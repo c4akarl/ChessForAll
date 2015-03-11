@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chess for All</string>
+    <string name="app_pgnFileManager">PGN-FileManager</string>
+    <string name="app_chessData">Game Data</string>
+    <string name="app_chessNotation">Notation</string>
+    <string name="app_optionsChessBoard">Options - Chessboard</string>
+    <string name="app_optionsGUI">Options - User Settings</string>
+    <string name="app_optionsPlay">Options - Play a game</string>
+    <string name="app_optionsEnginePlay">Options - Engine play</string>
+    <string name="app_optionsTimeControl">Options - Time Control</string>
+    <string name="app_editChessBoard">Edit Chessboard</string>
+    <string name="app_playEngineSettings">Batch - Engine AutoPlay</string>
+    <string name="comingSoon">coming soon</string>
+    
+    <string name="screen_small">SMALL</string>
+    <string name="screen_medium">MEDIUM</string>
+    <string name="screen_large">LARGE</string>
+    
+    <string name="pieces">KQRBN</string>
+    <string name="sendEmail">Send email</string>
+    
+    <string name="btn_Ok">  OK  </string>
+    <string name="btn_Yes">Yes</string>
+    <string name="btn_No">No</string>
+    <string name="btn_Pgn">PGN</string>
+    <string name="btn_Move">Moves</string>
+    <string name="btn_MoveText">+Text</string>
+
+    <string name="inputDialog_chess960Id">Chess960-ID(0...959):</string>
+    <string name="inputDialog_color">Select color:</string>
+    <string name="inputDialog_castling">Castling value</string>
+    <string name="inputDialog_enPassant">En passant value</string>
+    <string name="inputDialog_draw50">Draw 50 moves rule</string>
+    <string name="inputDialog_moveCounter">Move counter:</string>
+    
+    <string name="cl_unknownPiece">unknown piece</string>
+    <string name="cl_wrongBasePosition">wrong position</string>
+    <string name="cl_resultWhite">1-0</string>
+    <string name="cl_resultBlack">0-1</string>
+    <string name="cl_resultDraw">1/2-1/2</string>
+    <string name="cl_gameOver">Game over</string>
+    <string name="cl_50MoveRule">50-Move-Rule</string>
+    <string name="cl_position3Times">3x position</string>
+    <string name="cl_moveError">move error</string>
+    <string name="cl_moveWhite">white moves</string>
+    <string name="cl_moveBlack">black moves</string>
+    <string name="cl_moveMultiple">multiple moves</string>
+    <string name="cl_moveNo">impossible move</string>
+    <string name="cl_moveWrong">invalid move</string>
+    <string name="cl_mate">mate</string>
+    <string name="cl_stealmate">stalemate</string>
+    <string name="cl_check">chess!</string>
+    <string name="cl_castlingError">castling?</string>
+    <string name="cl_castlingCheck">invalid move or chess</string>
+    <string name="cl_emptyField">empty field</string>
+    <string name="cl_kingError">only one king!</string>
+    <string name="cl_fenError">FEN Error</string>
+    <string name="cl_notationError">PGN Notation Error</string>
+    <string name="cl_variationError">Variation: unequal parenthesis</string>
+    <string name="cl_checkOponent">opponent in chess</string>
+    
+    <string name="player_move"> your move . . .</string>
+    <string name="engine_thinking"> . . .</string>
+    <string name="engine_openingBook"> opening book  . . .</string>
+    <string name="engine_autoPlay"> AutoPlay</string>
+    <string name="engine_paused"> game paused! ></string>
+    <string name="engine_pausedNotConnected"> engine paused! (not connected) ></string>
+    <string name="engineProgressDialog">connecting to engines  . . .</string>
+    <string name="engineNotFound">engine not found . . . try again ></string>
+    <string name="engineNoEnginesOnDevice">no engines on device</string>
+    <string name="engineJustInstalled">Engine installed, start play! ></string>
+    <string name="engineAlreadyRunning">engine already running, close app </string>
+    <string name="engine_noRespond">engine stopped (no respond)</string>
+    <string name="engineSelectDialog">C4A - Dialog\nSelect an engine</string>
+    <string name="enginePlayerResign">resign the current game</string>
+    <string name="enginePlayerDraw">draw offer</string>
+    <string name="engineDeclinesDraw">the engine declines your draw offer</string>
+    <string name="engineSearchMessage">No engine found.\nSearch for chess engines?</string>
+    <string name="engineSearchNoInternetMessage">No internet connection!</string>
+    <string name="engineAnalysisSearch">Analysis:</string>
+    <string name="engineAnalysisStopWait">Analysis is stopped  . . .  Please wait!</string>
+    <string name="engineAnalysisStop">Analysis stopped!</string>
+    <string name="engineAutoStop">Auto stop, score: </string>
+    <string name="engine_timeout">engine stopped (timeout)</string>
+    
+    <string name="menu_title">Menu</string>
+    <string name="menu_new_game">new game</string>
+    <string name="menu_edit_board">edit board</string>
+    <string name="menu_pgn">PGN</string>
+    <string name="menu_pgn_load">load game from PGN-File</string>
+    <string name="menu_pgn_save">save game to PGN-File</string>
+    <string name="menu_pgn_delete">delete a PGN-File</string>
+    <string name="menu_pgn_edit">PGN-Data</string>
+    <string name="menu_modes">play, edit, view</string>
+    <string name="menu_modes_edit">Edit</string>
+    <string name="menu_modes_view">Play</string>
+    <string name="menu_play_options">Play (options)</string>
+    <string name="menu_enginesettings">engines</string>
+    <string name="menu_enginesettings_engine_1">E1</string>
+    <string name="menu_enginesettings_engine_2">E2</string>
+    <string name="menu_enginesettings_switch">E1 &lt;---&gt; E2</string>
+    <string name="menu_enginesettings_shutdown">Shutdown Engines</string>
+    <string name="menu_enginesettings_settings">Engine settings(E1, E2)</string>
+    <string name="menu_enginesettings_playOptions">Engine play options</string>
+    <string name="menu_usersettings">settings</string>
+    <string name="menu_usersettings_gui">UI Options</string>
+    <string name="menu_usersettings_chessBoard">Chessboard</string>
+    <string name="menu_usersettings_timeControl">Time Control</string>
+    <string name="menu_usersettings_timerAutoPlay">Timer auto play</string>
+    <string name="menu_usersettings_time_white">Time: white</string>
+    <string name="menu_usersettings_time_black">Time: black</string>
+    <string name="menu_specialities_engine_autoplay">Engine AutoPlay</string>
+    <string name="menu_find_engines">Find chess engines</string>
+    <string name="menu_about">about</string>
+    <string name="menu_about_new">What\'s new</string>
+    <string name="menu_about_userManual">User manual</string>
+    <string name="menu_about_c4a">Chess for All</string>
+    <string name="menu_about_developer">Developer/License</string>
+    <string name="menu_about_apps">All my applications</string>
+    <string name="menu_about_website">Website</string>
+    <string name="menu_about_sourcecode">Source code</string>
+    <string name="menu_about_contact">Contact</string>
+    <string name="menu_analysis">Analysis</string>
+    <string name="menu_analysis_stop">stop</string>
+    <string name="menu_analysis_moveStop">move and stop</string>
+    <string name="menu_analysis_moveContinue">move and continue</string>
+    
+    <string name="menu_load_extern">SD-card</string>
+    <string name="menu_load_intern">Assets</string>
+    <string name="menu_load_www">PGN download</string>
+    <string name="menu_load_game">Game</string>
+    <string name="menu_load_game_first">first</string>
+    <string name="menu_load_game_last">last</string>
+    <string name="menu_load_game_next">next</string>
+    <string name="menu_load_game_previous">previous</string>
+    <string name="menu_load_game_random">random</string>
+
+    <string name="menu_edit_fen_color">Color (w/b)</string>
+    <string name="menu_edit_fen_castling">Castling</string>
+    <string name="menu_edit_fen_ep">En passant</string>
+    <string name="menu_edit_fen_draw50">Draw 50 moves</string>
+    <string name="menu_edit_fen_movecounter">Move counter</string>
+    <string name="menu_edit_board_clear">Clear board</string>
+    <string name="menu_edit_board_current">Current position</string>
+    <string name="menu_edit_board_standard">Standard</string>
+    <string name="menu_edit_board_chess960_manual">Chess960 manual</string>
+    <string name="menu_edit_board_chess960_random">Chess960 random</string>
+    <string name="menu_edit_board_chess960_number">Chess960 number</string>
+
+    <string name="menu_info">game action</string>
+    <string name="menu_info_turnBoard">turn board</string>
+    <string name="menu_info_variations">variations</string>
+    <string name="menu_info_nag">NAG (+, -, =  . . .)</string>
+    <string name="menu_info_moveNotification">notification to a move</string>
+    <string name="menu_info_moveNotation">notation</string>
+    <string name="menu_info_clipboardCopyPgn">copy game to clipboard</string>
+    <string name="menu_info_clipboardCopyFen">copy position to clipboard</string>
+    <string name="menu_info_clipboardPaste">paste from clipboard</string>
+    
+    <string name="menu_query">Query - search for games</string>
+    <string name="menu_query_gameId">Game-ID</string>
+    <string name="menu_query_player">Player</string>
+    <string name="menu_query_event">Event</string>
+    <string name="menu_query_eco">ECO - Opening</string>
+    
+    <string name="peAutoSave">Auto Save</string>
+    <string name="peAutoFlipColor">Auto Flip(color)</string>
+    <string name="peAutoCurrentGame">Current game</string>
+    <string name="peRound">Round</string>
+    <string name="peGameCounter">Counter</string>
+    
+    <string name="fmLblPath">Path</string>
+    <string name="fmLblFile">File</string>
+    <string name="fmLblUrl">URL</string>
+    <string name="fmTitleLoad">PGN-FileManager - Load Game</string>
+    <string name="fmTitleSave">PGN-FileManager - Save Game</string>
+    <string name="fmTitleDelete">PGN-FileManager - Delete Game</string>
+    <string name="fmTitleEngineAutoPlay">PGN-FileManager - AutoPlay</string>
+    <string name="fmPathError">Path not exists!</string>
+    <string name="fmFileError">File not exists or PGN-Error!</string>
+    <string name="fmFileExists">File exists, overwrite?</string>
+    <string name="fmFileNotEndsWithPgn">No PGN-File(.pgn)!</string>
+    <string name="fmWebFileError">No Web-File(PGN) exists, URL: </string>
+    <string name="fmPgnError">PGN-File-Name-Error</string>
+    <string name="fmDeleteFileQuestion">Delete</string>
+    <string name="fmAddFolder">New folder:</string>
+    <string name="fmProgressDialog">Loading PGN-Data ...\nPlease wait ...</string>
+    <string name="fmProgressQueryDialog">database query ...\nPlease wait ...</string>
+    <string name="fmCreatingPgnDatabase">Creating db: </string>
+    <string name="fmCreatingPgnDatabaseToast">creating database  . . .\nmore information see Notifications</string>
+    <string name="fmDropCreateIndex">drop/create index  . . .  please wait!</string>
+    <string name="fmDatabaseLocked">database locked, process running</string>
+    <string name="fmDownloadError">Download error:</string>
+    <string name="fmDownloadFileExists">File exists, operation aborted!</string>
+    <string name="fmFileDownloaded">File downloaded:</string>
+
+    <string name="daTxtLblWhite">White</string>
+    <string name="daTxtLblBlack">Black</string>
+    
+    <string name="dgTitleFileDialog">C4A - PGN-File-Dialog</string>
+    <string name="dgTitleDialog">C4A - Dialog</string>
+    
+    <string name="cbC4a">C4a</string>
+    <string name="cbStandard">Standard</string>
+    <string name="cbGreen">Green</string>
+    <string name="cbBrown">Brown</string>
+    
+    <string name="guPlayerName">player name</string>
+    <string name="guStatusBar">show status bar</string>
+    <string name="guLastPosition">show last position (load)</string>
+    <string name="guDisableScreenTimeout">disable screen timeout</string>
+    <string name="guUsePgnDatabase">use PGN database</string>
+    <string name="guEnableSounds">Sound effects</string>
+    <string name="guDisplayCoordinates">Coordinates (a-h, 1-8)</string>
+    
+    <string name="epEngineMessage">show engine message</string>
+    <string name="epRandomFirstMove">random first engine move(white)</string>
+    <string name="epAutoStartEngine">auto start engines</string>
+    <string name="epOpeningBook">Polyglot opening book</string>
+    <string name="epBookHint">book.bin</string>
+    <string name="epMultiPv">Multi-PV count (1...4)</string>
+    <string name="epPvMoves">PV moves count (1...30)</string>
+    
+    <string name="tcGameClock">Game clock</string>
+    <string name="tcMoveTime">Move time</string>
+    <string name="tcSandGlass">Sand glass</string>
+    <string name="tcNone">None</string>
+
+    <string name="editWhiteMoves">White moves</string>
+    <string name="editBlackMoves">Black moves</string>
+    <string name="editChess960">Chess960 position</string>
+    <string name="editError">Error: edit board</string>
+    <string name="editChessboardDetection">Chessboard detection\n  . . .  please wait!</string>
+    
+    <string name="play_white">Play White</string>
+    <string name="play_black">Play Black</string>
+    <string name="play_engine">Engine vs Engine</string>
+    <string name="play_analysis">Analysis</string>
+    <string name="play_two_players">Edit</string>
+    <string name="play_two_players_flip">Two Players(flip board)</string>
+    <string name="play_newGame">New game</string>
+    
+    <string name="ccsTitle">Chess Clock</string>
+    <string name="ccsMessageWhite">White</string>
+    <string name="ccsMessageBlack">Black</string>
+    <string name="ccsMessagePlayerClock">Player (clock)</string>
+    <string name="ccsMessageEngineClock">Engine (clock)</string>
+    <string name="ccsMessagePlayerMove">Player (move)</string>
+    <string name="ccsMessageEngineMove">Engine (move)</string>
+    <string name="ccsMessagePlayerSand">Player (sand glass)</string>
+    <string name="ccsMessageEngineSand">Engine (sand glass)</string>
+    <string name="ccsMessageAutoPlay">Auto play</string>
+    <string name="ccsTime">Time</string>
+    <string name="ccsBonus">Bonus</string>
+    <string name="ccsH">h</string>
+    <string name="ccsM">min</string>
+    <string name="ccsS">sec</string>
+    <string name="ccsMs">mS</string>
+    
+    <string name="qDatabaseQuery">Database query</string>
+    <string name="qgTitle">Query - Game-ID</string>
+    <string name="qpTitle">Query - Player</string>
+    <string name="qeTitle">Query - Event, Site</string>
+    <string name="qoTitle">Query - ECO, Opening</string>
+    <string name="qgGameId">Game-ID</string>
+    <string name="qGameId">games</string>
+    <string name="qGameIdOrder">order</string>
+    <string name="qCurrentId">current game</string>
+    <string name="qMaxItems">max. items</string>
+    <string name="qDate">Date</string>
+    <string name="qDateFormat">yyyy.mm.dd</string>
+    <string name="qFrom">from</string>
+    <string name="qTo">to</string>
+    <string name="qPlayer">Player</string>
+    <string name="qEvent">Event</string>
+    <string name="qSite">Site</string>
+    <string name="qDesc">descending</string>
+    <string name="qEco">ECO</string>
+    <string name="qOpening">Opening</string>
+    <string name="qVariation">Variation</string>
+    <string name="qNoResults">No Results!</string>
+
+</resources>

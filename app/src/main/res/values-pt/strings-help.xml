@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="m_about_c4a">Sobre o programa</string>
+	<string name="m_about_c4a_text">&lt;b>&lt;i>Chess for All&lt;/i>&lt;/b> is a PGN-Editor/-Visualizador.
+		&lt;br/>&lt;br/>&lt;b>Jogue máquina&lt;/b>
+		&lt;br/>Este programa está usando um máquina de xadrez como um serviço. 
+		Faça o download de um &lt;b>&lt;i>Máquina&lt;/i>&lt;/b> do AndroidMarket para jogar contra um máquina.
+		&lt;br/>&lt;br/>Os máquinas a seguir são suportados:
+		&lt;br/> * &lt;b>&lt;i>Stockfish Chess&lt;/i>&lt;/b>
+		&lt;br/> * &lt;b>&lt;i>Chess Engines&lt;/i>&lt;/b>
+		&lt;br/>&lt;br/>Você pode selecionar/mudar um máquina com: menu > Máquinas > E1 ou E2
+		&lt;br/>&lt;br/>Se nenhum máquina estiver selecionado, o programa vai detectar um máquina no seu dispositivo automaticamente.</string>
+	<string name="m_about_developer">Desenvolvedores/Licença</string>
+	<string name="m_about_developer_text">Java motor de rotinas de Peter Osterlund (&lt;b>&lt;i>DroidFish&lt;/i>&lt;/b>)
+	    &lt;br/>&lt;br/>Usando motores de xadrez UCI por Aart Bik
+		&lt;br/>&lt;br/>&lt;b>&lt;i>Chesspresso&lt;/i>&lt;/b>(lógica de xadrez) por Bernhard Seybold
+		&lt;br/>&lt;br/>Elementos gráficos por Lars Streblow
+		&lt;br/>&lt;br/>Traduções:
+		&lt;br/>Francesa - Eric Gallula
+		&lt;br/>Espanhol - Sergio Revinelli, Sergio Ballesteros
+		&lt;br/>Russo - Ark (hark, arkpc)
+		&lt;br/>&lt;br/>&lt;b>&lt;i>Chess for All &lt;/i>&lt;/b> é desenvolvido por Karl Schreiner
+		&lt;br/>&lt;br/>&lt;b>Licença&lt;/b>
+		&lt;br/>GNU GPLv3.</string>
+</resources>

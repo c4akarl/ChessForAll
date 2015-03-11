@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu   xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item 	android:id="@+id/menu_edit_board_clear" android:title="@string/menu_edit_board_clear" /> 
+	<item 	android:id="@+id/menu_edit_board_current" android:title="@string/menu_edit_board_current" /> 
+	<item 	android:id="@+id/menu_edit_board_standard" android:title="@string/menu_edit_board_standard" /> 
+	<item 	android:id="@+id/menu_edit_board_chess960_manual" android:title="@string/menu_edit_board_chess960_manual" /> 
+	<item 	android:id="@+id/menu_edit_board_chess960_random" android:title="@string/menu_edit_board_chess960_random" /> 
+	<item 	android:id="@+id/menu_edit_board_chess960_number" android:title="@string/menu_edit_board_chess960_number" /> 
+</menu>

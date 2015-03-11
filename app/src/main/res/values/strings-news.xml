@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="whatsNew">What\'s new</string>
+	<string name="whatsNew_text">
+	    *** v1.42 ***
+	    &lt;br/>Source code released on GitHub.
+	    &lt;br/>IDE: Conversion of Eclipse on Android Studio.
+        &lt;br/>&lt;br/>*** v1.41 ***
+	    &lt;br/>Display the chessfield coordinates (a-h, 1-8)
+	    &lt;br/>Fixed: Interface error on some devices.
+	    &lt;br/>&lt;br/>*** v1.40 ***
+	    &lt;br/>Source code is available from my homepage.
+	    &lt;br/>&lt;br/>*** v1.39.2 ***
+	    &lt;br/>Troubleshooting in chess engine search.
+	    &lt;br/>Timeout added.
+	    &lt;br/>&lt;br/>*** v1.39.1 ***
+	    &lt;br/>Fixed: problem with submenu call on some devices.
+	    &lt;br/>&lt;br/>*** v1.39 ***
+	    &lt;br/>Translations:
+	    &lt;br/>Spanish - Sergio Revinelli, Sergio Ballesteros
+	    &lt;br/>Russian - Ark (hark, arkpc)
+	    &lt;br/>&lt;br/>*** v1.38 ***
+	    &lt;br/>Troubleshooting: engine access error with multiple user accounts on tablets with Android 4.2.
+	    &lt;br/>Added: Option settings for playing strength(is not supported on all engines).
+	    &lt;br/>&lt;br/>*** v1.37 ***
+	    &lt;br/>Horizontal button scrollview added (24 elements).
+	    &lt;br/>New graphics elements by Lars Streblow.
+	    &lt;br/>Sound effects added.
+	    &lt;br/>&lt;br/>*** v1.36 ***
+	    &lt;br/>Redesign of the graphical user interface.
+	    &lt;br/>Menu button added.
+	    &lt;br/>Support for MIME type:
+	    &lt;br/>application/x-chess-pgn.
+	    &lt;br/>PGN download (web).
+	    &lt;br/>User manual (web).
+	    &lt;br/>&lt;br/>*** v1.35 ***
+	    &lt;br/>PGN database:
+	    &lt;br/>search by ECO, opening, variation
+	    &lt;br/>fixed: some reported problems
+	    &lt;br/>&lt;br/>*** v1.34 ***
+	    &lt;br/>Improving the PGN-File-Manager
+	    &lt;br/>Added: PGN supplemental tags
+ 	</string>
+</resources>

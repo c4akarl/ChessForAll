@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/bg_c4a" >
+<ImageView android:id="@+id/ntBtnOk"
+	android:src="@drawable/button_ok"
+	android:onClick="myClickHandler" 
+    android:layout_width="48dip"
+    android:layout_height="48dip"
+    android:layout_marginTop="7dip" 
+    android:layout_marginBottom="3dip" 
+    android:layout_marginLeft="10dip" 
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"/>
+<Button android:id="@+id/ntBtnPgn"
+	android:onClick="myClickHandler" 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="7dip" 
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentRight="true"
+    android:text="@string/btn_Pgn" />
+<Button android:id="@+id/ntBtnMoveText"
+	android:onClick="myClickHandler" 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="7dip" 
+    android:layout_alignParentBottom="true"
+    android:layout_toLeftOf="@id/ntBtnPgn"
+    android:text="@string/btn_MoveText" />
+<Button android:id="@+id/ntBtnMove"
+	android:onClick="myClickHandler" 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="7dip" 
+    android:layout_alignParentBottom="true"
+    android:layout_toLeftOf="@id/ntBtnMoveText"
+    android:text="@string/btn_Move" />
+<ScrollView android:fillViewport="true"
+	android:layout_above="@id/ntBtnOk"
+	android:layout_alignParentTop="true"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"> 
+<TextView android:id="@+id/ntTv" 
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:typeface="sans"
+    android:textStyle="bold"
+    android:textSize="19dip" 
+    android:background="@color/notation_background"
+ 	android:textColor="@color/text_dark" /> 	
+</ScrollView>            
+</RelativeLayout>

@@ -1,0 +1,5 @@
+DROP INDEX IF EXISTS idx_white;
+DROP INDEX IF EXISTS idx_black;
+DROP INDEX IF EXISTS idx_date;
+DROP INDEX IF EXISTS idx_event;
+DROP INDEX IF EXISTS idx_eco;

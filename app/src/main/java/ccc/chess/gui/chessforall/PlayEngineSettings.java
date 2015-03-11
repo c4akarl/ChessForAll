@@ -1,0 +1,216 @@
+package ccc.chess.gui.chessforall;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
+{
+	public void onCreate(Bundle savedInstanceState) 
+	{
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.playenginesettings);
+        fileManagerIntent = new Intent(this, PgnFileManager.class);
+        pgnIO = new PgnIO();
+        baseDir = pgnIO.getExternalDirectory(0);
+        fmPrefs = getSharedPreferences("fm", 0);
+        userPrefs = getSharedPreferences("user", 0);
+        runPrefs = getSharedPreferences("run", 0);		
+        currentBase = runPrefs.getString("run_game0_file_base", "");
+		if (!currentBase.equals("") & !currentBase.equals("assets/") & !currentBase.equals("url"))	// == sd-card
+		{
+			currentPath = runPrefs.getString("run_game0_file_path", "");
+			currentFile = runPrefs.getString("run_game0_file_name", "");
+		}
+		else
+		{
+			currentPath = fmPrefs.getString("fm_extern_save_path", "");
+			currentFile = fmPrefs.getString("fm_extern_save_file", "");
+		}
+        getPrefs();
+        etPePath = (EditText) findViewById(R.id.etPePath);
+        etPeFile = (EditText) findViewById(R.id.etPeFile);
+        etPeRound = (EditText) findViewById(R.id.etPeRound);
+        etPeGameCounter = (EditText) findViewById(R.id.etPeGameCounter);
+        etPeMessage = (TextView) findViewById(R.id.etPeMessage);
+        cbPeAutoSave = (CheckBox) findViewById(R.id.cbPeAutoSave);
+        cbPeAutoFlipColor = (CheckBox) findViewById(R.id.cbPeAutoFlipColor);
+        cbPeAutoCurrentGame = (CheckBox) findViewById(R.id.cbPeAutoCurrentGame);
+        etPePath.setText(path);
+        etPeFile.setText(file);
+        etPeMessage.setVisibility(EditText.INVISIBLE);
+        etPeRound.setText(Integer.toString(round));
+        etPeGameCounter.setText(Integer.toString(gameCounter));
+        cbPeAutoSave.setChecked(autoSave);
+        cbPeAutoFlipColor.setChecked(autoFlipColor);
+        cbPeAutoCurrentGame.setChecked(autoCurrentGame);
+	}
+	@Override
+    protected void onDestroy() 					
+    {
+    	if (progressDialog != null)
+    	{
+	    	if (progressDialog.isShowing())
+	     		dismissDialog(ENGINE_PROGRESS_DIALOG);
+    	}
+     	super.onDestroy();
+    }
+	public void myClickHandler(View view) 				
+    {	// ClickHandler	(ButtonEvents)
+		Intent returnIntent;
+		returnIntent = new Intent();
+		switch (view.getId()) 
+		{
+		case R.id.btnPeAutoPlay:
+			if (checkFileData(etPePath.getText().toString(), etPeFile.getText().toString()))
+			{
+				setTitle(getString(R.string.engineProgressDialog));
+				setPrefs();
+				setResult(RESULT_OK, returnIntent);
+				finish();
+			}
+			break;
+		case R.id.btnPeAutoSetFile:
+			fileManagerIntent.putExtra("fileActionCode", 5);
+	    	fileManagerIntent.putExtra("displayActivity", 1);
+	    	startActivityForResult(fileManagerIntent, ENGINE_AUTOPLAY_REQUEST_CODE);		// start PgnFileManager - Activity(with GUI)
+			break;
+		case R.id.etPePath:
+		case R.id.etPeFile:
+			etPeMessage.setVisibility(EditText.INVISIBLE);
+			break;
+		}
+	}
+	public void onActivityResult(int requestCode, int resultCode, Intent data)			
+    {	// subActivity result
+		switch(requestCode) 
+	    {
+		    case ENGINE_AUTOPLAY_REQUEST_CODE: 
+		    	if (resultCode == C4aMain.RESULT_OK) 					
+				{
+			    	baseDir = data.getStringExtra("fileBase");
+			    	etPePath.setText(data.getStringExtra("filePath"));
+			    	etPeFile.setText(data.getStringExtra("fileName"));
+			    	etPeMessage.setVisibility(EditText.INVISIBLE);
+				}
+				break;
+	    }
+    }
+	@Override
+    protected Dialog onCreateDialog(int id) 
+	{
+		if (id == ENGINE_PROGRESS_DIALOG) 
+        {
+			String mes = getString(R.string.engineProgressDialog);
+        	progressDialog = new ProgressDialog(this);
+			progressDialog.setMessage(mes);
+	        progressDialog.setCancelable(true);
+	        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() 
+	        {
+	            public void onCancel(DialogInterface dialog) 
+	            {
+	            	finish();
+	            }
+	        });
+	        return progressDialog;
+        } 
+        return null;
+	}
+	@Override
+	public void getCallbackValue(int btnValue) { }
+	protected boolean checkFileData(String path, String file) 
+	{
+		boolean fileOk = true;
+		if (!etPeFile.getText().toString().endsWith(".pgn"))
+		{
+			etPeMessage.setVisibility(EditText.VISIBLE);
+			etPeMessage.setText(getString(R.string.fmFileNotEndsWithPgn));
+			fileOk = false;
+		}
+		if (etPeFile.getText().toString().equals(".pgn"))
+		{
+			etPeMessage.setVisibility(EditText.VISIBLE);
+			etPeMessage.setText(getString(R.string.fmPgnError));
+			fileOk = false;
+		}
+		if (!path.endsWith("/"))
+		{
+			path = path + "/";
+			etPePath.setText(path);
+		}
+		path = baseDir + path;
+		if (!pgnIO.pathExists(path))
+		{
+			etPeMessage.setVisibility(EditText.VISIBLE);
+			etPeMessage.setText(getString(R.string.fmPathError));
+			fileOk = false;
+		}
+		return fileOk;
+	}
+	protected void getPrefs() 
+	{
+		path = userPrefs.getString("user_play_eve_path", currentPath);
+		file = userPrefs.getString("user_play_eve_file", currentFile);
+		round = userPrefs.getInt("user_play_eve_round", 1);
+		gameCounter = userPrefs.getInt("user_play_eve_gameCounter", 1);
+		autoSave = userPrefs.getBoolean("user_play_eve_autoSave", true);
+		autoFlipColor = userPrefs.getBoolean("user_play_eve_autoFlipColor", true);
+		autoCurrentGame = userPrefs.getBoolean("user_play_eve_autoCurrentGame", false);
+	}
+	protected void setPrefs() 
+	{
+		path = etPePath.getText().toString();
+		file = etPeFile.getText().toString();
+		round = Integer.parseInt (etPeRound.getText().toString());
+		gameCounter = Integer.parseInt (etPeGameCounter.getText().toString());
+		SharedPreferences.Editor ed = userPrefs.edit();
+		ed.putInt("user_play_playMod", 3);
+		ed.putString("user_play_ceWhite", userPrefs.getString("user_play_engineName", ""));
+        ed.putString("user_play_ceBlack", userPrefs.getString("user_play_engineName", ""));
+		ed.putString("user_play_eve_path", path);
+		ed.putString("user_play_eve_file", file);
+        ed.putInt("user_play_eve_round", round);
+        ed.putInt("user_play_eve_gameCounter", gameCounter);
+        ed.putBoolean("user_play_eve_autoSave", cbPeAutoSave.isChecked());
+        ed.putBoolean("user_play_eve_autoFlipColor", cbPeAutoFlipColor.isChecked());
+        ed.putBoolean("user_play_eve_autoCurrentGame", cbPeAutoCurrentGame.isChecked());
+        ed.commit();
+	}
+	
+	final String TAG = "PlayEngineSettings";
+	final static int ENGINE_AUTOPLAY_REQUEST_CODE = 50;
+	Intent fileManagerIntent;
+	private static final int ENGINE_PROGRESS_DIALOG = 1;
+	ProgressDialog progressDialog = null;
+	PgnIO pgnIO;
+	String baseDir = "";
+	String path = "";
+	String file = "";
+	int round = 1;
+	int gameCounter = 1;
+	boolean autoSave = true;
+	boolean autoFlipColor = true;
+	boolean autoCurrentGame = true;
+	String currentBase = "";
+	String currentPath = "";
+	String currentFile = "";
+	SharedPreferences fmPrefs;
+	SharedPreferences userPrefs;
+	SharedPreferences runPrefs;
+	EditText etPePath = null;
+	EditText etPeFile = null;
+	EditText etPeRound = null;
+	EditText etPeGameCounter = null;
+	TextView etPeMessage = null;
+	CheckBox cbPeAutoSave;
+	CheckBox cbPeAutoFlipColor;
+	CheckBox cbPeAutoCurrentGame;
+}

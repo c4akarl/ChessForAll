@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chess for All</string>
+    <string name="app_pgnFileManager">PGN-Datei-Manager</string>
+    <string name="app_chessData">Spieldaten</string>
+    <string name="app_chessNotation">Notation</string>
+    <string name="app_optionsChessBoard">Optionen - Schachbrett</string>
+    <string name="app_optionsGUI">Benutzereinstellungen</string>
+    <string name="app_optionsPlay">Optionen - Spieleinstellungen</string>
+    <string name="app_optionsEnginePlay">Optionen - Maschinenspiel</string>
+    <string name="app_optionsTimeControl">Optionen - Zeitsteuerung</string>
+    <string name="app_editChessBoard">Neue Schachposition</string>
+    <string name="app_playEngineSettings">Stapel - automatisches Spiel der Maschine</string>
+    <string name="comingSoon">demnächst</string>
+     
+    <string name="screen_small">SMALL</string>
+    <string name="screen_medium">MEDIUM</string>
+    <string name="screen_large">LARGE</string>
+    
+    <string name="pieces">KQRBN</string>
+    <string name="sendEmail">E-Mail senden</string>
+
+    <string name="btn_Ok">  OK  </string>
+    <string name="btn_Yes">Ja</string>
+    <string name="btn_No">Nein</string>
+    <string name="btn_Pgn">PGN</string>
+    <string name="btn_Move">Züge</string>
+    <string name="btn_MoveText">+Text</string>
+
+    <string name="inputDialog_chess960Id">Chess960-ID(0...959):</string>
+    <string name="inputDialog_color">Wähle eine Farbe aus</string>
+    <string name="inputDialog_castling">Rochade-Wert eingeben</string>
+    <string name="inputDialog_enPassant">En passant Wert eingeben</string>
+    <string name="inputDialog_draw50">Remis 50-Züge-Regel</string>
+    <string name="inputDialog_moveCounter">Zugzähler:</string>
+    
+    <string name="cl_unknownPiece">unbekannte Figur</string>
+    <string name="cl_wrongBasePosition">falsche Stellung</string>
+    <string name="cl_resultWhite">1-0</string>
+    <string name="cl_resultBlack">0-1</string>
+    <string name="cl_resultDraw">1/2-1/2</string>
+    <string name="cl_gameOver">Spielende</string>
+    <string name="cl_50MoveRule">50-Züge-Regel</string>
+    <string name="cl_position3Times">3x Position</string>
+    <string name="cl_moveError">falscher Zug</string>
+    <string name="cl_moveWhite">Weiss ist am Zug</string>
+    <string name="cl_moveBlack">Schwarz ist am Zug</string>
+    <string name="cl_moveMultiple">mehrere Züge möglich</string>
+    <string name="cl_moveNo">kein Zug möglich</string>
+    <string name="cl_moveWrong">falscher Zug</string>
+    <string name="cl_mate">Matt</string>
+    <string name="cl_stealmate">Patt</string>
+    <string name="cl_check">König im Schach!</string>
+    <string name="cl_castlingError">Rochade?</string>
+    <string name="cl_castlingCheck">ungültiger Zug oder schach</string>
+    <string name="cl_emptyField">leeres feld</string>
+    <string name="cl_kingError">nur ein König pro Farbe!</string>
+    <string name="cl_fenError">FEN Fehler</string>
+    <string name="cl_notationError">PGN Notation Fehler</string>
+    <string name="cl_variationError">Variation: ungleiche runde Klammern</string>
+    <string name="cl_checkOponent">Gegner im Schach!</string>
+    
+    <string name="player_move"> Du bist am Zug . . .</string>
+    <string name="engine_thinking"> . . .</string>
+    <string name="engine_openingBook"> Eröffnungsbuch  . . .</string>
+    <string name="engine_autoPlay"> autom. Spiel</string>
+    <string name="engine_paused">Spiel angehalten!</string>
+    <string name="engine_pausedNotConnected">Maschine pausiert! (nicht verbunden)</string>
+    <string name="engineProgressDialog">Verbindungsaufbau  . . .</string>
+    <string name="engineNotFound">keine Schachmaschine gefunden . . . versuchen Sie es erneut ></string>
+    <string name="engineNoEnginesOnDevice">keine Maschine auf dem Gerät</string>
+    <string name="engineJustInstalled">Maschine installiert, starte ein Spiel!</string>
+    <string name="engineAlreadyRunning">Maschine läuft, schliesse Programm!</string>
+    <string name="engine_noRespond">Maschine gestoppt(keine Rückmeldung)</string>
+    <string name="engineSelectDialog">C4A - Dialog\nwähle eine Maschine aus</string>
+    <string name="enginePlayerResign">aktuelles Spiel aufgeben</string>
+    <string name="enginePlayerDraw">remis anbieten</string>
+    <string name="engineDeclinesDraw">die Maschine lehnt remis ab</string>
+    <string name="engineSearchMessage">Keine Maschine gefunden.\nNach Schachmaschinen suchen?</string>
+    <string name="engineSearchNoInternetMessage">Keine Internetverbindung!</string>
+    <string name="engineAnalysisSearch">Analyse . . .   </string>
+    <string name="engineAnalysisStopWait">Analyse wird gestoppt. . . Bitte warten!</string>
+    <string name="engineAnalysisStop">Analyse gestoppt!</string>
+    <string name="engineAutoStop">Auto-Stop, Bewertung: </string>
+    <string name="engine_timeout">Maschine gestoppt(Timeout)</string>
+    
+    <string name="menu_title">Menü</string>
+    <string name="menu_new_game">neues Spiel</string>
+    <string name="menu_edit_board">Brett editieren</string>
+    <string name="menu_pgn">PGN</string>
+    <string name="menu_pgn_load">PGN-Datei laden</string>
+    <string name="menu_pgn_save">PGN-Datei speichern</string>
+    <string name="menu_pgn_delete">PGN-Datei löschen</string>
+    <string name="menu_pgn_edit">PGN-Daten</string>
+    <string name="menu_modes">spielen, editieren, anschauen</string>
+    <string name="menu_modes_edit">Editieren</string>
+    <string name="menu_modes_view">Spielen</string>
+    <string name="menu_play_options">Spielen (Optionen)</string>
+    <string name="menu_enginesettings">Maschinen</string>
+    <string name="menu_enginesettings_engine_1">E1</string>
+    <string name="menu_enginesettings_engine_2">E2</string>
+    <string name="menu_enginesettings_switch">E1 &lt;---&gt; E2</string>
+    <string name="menu_enginesettings_shutdown">Maschinen schliessen</string>
+    <string name="menu_enginesettings_settings">Einstellungen(E1, E2)</string>
+    <string name="menu_enginesettings_playOptions">Maschinen-Spieloptionen</string>
+    <string name="menu_usersettings">Einstellungen</string>
+    <string name="menu_usersettings_gui">Anwenderoptionen</string>
+    <string name="menu_usersettings_chessBoard">Schachbrett</string>
+    <string name="menu_usersettings_timeControl">Zeitkontrolle</string>
+    <string name="menu_usersettings_timerAutoPlay">Zeit autom. Spiel</string>
+    <string name="menu_usersettings_time_white">Zeit: weiß</string>
+    <string name="menu_usersettings_time_black">Zeit: schwarz</string>
+    <string name="menu_specialities_engine_autoplay">Autom. Maschinenspiel</string>
+    <string name="menu_find_engines">Schachmaschinensuche</string>
+    <string name="menu_about">Informationen</string>
+    <string name="menu_about_new">Was ist neu</string>
+    <string name="menu_about_userManual">Bedienungsanleitung(E)</string>
+    <string name="menu_about_c4a">Chess for All</string>
+    <string name="menu_about_developer">Entwickler/Lizenz</string>
+    <string name="menu_about_apps">Alle meine Anwendungen</string>
+    <string name="menu_about_website">Website</string>
+    <string name="menu_about_sourcecode">Source code</string>
+    <string name="menu_about_contact">Kontakt</string>
+    <string name="menu_analysis">Analyse</string>
+    <string name="menu_analysis_stop">stoppen</string>
+    <string name="menu_analysis_moveStop">Zug ausführen und stoppen</string>
+    <string name="menu_analysis_moveContinue">Zug ausführen und fortsetzen</string>
+   
+    <string name="menu_load_extern">SD-Card</string>
+    <string name="menu_load_intern">Assets</string>
+    <string name="menu_load_www">PGN-Download</string>
+    <string name="menu_load_game">Spiel</string>
+    <string name="menu_load_game_first">erstes</string>
+    <string name="menu_load_game_last">letztes</string>
+    <string name="menu_load_game_next">nächstes</string>
+    <string name="menu_load_game_previous">vorheriges</string>
+    <string name="menu_load_game_random">Zufall</string>
+    
+    <string name="menu_edit_fen_color">Farbe (w/b)</string>
+    <string name="menu_edit_fen_castling">Rochade</string>
+    <string name="menu_edit_fen_ep">En passant</string>
+    <string name="menu_edit_fen_draw50">Remis (50 Züge-Regel)</string>
+    <string name="menu_edit_fen_movecounter">Zugzähler</string>
+    <string name="menu_edit_board_clear">Brett leeren</string>
+    <string name="menu_edit_board_current">Aktuelle Stellung</string>
+    <string name="menu_edit_board_standard">Standard</string>
+    <string name="menu_edit_board_chess960_manual">Chess960 editieren</string>
+    <string name="menu_edit_board_chess960_random">Chess960 Zufall</string>
+    <string name="menu_edit_board_chess960_number">Chess960 Nummer</string>
+    
+    <string name="menu_info">Spielaktion</string>
+    <string name="menu_info_turnBoard">Brett drehen</string>
+    <string name="menu_info_variations">Variationen</string>
+    <string name="menu_info_nag">NAG (+, -, =  . . .)</string>
+    <string name="menu_info_moveNotification">Anmerkung zu einen Zug</string>
+    <string name="menu_info_moveNotation">Notation</string>
+    <string name="menu_info_clipboardCopyPgn">Spiel >>> Zwischenablage</string>
+    <string name="menu_info_clipboardCopyFen">Position >>> Zwischenablage</string>
+    <string name="menu_info_clipboardPaste">Spiel von der Zwischenablage</string>
+        
+    <string name="menu_query">Abfrage - Suche nach Partien</string>
+    <string name="menu_query_gameId">Spiel-ID</string>
+    <string name="menu_query_player">Spieler</string>
+    <string name="menu_query_event">Ereignis</string>
+    <string name="menu_query_eco">ECO - Eröffnung</string>
+    
+    <string name="peAutoSave">autom. sichern</string>
+    <string name="peAutoFlipColor">Autom. Farbenwechsel</string>
+    <string name="peAutoCurrentGame">Aktuelles Spiel</string>
+    <string name="peRound">Runde</string>
+    <string name="peGameCounter">Zähler</string>
+    
+    <string name="fmLblPath">Pfad</string>
+    <string name="fmLblFile">Datei</string>
+    <string name="fmLblUrl">URL</string>
+    <string name="fmTitleLoad">PGN-DateiManager - Spiel laden</string>
+    <string name="fmTitleSave">PGN-DateiManager - Spiel speichern</string>
+    <string name="fmTitleDelete">PGN-DateiManager - Spiel löschen</string>
+    <string name="fmTitleEngineAutoPlay">PGN-FileManager - Autom. Spiel</string>
+    <string name="fmPathError">Pfad existiert nicht!</string>
+    <string name="fmFileError">Datei existiert nicht oder PGN-Fehler!</string>
+    <string name="fmFileExists">Datei vorhanden, überschreiben?</string>
+    <string name="fmFileNotEndsWithPgn">Keine PGN-Datei(.pgn)!</string>
+    <string name="fmWebFileError">Es existiert keine Web-Datei(PGN), URL: </string>
+    <string name="fmPgnError">PGN-Dateinamefehler</string>
+    <string name="fmDeleteFileQuestion">Löschen</string>
+    <string name="fmAddFolder">Neuer Ordner:</string>
+    <string name="fmProgressDialog">PGN-Daten werden geladen ...\nBitte warten ...</string>
+    <string name="fmProgressQueryDialog">Datenbankabfrage ...\nBitte warten ...</string>
+    <string name="fmCreatingPgnDatabase">DB-Erstellung: </string>
+    <string name="fmCreatingPgnDatabaseToast">Datenbankerstellung  . . .\nweitere Informationen finden Sie unter Benachrichtigungen</string>
+    <string name="fmDropCreateIndex">Drop/create Index. . . bitte warten!</string>
+    <string name="fmDatabaseLocked">Datenbank gesperrt, Prozess läuft</string>
+    <string name="fmDownloadError">Download-Fehler:</string>
+    <string name="fmDownloadFileExists">Datei existiert, Vorgang abgebrochen!</string>
+    <string name="fmFileDownloaded">Datei heruntergeladen:</string>
+    
+    <string name="daTxtLblWhite">Weiß</string>
+    <string name="daTxtLblBlack">Schwarz</string>
+    
+    <string name="dgTitleFileDialog">C4A - PGN-Datei-Dialog</string>
+    <string name="dgTitleDialog">C4A - Dialog</string>
+    
+    <string name="cbC4a">C4a</string>
+    <string name="cbStandard">Standard</string>
+    <string name="cbGreen">Grün</string>
+    <string name="cbBrown">Braun</string>
+    
+    <string name="guPlayerName">Spielername</string>
+    <string name="guStatusBar">Status Bar anzeigen</string>
+    <string name="guLastPosition">Letzte Stellung anzeigen (laden)</string>
+    <string name="guDisableScreenTimeout">Bildschirm-Timeout deaktivieren</string>
+    <string name="guUsePgnDatabase">PGN-Datenbank verwenden</string>
+    <string name="guEnableSounds">Ton-Effekte</string>
+    <string name="guDisplayCoordinates">Koordinaten (a-h, 1-8)</string>
+    
+    <string name="epEngineMessage">Maschinennachricht anzeigen</string>
+    <string name="epRandomFirstMove">1. Maschinenzug(weiss): Zufallszug</string>
+    <string name="epAutoStartEngine">autom. Maschinenstart</string>
+    <string name="epOpeningBook">Polyglot Eröffnungsbuch</string>
+    <string name="epMultiPv">Multi-PV Anzahl (1...4)</string>
+    <string name="epPvMoves">PV-Zug-Anzahl (1...30)</string>
+    
+    <string name="tcGameClock">Schachuhr</string>
+    <string name="tcMoveTime">Zugzeit</string>
+    <string name="tcSandGlass">Sanduhr</string>
+    <string name="tcNone">ohne Uhr</string>
+
+    <string name="editWhiteMoves">Weiss zieht</string>
+    <string name="editBlackMoves">Schwarz zieht</string>
+    <string name="editChess960">Chess960-Position</string>
+    <string name="editError">Fehler: editieren Brett</string>
+    <string name="editChessboardDetection">Schachbrett-Ermittlung\n  . . .  bitte warten!</string>
+    
+    <string name="play_white">Weiss</string>
+    <string name="play_black">Schwarz</string>
+    <string name="play_engine">Maschine / Maschine</string>
+    <string name="play_analysis">Analyse</string>
+    <string name="play_two_players">Editieren</string>
+    <string name="play_two_players_flip">Zwei Spieler(Brettwechsel)</string>
+    <string name="play_newGame">Neues Spiel</string>
+    
+    <string name="ccsTitle">Schachuhr</string>
+    <string name="ccsMessageWhite">Weiss</string>
+    <string name="ccsMessageBlack">Schwarz</string>
+    <string name="ccsMessagePlayerClock">Spieler (Uhr)</string>
+    <string name="ccsMessageEngineClock">Maschine (Uhr)</string>
+    <string name="ccsMessagePlayerMove">Spieler (Zug)</string>
+    <string name="ccsMessageEngineMove">Maschine (Zug)</string>
+    <string name="ccsMessagePlayerSand">Spieler (Sanduhr)</string>
+    <string name="ccsMessageEngineSand">Maschine (Sanduhr)</string>
+    <string name="ccsMessageAutoPlay">Autom. Spiel</string>
+    <string name="ccsTime">Zeit</string>
+    <string name="ccsBonus">Bonus</string>
+    <string name="ccsH">St</string>
+    <string name="ccsM">Min</string>
+    <string name="ccsS">Sek</string>
+    <string name="ccsMs">mS</string>
+    
+    <string name="qDatabaseQuery">Datenbankabfrage</string>
+    <string name="qgTitle">Abfrage - Spiel-ID</string>
+    <string name="qpTitle">Abfrage - Spieler</string>
+    <string name="qeTitle">Abfrage - Veranstaltung, Ort</string>
+    <string name="qoTitle">Abfrage - ECO, Eröffnung</string>
+    <string name="qgGameId">Spiel-ID</string>
+    <string name="qGameId">Spiele</string>
+    <string name="qGameIdOrder">Reihenfolge</string>
+    <string name="qCurrentId">aktuelles Spiel</string>
+    <string name="qMaxItems">max. Einträge</string>
+    <string name="qDate">Datum</string>
+    <string name="qDateFormat">JJJJ.MM.TT</string>
+    <string name="qFrom">von</string>
+    <string name="qTo">bis</string>
+    <string name="qPlayer">Spieler</string>
+    <string name="qEvent">Ereignis</string>
+    <string name="qSite">Ort</string>
+    <string name="qDesc">absteigend</string>
+    <string name="qEco">ECO</string>
+    <string name="qOpening">Eröffnung</string>
+    <string name="qVariation">Variation</string>
+    <string name="qNoResults">Keine Ergebnisse!</string>
+    
+</resources>

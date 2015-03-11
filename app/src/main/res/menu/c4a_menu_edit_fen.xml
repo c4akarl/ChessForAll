@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item 	android:id="@+id/menu_edit_fen_color" android:title="@string/menu_edit_fen_color" /> 
+	<item 	android:id="@+id/menu_edit_fen_castling" android:title="@string/menu_edit_fen_castling" /> 
+	<item 	android:id="@+id/menu_edit_fen_ep" android:title="@string/menu_edit_fen_ep" /> 
+	<item 	android:id="@+id/menu_edit_fen_draw50" android:title="@string/menu_edit_fen_draw50" /> 
+	<item 	android:id="@+id/menu_edit_fen_movecounter" android:title="@string/menu_edit_fen_movecounter" /> 
+</menu>

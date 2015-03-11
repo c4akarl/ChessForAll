@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="whatsNew">O que há de novo</string>
+	<string name="whatsNew_text">
+	    *** v1.42 ***
+	    &lt;br/>Código-fonte disponibilizado no GitHub.
+	    &lt;br/>IDE: Conversão de Eclipse em Android Studio.
+        &lt;br/>&lt;br/>*** v1.41 ***
+	    &lt;br/>Exibir as coordenadas tabuleiro de xadrez (a-h, 1-8)
+	    &lt;br/>Corrigido: Erro de interface em alguns dispositivos.
+	    &lt;br/>&lt;br/>*** v1.40 ***
+	    &lt;br/>O código fonte está disponível na minha homepage.
+	    &lt;br/>&lt;br/>*** v1.39.2 ***
+	    &lt;br/>Solução de problemas na busca de xadrez.
+	    &lt;br/>Timeout acrescentou.
+	    &lt;br/>&lt;br/>*** v1.39.1 ***
+	    &lt;br/>Corrigido: problema com a chamada submenu em alguns dispositivos.
+	    &lt;br/>&lt;br/>*** v1.39 ***
+	    &lt;br/>Traduções:
+	    &lt;br/>Espanhol - Sergio Revinelli, Sergio Ballesteros
+		&lt;br/>Russo - Ark (hark, arkpc)
+	    &lt;br/>&lt;br/>*** v1.38 ***
+	    &lt;br/>Solução de problemas: erro de acesso da máquina com múltiplas contas de usuário em tablets com Android 4.2.
+	    &lt;br/>Adicionado: configurações de opção para jogar força(não é suportado em todos os motores).
+	    &lt;br/>&lt;br/>*** v1.37 ***
+	    &lt;br/>Horizontal botão scrollview agregado (24 elementos).
+	    &lt;br/>Novos gráficos elementos por Lars Streblow.
+	    &lt;br/>Os efeitos sonoros adicionados.
+	    &lt;br/>&lt;br/>*** v1.36 ***
+	    &lt;br/>Redesenho da interface gráfica do usuário.
+	    &lt;br/>Botão de menu acrescentou.
+	    &lt;br/>Suporte para tipo MIME:
+	    &lt;br/>application/x-chess-pgn.
+	    &lt;br/>PGN download (web).
+	    &lt;br/>Manual do usuário (Web).
+	    &lt;br/>&lt;br/>*** v1.35 ***
+	    &lt;br/>Banco de dados PGN:
+	    &lt;br/>busca por ECO, abertura, variação
+	    &lt;br/>corrigidos: alguns problemas relatados
+	    &lt;br/>&lt;br/>*** v1.34 ***
+	    &lt;br/>Melhorar o gerenciador de arquivos PGN
+	    &lt;br/>Adicionado: tags PGN suplementares
+	</string>
+</resources>

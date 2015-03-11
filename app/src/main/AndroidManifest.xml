@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="ccc.chess.gui.chessforall"
+	android:versionCode="54"
+	android:versionName="1.42" >
+	<uses-sdk android:minSdkVersion="8"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true"/>
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@style/CustomTheme" android:allowBackup="true" >
+		
+		<activity android:name=".C4aMain"
+	        android:theme="@style/Theme.C4a"
+	        android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="ccc.chess.GUI" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/x-chess-pgn" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".PgnFileManager" android:label="@string/app_pgnFileManager" android:windowSoftInputMode="adjustPan" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".ChessGameData" android:label="@string/app_chessData" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".ChessNotation" android:label="@string/app_chessNotation" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".ChessMoveText" android:label="" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".OptionsChessBoard" android:label="@string/app_optionsChessBoard" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".OptionsGUI" android:label="@string/app_optionsGUI" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".OptionsTimeControl" android:label="@string/app_optionsTimeControl" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".OptionsPlay" android:label="@string/menu_modes" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".OptionsEnginePlay" android:label="@string/app_optionsEnginePlay" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".EditChessBoard" android:label="@string/app_editChessBoard" android:screenOrientation="portrait" > </activity>
+        <activity android:name=".PlayEngineSettings" android:label="@string/app_playEngineSettings" android:screenOrientation="portrait"> </activity>
+        <activity android:name=".PdbToPgnActivity" android:label="PDB to PGN" android:screenOrientation="portrait"> </activity>
+
+    </application>
+</manifest> 

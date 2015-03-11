@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chess for All</string>
+    <string name="app_pgnFileManager">PGN-Arquivo-Manager</string>
+    <string name="app_chessData">Dados do jogo</string>
+    <string name="app_chessNotation">notação</string>
+    <string name="app_optionsChessBoard">Opções - tabuleiro de xadrez</string>
+    <string name="app_optionsGUI">Opções - Configurações do Usuário</string>
+    <string name="app_optionsPlay">Opções - Jogar um jogo</string>
+    <string name="app_optionsEnginePlay">jogo do máquina</string>
+    <string name="app_optionsTimeControl">Opções - Controle de Tempo</string>
+    <string name="app_editChessBoard">Editar tabuleiro de xadrez</string>
+    <string name="app_playEngineSettings">Lote - Jogue Auto Máquina</string>
+    <string name="comingSoon">em breve</string>
+    
+    <string name="screen_small">SMALL</string>
+    <string name="screen_medium">MEDIUM</string>
+    <string name="screen_large">LARGE</string>
+    
+    <string name="pieces">KQRBN</string>
+    <string name="sendEmail">Enviar e-mail</string>
+    
+    <string name="btn_Ok">  OK  </string>
+    <string name="btn_Yes">Sim</string>
+    <string name="btn_No">não</string>
+    <string name="btn_Pgn">PGN</string>
+    <string name="btn_Move">Movim.</string>
+    <string name="btn_MoveText">+texto</string>
+
+    <string name="inputDialog_chess960Id">Chess960-ID(0...959):</string>
+    <string name="inputDialog_color">Selecione a cor:</string>
+    <string name="inputDialog_castling">roque valor</string>
+    <string name="inputDialog_enPassant">En passant valor</string>
+    <string name="inputDialog_draw50">Desenhe 50 regra move</string>
+    <string name="inputDialog_moveCounter">Movimento contrário:</string>
+    
+    <string name="cl_unknownPiece">pedaço desconhecido</string>
+    <string name="cl_wrongBasePosition">posição errada</string>
+    <string name="cl_resultWhite">1-0</string>
+    <string name="cl_resultBlack">0-1</string>
+    <string name="cl_resultDraw">1/2-1/2</string>
+    <string name="cl_gameOver">Game over</string>
+    <string name="cl_50MoveRule">50-Mova-Rule</string>
+    <string name="cl_position3Times">3x posição</string>
+    <string name="cl_moveError">erro jogada</string>
+    <string name="cl_moveWhite">movimentos branco</string>
+    <string name="cl_moveBlack">movimentos negros</string>
+    <string name="cl_moveMultiple">movimentos múltiplos</string>
+    <string name="cl_moveNo">movimentos impossível</string>
+    <string name="cl_moveWrong">mover inválido</string>
+    <string name="cl_mate">mate</string>
+    <string name="cl_stealmate">beco sem saída</string>
+    <string name="cl_check">xadrez!</string>
+    <string name="cl_castlingError">roque?</string>
+    <string name="cl_castlingCheck">mover inválido ou xadrez</string>
+    <string name="cl_emptyField">campo vazio</string>
+    <string name="cl_kingError">apenas um rei!</string>
+    <string name="cl_fenError">Erro FEN</string>
+    <string name="cl_notationError">Erro notação PGN</string>
+    <string name="cl_variationError">Variação: parêntese desigual</string>
+    <string name="cl_checkOponent">adversário no xadrez</string>
+    
+    <string name="player_move"> seu movimento . . .</string>
+    <string name="engine_thinking"> . . .</string>
+    <string name="engine_openingBook"> livro de abertura  . . .</string>
+    <string name="engine_autoPlay"> reprodução automática</string>
+    <string name="engine_paused"> jogo pausado!</string>
+    <string name="engine_pausedNotConnected"> máquina parou! (não conectado)</string>
+    <string name="engineProgressDialog">conexão com máquinas  . . .</string>
+    <string name="engineNotFound">motor não foi encontrado . . . tente novamente ></string>
+    <string name="engineNoEnginesOnDevice">sem máquinasno dispositivo</string>
+    <string name="engineJustInstalled">Motor instalado, começar a jogar!</string>
+    <string name="engineAlreadyRunning">máquina já estiver em execução, app perto </string>
+    <string name="engine_noRespond">máquina parado (sem resposta)</string>
+    <string name="engineSelectDialog">C4A - De diálogo\nSelecione um máquina</string>
+    <string name="enginePlayerResign">demitir o jogo atual</string>
+    <string name="enginePlayerDraw">chamar a oferecer</string>
+    <string name="engineDeclinesDraw">o máquina diminui sua oferta desenhar</string>
+    <string name="engineSearchMessage">Nenhum mecanismo encontrado.\nSearch para os máquinas de xadrez?</string>
+    <string name="engineSearchNoInternetMessage">Sem conexão à Internet!</string>
+    <string name="engineAnalysisSearch">Análise . . .   </string>
+    <string name="engineAnalysisStopWait">A análise é interrompida. . . Por favor, aguarde!</string>
+    <string name="engineAnalysisStop">Análise parado!</string>
+    <string name="engineAutoStop">Paragem automática, a pontuação: </string>
+    <string name="engine_timeout">máquina parado (timeout)</string>
+    
+    <string name="menu_title">Menu</string>
+    <string name="menu_new_game">Novo jogo</string>
+    <string name="menu_edit_board">Editar bordo</string>
+    <string name="menu_pgn">PGN</string>
+    <string name="menu_pgn_load">carregar jogo de PGN-Arquivo</string>
+    <string name="menu_pgn_save">salvar o jogo para PGN-Arquivo</string>
+    <string name="menu_pgn_delete">excluir um PGN-Arquivo</string>
+    <string name="menu_pgn_edit">PGN-Dados</string>
+    <string name="menu_modes">jogar, editar, exibir</string>
+    <string name="menu_modes_edit">Editar</string>
+    <string name="menu_modes_view">Jogar</string>
+    <string name="menu_play_options">Jogar (opções)</string>
+    <string name="menu_enginesettings">Máquinas</string>
+    <string name="menu_enginesettings_engine_1">E1</string>
+    <string name="menu_enginesettings_engine_2">E2</string>
+    <string name="menu_enginesettings_switch">E1 &lt;---&gt; E2</string>
+    <string name="menu_enginesettings_shutdown">Máquinas de desligamento</string>
+    <string name="menu_enginesettings_settings">Configurações do máquina de(E1, E2)</string>
+    <string name="menu_enginesettings_playOptions">Jogar opções de máquina</string>
+    <string name="menu_usersettings">Configurações</string>
+    <string name="menu_usersettings_gui">UI Opções</string>
+    <string name="menu_usersettings_chessBoard">Tabuleiro de xadrez</string>
+    <string name="menu_usersettings_timeControl">Controle de tempo</string>
+    <string name="menu_usersettings_timerAutoPlay">Temporizador de reprodução automática</string>
+    <string name="menu_usersettings_time_white">Horário: branco</string>
+    <string name="menu_usersettings_time_black">Horário: preto</string>
+    <string name="menu_specialities_engine_autoplay">Auto Máquina de jogo</string>
+    <string name="menu_find_engines">Encontrar Máquina de xadrez</string>
+    <string name="menu_about">Sobre</string>
+    <string name="menu_about_new">O que é novo</string>
+    <string name="menu_about_userManual">Manual(Inglês)</string>
+    <string name="menu_about_c4a">Chess for All</string>
+    <string name="menu_about_developer">Desenvolvedor/Licença</string>
+    <string name="menu_about_apps">Todas as minhas aplicações</string>
+    <string name="menu_about_website">Website</string>
+    <string name="menu_about_sourcecode">Source code</string>
+    <string name="menu_about_contact">Contato</string>
+    <string name="menu_analysis">Análise</string>
+    <string name="menu_analysis_stop">parar</string>
+    <string name="menu_analysis_moveStop">mover e parar</string>
+    <string name="menu_analysis_moveContinue">mover e continuar</string>
+    
+    <string name="menu_load_extern">SD-card</string>
+    <string name="menu_load_intern">Ativos</string>
+    <string name="menu_load_www">Download PGN</string>
+    <string name="menu_load_game">Jogo</string>
+    <string name="menu_load_game_first">primeiro</string>
+    <string name="menu_load_game_last">passado</string>
+    <string name="menu_load_game_next">próximo</string>
+    <string name="menu_load_game_previous">anterior</string>
+    <string name="menu_load_game_random">acaso</string>
+    
+    <string name="menu_edit_fen_color">cor (b/n)</string>
+    <string name="menu_edit_fen_castling">Roque</string>
+    <string name="menu_edit_fen_ep">En passant</string>
+    <string name="menu_edit_fen_draw50">Desenhe 50 lances</string>
+    <string name="menu_edit_fen_movecounter">Mover contra</string>
+    <string name="menu_edit_board_clear">Tabuleiro claro</string>
+    <string name="menu_edit_board_current">Posição atual</string>
+    <string name="menu_edit_board_standard">Padrão</string>
+    <string name="menu_edit_board_chess960_manual">Chess960 manual</string>
+    <string name="menu_edit_board_chess960_random">Chess960 acaso</string>
+    <string name="menu_edit_board_chess960_number">Chess960 número</string>
+
+    <string name="menu_info">ação do jogo</string>
+    <string name="menu_info_turnBoard">vire tabuleiro de xadrez</string>
+    <string name="menu_info_variations">variações</string>
+    <string name="menu_info_nag">NAG (+, -, =  . . .)</string>
+    <string name="menu_info_moveNotification">notificação para um movimento</string>
+    <string name="menu_info_moveNotation">notação</string>
+    <string name="menu_info_clipboardCopyPgn">jogo de cópia para prancheta</string>
+    <string name="menu_info_clipboardCopyFen">posição cópia para prancheta</string>
+    <string name="menu_info_clipboardPaste">cole da prancheta</string>
+    
+    <string name="menu_query">Consulta - a procura de jogos</string>
+    <string name="menu_query_gameId">ID do jogo</string>
+    <string name="menu_query_player">Jogador</string>
+    <string name="menu_query_event">Eventp</string>
+    <string name="menu_query_eco">ECO - Abertura</string>
+    
+    <string name="peAutoSave">Backup automático</string>
+    <string name="peAutoFlipColor">mudança de cor automática</string>
+    <string name="peAutoCurrentGame">jogo atual</string>
+    <string name="peRound">Volta</string>
+    <string name="peGameCounter">Contador</string>
+    
+    <string name="fmLblPath">Caminho</string>
+    <string name="fmLblFile">Arquivo</string>
+    <string name="fmLblUrl">URL</string>
+    <string name="fmTitleLoad">PGN-ArquivosGerenciador - jogo de carga</string>
+    <string name="fmTitleSave">PGN-ArquivosGerenciador - salvar jogo</string>
+    <string name="fmTitleDelete">PGN-ArquivosGerenciador - excluir jogo</string>
+    <string name="fmTitleEngineAutoPlay">PGN-ArquivosGerenciador - reprodução automática</string>
+    <string name="fmPathError">Caminho não existe!</string>
+    <string name="fmFileError">Arquivo não existe ou PGN Erro!</string>
+    <string name="fmFileExists">Arquivo existe, sobrescrever?</string>
+    <string name="fmFileNotEndsWithPgn">Não PGN-Arquivo (.pgn)!</string>
+    <string name="fmWebFileError">Nenhum arquivo web (PGN) existe, URL: </string>
+    <string name="fmPgnError">PGN arquivo nome de erro</string>
+    <string name="fmDeleteFileQuestion">Excluir</string>
+    <string name="fmAddFolder">Nova pasta:</string>
+    <string name="fmProgressDialog">Carregando PGN-Data ... \nPor favor, aguarde ...</string>
+    <string name="fmProgressQueryDialog">consulta de banco de dados ...\nPor favor, aguarde ...</string>
+    <string name="fmCreatingPgnDatabase">Criando db: </string>
+    <string name="fmCreatingPgnDatabaseToast">criação de banco de dados  . . .\nmais informações ver notificações</string>
+    <string name="fmDropCreateIndex">soltar/criar um índice. . . por favor aguarde!</string>
+    <string name="fmDatabaseLocked">banco de dados de processo fechado, correndo</string>
+    <string name="fmDownloadError">Baixe erro:</string>
+    <string name="fmDownloadFileExists">Arquivo já existe, operação anulada!</string>
+    <string name="fmFileDownloaded">Arquivo baixado:</string>
+
+    <string name="daTxtLblWhite">Branco</string>
+    <string name="daTxtLblBlack">Negro</string>
+    
+    <string name="dgTitleFileDialog">C4A - PGN-Arquivos-Diálogo</string>
+    <string name="dgTitleDialog">C4A - Diálogo</string>
+    
+    <string name="cbC4a">C4a</string>
+    <string name="cbStandard">Padrão</string>
+    <string name="cbGreen">Verde</string>
+    <string name="cbBrown">Marrom</string>
+    
+    <string name="guPlayerName">nome do jogador</string>
+    <string name="guStatusBar">mostrar barra de status</string>
+    <string name="guLastPosition">mostrar última posição (carga)</string>
+    <string name="guDisableScreenTimeout">Desativar o tempo limite de tela</string>
+    <string name="guUsePgnDatabase">usar banco de dados PGN</string>
+    <string name="guEnableSounds">efeitos sonoros</string>
+    <string name="guDisplayCoordinates">Coordenadas (a-h, 1-8)</string>
+    
+    <string name="epEngineMessage">mensagem para máquina a mostrar</string>
+    <string name="epRandomFirstMove">movimento aleatório primeiro máquina(branco)</string>
+    <string name="epAutoStartEngine">iniciar os máquinas auto</string>
+    <string name="epOpeningBook">Poliglota livro de abertura</string>
+    <string name="epMultiPv">Multi-PV contagem (1...4)</string>
+    <string name="epPvMoves">PV move contar (1...30)</string>
+    
+    <string name="tcGameClock">Cronômetro de jogo</string>
+    <string name="tcMoveTime">Tempo de movimento</string>
+    <string name="tcSandGlass">Ampulheta</string>
+    <string name="tcNone">Nenhum</string>
+
+    <string name="editWhiteMoves">move branco</string>
+    <string name="editBlackMoves">move negros</string>
+    <string name="editChess960">Chess960 posição</string>
+    <string name="editError">Erro: editar bordo</string>
+    <string name="editChessboardDetection">Detecção de tabuleiro de xadrez\n  . . .  por favor, aguarde!</string>
+    
+    <string name="play_white">Jogar branco</string>
+    <string name="play_black">Jogar preto</string>
+    <string name="play_engine">Máquina contra Máquina</string>
+    <string name="play_analysis">Análise</string>
+    <string name="play_two_players">editar</string>
+    <string name="play_two_players_flip">Dois jogadores(bordo de virar)</string>
+    <string name="play_newGame">Novo jogo</string>
+    
+    <string name="ccsTitle">Relógio de xadrez</string>
+    <string name="ccsMessageWhite">Branco</string>
+    <string name="ccsMessageBlack">Negro</string>
+    <string name="ccsMessagePlayerClock">Jogador (relógio)</string>
+    <string name="ccsMessageEngineClock">Máquina (relógio)</string>
+    <string name="ccsMessagePlayerMove">Jogador (mover)</string>
+    <string name="ccsMessageEngineMove">Máquina (mover)</string>
+    <string name="ccsMessagePlayerSand">Jogador (ampulheta)</string>
+    <string name="ccsMessageEngineSand">Máquina (ampulheta)</string>
+    <string name="ccsMessageAutoPlay">Reprodução automática</string>
+    <string name="ccsTime">tempo</string>
+    <string name="ccsBonus">Bônus</string>
+    <string name="ccsH">h</string>
+    <string name="ccsM">min</string>
+    <string name="ccsS">sec</string>
+    <string name="ccsMs">mS</string>
+    
+    <string name="qDatabaseQuery">Consulta de banco de dados</string>
+    <string name="qgTitle">Pergunta - Jogo-ID</string>
+    <string name="qpTitle">Pergunta - Jogador</string>
+    <string name="qeTitle">Pergunta - Evento, Local</string>
+    <string name="qoTitle">Pergunta - ECO, Abertura</string>
+    <string name="qgGameId">ID do jogo</string>
+    <string name="qGameId">jogos</string>
+    <string name="qGameIdOrder">ordem</string>
+    <string name="qCurrentId">jogo atual</string>
+    <string name="qMaxItems">max. itens</string>
+    <string name="qDate">data</string>
+    <string name="qDateFormat">aaaa.mm.dd</string>
+    <string name="qFrom">de</string>
+    <string name="qTo">para</string>
+    <string name="qPlayer">Jogador</string>
+    <string name="qEvent">Evento</string>
+    <string name="qSite">Local</string>
+    <string name="qDesc">descendente</string>
+    <string name="qEco">ECO</string>
+    <string name="qOpening">Abertura</string>
+    <string name="qVariation">Variação</string>
+    <string name="qNoResults">Sem resultados!</string>
+    
+</resources>

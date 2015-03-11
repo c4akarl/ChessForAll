@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="edit_board">Schachbrett editieren - Gebrauchsanweisung</string>
+	<string name="edit_board_text">HINZUFÜGEN: wähle ein Schachsymbolen unterhalb des Schachbrettes aus 
+		und berühre ein oder mehrere Zielfelder am Schachbrett.
+		&lt;br/>&lt;br/>LÖSCHEN: berühre den Abfalleimer und danach ein oder mehrere Schachsymbole auf dem Brett.
+		&lt;br/>&lt;br/>ZIEHEN: ziehen und loslassen auf dem Brett.
+		&lt;br/>&lt;br/>AKTIVE FARBE: berühre das Symbol unterhalb des Abfalleimers um die aktive Farbe zu ändern.
+		&lt;br/>&lt;br/>BRETT Taste: Ein Menü wird angezeigt und du hast folgende Auswahlmöglichkeiten:
+		&lt;br/>  * Brett leeren
+		&lt;br/>  * Aktuelle Stellung
+		&lt;br/>  * Standard Stellung
+		&lt;br/>  * Chess960 editieren
+		&lt;br/>  * Chess960 Zufall
+		&lt;br/>  * Chess960 Nummer
+		&lt;br/>&lt;br/>FEN Taste: Ein Menü wird angezeigt und du kannst folgende FEN-Werte ändern(nur für Profis):
+		&lt;br/>  * Farbe(w/b)
+		&lt;br/>  * Rochade Möglichkeiten
+		&lt;br/>  * En passant Zielfeld
+		&lt;br/>  * 50-Züge-Remis
+		&lt;br/>  * Zugzähler</string>
+</resources>

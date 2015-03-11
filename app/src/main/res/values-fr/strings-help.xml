@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="m_about_c4a">A propos du programme</string>
+	<string name="m_about_c4a_text">&lt;b>&lt;i>Chess for All&lt;/i>&lt;/b> est un éditeur/spectateur de PGN.
+		&lt;br/>&lt;br/>&lt;b>Jouer Moteur&lt;/b>
+		&lt;br/>Ce programme utilise un moteur d\'échecs comme un service.
+		S\'il vous plaît télécharger une &lt;b>&lt;i>Engine&lt;/i>&lt;/b> du marché pour jouer contre un moteur.
+		&lt;br/>&lt;br/>Les moteurs suivants sont supportés:
+		&lt;br/> * &lt;b>&lt;i>Stockfish Chess&lt;/i>&lt;/b>
+		&lt;br/> * &lt;b>&lt;i>Chess Engines&lt;/i>&lt;/b>
+		&lt;br/>&lt;br/>Vous pouvez sélectionner / changer un moteur avec: Menu > Moteurs > E1 ou E2
+		&lt;br/>&lt;br/>Si aucun moteur est sélectionné, le programme détectera un moteur sur votre appareil automatiquement.</string>
+	<string name="m_about_developer">Développeurs/Licence</string>
+	<string name="m_about_developer_text">Moteur Java routines de Peter Österlund (&lt;b>&lt;i>DroidFish&lt;/i>&lt;/b>)
+	    &lt;br/>&lt;br/>En utilisant des UCI moteurs d\'échecs par Aart Bik 
+		&lt;br/>&lt;br/>&lt;b>&lt;i>Chesspresso&lt;/i>&lt;/b>(logique d\'échecs) par Bernhard Seybold
+		&lt;br/>&lt;br/>Les éléments graphiques de Lars Streblow
+		&lt;br/>&lt;br/>Traductions:
+		&lt;br/>Française - Eric Gallula
+		&lt;br/>Espagnole - Sergio Revinelli, Sergio Ballesteros
+		&lt;br/>Russie - Ark (hark, arkpc)
+		&lt;br/>&lt;br/>&lt;b>&lt;i>Chess for All &lt;/i>&lt;/b> est développée par Karl Schreiner
+		&lt;br/>&lt;br/>&lt;b>Licence&lt;/b>
+		&lt;br/>GNU GPLv3.</string>
+</resources>

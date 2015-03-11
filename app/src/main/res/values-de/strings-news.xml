@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="whatsNew">Was ist neu</string>
+	<string name="whatsNew_text">
+	   	*** v1.42 ***
+	    &lt;br/>Source-Code auf GitHub veröffentlicht.
+	    &lt;br/>IDE: Umstellung von Eclipse auf Android Studio.
+        &lt;br/>&lt;br/>*** v1.41 ***
+	    &lt;br/>Anzeige der Schachfeld Koordinaten (a-h, 1-8)
+	    &lt;br/>Beseitigt: Schnittstellen-Fehler bei manchen Geräten.
+	    &lt;br/>&lt;br/>*** v1.40 ***
+	    &lt;br/>Quellcode verfügbar auf meiner Homepage.
+	    &lt;br/>&lt;br/>*** v1.39.2 ***
+	    &lt;br/>Fehlerbehebung in der Schachmaschinen-Suche.
+	    &lt;br/>Timeout hinzugefügt.
+	    &lt;br/>&lt;br/>*** v1.39.1 ***
+	    &lt;br/>Beseitigt: Problem mit Submenü-Aufruf bei manchen Geräten.
+	    &lt;br/>&lt;br/>*** v1.39 ***
+	    &lt;br/>Übersetzungen:
+	    &lt;br/>Spanisch - Sergio Revinelli, Sergio Ballesteros
+		&lt;br/>Russisch - Ark (hark, arkpc)
+	    &lt;br/>&lt;br/>*** v1.38 ***
+	    &lt;br/>Fehlerbeseitigung: Maschinen-Zugriffsfehler bei mehreren User-Accounts bei Tablets mit Android 4.2.
+	    &lt;br/>Hinzugefügt: Option Einstellungen für Spielstärke(wird nicht von allen Engines unterstützt).
+	    &lt;br/>&lt;br/>*** v1.37 ***
+	    &lt;br/>Horizontale Button-Scrollview hinzugefügt (24 Elemente).
+	    &lt;br/>Neue Grafik-Elemente von Lars Streblow.
+	    &lt;br/>Ton-Effekte hinzugefügt.
+	    &lt;br/>&lt;br/>*** v1.36 ***
+	    &lt;br/>Neugestaltung der grafischen Benutzeroberfläche.
+	    &lt;br/>Menü-Taste hinzugefügt.
+	    &lt;br/>Unterstützung für MIME-Typ:
+	    &lt;br/>application/x-chess-pgn.
+	    &lt;br/>PGN-Download (Web).
+	    &lt;br/>Bedienungsanleitung (Web).
+	    &lt;br/>&lt;br/>*** v1.35 ***
+	    &lt;br/>PGN-Datenbank:
+	    &lt;br/>Suche nach Eröffnungen(ECO, opening, variation)
+	    &lt;br/>Behoben: einige gemeldete Probleme
+	    &lt;br/>&lt;br/>*** v1.34 ***
+	    &lt;br/>Verbesserung des PGN-Datei-Managers
+	    &lt;br/>Hinzugefügt: PGN zusätzliche Tags
+	</string>
+</resources>

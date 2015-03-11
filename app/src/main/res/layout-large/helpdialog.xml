@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout	xmlns:android="http://schemas.android.com/apk/res/android"
+              	android:layout_width="wrap_content"
+              	android:layout_height="wrap_content"
+              	android:padding="10dp" >
+    <TextView 	android:id="@+id/helpTitle"
+	         	android:layout_width="wrap_content"
+             	android:layout_height="wrap_content"
+             	android:layout_marginBottom="6dp"
+             	android:textSize="24sp"
+             	android:textColor="#FFF" />
+    <View 		android:id="@+id/helpLine"
+    			android:layout_width="wrap_content"
+				android:layout_height="2dip"
+				android:layout_below="@id/helpTitle"
+				android:layout_marginBottom="6dp"
+				android:background="#FFF" />
+
+	<ImageView android:id="@+id/btnOk"
+			    android:src="@drawable/button_ok"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="4dp"
+			    android:layout_alignParentBottom="true"
+			   	android:layout_alignParentLeft="true" />
+	<ImageView android:id="@+id/btnUserManual"
+			    android:src="@drawable/manual"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			   	android:layout_centerHorizontal="true"
+			    android:layout_alignTop="@id/btnOk" /> 
+	<ImageView android:id="@+id/btnCancelHelp"
+			    android:src="@drawable/button_cancelhelp"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			   	android:layout_alignParentRight="true"
+			    android:layout_alignTop="@id/btnOk" /> 
+			    
+	<ScrollView android:id="@+id/scrollHelp"
+	    		android:layout_height="wrap_content"   
+      			android:layout_width="fill_parent"
+      			android:layout_below="@id/helpLine"   
+      			android:layout_above="@id/btnOk" >   
+	    <TextView 	android:id="@+id/helpText"
+	              	style="@style/c4aTV3"
+	              	android:layout_width="wrap_content"
+	              	android:layout_marginBottom="6dp"
+	              	android:maxLines="100"
+	              	android:scrollbars="vertical"
+	              	android:textSize="22sp"
+	              	android:textColor="#ffffff" />
+	</ScrollView>
+	
+</RelativeLayout>

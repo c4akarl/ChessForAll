@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="whatsNew">Quoi de neuf</string>
+	<string name="whatsNew_text">
+	   	*** v1.42 ***
+	    &lt;br/>Code source disponible sur GitHub.
+	    &lt;br/>Conversion Eclipse effectuée sous Android Studio IDE.
+        &lt;br/>&lt;br/>*** v1.41 ***
+	    &lt;br/>Afficher les coordonnées de l\'échiquier (a-h, 1-8)
+	    &lt;br/>Correction: erreur d\'interface sur certains appareils.
+	    &lt;br/>&lt;br/>*** v1.40 ***
+	    &lt;br/>Le code source est disponible depuis ma page.
+	    &lt;br/>&lt;br/>*** v1.39.2 ***
+	    &lt;br/>Débogage sur la recherche du moteur d\'echecs.
+	    &lt;br/>Ajout temps d\'expiration.
+	    &lt;br/>&lt;br/>*** v1.39.1 ***
+	    &lt;br/>Correction à l\'appel du sous menu sur certains appareils.
+	    &lt;br/>&lt;br/>*** v1.39 ***
+	    &lt;br/>Traductions:
+	    &lt;br/>Espagnole - Sergio Revinelli, Sergio Ballesteros
+		&lt;br/>Russie - Ark (hark, arkpc)
+	    &lt;br/>&lt;br/>*** v1.38 ***
+	    &lt;br/>Résolution du problème: Erreur d\'accés au moteur avec plusieurs comptes utilisateurs notamment sur les tablettes sous Android 4.2.
+	    &lt;br/>Rajouté: Paramètres d\'option pour la force de jeu (n\'est pas pris en charge par tous les moteurs).
+	    &lt;br/>&lt;br/>*** v1.37 ***
+	    &lt;br/>Ajout de la barre de defilement horizontale (24 éléments).
+	    &lt;br/>Nouveaux éléments graphiques de Lars Streblow.
+	    &lt;br/>Ajout d\'effets sonores.
+	    &lt;br/>&lt;br/>*** v1.36 ***
+	    &lt;br/>Refonte de l\'interface graphique.
+	    &lt;br/>Bouton Menu ajouté.
+	    &lt;br/>Prise en charge du format MIME:
+	    &lt;br/>application/x-chess-pgn.
+	    &lt;br/>PGN téléchargement (web).
+	    &lt;br/>Manuel de l\'utilisateur (Web).
+	    &lt;br/>&lt;br/>*** v1.35 ***
+	    &lt;br/>Base de données PGN:
+	    &lt;br/>recherche par codes ECO, ouverture, variante
+	    &lt;br/>fixé: certains problèmes signalés
+	    &lt;br/>&lt;br/>*** v1.34 ***
+	    &lt;br/>Amelioration du gestionnaire de fichiers PGN
+	    &lt;br/>Ajout: Etiquettes PGN  supplementaires
+	</string>
+</resources>

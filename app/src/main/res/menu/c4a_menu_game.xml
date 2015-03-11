@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item 	android:id="@+id/menu_player_resign" android:title="@string/enginePlayerResign" />
+	<item 	android:id="@+id/menu_player_draw" android:title="@string/enginePlayerDraw" />
+	<item 	android:id="@+id/menu_info_variations" android:title="@string/menu_info_variations" />
+	<item 	android:id="@+id/menu_info_moveNotification" android:title="@string/menu_info_moveNotification" />
+	<item 	android:id="@+id/menu_info_nag" android:title="@string/menu_info_nag" />  
+	<item 	android:id="@+id/menu_info_moveNotation" android:title="@string/menu_info_moveNotation" />
+</menu>

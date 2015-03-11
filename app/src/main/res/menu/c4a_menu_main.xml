@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item 	android:id="@+id/menu_play" android:title="@string/menu_modes_view" />
+	<item 	android:id="@+id/menu_edit" android:title="@string/menu_modes_edit" />
+	<item 	android:id="@+id/menu_pgn" android:title="@string/menu_pgn" />
+	<item 	android:id="@+id/menu_enginesettings" android:title="@string/menu_enginesettings" />
+	<item 	android:id="@+id/menu_usersettings" android:title="@string/menu_usersettings" />
+	<item 	android:id="@+id/menu_about" android:title="@string/menu_about" />
+
+</menu>

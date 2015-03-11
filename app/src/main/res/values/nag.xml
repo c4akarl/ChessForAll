@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="nag_$0"></string>
+	<string name="nag_$1">!</string>
+	<string name="nag_$2">\?</string> 
+	<string name="nag_$3">!!</string>
+	<string name="nag_$4">\??</string>
+	<string name="nag_$5">!?</string>
+	<string name="nag_$6">\?!</string>
+	<string name="nag_$7">&#9632;</string>
+	<string name="nag_$8"> </string>
+	<string name="nag_$9"> </string>
+	<string name="nag_$10">=</string>
+	<string name="nag_$11">=</string>
+	<string name="nag_$12">=</string>
+	<string name="nag_$13">ý</string>
+	<string name="nag_$14">+=</string>
+	<string name="nag_$15">=-</string>
+	<string name="nag_$16">+/-</string>
+	<string name="nag_$17">-/+</string>
+	<string name="nag_$18">+-</string>
+	<string name="nag_$19">-+</string>
+</resources>

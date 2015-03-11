@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item 	android:id="@+id/menu_enginesettings_engine_1" android:title="@string/menu_enginesettings_engine_1" />
+	<item 	android:id="@+id/menu_enginesettings_engine_2" android:title="@string/menu_enginesettings_engine_2" />
+	<item 	android:id="@+id/menu_enginesettings_switch" android:title="@string/menu_enginesettings_switch" />
+	<item 	android:id="@+id/menu_enginesettings_settings" android:title="@string/menu_enginesettings_settings" />
+	<item 	android:id="@+id/menu_enginesettings_playOptions" android:title="@string/menu_enginesettings_playOptions" />
+	<item 	android:id="@+id/menu_specialities_engine_autoplay" android:title="@string/menu_specialities_engine_autoplay" />
+	<item 	android:id="@+id/menu_enginesettings_shutdown" android:title="@string/menu_enginesettings_shutdown" />
+	<item 	android:id="@+id/menu_find_engines" android:title="@string/menu_find_engines" />
+</menu>

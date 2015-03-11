@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="edit_board">Editar tabuleiro de xadrez - Manual</string>
+	<string name="edit_board_text">ADICIONAR: selecionar um símbolo de xadrez a partir das imagens abaixo a placa e tocar um ou mais campos de destino a bordo.
+		&lt;br/>&lt;br/>EXCLUIR: tocar no ícone da lixeira e depois toque em um ou mais símbolos de xadrez a bordo.
+		&lt;br/>&lt;br/>MOVIMENTO: arrastar e soltar a bordo.
+		&lt;br/>&lt;br/>COR ATIVA: toque neste ícone (abaixo do ícone do lixo) para alterar a cor ativa.
+		&lt;br/>&lt;br/>Botão MESA: um menu aparece e lhe oferece as seguintes possibilidades:
+		&lt;br/>  * tabuleiro de xadrez clara
+		&lt;br/>  * última posição atual
+		&lt;br/>  * a posição padrão de xadrez
+		&lt;br/>  * criar uma posição Chess960 manuais
+		&lt;br/>  * criar uma posição aleatória Chess960
+		&lt;br/>  * inserir um ID Chess960
+		&lt;br/>&lt;br/>Botão FEN: um menu aparece e você pode alterar os seguintes valores FEN (somente para profissionais):
+		&lt;br/>  * cor ativa
+		&lt;br/>  * roque disponibilidade
+		&lt;br/>  * en passant alvo quadrado
+		&lt;br/>  * relógio halfmove
+		&lt;br/>  * número fullmove</string>
+</resources>

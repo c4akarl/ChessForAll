@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chess for All</string>
+    <string name="app_pgnFileManager">PGN-менеджер файлов</string>
+    <string name="app_chessData">Данные игры</string>
+    <string name="app_chessNotation">Нотация</string>
+    <string name="app_optionsChessBoard">Настройки шахматной доски</string>
+    <string name="app_optionsGUI">Настройки пользователя</string>
+    <string name="app_optionsPlay">Настройки режимов игры</string>
+    <string name="app_optionsEnginePlay">Настройки игры движка</string>
+    <string name="app_optionsTimeControl">Настройки контроля времени</string>
+    <string name="app_editChessBoard">Настройки шахматной доски</string>
+    <string name="app_playEngineSettings">Настройки режима автоигры движком</string>
+    <string name="comingSoon">ждите ответа</string>
+     
+    <string name="screen_small">SMALL</string>
+    <string name="screen_medium">MEDIUM</string>
+    <string name="screen_large">LARGE</string>
+    
+    <string name="pieces">KQRBN</string>
+    <string name="sendEmail">Отправить почту</string>
+
+    <string name="btn_Ok">  ОК  </string>
+    <string name="btn_Yes">да</string>
+    <string name="btn_No">нет</string>
+    <string name="btn_Pgn">PGN</string>
+    <string name="btn_Move">Ходы</string>
+    <string name="btn_MoveText">+текст</string>
+
+    <string name="inputDialog_chess960Id">Chess960-ID(0...959):</string>
+    <string name="inputDialog_color">Выбор цвета:</string>
+    <string name="inputDialog_castling">Рокировка</string>
+    <string name="inputDialog_enPassant">Взятие на проходе</string>
+    <string name="inputDialog_draw50">Правило ничьи в 50 ходов</string>
+    <string name="inputDialog_moveCounter">Счетчик ходов:</string>
+    
+    <string name="cl_unknownPiece">неизвестная фигура</string>
+    <string name="cl_wrongBasePosition">неправильная позиция</string>
+    <string name="cl_resultWhite">1-0</string>
+    <string name="cl_resultBlack">0-1</string>
+    <string name="cl_resultDraw">1/2-1/2</string>
+    <string name="cl_gameOver">Игра окончена</string>
+    <string name="cl_50MoveRule">Правило 50-и ходов</string>
+    <string name="cl_position3Times">3-x кратное повторение позиции</string>
+    <string name="cl_moveError">ошбочный ход</string>
+    <string name="cl_moveWhite">ходы белых</string>
+    <string name="cl_moveBlack">ходы черных</string>
+    <string name="cl_moveMultiple">множество ходов</string>
+    <string name="cl_moveNo">невозможный ход</string>
+    <string name="cl_moveWrong">ошибочный ход</string>
+    <string name="cl_mate">мат</string>
+    <string name="cl_stealmate">пат</string>
+    <string name="cl_check">шах!</string>
+    <string name="cl_castlingError">рокировка?</string>
+    <string name="cl_castlingCheck">не возможный ход из-за шаха, невозможная рокирока</string>
+    <string name="cl_emptyField">пустое поле</string>
+    <string name="cl_kingError">только один король!</string>
+    <string name="cl_fenError">FEN ошибка</string>
+    <string name="cl_notationError">PGN нотация ошибок</string>
+    <string name="cl_variationError">Вариант: unequal parenthesis</string>
+    <string name="cl_checkOponent">оппонент в шахматах</string>
+    
+    <string name="player_move"> ваш ход . . .</string>
+    <string name="engine_thinking"> . . .</string>
+    <string name="engine_openingBook"> книга дебютов  . . .</string>
+    <string name="engine_autoPlay"> Автоматическое воспроизведение</string>
+    <string name="engine_paused"> игра приостановлена!</string>
+    <string name="engine_pausedNotConnected"> движок остановился! (не подключен)</string>
+    <string name="engineProgressDialog">подключение к движкам  . . .</string>
+    <string name="engineNotFound">движок не найден . . . попробуйте еще раз &gt;</string>
+    <string name="engineNoEnginesOnDevice">нет движков на устройстве</string>
+    <string name="engineJustInstalled">Движок установлен, начинайте играть!</string>
+    <string name="engineAlreadyRunning">Движок уже запущен, закройте программу </string>
+    <string name="engine_noRespond">Движок остановлен (не отвечает)</string>
+    <string name="engineSelectDialog">C4A - Диалог\nВыберите движок</string>
+    <string name="enginePlayerResign">сдать текущую игру</string>
+    <string name="enginePlayerDraw">Предложить ничью</string>
+    <string name="engineDeclinesDraw">движок отклонил ничью</string>
+    <string name="engineSearchMessage">Движок не найден.\nИскать шахматный движок?</string>
+    <string name="engineSearchNoInternetMessage">Нет подключения к интернету!</string>
+    <string name="engineAnalysisSearch">Анализ . . .   </string>
+    <string name="engineAnalysisStopWait">Анализ остановлен. . . Пожалуйста, подождите!</string>
+    <string name="engineAnalysisStop">Анализ остановился!</string>
+    <string name="engineAutoStop">Автоматическая остановка, счет: </string>
+    <string name="engine_timeout">Движок остановлен (тайм-аут)</string>
+    
+    <string name="menu_title">Меню</string>
+    <string name="menu_new_game">новая игра</string>
+    <string name="menu_edit_board">изменить доску</string>
+    <string name="menu_pgn">PGN</string>
+    <string name="menu_pgn_load">загрузить игру из PGN-файла</string>
+    <string name="menu_pgn_save">сохранить игру в PGN-файл</string>
+    <string name="menu_pgn_delete">удалить PGN-файл</string>
+    <string name="menu_pgn_edit">PGN-данные</string>
+    <string name="menu_modes">играть, редактировать, смотреть</string>
+    <string name="menu_modes_edit">Редактировать</string>
+    <string name="menu_modes_view">Играть</string>
+    <string name="menu_play_options">Играть (опции)</string>
+    <string name="menu_enginesettings">движки</string>
+    <string name="menu_enginesettings_engine_1">E1</string>
+    <string name="menu_enginesettings_engine_2">E2</string>
+    <string name="menu_enginesettings_switch">E1 &lt;---&gt; E2</string>
+    <string name="menu_enginesettings_shutdown">Отключение движка</string>
+    <string name="menu_enginesettings_settings">Настройки движка (E1, E2)</string>
+    <string name="menu_enginesettings_playOptions">Настройка игры движка</string>
+    <string name="menu_usersettings">настройки</string>
+    <string name="menu_usersettings_gui">Настройка интерфейса пользователя</string>
+    <string name="menu_usersettings_chessBoard">Шахматная доска</string>
+    <string name="menu_usersettings_timeControl">Контроль времени</string>
+    <string name="menu_usersettings_timerAutoPlay">Таймер автоигры</string>
+    <string name="menu_usersettings_time_white">Время: белые</string>
+    <string name="menu_usersettings_time_black">Время: черные</string>
+    <string name="menu_specialities_engine_autoplay">Автоигра движка</string>
+    <string name="menu_find_engines">Поиск шахматных движков</string>
+    <string name="menu_about">О программе</string>
+    <string name="menu_about_new">Что нового?</string>
+    <string name="menu_about_userManual">Руководство пользователя(английский)</string>
+    <string name="menu_about_c4a">Chess for All</string>
+    <string name="menu_about_developer">Разработчик/Лицензия</string>
+    <string name="menu_about_apps">Все мои приложения</string>
+    <string name="menu_about_website">Веб-сайт</string>
+    <string name="menu_about_sourcecode">Source code</string>
+    <string name="menu_about_contact">Контакт</string>
+    <string name="menu_analysis">Анализ</string>
+    <string name="menu_analysis_stop">стоп</string>
+    <string name="menu_analysis_moveStop">ход и остоп</string>
+    <string name="menu_analysis_moveContinue">ход и продолжить</string>
+    
+    <string name="menu_load_extern">SD-карта</string>
+    <string name="menu_load_intern">Активы</string>
+    <string name="menu_load_www">Скачать PGN</string>
+    <string name="menu_load_game">Игра</string>
+    <string name="menu_load_game_first">первый</string>
+    <string name="menu_load_game_last">последний</string>
+    <string name="menu_load_game_next">следующий</string>
+    <string name="menu_load_game_previous">предыдущий</string>
+    <string name="menu_load_game_random">случайный</string>
+    
+    <string name="menu_edit_fen_color">Цвет (б/ч)</string>
+    <string name="menu_edit_fen_castling">Рокировка</string>
+    <string name="menu_edit_fen_ep">На проходе</string>
+    <string name="menu_edit_fen_draw50">Ничья после 50 ходов</string>
+    <string name="menu_edit_fen_movecounter">Счетчик ходов</string>
+    <string name="menu_edit_board_clear">Очистить доску</string>
+    <string name="menu_edit_board_current">Текущая позиция</string>
+    <string name="menu_edit_board_standard">Стандарт</string>
+    <string name="menu_edit_board_chess960_manual">Chess960 ручной</string>
+    <string name="menu_edit_board_chess960_random">Chess960 случайный</string>
+    <string name="menu_edit_board_chess960_number">Chess960 номер</string>
+
+    <string name="menu_info">действие игры</string>
+    <string name="menu_info_turnBoard">повернуть доску</string>
+    <string name="menu_info_variations">варианты</string>
+    <string name="menu_info_nag">NAG (+, -, =  . . .)</string>
+    <string name="menu_info_moveNotification">уведомление о ходе</string>
+    <string name="menu_info_moveNotation">нотация</string>
+    <string name="menu_info_clipboardCopyPgn">копирование игры в буфер обмена</string>
+    <string name="menu_info_clipboardCopyFen">копирование позиции в буфер обмена</string>
+    <string name="menu_info_clipboardPaste">вставить из буфера обмена</string>
+    
+    <string name="menu_query">Запрос - поиск для игр</string>
+    <string name="menu_query_gameId">Номер партии</string>
+    <string name="menu_query_player">Игрок</string>
+    <string name="menu_query_event">Событие</string>
+    <string name="menu_query_eco">Библиотека дебютов - открытие</string>
+    
+    <string name="peAutoSave">Автосохранение</string>
+    <string name="peAutoFlipColor">Автоматический поворот (по цвету)</string>
+    <string name="peAutoCurrentGame">Текущая игра</string>
+    <string name="peRound">Тур</string>
+    <string name="peGameCounter">Счетчик</string>
+    
+    <string name="fmLblPath">Путь</string>
+    <string name="fmLblFile">Файл</string>
+    <string name="fmLblUrl">URL</string>
+    <string name="fmTitleLoad">PGN-файл-менеджер - Загрузит игру</string>
+    <string name="fmTitleSave">PGN-файл-менеджер - Сохранить игру</string>
+    <string name="fmTitleDelete">PGN-файл-менеджер - удалить игру</string>
+    <string name="fmTitleEngineAutoPlay">PGN-FileManager - автоигра</string>
+    <string name="fmPathError">Путь не существует!</string>
+    <string name="fmFileError">Файл не существует или PGN-Ошибка!</string>
+    <string name="fmFileExists">Файл существует, перезаписать?</string>
+    <string name="fmFileNotEndsWithPgn">Не PGN-файл(.pgn)!</string>
+    <string name="fmWebFileError">Web-файл (PGN) не существует, URL: </string>
+    <string name="fmPgnError">PGN-файл-имя-ошибка</string>
+    <string name="fmDeleteFileQuestion">Удаление</string>
+    <string name="fmAddFolder">Новая папка:</string>
+    <string name="fmProgressDialog">Загрузка PGN-данных ... \nПожалуйста, ждите ...</string>
+    <string name="fmProgressQueryDialog">запрос к базе данных ...\nПожалуйста, ждите ...</string>
+    <string name="fmCreatingPgnDatabase">Создание БД: </string>
+    <string name="fmCreatingPgnDatabaseToast">Создание базы данных  . . .\nДополнительные сведения см. в уведомлениях</string>
+    <string name="fmDropCreateIndex">удаление/создание индексов. . . пожалуйста, подождите!</string>
+    <string name="fmDatabaseLocked">База данных заблокирована, процесс запущен</string>
+    <string name="fmDownloadError">Ошибка скачивания:</string>
+    <string name="fmDownloadFileExists">Файл существует, операция отменена!</string>
+    <string name="fmFileDownloaded">Скачивание файла:</string>
+    
+    <string name="daTxtLblWhite">Белые</string>
+    <string name="daTxtLblBlack">Черные</string>
+    
+    <string name="dgTitleFileDialog">C4A - PGN-Файл-Диалог</string>
+    <string name="dgTitleDialog">C4A - Диалог</string>
+    
+    <string name="cbC4a">C4a</string>
+    <string name="cbStandard">Стандарт</string>
+    <string name="cbGreen">Зеленый</string>
+    <string name="cbBrown">Коричневый</string>
+    
+    <string name="guPlayerName">имя игрока</string>
+    <string name="guStatusBar">показать строку состояния</string>
+    <string name="guLastPosition">показать последнюю позицию(загрузить)</string>
+    <string name="guDisableScreenTimeout">отключить блокировку экрана</string>
+    <string name="guUsePgnDatabase">использовать базу данных PGN</string>
+    <string name="guEnableSounds">Звуковые эффекты</string>
+    <string name="guDisplayCoordinates">координаты (a-h, 1-8)</string>
+    
+    <string name="epEngineMessage">Показать сообщение движка</string>
+    <string name="epRandomFirstMove">случайный первый ход движка(белые)</string>
+    <string name="epAutoStartEngine">автоматический старт движка</string>
+    <string name="epOpeningBook">Использовать библиотеку дебютов</string>
+    <string name="epBookHint">book.bin</string>
+    <string name="epMultiPv">Многопроцессный режим (1...4)</string>
+    <string name="epPvMoves">Глубина рассчета (1...0)</string>
+    
+    <string name="tcGameClock">Время на игру</string>
+    <string name="tcMoveTime">Время на ход</string>
+    <string name="tcSandGlass">Песочные часы</string>
+    <string name="tcNone">Отсутствует</string>
+ 
+    <string name="editWhiteMoves">Ходы белых</string>
+    <string name="editBlackMoves">Ходы черных</string>
+    <string name="editChess960">Chess960 позиция</string>
+    <string name="editError">Ошибка: отредактировать доску</string>
+    <string name="editChessboardDetection">Шахматная доска обнаружения\n  . . .  пожалуйста, подождите!</string>
+    
+    <string name="play_white">Играть белыми</string>
+    <string name="play_black">Играть черными</string>
+    <string name="play_engine">Движок против Движка</string>
+    <string name="play_analysis">Анализ</string>
+    <string name="play_two_players">Редактировать</string>
+    <string name="play_two_players_flip">Игрок против Игрока (вращать доску)</string>
+    <string name="play_newGame">новая игра</string>
+    
+    <string name="ccsTitle">Шахматные часы</string>
+    <string name="ccsMessageWhite">Белые</string>
+    <string name="ccsMessageBlack">Черные</string>
+    <string name="ccsMessagePlayerClock">Игрок (часы)</string>
+    <string name="ccsMessageEngineClock">Движок (часы)</string>
+    <string name="ccsMessagePlayerMove">Игрок (ход)</string>
+    <string name="ccsMessageEngineMove">Движок (ход)</string>
+    <string name="ccsMessagePlayerSand">Игрок (песочные часы)</string>
+    <string name="ccsMessageEngineSand">Движок (песочные часы)</string>
+    <string name="ccsMessageAutoPlay">Автоигра</string>
+    <string name="ccsTime">Время</string>
+    <string name="ccsBonus">Бонус (прибавление)</string>
+    <string name="ccsH">ч</string>
+    <string name="ccsM">м</string>
+    <string name="ccsS">с</string>
+    <string name="ccsMs">мс</string>
+    
+    <string name="qDatabaseQuery">Запросов к базам данных</string>
+    <string name="qgTitle">Запрос - Номер партии</string>
+    <string name="qpTitle">Запрос - Игрок</string>
+    <string name="qeTitle">Запрос - Событие, Место</string>
+    <string name="qoTitle">Запрос - Дебют</string>
+    <string name="qgGameId">Номер партии</string>
+    <string name="qGameId">игры</string>
+    <string name="qGameIdOrder">заказ</string>
+    <string name="qCurrentId">текущая игра</string>
+    <string name="qMaxItems">макс. рейтинг</string>
+    <string name="qDate">Дата</string>
+    <string name="qDateFormat">гггг.мм.дд</string>
+    <string name="qFrom">с</string>
+    <string name="qTo">по</string>
+    <string name="qPlayer">Игрок</string>
+    <string name="qEvent">Событие</string>
+    <string name="qSite">Место</string>
+    <string name="qDesc">по нисходящей</string>
+    <string name="qEco">Дебютная энциклопедия</string>
+    <string name="qOpening">Дебют</string>
+    <string name="qVariation">Вариант</string>
+    <string name="qNoResults">Нет результатов!</string>
+    
+</resources>
+
+

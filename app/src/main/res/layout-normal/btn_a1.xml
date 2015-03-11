@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/app_background"
+	android:orientation="horizontal"
+	android:paddingTop="3dip"
+    android:paddingBottom="3dip" 
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content">
+	
+	<ImageView android:id="@+id/btn_edit_board"
+		android:src="@drawable/btn_edit_board" 
+		android:layout_alignParentLeft="true" 
+		android:layout_marginLeft="5dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"/>
+	<ImageView android:id="@+id/btn_pgn_data"
+		android:src="@drawable/btn_pgn_data"
+		android:layout_toRightOf="@id/btn_edit_board"
+		android:layout_marginLeft="2dip"
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"/>
+	<ImageView android:id="@+id/btn_game"
+		android:src="@drawable/btn_game"
+		android:layout_toRightOf="@id/btn_pgn_data"
+		android:layout_marginLeft="2dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"/>
+	<ImageView android:id="@+id/btn_notation"
+		android:src="@drawable/btn_notation"
+		android:layout_toRightOf="@id/btn_game"
+		android:layout_marginLeft="2dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"/>   	   	
+	<ImageView android:id="@+id/btn_settings"
+		android:src="@drawable/btn_settings"
+		android:layout_toRightOf="@id/btn_notation"
+		android:layout_marginLeft="2dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"/>
+	
+	<ImageView android:id="@+id/btn_menu"
+		android:src="@drawable/btn_menu"
+		android:layout_alignParentRight="true"
+		android:layout_marginLeft="2dip"
+		android:layout_marginRight="5dip" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"/>
+	
+</RelativeLayout>
