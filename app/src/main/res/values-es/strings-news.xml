@@ -2,7 +2,10 @@
 <resources>
 	<string name="whatsNew">Qué hay de nuevo</string>
 	<string name="whatsNew_text">
-	    *** v1.42 ***
+	    *** v1.43 ***
+	    &lt;br/>Llamando a la aplicación: Reconocimiento del Tablero.
+	    &lt;br/>Más información disponible en mi página web.
+        &lt;br/>&lt;br/>*** v1.42 ***
 	    &lt;br/>El Código fuente publicado en GitHub.
 	    &lt;br/>IDE: Conversión de Eclipse en Android Studio.
         &lt;br/>&lt;br/>*** v1.41 ***
@@ -22,19 +25,5 @@
 	    &lt;br/>Botón horizontal "ScrollView" añadido (24 elementos).
 	    &lt;br/>Nuevos elementos gráficos de Lars Streblow.
 	    &lt;br/>Efectos de sonido añadidos.
-	    &lt;br/>&lt;br/>*** v1.36 ***
-	    &lt;br/>Rediseño de la interfaz gráfica de usuario.
-	    &lt;br/>Botón Menu añadido.
-	    &lt;br/>Soporte para el tipo MIME:
-	    &lt;br/>aplicación/x-chess-pgn.
-	    &lt;br/>Descarga PGN (web).
-	    &lt;br/>Manual del usuario (Web).
-	    &lt;br/>&lt;br/>*** v1.35 ***
-	    &lt;br/>Base de datos PGN:
-	    &lt;br/>búsqueda por ECO, apertura y variación
-	    &lt;br/>Arreglado: algunos problemas reportados
-	    &lt;br/>&lt;br/>*** v1.34 ***
-	    &lt;br/>Mejora del administrador de archivos PGN
-	    &lt;br/>Añadido: Etiquetas PGN suplementarias
 	</string>
 </resources>

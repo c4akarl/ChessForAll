@@ -2,7 +2,10 @@
 <resources>
 	<string name="whatsNew">O que há de novo</string>
 	<string name="whatsNew_text">
-	    *** v1.42 ***
+	    *** v1.43 ***
+	    &lt;br/>Chamando o aplicativo: Reconhecimento do tabuleiro de xadrez.
+	    &lt;br/>Mais informações estão disponíveis no meu site.
+        &lt;br/>&lt;br/>*** v1.42 ***
 	    &lt;br/>Código-fonte disponibilizado no GitHub.
 	    &lt;br/>IDE: Conversão de Eclipse em Android Studio.
         &lt;br/>&lt;br/>*** v1.41 ***
@@ -26,19 +29,5 @@
 	    &lt;br/>Horizontal botão scrollview agregado (24 elementos).
 	    &lt;br/>Novos gráficos elementos por Lars Streblow.
 	    &lt;br/>Os efeitos sonoros adicionados.
-	    &lt;br/>&lt;br/>*** v1.36 ***
-	    &lt;br/>Redesenho da interface gráfica do usuário.
-	    &lt;br/>Botão de menu acrescentou.
-	    &lt;br/>Suporte para tipo MIME:
-	    &lt;br/>application/x-chess-pgn.
-	    &lt;br/>PGN download (web).
-	    &lt;br/>Manual do usuário (Web).
-	    &lt;br/>&lt;br/>*** v1.35 ***
-	    &lt;br/>Banco de dados PGN:
-	    &lt;br/>busca por ECO, abertura, variação
-	    &lt;br/>corrigidos: alguns problemas relatados
-	    &lt;br/>&lt;br/>*** v1.34 ***
-	    &lt;br/>Melhorar o gerenciador de arquivos PGN
-	    &lt;br/>Adicionado: tags PGN suplementares
 	</string>
 </resources>

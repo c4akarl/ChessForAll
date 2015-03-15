@@ -4860,19 +4860,19 @@ public class UiControl
         pdbToPgnIntent = new Intent(c4aM, PdbToPgnActivity.class);
     }
     public void updateFullscreenStatus(boolean bUseFullscreen)
-	{	// full screen on/off  
-	   if(bUseFullscreen)
-	   {
-		   c4aM.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		   c4aM.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-	   }
-	   else
-	   {
-		   c4aM.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-		   c4aM.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-	   }
-	   mainView.requestLayout();
-	}
+{	// full screen on/off
+    if(bUseFullscreen)
+    {
+        c4aM.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        c4aM.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+    }
+    else
+    {
+        c4aM.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        c4aM.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+    mainView.requestLayout();
+}
     public char getFieldColor(CharSequence field, boolean boardTurn)									
     {return chessBoard.getFieldColor(field, boardTurn);}
     public void getGameData(CharSequence fileBase, CharSequence filePath, CharSequence fileName, 

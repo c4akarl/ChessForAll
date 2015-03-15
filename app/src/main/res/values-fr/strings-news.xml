@@ -2,7 +2,10 @@
 <resources>
 	<string name="whatsNew">Quoi de neuf</string>
 	<string name="whatsNew_text">
-	   	*** v1.42 ***
+	   	*** v1.43 ***
+	    &lt;br/>Appel de l\'application: Reconnaissance de l\'échiquier.
+	    &lt;br/>Plus d\'informations disponibles sur mon site Web.
+        &lt;br/>&lt;br/>*** v1.42 ***
 	    &lt;br/>Code source disponible sur GitHub.
 	    &lt;br/>Conversion Eclipse effectuée sous Android Studio IDE.
         &lt;br/>&lt;br/>*** v1.41 ***
@@ -26,19 +29,5 @@
 	    &lt;br/>Ajout de la barre de defilement horizontale (24 éléments).
 	    &lt;br/>Nouveaux éléments graphiques de Lars Streblow.
 	    &lt;br/>Ajout d\'effets sonores.
-	    &lt;br/>&lt;br/>*** v1.36 ***
-	    &lt;br/>Refonte de l\'interface graphique.
-	    &lt;br/>Bouton Menu ajouté.
-	    &lt;br/>Prise en charge du format MIME:
-	    &lt;br/>application/x-chess-pgn.
-	    &lt;br/>PGN téléchargement (web).
-	    &lt;br/>Manuel de l\'utilisateur (Web).
-	    &lt;br/>&lt;br/>*** v1.35 ***
-	    &lt;br/>Base de données PGN:
-	    &lt;br/>recherche par codes ECO, ouverture, variante
-	    &lt;br/>fixé: certains problèmes signalés
-	    &lt;br/>&lt;br/>*** v1.34 ***
-	    &lt;br/>Amelioration du gestionnaire de fichiers PGN
-	    &lt;br/>Ajout: Etiquettes PGN  supplementaires
 	</string>
 </resources>

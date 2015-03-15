@@ -2,7 +2,10 @@
 <resources>
 	<string name="whatsNew">What\'s new</string>
 	<string name="whatsNew_text">
-	    *** v1.42 ***
+	    *** v1.43 ***
+	    &lt;br/>Calling the application: Chessboard Recognition.
+	    &lt;br/>More information is available on my website.
+        &lt;br/>&lt;br/>*** v1.42 ***
 	    &lt;br/>Source code released on GitHub.
 	    &lt;br/>IDE: Conversion of Eclipse on Android Studio.
         &lt;br/>&lt;br/>*** v1.41 ***
@@ -26,19 +29,5 @@
 	    &lt;br/>Horizontal button scrollview added (24 elements).
 	    &lt;br/>New graphics elements by Lars Streblow.
 	    &lt;br/>Sound effects added.
-	    &lt;br/>&lt;br/>*** v1.36 ***
-	    &lt;br/>Redesign of the graphical user interface.
-	    &lt;br/>Menu button added.
-	    &lt;br/>Support for MIME type:
-	    &lt;br/>application/x-chess-pgn.
-	    &lt;br/>PGN download (web).
-	    &lt;br/>User manual (web).
-	    &lt;br/>&lt;br/>*** v1.35 ***
-	    &lt;br/>PGN database:
-	    &lt;br/>search by ECO, opening, variation
-	    &lt;br/>fixed: some reported problems
-	    &lt;br/>&lt;br/>*** v1.34 ***
-	    &lt;br/>Improving the PGN-File-Manager
-	    &lt;br/>Added: PGN supplemental tags
  	</string>
 </resources>

@@ -241,7 +241,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		case R.id.btnCamera:
 			try
 			{
-				Intent i = getPackageManager().getLaunchIntentForPackage("ccc.chessboard.recognition");
+				Intent i = getPackageManager().getLaunchIntentForPackage("ccc.chess.chessboard.recognition");
 	    		i.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);	 // + onActivityResult()
 	    		i.putExtra("calling-activity", "GUI");
 				startActivityForResult(i, CHESSBOARD_RECOGNITION_REQUEST_CODE);
