@@ -102,6 +102,12 @@ public class C4aMain extends Activity implements Ic4aDialogCallback, OnTouchList
     	}
         super.onResume();
     }
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        uic.getDataFromIntent(intent);
+    }
 //	MENU		MENU		MENU		MENU		MENU		MENU		MENU
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)

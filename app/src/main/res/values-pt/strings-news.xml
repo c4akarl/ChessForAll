@@ -2,7 +2,9 @@
 <resources>
 	<string name="whatsNew">O que há de novo</string>
 	<string name="whatsNew_text">
-	    *** v1.43 ***
+	    *** v1.44 ***
+	    &lt;br/>Interface do Usuário: otimizando as operações de análise.
+        &lt;br/>&lt;br/>*** v1.43 ***
 	    &lt;br/>Chamando o aplicativo: Reconhecimento do tabuleiro de xadrez.
 	    &lt;br/>Mais informações estão disponíveis no meu site.
         &lt;br/>&lt;br/>*** v1.42 ***

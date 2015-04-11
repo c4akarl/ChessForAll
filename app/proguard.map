@@ -1281,18 +1281,19 @@ ccc.chess.gui.chessforall.C4aMain -> ccc.chess.gui.chessforall.C4aMain:
     47:64:void onDestroy() -> onDestroy
     69:80:void onPause() -> onPause
     85:104:void onResume() -> onResume
-    109:111:void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
-    115:116:boolean onContextItemSelected(android.view.MenuItem) -> onContextItemSelected
-    124:124:android.app.Dialog onCreateDialog(int) -> onCreateDialog
-    127:127:void getCallbackValue(int) -> a
-    132:138:void onWindowFocusChanged(boolean) -> onWindowFocusChanged
-    141:141:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
-    143:143:void myClickHandler(android.view.View) -> myClickHandler
-    147:149:boolean onKeyUp(int,android.view.KeyEvent) -> onKeyUp
-    153:153:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-    156:164:void setWakeLock(boolean) -> a
-    169:200:void setRunPrefs() -> a
-    204:219:void setRunMoveHistory() -> b
+    108:110:void onNewIntent(android.content.Intent) -> onNewIntent
+    115:117:void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
+    121:122:boolean onContextItemSelected(android.view.MenuItem) -> onContextItemSelected
+    130:130:android.app.Dialog onCreateDialog(int) -> onCreateDialog
+    133:133:void getCallbackValue(int) -> a
+    138:144:void onWindowFocusChanged(boolean) -> onWindowFocusChanged
+    147:147:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+    149:149:void myClickHandler(android.view.View) -> myClickHandler
+    153:155:boolean onKeyUp(int,android.view.KeyEvent) -> onKeyUp
+    159:159:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    162:170:void setWakeLock(boolean) -> a
+    175:206:void setRunPrefs() -> a
+    210:225:void setRunMoveHistory() -> b
 ccc.chess.gui.chessforall.ChessBoard -> ccc.chess.gui.chessforall.d:
     java.lang.String TAG -> a
     android.content.Context mContext -> q
@@ -2492,79 +2493,80 @@ ccc.chess.gui.chessforall.UiControl -> ccc.chess.gui.chessforall.af:
     1224:1274:void startFileManager(int,int,int) -> a
     1298:1301:void startGameData() -> e
     1304:1312:void startNotation$13462e() -> f
-    2379:2510:void enginePlay(java.lang.CharSequence,java.lang.CharSequence) -> b
-    2514:2516:void cancelBindTask() -> g
-    2519:2521:void cancelSearchTask() -> h
-    2524:2533:void startEngineAutoplay() -> i
-    2536:2553:void chessEngineBestMove(java.lang.CharSequence,java.lang.CharSequence) -> c
-    2556:2580:java.lang.CharSequence chessEngineGui(java.lang.CharSequence,java.lang.CharSequence) -> f
-    2584:2592:void startEnginePlay() -> H
-    2595:2616:void startEnginePlayIsReady() -> j
-    2619:2662:java.lang.CharSequence getEngineThinkingMessage() -> k
-    2667:2692:java.lang.CharSequence getEnginePausedMessage() -> l
-    2698:2716:void initInfoArrays(boolean) -> a
-    2720:2738:void setMoveTime() -> m
-    2742:2753:void setPauseEnginePlay(boolean) -> g
-    2757:2780:void continuePausedEngine$1385ff() -> n
-    2786:2830:void pauseEnginePlay(int) -> b
-    2833:2884:void nextGameEngineAutoPlay() -> I
-    2957:3046:void selectEngine(int,java.util.ArrayList) -> a
-    3049:3081:void switchEngines() -> o
-    3200:3225:boolean pdbToPgnSearchTask(java.lang.CharSequence,java.lang.CharSequence) -> d
-    3238:3261:boolean initPdbPgn() -> p
-    3265:3514:java.lang.String getPgnFromPdb(java.lang.String) -> a
-    3551:3559:boolean pdbToPgnCheckFen(java.lang.String) -> c
-    3563:3595:java.lang.String pdbToPgnCastling(java.lang.String) -> d
-    3599:3616:java.lang.String getFirstMove(java.lang.String) -> e
-    3620:3656:void pdbToPgnUpdateFiles(java.lang.String,java.lang.String) -> a
-    3659:3660:void pdbToPgnSetLogMessage(java.lang.String,java.lang.String) -> b
-    3664:3671:void pdbToPgnEnd() -> q
-    3675:3675:int getImageSet() -> r
-    3679:3687:int getChessFieldSize() -> s
-    3691:3700:void setButtonPosition(boolean) -> b
-    3703:3733:void setButtonPosition(int) -> c
-    3743:3765:void writePgnErrorFile(java.lang.String) -> b
-    3837:3842:boolean getIsEndPosition() -> t
-    3846:3851:java.lang.CharSequence getGameOverMessage() -> J
-    3855:3858:void setToClipboard(java.lang.CharSequence) -> a
-    3861:3919:void getFromClipboard() -> u
-    3922:3938:android.graphics.Bitmap combineImages(int,int,int) -> b
-    3942:3947:android.graphics.Bitmap rotateImage$53291273(int) -> e
-    3951:3953:void playSound$255f295(int) -> f
-    3956:3969:java.lang.CharSequence getGameInfo() -> v
-    3974:3992:void setInfoSize(int,boolean) -> a
-    4001:4173:void setInfoMessage(boolean,boolean,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence) -> a
-    4458:4491:void setInfoMoveValues(android.text.SpannableStringBuilder,int) -> a
-    4494:4516:int getMoveIdxFromInfo() -> w
-    4521:4522:void myClickHandler(android.view.View) -> myClickHandler
-    4526:4713:void myClickHandlerEvents(android.view.View) -> a
-    4864:4875:void updateFullscreenStatus(boolean) -> c
-    4882:4905:void getGameData(java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,boolean,boolean,int) -> a
-    4908:4936:void getNewChessPosition(java.lang.CharSequence) -> e
-    4952:4977:void nextMove(int,int) -> a
-    4980:4983:void setNagToMoveText(java.lang.CharSequence) -> b
-    5008:5021:void startEdit(boolean) -> d
-    5029:5074:void startPlay(boolean) -> e
-    5092:5094:void stopThreads$1385ff() -> x
-    5097:5100:void stopTimeHandler(boolean) -> f
-    5103:5106:void stopAutoPlay() -> y
-    5109:5196:void initChessClock() -> z
-    5199:5201:void stopChessClock() -> A
-    5207:5214:void startChessClock() -> B
-    5217:5226:void stopGameShow() -> C
-    5252:5257:void startTurnBoard() -> D
-    5260:5270:void startVariation() -> E
-    5273:5276:void startUserManual() -> F
-    5297:5311:void updateCurrentPosition(java.lang.CharSequence) -> c
-    5315:5320:void startC4aService315(java.lang.CharSequence,java.lang.CharSequence) -> e
-    5336:5408:void moveAction(int) -> d
-    5411:5450:void setPlayerData() -> K
-    5454:5468:void updatePosibleMoves() -> L
-    5471:5477:void updateMoveOnBoard(java.lang.CharSequence) -> f
-    5480:5484:void setDrawValues(int,int,boolean) -> a
-    5487:5540:void updateTime(java.lang.CharSequence) -> d
-    5543:5555:void updateTimeBackground(android.widget.TextView,int) -> a
-    5559:5780:void updateGui() -> G
+    2389:2520:void enginePlay(java.lang.CharSequence,java.lang.CharSequence) -> b
+    2524:2526:void cancelBindTask() -> g
+    2529:2531:void cancelSearchTask() -> h
+    2534:2543:void startEngineAutoplay() -> i
+    2546:2563:void chessEngineBestMove(java.lang.CharSequence,java.lang.CharSequence) -> c
+    2566:2590:java.lang.CharSequence chessEngineGui(java.lang.CharSequence,java.lang.CharSequence) -> f
+    2594:2602:void startEnginePlay() -> H
+    2605:2626:void startEnginePlayIsReady() -> j
+    2629:2672:java.lang.CharSequence getEngineThinkingMessage() -> k
+    2677:2702:java.lang.CharSequence getEnginePausedMessage() -> l
+    2708:2726:void initInfoArrays(boolean) -> a
+    2730:2748:void setMoveTime() -> m
+    2752:2763:void setPauseEnginePlay(boolean) -> g
+    2767:2790:void continuePausedEngine$1385ff() -> n
+    2796:2840:void pauseEnginePlay(int) -> b
+    2843:2894:void nextGameEngineAutoPlay() -> I
+    2967:3056:void selectEngine(int,java.util.ArrayList) -> a
+    3059:3091:void switchEngines() -> o
+    3210:3235:boolean pdbToPgnSearchTask(java.lang.CharSequence,java.lang.CharSequence) -> d
+    3248:3271:boolean initPdbPgn() -> p
+    3275:3524:java.lang.String getPgnFromPdb(java.lang.String) -> a
+    3561:3569:boolean pdbToPgnCheckFen(java.lang.String) -> c
+    3573:3605:java.lang.String pdbToPgnCastling(java.lang.String) -> d
+    3609:3626:java.lang.String getFirstMove(java.lang.String) -> e
+    3630:3666:void pdbToPgnUpdateFiles(java.lang.String,java.lang.String) -> a
+    3669:3670:void pdbToPgnSetLogMessage(java.lang.String,java.lang.String) -> b
+    3674:3681:void pdbToPgnEnd() -> q
+    3685:3685:int getImageSet() -> r
+    3689:3697:int getChessFieldSize() -> s
+    3701:3710:void setButtonPosition(boolean) -> b
+    3713:3743:void setButtonPosition(int) -> c
+    3753:3775:void writePgnErrorFile(java.lang.String) -> b
+    3778:3849:boolean getDataFromIntent(android.content.Intent) -> a
+    3874:3879:boolean getIsEndPosition() -> t
+    3883:3888:java.lang.CharSequence getGameOverMessage() -> J
+    3892:3895:void setToClipboard(java.lang.CharSequence) -> a
+    3898:3956:void getFromClipboard() -> u
+    3959:3975:android.graphics.Bitmap combineImages(int,int,int) -> b
+    3979:3984:android.graphics.Bitmap rotateImage$53291273(int) -> e
+    3988:3990:void playSound$255f295(int) -> f
+    3993:4006:java.lang.CharSequence getGameInfo() -> v
+    4011:4029:void setInfoSize(int,boolean) -> a
+    4038:4210:void setInfoMessage(boolean,boolean,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence) -> a
+    4500:4533:void setInfoMoveValues(android.text.SpannableStringBuilder,int) -> a
+    4536:4558:int getMoveIdxFromInfo() -> w
+    4563:4564:void myClickHandler(android.view.View) -> myClickHandler
+    4568:4757:void myClickHandlerEvents(android.view.View) -> a
+    4908:4919:void updateFullscreenStatus(boolean) -> c
+    4926:4949:void getGameData(java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence,boolean,boolean,int) -> a
+    4952:4980:void getNewChessPosition(java.lang.CharSequence) -> e
+    4996:5021:void nextMove(int,int) -> a
+    5024:5027:void setNagToMoveText(java.lang.CharSequence) -> b
+    5052:5065:void startEdit(boolean) -> d
+    5073:5118:void startPlay(boolean) -> e
+    5136:5138:void stopThreads$1385ff() -> x
+    5141:5144:void stopTimeHandler(boolean) -> f
+    5147:5150:void stopAutoPlay() -> y
+    5153:5240:void initChessClock() -> z
+    5243:5245:void stopChessClock() -> A
+    5251:5258:void startChessClock() -> B
+    5261:5270:void stopGameShow() -> C
+    5296:5301:void startTurnBoard() -> D
+    5304:5314:void startVariation() -> E
+    5317:5320:void startUserManual() -> F
+    5341:5355:void updateCurrentPosition(java.lang.CharSequence) -> c
+    5359:5364:void startC4aService315(java.lang.CharSequence,java.lang.CharSequence) -> e
+    5380:5457:void moveAction(int) -> d
+    5460:5499:void setPlayerData() -> K
+    5503:5517:void updatePosibleMoves() -> L
+    5520:5526:void updateMoveOnBoard(java.lang.CharSequence) -> f
+    5529:5533:void setDrawValues(int,int,boolean) -> a
+    5536:5589:void updateTime(java.lang.CharSequence) -> d
+    5592:5604:void updateTimeBackground(android.widget.TextView,int) -> a
+    5608:5829:void updateGui() -> G
 ccc.chess.gui.chessforall.UiControl$1 -> ccc.chess.gui.chessforall.ag:
     ccc.chess.gui.chessforall.UiControl this$0 -> a
     499:499:void onCancel(android.content.DialogInterface) -> onCancel
@@ -2603,7 +2605,7 @@ ccc.chess.gui.chessforall.UiControl$18 -> ccc.chess.gui.chessforall.ap:
     1695:1708:void run() -> run
 ccc.chess.gui.chessforall.UiControl$19 -> ccc.chess.gui.chessforall.aq:
     ccc.chess.gui.chessforall.UiControl this$0 -> a
-    2979:3043:void onClick(android.content.DialogInterface,int) -> onClick
+    2989:3053:void onClick(android.content.DialogInterface,int) -> onClick
 ccc.chess.gui.chessforall.UiControl$2 -> ccc.chess.gui.chessforall.ar:
     ccc.chess.gui.chessforall.UiControl this$0 -> a
     510:510:void onCancel(android.content.DialogInterface) -> onCancel
@@ -2611,13 +2613,13 @@ ccc.chess.gui.chessforall.UiControl$20 -> ccc.chess.gui.chessforall.as:
     java.lang.String pgn -> a
     boolean isEngineOk -> b
     ccc.chess.gui.chessforall.UiControl this$0 -> c
-    3090:3196:void run() -> run
+    3100:3206:void run() -> run
 ccc.chess.gui.chessforall.UiControl$21 -> ccc.chess.gui.chessforall.at:
     ccc.chess.gui.chessforall.UiControl this$0 -> a
-    4139:4155:void run() -> run
+    4176:4192:void run() -> run
 ccc.chess.gui.chessforall.UiControl$22 -> ccc.chess.gui.chessforall.au:
     ccc.chess.gui.chessforall.UiControl this$0 -> a
-    4181:4192:void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
+    4218:4234:void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
 ccc.chess.gui.chessforall.UiControl$3 -> ccc.chess.gui.chessforall.av:
     ccc.chess.gui.chessforall.UiControl this$0 -> a
     530:531:void onClick(android.content.DialogInterface,int) -> onClick
@@ -2663,19 +2665,22 @@ ccc.chess.gui.chessforall.UiControl$ChessEngineSearchTask -> ccc.chess.gui.chess
     java.lang.CharSequence currentBestMove -> n
     boolean isDrawOffer -> o
     boolean isNoRespond -> p
-    java.lang.CharSequence taskFen -> q
-    java.lang.CharSequence taskMoves -> r
-    java.lang.StringBuilder sbMoves -> s
-    java.lang.StringBuilder sbInfo -> t
-    long searchStartTimeInfo -> u
-    int MAX_SEARCH_TIMEOUT -> v
-    int MAX_SEARCH_CANCEL_TIMEOUT -> w
-    boolean cancelTask -> x
-    ccc.chess.gui.chessforall.UiControl this$0 -> y
+    long currentTime -> q
+    long previousTime -> r
+    long cntTime -> s
+    java.lang.CharSequence taskFen -> t
+    java.lang.CharSequence taskMoves -> u
+    java.lang.StringBuilder sbMoves -> v
+    java.lang.StringBuilder sbInfo -> w
+    long searchStartTimeInfo -> x
+    int MAX_SEARCH_TIMEOUT -> y
+    int MAX_SEARCH_CANCEL_TIMEOUT -> z
+    boolean cancelTask -> A
+    ccc.chess.gui.chessforall.UiControl this$0 -> B
     1880:2049:java.lang.CharSequence doInBackground(java.lang.CharSequence[]) -> a
     2053:2074:void onPreExecute() -> onPreExecute
-    2269:2298:java.lang.CharSequence getInfoPv(int,java.lang.CharSequence,int,boolean,java.lang.CharSequence) -> a
-    2329:2339:int getBestScore(int,java.lang.CharSequence) -> a
+    2276:2305:java.lang.CharSequence getInfoPv(int,java.lang.CharSequence,int,boolean,java.lang.CharSequence) -> a
+    2336:2346:int getBestScore(int,java.lang.CharSequence) -> a
     1875:1875:void onProgressUpdate(java.lang.Object[]) -> onProgressUpdate
     1875:1875:void onPostExecute(java.lang.Object) -> onPostExecute
     1875:1875:java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground

@@ -2,7 +2,9 @@
 <resources>
 	<string name="whatsNew">What\'s new</string>
 	<string name="whatsNew_text">
-	    *** v1.43 ***
+	    *** v1.44 ***
+	    &lt;br/>User Interface: optimizing the analysis operations.
+        &lt;br/>&lt;br/>*** v1.43 ***
 	    &lt;br/>Calling the application: Chessboard Recognition.
 	    &lt;br/>More information is available on my website.
         &lt;br/>&lt;br/>*** v1.42 ***

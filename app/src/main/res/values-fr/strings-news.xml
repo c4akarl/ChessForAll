@@ -2,7 +2,9 @@
 <resources>
 	<string name="whatsNew">Quoi de neuf</string>
 	<string name="whatsNew_text">
-	   	*** v1.43 ***
+	   	*** v1.44 ***
+	    &lt;br/>Interface utilisateur: Optimisation des opérations d\'analyse.
+        &lt;br/>&lt;br/>*** v1.43 ***
 	    &lt;br/>Appel de l\'application: Reconnaissance de l\'échiquier.
 	    &lt;br/>Plus d\'informations disponibles sur mon site Web.
         &lt;br/>&lt;br/>*** v1.42 ***

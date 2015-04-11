@@ -2,7 +2,9 @@
 <resources>
 	<string name="whatsNew">Qué hay de nuevo</string>
 	<string name="whatsNew_text">
-	    *** v1.43 ***
+	    *** v1.44 ***
+	    &lt;br/>Interfaz de usuario: optimización de las operaciones de análisis.
+        &lt;br/>&lt;br/>*** v1.43 ***
 	    &lt;br/>Llamando a la aplicación: Reconocimiento del Tablero.
 	    &lt;br/>Más información disponible en mi página web.
         &lt;br/>&lt;br/>*** v1.42 ***

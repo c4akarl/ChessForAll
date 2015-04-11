@@ -402,7 +402,8 @@ public class EngineControl
 	boolean twoEngines = false;				// true if two different engines(b/w)
 	boolean makeMove = false;				// engine makes first move
 	boolean onBinding = false;				// engine makes first move
-    int chessEnginePlayMod = 1;				// 1 = player vs engine, 2 = engine vs player, 3 = engine vs engine
+    int chessEnginePlayMod = 1;				// 1 = player vs engine, 2 = engine vs player, 3 = engine vs engine, 4 = engine analysis
+    				                        // 5 = player vs player, 6 = edit
     long sleepTime = 200;
     
     public boolean chessEngineInit = false;

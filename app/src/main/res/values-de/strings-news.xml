@@ -2,7 +2,9 @@
 <resources>
 	<string name="whatsNew">Was ist neu</string>
 	<string name="whatsNew_text">
-	   	*** v1.43 ***
+	   	*** v1.44 ***
+	    &lt;br/>Benutzer-Schnittstelle: Optimierung der Analyseoperationen.
+        &lt;br/>&lt;br/>*** v1.43 ***
 	    &lt;br/>Aufruf der Applikation: Chessboard Recognition.
 	    &lt;br/>Mehr Informationen gibt es auf meiner Homepage.
         &lt;br/>&lt;br/>*** v1.42 ***

@@ -64,7 +64,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.StyleSpan;
-//import android.util.Log;
+import android.util.Log;
 
 public class UiControl
 {	//>210 	the user interface(sub activity from C4aMain) 
@@ -184,7 +184,7 @@ public class UiControl
 	    	}
     	}
     	updateCurrentPosition("");
-    	getPgnFromIntent();
+        getDataFromIntent(c4aM.getIntent());
     }
 //	MENU		MENU		MENU		MENU		MENU		MENU		MENU	
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) 
@@ -2074,12 +2074,19 @@ public class UiControl
 		}
 		protected void onProgressUpdate(CharSequence... args)
 	    {	
-			long currentTime = System.currentTimeMillis();
+			currentTime = System.currentTimeMillis();
+            if (previousTime != 0)
+                cntTime = cntTime + currentTime - previousTime;
+            previousTime = currentTime;
+            if (cntTime < 200)
+                return;
+            else
+                cntTime = 0;
+
 			if (cancelTask & ((int) (currentTime - searchStartTimeInfo) > MAX_SEARCH_CANCEL_TIMEOUT))
 		    	isNoRespond = true;
 		    if ((int) (currentTime - searchStartTimeInfo) > MAX_SEARCH_TIMEOUT)
 		    	isNoRespond = true;
-//		    Log.i(TAG, "currentTime, searchStartTimeInfo, isNoRespond: " + currentTime + ", " + searchStartTimeInfo + ", " + isNoRespond);
 			if (mate > 0)
 			{
 				engineMessage = (String) args[1];
@@ -2356,6 +2363,9 @@ public class UiControl
     	CharSequence currentBestMove = "";
     	boolean isDrawOffer = false;
     	boolean isNoRespond = false;
+        long currentTime = 0;
+        long previousTime = 0;
+        long cntTime = 0;
     	CharSequence taskFen = "";
     	CharSequence taskMoves = "";
     	StringBuilder sbMoves = new StringBuilder(100);
@@ -3763,53 +3773,80 @@ public class UiControl
 			catch (IOException e)				{e.printStackTrace();} 
 		}
 	}
-	public boolean getPgnFromIntent() 
+	public boolean getDataFromIntent(Intent intent)
 	{
-		boolean copyOk = false;
-        Intent intent = c4aM.getIntent();
+		boolean isOk = false;
+//        Log.i(TAG, "intent.getFlags(): " + intent.getFlags() + ", FLAG_ACTIVITY_NEW_TASK: " + Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // call from another Activity, passing the FEN(String)
+        if (intent.getType() != null)
+        {
+            if (intent.getType().endsWith("x-chess-fen"))
+            {
+//                if (intent.getStringExtra("fen") != null & !intent.getStringExtra("fen").equals("") & intent.getFlags() == 777)
+                if (intent.getStringExtra("fen") != null & !intent.getStringExtra("fen").equals(""))
+                {
+                    editChessBoardIntent.putExtra("currentFen", intent.getStringExtra("fen"));
+                    editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
+                    editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
+                    c4aM.startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
+                    return true;
+                }
+            }
+        }
+
+        // call from another Activity, passing the PGN(File)
         if (intent.getData() != null)
         {
-	        String intentUri = intent.getDataString();
-//	        Log.i(TAG, "intentUri: " + intentUri);
-	        if (intentUri.endsWith(".pgn") | intentUri.endsWith(".pgn-db"))	//".pgn-db" canceled
+            if (intent.getType() == null)
+            {
+                Toast.makeText(c4aM, "This MIME type is not supported.", Toast.LENGTH_LONG).show();
+                return false;
+            }
+	        String intentData = intent.getDataString();
+//            Log.i(TAG, "intentTyp: " + intent.getType() + ", intentData: " + intentData);
+            if (intent.getType().endsWith("x-chess-pgn") & intentData.endsWith(".pgn"))	//".pgn-db" canceled
 	        {
+                // pgn ---> PgnFileManager
 	        	pgnIO = new PgnIO();
+//                Log.i(TAG, "fm_extern_load_path: " + fmPrefs.getString("fm_extern_load_path", ""));
 	        	String target = pgnIO.getExternalDirectory(0) + fmPrefs.getString("fm_extern_load_path", "");
-	        	File fUri = new File(intentUri);
+	        	File fUri = new File(intentData);
 	        	String fName = fUri.getName();
-	        	if (pgnIO.moveFile(intentUri, target))
-	        	{
-//	        		Log.i(TAG, "moveFile OK");
-	        		copyOk = true;
-	        	}
-	        	else
-	        	{
-//	        		Log.i(TAG, "copyFile OK");
-	        		if (pgnIO.fileExists(target, fName))
-	        		{
-	        			Toast.makeText(c4aM, c4aM.getString(R.string.fmDownloadFileExists), Toast.LENGTH_LONG).show();
-	        			return false;
-	        		}
-	        		if (pgnIO.copyFile(intentUri, target))
-	        			copyOk = true;
-	        	}
-        		if (copyOk)
-        		{
-        			if (intentUri.endsWith(".pgn"))
-        			{
-	        			SharedPreferences.Editor ed = fmPrefs.edit();
-	        			ed.putString("fm_extern_load_file", fName);
-	        			ed.commit();
-	        			startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
-        			}
-        			if (intentUri.endsWith(".pgn-db"))
-        				Toast.makeText(c4aM, c4aM.getString(R.string.fmFileDownloaded) + " " + fName, Toast.LENGTH_LONG).show();
-        		}
-        		else
-        			Toast.makeText(c4aM, c4aM.getString(R.string.fmDownloadError) + " " + fName, Toast.LENGTH_LONG).show();
+	        	String fPath = fUri.getParent();
+                if (fPath.startsWith("file:"))
+                    fPath = fPath.replace("file:", "");
+                if (fPath.startsWith(pgnIO.getExternalDirectory(0)))
+                    fPath = fPath.replace(pgnIO.getExternalDirectory(0), "");
+                if (!fPath.endsWith("/"))
+                    fPath = fPath + "/";
+//                Log.i(TAG, "target: " + target + ", fPath: " + fPath + ", fName: " + fName);
+                if (pgnIO.fileExists(pgnIO.getExternalDirectory(0) + fPath, fName))
+                {
+//                    Log.i(TAG, "pgnIO.fileExists()");
+                    isOk = true;
+                    SharedPreferences.Editor ed = fmPrefs.edit();
+                    ed.putString("fm_extern_load_path", fPath);
+                    ed.putString("fm_extern_load_file", fName);
+                    ed.commit();
+                    startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
+                }
+                else
+                {
+//                    Log.i(TAG, "!pgnIO.fileExists()");
+                    if (pgnIO.copyFile(intentData, target))
+                    {
+//                        Log.i(TAG, "target: " + target + ", fName: " + fName);
+                        isOk = true;
+                        SharedPreferences.Editor ed = fmPrefs.edit();
+                        ed.putString("fm_extern_load_file", fName);
+                        ed.commit();
+                        startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
+                    }
+                }
 	        }
         }
-        return copyOk;
+        return isOk;
     }
 	public String getAnalizesTime()
 	{
@@ -4181,8 +4218,13 @@ public class UiControl
     		gc.isMoveError = false;
 			if (ec.chessEngineSearching & !ec.chessEnginePaused)
 			{
-				stopThreads(false);
-				Toast.makeText(c4aM, c4aM.getString(R.string.engine_paused), Toast.LENGTH_SHORT).show();
+                if (ec.chessEnginePlayMod != 4)
+                {
+                    stopThreads(false);
+                    Toast.makeText(c4aM, c4aM.getString(R.string.engine_paused), Toast.LENGTH_SHORT).show();
+                }
+                else
+                    moveAction(position);
 			}
 			else
 			{
@@ -4651,10 +4693,12 @@ public class UiControl
 			stopThreads(false);
 			gc.isGameOver = false;
         	nextMove(1, 0);	// move back
+            startEnginePlay();
 			break;
 		case R.id.btn_analyses_moves_next:
 			stopThreads(false);
 			nextMove(2, 0);	// next move
+            startEnginePlay();
 			break;
 		case R.id.btn_moves_cancel:	
 			startMoveDelete();	
@@ -4905,8 +4949,8 @@ public class UiControl
     }
     public void getNewChessPosition(CharSequence chess960Id)											
     {	// new Game, new ChessPosition  and updateGui
-    	gc.cl.newPosition(chess960Id, "", gc.cl.history.getGameTagValue("Event"), gc.cl.history.getGameTagValue("Site"), "", 
-    			gc.cl.history.getGameTagValue("Round"), gc.cl.history.getGameTagValue("White"), gc.cl.history.getGameTagValue("Black"));
+        gc.cl.newPosition(chess960Id, "", gc.cl.history.getGameTagValue("Event"), gc.cl.history.getGameTagValue("Site"), "",
+                gc.cl.history.getGameTagValue("Round"), gc.cl.history.getGameTagValue("White"), gc.cl.history.getGameTagValue("Black"));
     	if (gc.cl.p_stat.equals("1"))
 	  	{
 	  		if (gc.cl.history.getGameTagValue("Event").equals(""))
@@ -5396,7 +5440,12 @@ public class UiControl
 		        		)
 		        	{
 		    			if (!ec.chessEnginePaused & ec.chessEnginePlayMod == 4)
-		    				pauseEnginePlay(0);			// start/stop engine play
+                        {
+//		    				pauseEnginePlay(0);			// start/stop engine play
+                            stopThreads(false);
+                            startEnginePlay();
+//                            chessEngineBestMove(gc.cl.p_fen, "");
+                        }
 		    			else
 		    				chessEngineBestMove(gc.cl.p_fen, "");
 		        	}

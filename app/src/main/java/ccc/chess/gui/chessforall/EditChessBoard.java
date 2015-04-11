@@ -31,7 +31,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.util.Log;
+//import android.util.Log;
 
 public class EditChessBoard extends Activity implements Ic4aDialogCallback, DialogInterface.OnCancelListener, OnTouchListener
 {
@@ -291,7 +291,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		    	if (resultCode == C4aMain.RESULT_OK)
 		    	{
 			    	String fen1 = data.getStringExtra("fen");
-			    	Log.i(TAG, "fen1: " + fen1);
+//			    	Log.i(TAG, "fen1: " + fen1);
 			    	CharSequence tmp[] = ((String) newFen).split(" ");
 					if (tmp.length == 6)
 					{
