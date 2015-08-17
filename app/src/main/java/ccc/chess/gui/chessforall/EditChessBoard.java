@@ -66,8 +66,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
         btnCamera = (ImageView) findViewById(R.id.btnCamera);
         
 //        if (!runP.getBoolean("run_isActivate", false))
-        
-//        	btnCamera.setVisibility(ImageView.INVISIBLE);
+
+        // !!! Chessboard Recognition disabled !!!
+        btnCamera.setVisibility(ImageView.INVISIBLE);
         
         help = (ImageView) findViewById(R.id.help);
         message = (TextView) findViewById(R.id.message);

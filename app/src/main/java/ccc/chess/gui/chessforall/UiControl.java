@@ -773,7 +773,7 @@ public class UiControl
                 {
                     switch (finalActions.get(item)) 
                     {
-                    case MENU_EDIT_BOARD:
+                        case MENU_EDIT_BOARD:
                     	editChessBoardIntent.putExtra("currentFen", gc.fen);
         	        	editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
         	        	editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
