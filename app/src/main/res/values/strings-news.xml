@@ -2,7 +2,9 @@
 <resources>
 	<string name="whatsNew">What\'s new</string>
 	<string name="whatsNew_text">
-	    *** v1.44 ***
+	    *** v1.45 ***
+	    &lt;br/>Updated to SDK version 23.
+		&lt;br/>&lt;br/>*** v1.44 ***
 	    &lt;br/>User Interface: optimizing the analysis operations.
         &lt;br/>&lt;br/>*** v1.43 ***
 	    &lt;br/>Calling the application: Chessboard Recognition.

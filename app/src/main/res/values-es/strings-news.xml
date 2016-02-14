@@ -2,7 +2,9 @@
 <resources>
 	<string name="whatsNew">Qué hay de nuevo</string>
 	<string name="whatsNew_text">
-	    *** v1.44 ***
+	    *** v1.45 ***
+	    &lt;br/>Actualizar a la versión SDK 23.
+		&lt;br/>&lt;br/>*** v1.44 ***
 	    &lt;br/>Interfaz de usuario: optimización de las operaciones de análisis.
         &lt;br/>&lt;br/>*** v1.43 ***
 	    &lt;br/>Llamando a la aplicación: Reconocimiento del Tablero.

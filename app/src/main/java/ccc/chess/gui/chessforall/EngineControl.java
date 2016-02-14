@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Environment;
 import android.util.AndroidRuntimeException;
+import android.util.Log;
 //import android.util.Log;
 
 public class EngineControl 
@@ -255,6 +256,8 @@ public class EngineControl
 		    	Intent i;
 		    	getEngine().setEngineServiceId(getIdxFromSupportedServices(getEngine().engineServiceName, supportedServices));
 	    		i = new Intent(getEngine().engineServiceName.toString());
+                Log.i(TAG, "engineServiceName: " + getEngine().engineServiceName);
+				i.setPackage("ccc.chess.engine.stockfish");
 	    		//>373 binds to the ChessEngineService --->154 (ccc_engine)
 		    	ret = c4aM.bindService(i, getEngine(), Context.BIND_AUTO_CREATE);
 		    	if (ret)

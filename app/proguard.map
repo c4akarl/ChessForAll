@@ -162,7 +162,7 @@ android.support.v4.app.FragmentActivity -> android.support.v4.app.FragmentActivi
     531:536:void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     544:585:void onStart() -> onStart
     592:598:void onStop() -> onStop
-    653:677:void dump$ec96877(java.lang.String,java.io.PrintWriter,java.lang.String[]) -> a
+    653:677:void dump(java.lang.String,java.io.FileDescriptor,java.io.PrintWriter,java.lang.String[]) -> dump
     680:742:java.lang.String viewToString(android.view.View) -> a
     746:764:void dumpViewHierarchy(java.lang.String,java.io.PrintWriter,android.view.View) -> a
     767:773:void doReallyStop(boolean) -> a
@@ -389,7 +389,71 @@ android.support.v4.app.NoSaveStateFrameLayout -> android.support.v4.app.y:
     32:41:android.view.ViewGroup wrap(android.view.View) -> a
     53:54:void dispatchSaveInstanceState(android.util.SparseArray) -> dispatchSaveInstanceState
     61:62:void dispatchRestoreInstanceState(android.util.SparseArray) -> dispatchRestoreInstanceState
-android.support.v4.app.SuperNotCalledException -> android.support.v4.app.z:
+android.support.v4.app.NotificationCompat -> android.support.v4.app.z:
+    android.support.v4.app.NotificationCompat$NotificationCompatImpl IMPL -> a
+    34:34:android.support.v4.app.NotificationCompat$NotificationCompatImpl access$000() -> a
+android.support.v4.app.NotificationCompat$Action -> android.support.v4.app.aa:
+    int icon -> a
+    java.lang.CharSequence title -> b
+    android.app.PendingIntent actionIntent -> c
+android.support.v4.app.NotificationCompat$BigPictureStyle -> android.support.v4.app.ab:
+    android.graphics.Bitmap mPicture -> a
+    android.graphics.Bitmap mBigLargeIcon -> b
+    boolean mBigLargeIconSet -> c
+android.support.v4.app.NotificationCompat$BigTextStyle -> android.support.v4.app.ac:
+    java.lang.CharSequence mBigText -> a
+android.support.v4.app.NotificationCompat$Builder -> android.support.v4.app.ad:
+    android.content.Context mContext -> a
+    java.lang.CharSequence mContentTitle -> b
+    java.lang.CharSequence mContentText -> c
+    android.app.PendingIntent mContentIntent -> d
+    android.app.PendingIntent mFullScreenIntent -> e
+    android.widget.RemoteViews mTickerView -> f
+    android.graphics.Bitmap mLargeIcon -> g
+    java.lang.CharSequence mContentInfo -> h
+    int mNumber -> i
+    int mPriority -> j
+    boolean mUseChronometer -> k
+    android.support.v4.app.NotificationCompat$Style mStyle -> l
+    java.lang.CharSequence mSubText -> m
+    int mProgressMax -> n
+    int mProgress -> o
+    boolean mProgressIndeterminate -> p
+    java.util.ArrayList mActions -> q
+    android.app.Notification mNotification -> r
+    231:232:android.support.v4.app.NotificationCompat$Builder setWhen(long) -> a
+    259:260:android.support.v4.app.NotificationCompat$Builder setSmallIcon$19d6eefc() -> a
+    283:284:android.support.v4.app.NotificationCompat$Builder setContentTitle(java.lang.CharSequence) -> a
+    291:292:android.support.v4.app.NotificationCompat$Builder setContentText(java.lang.CharSequence) -> b
+    355:356:android.support.v4.app.NotificationCompat$Builder setContentIntent(android.app.PendingIntent) -> a
+    395:396:android.support.v4.app.NotificationCompat$Builder setTicker(java.lang.CharSequence) -> c
+    497:498:android.support.v4.app.NotificationCompat$Builder setAutoCancel$7abcb88d() -> b
+    587:587:android.app.Notification getNotification() -> c
+    595:595:android.app.Notification build() -> d
+android.support.v4.app.NotificationCompat$InboxStyle -> android.support.v4.app.ae:
+    java.util.ArrayList mTexts -> a
+android.support.v4.app.NotificationCompat$NotificationCompatImpl -> android.support.v4.app.af:
+    android.app.Notification build(android.support.v4.app.NotificationCompat$Builder) -> a
+android.support.v4.app.NotificationCompat$NotificationCompatImplBase -> android.support.v4.app.ag:
+    87:94:android.app.Notification build(android.support.v4.app.NotificationCompat$Builder) -> a
+android.support.v4.app.NotificationCompat$NotificationCompatImplHoneycomb -> android.support.v4.app.ah:
+    100:100:android.app.Notification build(android.support.v4.app.NotificationCompat$Builder) -> a
+android.support.v4.app.NotificationCompat$NotificationCompatImplIceCreamSandwich -> android.support.v4.app.ai:
+    108:108:android.app.Notification build(android.support.v4.app.NotificationCompat$Builder) -> a
+android.support.v4.app.NotificationCompat$NotificationCompatImplJellybean -> android.support.v4.app.aj:
+    117:148:android.app.Notification build(android.support.v4.app.NotificationCompat$Builder) -> a
+android.support.v4.app.NotificationCompat$Style -> android.support.v4.app.ak:
+    java.lang.CharSequence mBigContentTitle -> d
+    java.lang.CharSequence mSummaryText -> e
+    boolean mSummaryTextSet -> f
+android.support.v4.app.NotificationCompatJellybean -> android.support.v4.app.al:
+    android.app.Notification$Builder b -> a
+    62:63:void addAction(int,java.lang.CharSequence,android.app.PendingIntent) -> a
+    67:73:void addBigTextStyle(java.lang.CharSequence,boolean,java.lang.CharSequence,java.lang.CharSequence) -> a
+    78:87:void addBigPictureStyle(java.lang.CharSequence,boolean,java.lang.CharSequence,android.graphics.Bitmap,android.graphics.Bitmap,boolean) -> a
+    91:99:void addInboxStyle(java.lang.CharSequence,boolean,java.lang.CharSequence,java.util.ArrayList) -> a
+    102:102:android.app.Notification build() -> a
+android.support.v4.app.SuperNotCalledException -> android.support.v4.app.am:
 android.support.v4.content.FileProvider -> android.support.v4.content.FileProvider:
     java.lang.String[] COLUMNS -> a
     java.io.File DEVICE_ROOT -> b
@@ -438,10 +502,13 @@ android.support.v4.os.ParcelableCompat$CompatCreator -> android.support.v4.a.b:
     51:51:java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
     56:56:java.lang.Object[] newArray(int) -> newArray
 android.support.v4.os.ParcelableCompatCreatorCallbacks -> android.support.v4.a.c:
-    java.lang.Object createFromParcel$58b95460(android.os.Parcel) -> a
+    java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> a
     java.lang.Object[] newArray(int) -> a
 android.support.v4.os.ParcelableCompatCreatorHoneycombMR2 -> android.support.v4.a.d:
     android.support.v4.os.ParcelableCompatCreatorCallbacks mCallbacks -> a
+    36:36:java.lang.Object createFromParcel(android.os.Parcel) -> createFromParcel
+    40:40:java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> createFromParcel
+    44:44:java.lang.Object[] newArray(int) -> newArray
 android.support.v4.util.DebugUtils -> android.support.v4.b.a:
     28:43:void buildShortClassTag(java.lang.Object,java.lang.StringBuilder) -> a
 android.support.v4.util.LogWriter -> android.support.v4.b.b:
@@ -639,11 +706,11 @@ android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
     int mDecorChildCount -> U
     android.support.v4.view.ViewPager$OnPageChangeListener mInternalPageChangeListener -> V
     android.support.v4.view.ViewPager$PageTransformer mPageTransformer -> W
-    int mDrawingOrder -> X
-    java.util.ArrayList mDrawingOrderedChildren -> Y
-    android.support.v4.view.ViewPager$ViewPositionComparator sPositionComparator -> Z
-    java.lang.Runnable mEndScrollRunnable -> aa
-    int mScrollState -> ab
+    int mDrawingOrder -> aa
+    java.util.ArrayList mDrawingOrderedChildren -> ab
+    android.support.v4.view.ViewPager$ViewPositionComparator sPositionComparator -> ac
+    java.lang.Runnable mEndScrollRunnable -> ad
+    int mScrollState -> ae
     383:385:void onDetachedFromWindow() -> onDetachedFromWindow
     388:397:void setScrollState(int) -> a
     478:478:int getClientWidth() -> b
@@ -683,6 +750,7 @@ android.support.v4.view.ViewPager -> android.support.v4.view.ViewPager:
     2370:2382:void onSecondaryPointerUp(android.view.MotionEvent) -> a
     2385:2392:void endDrag() -> i
     2395:2407:void setScrollingCacheEnabled(boolean) -> b
+    2410:2421:boolean canScrollHorizontally(int) -> canScrollHorizontally
     2437:2456:boolean canScroll(android.view.View,boolean,int,int,int) -> a
     2462:2462:boolean dispatchKeyEvent(android.view.KeyEvent) -> dispatchKeyEvent
     2500:2562:boolean arrowScroll(int) -> f
@@ -725,7 +793,7 @@ android.support.v4.view.ViewPager$SavedState -> android.support.v4.view.ViewPage
     1231:1231:java.lang.String toString() -> toString
 android.support.v4.view.ViewPager$SavedState$1 -> android.support.v4.view.ah:
     1237:1237:java.lang.Object[] newArray(int) -> a
-    1237:1237:java.lang.Object createFromParcel$58b95460(android.os.Parcel) -> a
+    1237:1237:java.lang.Object createFromParcel(android.os.Parcel,java.lang.ClassLoader) -> a
 android.support.v4.view.ViewPager$ViewPositionComparator -> android.support.v4.view.ai:
     2865:2865:int compare(java.lang.Object,java.lang.Object) -> compare
 android.support.v4.widget.CursorAdapter -> android.support.v4.widget.a:
@@ -1562,34 +1630,34 @@ ccc.chess.gui.chessforall.EditChessBoard -> ccc.chess.gui.chessforall.EditChessB
     android.widget.ImageView btnBoard -> at
     android.widget.ImageView btnCamera -> au
     android.widget.ImageView help -> av
-    41:99:void onCreate(android.os.Bundle) -> onCreate
-    102:106:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
-    147:159:void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
-    163:230:boolean onContextItemSelected(android.view.MenuItem) -> onContextItemSelected
-    234:285:void myClickHandler(android.view.View) -> myClickHandler
-    288:304:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-    315:396:android.app.Dialog onCreateDialog(int) -> onCreateDialog
-    400:480:void getCallbackValue(int) -> a
-    482:482:void onCancel(android.content.DialogInterface) -> onCancel
-    485:493:void initChess960() -> b
-    545:560:void showChess960() -> c
-    649:664:android.graphics.Bitmap setBackground(int,boolean) -> a
-    668:681:void deleteBackgroundBorder() -> d
-    684:700:void setFen(java.lang.CharSequence) -> b
-    704:741:void setFenTo518(java.lang.CharSequence) -> c
-    766:784:java.lang.CharSequence setPieceToFen(java.lang.CharSequence,int,char) -> a
-    813:838:char[] getFen64(java.lang.CharSequence) -> a
-    842:875:java.lang.CharSequence getFenFromChar(char[]) -> a
-    879:924:boolean checkKing(java.lang.CharSequence) -> d
-    963:996:void showPosibleMoves() -> e
-    1000:1057:void showChessBoard() -> a
-    1060:1064:void setDrawValues(int,int,boolean) -> a
+    41:100:void onCreate(android.os.Bundle) -> onCreate
+    103:107:boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+    148:160:void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo) -> onCreateContextMenu
+    164:231:boolean onContextItemSelected(android.view.MenuItem) -> onContextItemSelected
+    235:286:void myClickHandler(android.view.View) -> myClickHandler
+    289:305:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    316:397:android.app.Dialog onCreateDialog(int) -> onCreateDialog
+    401:481:void getCallbackValue(int) -> a
+    483:483:void onCancel(android.content.DialogInterface) -> onCancel
+    486:494:void initChess960() -> b
+    546:561:void showChess960() -> c
+    650:665:android.graphics.Bitmap setBackground(int,boolean) -> a
+    669:682:void deleteBackgroundBorder() -> d
+    685:701:void setFen(java.lang.CharSequence) -> b
+    705:742:void setFenTo518(java.lang.CharSequence) -> c
+    767:785:java.lang.CharSequence setPieceToFen(java.lang.CharSequence,int,char) -> a
+    814:839:char[] getFen64(java.lang.CharSequence) -> a
+    843:876:java.lang.CharSequence getFenFromChar(char[]) -> a
+    880:925:boolean checkKing(java.lang.CharSequence) -> d
+    964:997:void showPosibleMoves() -> e
+    1001:1058:void showChessBoard() -> a
+    1061:1065:void setDrawValues(int,int,boolean) -> a
 ccc.chess.gui.chessforall.EditChessBoard$1 -> ccc.chess.gui.chessforall.k:
     ccc.chess.gui.chessforall.EditChessBoard this$0 -> a
-    112:114:void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
+    113:115:void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
 ccc.chess.gui.chessforall.EditChessBoard$2 -> ccc.chess.gui.chessforall.l:
     ccc.chess.gui.chessforall.EditChessBoard this$0 -> a
-    392:392:void onCancel(android.content.DialogInterface) -> onCancel
+    393:393:void onCancel(android.content.DialogInterface) -> onCancel
 ccc.chess.gui.chessforall.EngineControl -> ccc.chess.gui.chessforall.m:
     java.lang.String TAG -> a
     ccc.chess.gui.chessforall.C4aMain c4aM -> b
@@ -1705,12 +1773,13 @@ ccc.chess.gui.chessforall.NotificationHelper -> ccc.chess.gui.chessforall.q:
     int notivicationId -> a
     android.app.Notification mNotification -> d
     android.app.NotificationManager mNotificationManager -> e
-    android.app.PendingIntent mContentIntent -> f
-    java.lang.CharSequence mContentTitle -> g
+    android.support.v4.app.NotificationCompat$Builder builder -> f
+    android.app.PendingIntent mContentIntent -> g
+    java.lang.CharSequence mContentTitle -> h
     java.lang.String TAG -> b
-    25:37:void createNotification(java.lang.String) -> a
-    40:70:void progressUpdate(java.lang.Long,java.lang.Long,java.lang.Long,java.lang.Long) -> a
-    73:74:void completed() -> a
+    27:46:void createNotification(java.lang.String) -> a
+    49:82:void progressUpdate(java.lang.Long,java.lang.Long,java.lang.Long,java.lang.Long) -> a
+    85:86:void completed() -> a
 ccc.chess.gui.chessforall.OptionsChessBoard -> ccc.chess.gui.chessforall.OptionsChessBoard:
     java.lang.String TAG -> a
     android.content.SharedPreferences userPrefs -> b
@@ -2792,16 +2861,16 @@ ccc.chess.logic.c4aservice.ChessHistory -> ccc.chess.d.a.b:
     217:241:java.lang.CharSequence getPreviousValueFromMoveHistory(int,java.lang.CharSequence,java.lang.CharSequence,java.lang.CharSequence) -> a
     245:272:java.lang.CharSequence getBaseFenForNewVariation$46dec7c(int) -> b
     276:283:java.lang.CharSequence getBaseFenFromLastMove(int,java.lang.CharSequence,java.lang.CharSequence) -> a
-    482:512:int getBaseMoveIdxFromVariation(int) -> h
+    482:512:int getBaseMoveIdxFromVariation(int) -> c
     538:562:void setGameTag(java.lang.String,java.lang.String) -> a
     567:582:java.lang.String getGameTagValue(java.lang.String) -> a
     623:860:java.lang.CharSequence createGameNotationFromHistory$3afc8d7b(int,boolean,boolean,int) -> a
     864:869:java.lang.CharSequence createPgnFromHistory$7c9ecdcc() -> b
     994:1063:java.lang.String addNewTag(java.lang.String,java.lang.String,java.lang.String) -> a
     1068:1078:java.lang.String getInitValueFromTag(java.lang.String) -> b
-    1085:1089:void setMoveIdx(int) -> c
+    1085:1089:void setMoveIdx(int) -> d
     1094:1126:void setMoveText(java.lang.CharSequence) -> a
-    1129:1316:void setNextMoveHistory(int) -> d
+    1129:1316:void setNextMoveHistory(int) -> e
     1320:1331:void setFigurineAlgebraicNotation(java.lang.CharSequence) -> b
     1400:1427:java.lang.CharSequence getDateYYYYMMDD() -> c
     1436:1454:java.lang.CharSequence getFigurineAlgebraicNotation(java.lang.CharSequence,boolean) -> a
@@ -2809,15 +2878,14 @@ ccc.chess.logic.c4aservice.ChessHistory -> ccc.chess.d.a.b:
     1457:1457:java.lang.CharSequence getFilePath() -> e
     1458:1458:java.lang.CharSequence getFileName() -> f
     1477:1481:java.lang.CharSequence getStartFen() -> g
-    1496:1500:java.lang.CharSequence getMoveFen(int) -> e
+    1496:1500:java.lang.CharSequence getMoveFen(int) -> f
     1515:1515:int getMoveIdx() -> h
-    1554:1554:java.lang.CharSequence getMove(int) -> f
-    1582:1677:java.util.ArrayList getVariationsFromMoveHistory() -> i
+    1554:1554:java.lang.CharSequence getMove(int) -> g
     1681:1722:int getCountEvenPosition(java.lang.CharSequence) -> c
-    2038:2053:void parseAddToMoveList(int) -> g
+    2038:2053:void parseAddToMoveList(int) -> h
     2057:2068:void parseSetCommentToMoveList(int,java.lang.CharSequence) -> a
-    2106:2111:void parseInitMove() -> j
-    2114:2133:void parseSetVariationEndToMoveList() -> k
+    2106:2111:void parseInitMove() -> i
+    2114:2133:void parseSetVariationEndToMoveList() -> j
     2137:2147:int parseGetLastVariantFromRank(int) -> i
     2151:2189:boolean parseMove(java.lang.CharSequence) -> d
     2193:2203:boolean parseIsDigit(java.lang.CharSequence) -> e
@@ -2892,6 +2960,11 @@ ccc.chess.logic.c4aservice.ChessMove -> ccc.chess.d.a.d:
     108:113:java.lang.CharSequence getVal(java.lang.CharSequence,int) -> a
     118:122:java.lang.CharSequence getColorFromFen(java.lang.CharSequence) -> c
     126:130:java.lang.CharSequence getMoveNumberFromFen(java.lang.CharSequence) -> d
+    133:133:java.lang.CharSequence getRank() -> b
+    134:134:java.lang.CharSequence getVariant() -> c
+    136:136:java.lang.CharSequence getPgn() -> d
+    142:142:java.lang.CharSequence getBaseFen() -> e
+    144:144:java.lang.CharSequence getControl() -> f
     158:161:void setBaseFen(java.lang.CharSequence) -> e
 ccc.chess.logic.c4aservice.ChessPosition -> ccc.chess.d.a.e:
     java.lang.String TAG -> a

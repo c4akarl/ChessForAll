@@ -19,8 +19,8 @@
     
     <string name="pieces">KQRBN</string>
     <string name="sendEmail">Send email</string>
-    
 
+    <string name="btn_Ok">  OK  </string>
     <string name="btn_Yes">Yes</string>
     <string name="btn_No">No</string>
     <string name="btn_Pgn">PGN</string>

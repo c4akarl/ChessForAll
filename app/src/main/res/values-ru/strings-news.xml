@@ -2,7 +2,9 @@
 <resources>
 	<string name="whatsNew">Что нового</string>
 	<string name="whatsNew_text">
-	    *** v1.44 ***
+	    *** v1.45 ***
+	    &lt;br/>Обновить до версии SDK 23.
+		&lt;br/>&lt;br/>*** v1.44 ***
 	    &lt;br/>Пользовательский интерфейс: оптимизация операций анализа.
         &lt;br/>&lt;br/>*** v1.43 ***
 	    &lt;br/>Запуск приложения: Chessboard Recognition.
