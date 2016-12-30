@@ -117,7 +117,7 @@
     <string name="menu_about_userManual">Bedienungsanleitung(E)</string>
     <string name="menu_about_c4a">Chess for All</string>
     <string name="menu_about_developer">Entwickler/Lizenz</string>
-    <string name="menu_about_apps">Alle meine Anwendungen</string>
+    <string name="menu_about_apps">Teste Eskalero!</string>
     <string name="menu_about_website">Website</string>
     <string name="menu_about_sourcecode">Source code</string>
     <string name="menu_about_contact">Kontakt</string>
@@ -279,5 +279,6 @@
     <string name="qOpening">Eröffnung</string>
     <string name="qVariation">Variation</string>
     <string name="qNoResults">Keine Ergebnisse!</string>
-    
+    <string name="whatsNew">Was ist neu</string>
+
 </resources>

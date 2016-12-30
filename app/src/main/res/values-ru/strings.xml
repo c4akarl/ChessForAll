@@ -117,7 +117,7 @@
     <string name="menu_about_userManual">Руководство пользователя(английский)</string>
     <string name="menu_about_c4a">Chess for All</string>
     <string name="menu_about_developer">Разработчик/Лицензия</string>
-    <string name="menu_about_apps">Все мои приложения</string>
+    <string name="menu_about_apps">Тест Escalero!</string>
     <string name="menu_about_website">Веб-сайт</string>
     <string name="menu_about_sourcecode">Source code</string>
     <string name="menu_about_contact">Контакт</string>
@@ -280,7 +280,8 @@
     <string name="qOpening">Дебют</string>
     <string name="qVariation">Вариант</string>
     <string name="qNoResults">Нет результатов!</string>
-    
+    <string name="whatsNew">Что нового</string>
+
 </resources>
 
 

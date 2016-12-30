@@ -117,7 +117,7 @@
     <string name="menu_about_userManual">Manual(Inglês)</string>
     <string name="menu_about_c4a">Chess for All</string>
     <string name="menu_about_developer">Desenvolvedor/Licença</string>
-    <string name="menu_about_apps">Todas as minhas aplicações</string>
+    <string name="menu_about_apps">Teste Escalero!</string>
     <string name="menu_about_website">Website</string>
     <string name="menu_about_sourcecode">Source code</string>
     <string name="menu_about_contact">Contato</string>
@@ -279,5 +279,6 @@
     <string name="qOpening">Abertura</string>
     <string name="qVariation">Variação</string>
     <string name="qNoResults">Sem resultados!</string>
-    
+    <string name="whatsNew">O que há de novo</string>
+
 </resources>

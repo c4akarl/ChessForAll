@@ -6,10 +6,12 @@ import ccc.chess.book.TextIO;
 import ccc.chess.logic.c4aservice.Chess960;
 import ccc.chess.logic.c4aservice.ChessPosition;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnTouchListener;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -1060,8 +1063,9 @@ public class UiControl
                     switch (finalActions.get(item)) 
                     {
                     case MENU_ABOUT_NEW:
-                    	showHelpDialog(10, c4aM.getString(R.string.whatsNew), c4aM.getString(R.string.whatsNew_text));
-                    	break;
+//                    	showHelpDialog(10, c4aM.getString(R.string.whatsNew), c4aM.getString(R.string.whatsNew_text));
+                        showWhatsNewDialog();
+                        break;
                     case MENU_ABOUT_USER_MANUAL: 
                     	startUserManual();
                         break;
@@ -1073,7 +1077,8 @@ public class UiControl
                         break;
                     case MENU_ABOUT_APPS:
                     	Intent ir = new Intent(Intent.ACTION_VIEW);
-        				ir.setData(Uri.parse("market://search?q=pub:Karl Schreiner"));
+//        				ir.setData(Uri.parse("market://search?q=pub:Karl Schreiner"));
+        				ir.setData(Uri.parse(MY_APPS));
         				c4aM.startActivityForResult(ir, RATE_REQUEST_CODE);
                         break;
                     case MENU_ABOUT_WEBSITE:
@@ -1204,6 +1209,45 @@ public class UiControl
 	    helpText = text;
 		c4aShowDialog(HELP_DIALOG);
     }
+	public void showWhatsNewDialog()
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(c4aM);
+		String title = c4aM.getString(R.string.whatsNew);
+		WebView wv = new WebView(c4aM);
+		builder.setView(wv);
+		InputStream is = c4aM.getResources().openRawResource(R.raw.whats_new);
+		String data = readFromStream(is);
+		if (data == null)
+			data = "";
+		try { is.close(); } catch (IOException ignored) {}
+		wv.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
+		builder.setTitle(title);
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	public String readFromStream(InputStream is)
+	{
+		String userManual = "";
+		try
+		{
+			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+			byte[] bytes = new byte[4096];
+			int len;
+			while ((len = is.read(bytes)) > 0)
+				byteStream.write(bytes, 0, len);
+			userManual = new String(byteStream.toByteArray(), "UTF8");
+		}
+		catch (IOException e) {userManual = "Couldn't load file: manual";}
+		finally
+		{
+			if (is != null)
+			{
+				try {is.close();}
+				catch (IOException e) {userManual = "Couldn't close file: manual";}
+			}
+		}
+		return userManual;
+	}
 //	SUBACTIVITYS		SUBACTIVITYS		SUBACTIVITYS		SUBACTIVITYS		
 	public void startPgnDownload() 
 	{
@@ -5831,7 +5875,9 @@ public class UiControl
     final String TAG = "UiControl";
     final CharSequence APP_PACKAGE_NAME = "ccc.chess.gui.chessforall";
     final CharSequence APP_EMAIL = "c4akarl@gmail.com";
-    
+//    final CharSequence MY_APPS = "market://search?q=pub:Karl Schreiner";
+    final String MY_APPS = "https://play.google.com/store/apps/details?id=com.androidheads.vienna.escalero";
+
     C4aMain c4aM;
     SharedPreferences userP;
     SharedPreferences runP;

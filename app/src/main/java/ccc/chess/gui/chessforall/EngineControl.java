@@ -256,8 +256,14 @@ public class EngineControl
 		    	Intent i;
 		    	getEngine().setEngineServiceId(getIdxFromSupportedServices(getEngine().engineServiceName, supportedServices));
 	    		i = new Intent(getEngine().engineServiceName.toString());
-                Log.i(TAG, "engineServiceName: " + getEngine().engineServiceName);
-				i.setPackage("ccc.chess.engine.stockfish");
+//				i.setPackage("ccc.chess.engine.stockfish");
+				String packageName;
+				if (getEngine().engineServiceName.equals(SERVICE_CHESS_ENGINES))
+					packageName = "ccc.chess.engines";
+				else
+					packageName = "ccc.chess.engine.stockfish";
+				i.setPackage(packageName);
+				Log.i(TAG, "engineServiceName: " + getEngine().engineServiceName + ", package: " + packageName);
 	    		//>373 binds to the ChessEngineService --->154 (ccc_engine)
 		    	ret = c4aM.bindService(i, getEngine(), Context.BIND_AUTO_CREATE);
 		    	if (ret)
@@ -391,6 +397,8 @@ public class EngineControl
     }
 
 	final String TAG = "EngineControl";
+	private static final CharSequence SERVICE_STOCKFISH = "ccc.chess.engine.stockfish.IChessEngineService";	// android service id
+	private static final CharSequence SERVICE_CHESS_ENGINES = "ccc.chess.engines.IChessEngineService";	// android service id
 	C4aMain c4aM;
 	ChessEngine en_1;						// ChessEngineServiceConnection (engine number 1)
 	ChessEngine en_2;						// ChessEngineServiceConnection (engine number 2)
