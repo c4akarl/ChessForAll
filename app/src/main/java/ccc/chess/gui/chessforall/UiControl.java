@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -27,6 +28,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.Config;
@@ -39,6 +41,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.MenuInflater;
@@ -78,6 +82,7 @@ public class UiControl
 		gc = gameC;
 		ec = engineC;
 		tc = new TimeControl();
+		c4aM.getPermissions();
 		userP = userPrefs;
 		runP = c4aM.getSharedPreferences("run", 0);		//	run Preferences
 		fmPrefs = c4aM.getSharedPreferences("fm", 0);
@@ -189,7 +194,7 @@ public class UiControl
     	updateCurrentPosition("");
         getDataFromIntent(c4aM.getIntent());
     }
-//	MENU		MENU		MENU		MENU		MENU		MENU		MENU	
+//	MENU		MENU		MENU		MENU		MENU		MENU		MENU
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) 
     {
 		menuSelected = false;
@@ -1358,7 +1363,7 @@ public class UiControl
     {	// startActivity: FileManager(saveGame)
        	startFileManager(SAVE_GAME_REQUEST_CODE, displayActivity, 0);
     }
-    public void onActivityResult(int requestCode, int resultCode, Intent data)			
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
     {	// subActivity result
 //    	Log.i(TAG, "onActivityResult, user_play_playMod: " + requestCode + ", " + userP.getInt("user_play_playMod", 1));
 //    	Log.i(TAG, "ec.chessEnginePaused, ec.lastChessEnginePaused: " + ec.chessEnginePaused + ", " + ec.lastChessEnginePaused);
@@ -5933,6 +5938,7 @@ public class UiControl
 	final static int ENGINE_SETTING_REQUEST_CODE = 41;
 	final static int RATE_REQUEST_CODE = 42;
 	final static int PDB_TO_PGN_CODE = 43;
+	final static int PERMISSIONS_WRITE_EXTERNAL_STORAGE = 50;
 //  dialogs RequestCode
 	final static int HELP_DIALOG = 901;
 	final static int NO_CHESS_ENGINE_DIALOG = 109;

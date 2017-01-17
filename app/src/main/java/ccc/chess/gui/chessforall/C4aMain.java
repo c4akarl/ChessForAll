@@ -2,12 +2,17 @@ package ccc.chess.gui.chessforall;
 
 import java.util.ArrayList;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.PowerManager.WakeLock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 //import android.view.Menu;
@@ -108,6 +113,25 @@ public class C4aMain extends Activity implements Ic4aDialogCallback, OnTouchList
         super.onNewIntent(intent);
         uic.getDataFromIntent(intent);
     }
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+	{
+		switch (requestCode)
+		{
+			case PERMISSIONS_WRITE_EXTERNAL_STORAGE:
+			{
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+				{
+					Log.i(TAG, "PERMISSIONS_WRITE_EXTERNAL_STORAGE, permission was granted");
+				}
+				else
+				{
+					Log.i(TAG, "PERMISSIONS_WRITE_EXTERNAL_STORAGE, permission denied");
+				}
+				return;
+			}
+		}
+	}
 //	MENU		MENU		MENU		MENU		MENU		MENU		MENU
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
@@ -169,7 +193,22 @@ public class C4aMain extends Activity implements Ic4aDialogCallback, OnTouchList
         }
     }
 //	PREFERENCES		PREFERENCES		PREFERENCES		PREFERENCES		PREFERENCES
-    public void setRunPrefs() 
+	public void getPermissions()
+	{
+		if (ContextCompat.checkSelfPermission(this,	Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+		{
+			if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+			{
+				Log.i(TAG, "PERMISSIONS_WRITE_EXTERNAL_STORAGE, ActivityCompat.shouldShowRequestPermissionRationale()");
+			}
+			else
+			{
+				Log.i(TAG, "PERMISSIONS_WRITE_EXTERNAL_STORAGE, ActivityCompat.requestPermissions()");
+				ActivityCompat.requestPermissions(this,	new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+			}
+		}
+	}
+	public void setRunPrefs()
 	{
 //    	Log.i(TAG, "setRunPrefs()");
     	SharedPreferences.Editor ed = runP.edit();
@@ -308,6 +347,7 @@ public class C4aMain extends Activity implements Ic4aDialogCallback, OnTouchList
     GameControl gc;
     EngineControl ec;
     UiControl uic;
+	final static int PERMISSIONS_WRITE_EXTERNAL_STORAGE = 50;
 	public SharedPreferences userP;
 	public SharedPreferences runP;
 	public SharedPreferences moveHistoryP;
