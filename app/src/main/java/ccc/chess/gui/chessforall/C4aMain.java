@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager.WakeLock;
 import android.support.v4.app.ActivityCompat;
@@ -118,18 +119,18 @@ public class C4aMain extends Activity implements Ic4aDialogCallback, OnTouchList
 	{
 		switch (requestCode)
 		{
-			case PERMISSIONS_WRITE_EXTERNAL_STORAGE:
-			{
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+			case PERMISSIONS_REQUEST_CODE:
+				if (grantResults.length > 0)
 				{
-					Log.i(TAG, "PERMISSIONS_WRITE_EXTERNAL_STORAGE, permission was granted");
-				}
-				else
-				{
-					Log.i(TAG, "PERMISSIONS_WRITE_EXTERNAL_STORAGE, permission denied");
+					for (int i = 0; i < grantResults.length; i++)
+					{
+						if (grantResults[i] == PackageManager.PERMISSION_GRANTED)
+							Log.i(TAG, permissions[i] + " was granted");
+						else
+							Log.i(TAG, permissions[i] + " denied");
+					}
 				}
 				return;
-			}
 		}
 	}
 //	MENU		MENU		MENU		MENU		MENU		MENU		MENU
@@ -193,21 +194,16 @@ public class C4aMain extends Activity implements Ic4aDialogCallback, OnTouchList
         }
     }
 //	PREFERENCES		PREFERENCES		PREFERENCES		PREFERENCES		PREFERENCES
-	public void getPermissions()
+public void getPermissions()
+{
+	if (Build.VERSION.SDK_INT >= 23)
 	{
-		if (ContextCompat.checkSelfPermission(this,	Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-		{
-			if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
-			{
-				Log.i(TAG, "PERMISSIONS_WRITE_EXTERNAL_STORAGE, ActivityCompat.shouldShowRequestPermissionRationale()");
-			}
-			else
-			{
-				Log.i(TAG, "PERMISSIONS_WRITE_EXTERNAL_STORAGE, ActivityCompat.requestPermissions()");
-				ActivityCompat.requestPermissions(this,	new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_WRITE_EXTERNAL_STORAGE);
-			}
-		}
+		String[] permissions = new String[]
+				{Manifest.permission.INTERNET, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.WAKE_LOCK};
+		ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_CODE);
 	}
+
+}
 	public void setRunPrefs()
 	{
 //    	Log.i(TAG, "setRunPrefs()");
@@ -347,7 +343,7 @@ public class C4aMain extends Activity implements Ic4aDialogCallback, OnTouchList
     GameControl gc;
     EngineControl ec;
     UiControl uic;
-	final static int PERMISSIONS_WRITE_EXTERNAL_STORAGE = 50;
+	private static final int PERMISSIONS_REQUEST_CODE = 50;
 	public SharedPreferences userP;
 	public SharedPreferences runP;
 	public SharedPreferences moveHistoryP;

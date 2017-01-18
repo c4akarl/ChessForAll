@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "ccc.chess.gui.chessforall"
         minSdkVersion 9
-        targetSdkVersion 25
+        targetSdkVersion 23
         versionCode 59
         versionName "1.47"
     }
@@ -23,5 +23,5 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
 }
