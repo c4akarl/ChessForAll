@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="wrap_content"
+  	android:layout_height="wrap_content"
+	android:background="@color/dialog_background">
+
+<TextView android:id="@+id/dgTitle"
+	style="@style/c4aDialogTitle"
+	android:gravity="center_horizontal"
+	android:background="@color/fm_save"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="0dip"
+	android:layout_marginLeft="0dip" />
+<TextView android:id="@+id/dgMessage"
+	style="@style/c4aTV1"
+	android:layout_below="@id/dgTitle"
+	android:gravity="center_horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+	android:layout_marginTop="@dimen/margin_2"
+	android:layout_marginBottom="5dip" />
+<EditText android:id="@+id/dgInputText"
+	style="@style/c4aET1"
+	android:layout_height="wrap_content"
+	android:layout_width="160dip"
+    android:layout_centerHorizontal="true"
+	android:singleLine="true"
+	android:layout_below="@id/dgMessage" />
+<Button android:id="@+id/dgBtn1"
+    android:layout_width="80dip"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_marginLeft="@dimen/margin_2"
+	android:layout_marginTop="@dimen/margin_2"
+	android:layout_marginBottom="@dimen/margin_2"
+    android:layout_below="@id/dgInputText" />
+<Button android:id="@+id/dgBtn2"
+    android:layout_width="80dip"
+    android:layout_height="wrap_content"
+	android:layout_marginTop="@dimen/margin_2"
+    android:layout_centerHorizontal="true"
+	android:layout_marginBottom="@dimen/margin_2"
+    android:layout_below="@id/dgInputText" />
+<Button android:id="@+id/dgBtn3"
+    android:layout_width="80dip"
+    android:layout_height="wrap_content"
+	android:layout_alignParentRight="true"
+	android:layout_marginTop="@dimen/margin_2"
+	android:layout_marginRight="@dimen/margin_2"
+	android:layout_marginBottom="@dimen/margin_2"
+	android:layout_below="@id/dgInputText" />
+
+</RelativeLayout>

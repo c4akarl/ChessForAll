@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
+<body>
+<p><em>ChessForAll</em> ist ein Schachprogramm mit der starken Schach-Engine <em>Stockfish</em> und vielen nützlichen Funktionen.</p>
+<h3>Funktionen</h3>
+<ul>
+	<li>Spiel gegen Computer</li>
+	<li>Zwei-Spieler-Modus</li>
+	<li>Computer gegen Computer</li>
+	<li>Analysemodus</li>
+	<li>Editiermodus</li>
+	<li>Eigene Datenbank (.pgn-db)</li>
+	<li>Speichern, Einfügen, Ersetzen und Löschen einer Partie</li>
+	<li>Stellungseingabe</li>
+	<li>Zwischenablage (Partie oder Stellung)</li>
+	<li>Eröffnungsbuch</li>
+	<li>Spielstärke</li>
+	<li>Schachuhroptionen</li>
+	<li>Portrait-/Landschaftsmodus</li>
+</ul>
+<h3>Bedienungshinweise</h3>
+<p><em>Hauptmenü</em>: Vom linken Rand nach rechts wischen</p>
+<p><em>Spielmenü</em>: Vom rechten Rand nach links wischen</p>
+<p><em>Brettoptionenmenü</em>: Langes Drücken auf das Schachbrett</p>
+<p><em>Brettoptionen</em>: Wischen</p>
+<ul>
+	<li><em>Nächster Zug</em>: Nach rechts wischen</li>
+	<li><em>Vorheriger Zug</em>: Nach links wischen</li>
+	<li><em>Anfangsstellung</em>: Bis zum linken Rand wischen</li>
+	<li><em>Schlußstellung</em>: Bis zum rechten Rand wischen</li>
+</ul>
+<p><em>Schnellstart-Tasten</em></p>
+<ul>
+	<li>Spielmodus</li>
+	<li>Analyse-/Pausemodus</li>
+	<li>Computerzug ausführen</li>
+	<li>Zug löschen (ab Position)</li>
+	<li>Seitenwechsel</li>
+	<li>Zug zurück</li>
+	<li>Zug vorwärts</li>
+</ul>
+<p><em>Schnellstart-Tasten (langes Drücken)</em></p>
+<ul>
+	<li>Einstellungen</li>
+	<li>-</li>
+	<li>Automatisches Abspielen einer Partie</li>
+	<li>-</li>
+	<li>-</li>
+	<li>Erster Zug</li>
+	<li>Letzter Zug</li>
+</ul>
+<p><em>Schnellstart-Tasten (Wischen)</em>: Laden einer Partie von der aktuellen PGN-Datei</p>
+<ul>
+	<li><em>NächstePartie</em>: Nach rechts wischen</li>
+	<li><em>Vorherige Partie</em>: Nach links wischen</li>
+	<li><em>Erste Partie</em>: Bis zum linken Rand wischen</li>
+	<li><em>Letzte Partie</em>: Bis zum rechten Rand wischen</li>
+	<li><em>Zufällige Partie</em>: Von der letzten Taste bis zu der ersten Taste wischen</li>
+	<li><em>Partiensuche</em>: Von der ersten Taste bis zu der letzten Taste wischen</li>
+</ul>
+<p>Feld <em>Name</em> oder <em>Elo</em> drücken: Spieldaten editieren</p><p>Feld <em>Computerberechnungen</em> drücken: Computereinstellungen</p>
+
+<p>Feld <em>Zeit</em> drücken: Aktuelle Zeit ändern; lange drücken: Schachuhroptionen einstellen</p>
+<h3>PGN-Dateien</h3>
+<p>Folgende Funktionen stehen zur Verfügung:</p>
+<ul>
+	<li>Partie laden</li>
+	<li>Partie speichern, einfügen, ersetzen und löschen</li>
+	<li>PGN-Datei downloaden</li>
+	<li>Partie in die Zwischenablage</li>
+	<li>Position in die Zwischenablage</li>
+	<li>Partie aus der Zwischenablage</li>
+</ul>
+<p>Durch langes Drücken auf eine PGN-Datei wird diese (.pgn) und die Datenbankdatei (.pgn-db) gelöscht.</p>
+<p>Eine PGN-Datei kann auch von einer Dateimanager-App geladen werden.</p>
+<h3>Datenbank (.pgn-db)</h3>
+<p>Das Programm verwendet eine eigene Schachdatenbank (Datei: .pgn-db)
+zum Verwalten von Partien. Ist beim Laden/Speichern keine
+Schachdatenbank-Datei vorhanden, wird diese erstellt. In der Statusbar
+wird der aktuelle Stand der Datenbankerstellung angezeigt. Während
+dieses Vorgangs ist die PGN-Datei gesperrt. Andere Aktionen können ohne
+Probleme ausgeführt werden.</p>
+<p>Die Verwendung der PGN-Datenbank kann in den Einstellungen
+deaktiviert werden. Beim Speichern wird dann eine Partie immer an das
+Dateiende angehängt.</p>
+<h3>Eröffnungsbücher</h3>
+<p>Ein kleines Eröffnungsbuch ist in <em>ChessForAll </em>bereits
+integriert. Es können jedoch auch externe Polyglot-Eröffnungsbücher
+(.bin) verwendet werden. Die Verwaltung der Eröffnungsbücher erfolgt in
+den Computer-Spieloptionen, Aufruf über: Hauptmenü/Computer oder durch
+langes Drücken auf das Feld Computerberechnungen.</p>
+<h3>Einstellungen - Anwenderoptionen</h3>
+<ul>
+	<li>Spielername</li>
+	<li>Statusbar anzeigen</li>
+	<li>Nach Zug die Seite wechseln</li>
+	<li>Letzte Stellung anzeigen (laden)</li>
+	<li>Bildschirm-Timeout deaktivieren</li>
+	<li>Partie-Navigation (Brett)</li>
+	<li>PGN-Datenbank verwenden</li>
+	<li>Toneffekte</li>
+	<li>Koordinaten (1-h, 1-8)</li>
+</ul>
+<h3>Stockfish-Einstellungen</h3>
+<ul>
+	<li>Automatischer Start bei Programmöffnung</li>
+	<li>Berechnungen anzeigen</li>
+	<li>1. Zug (weiss): Zufallszug</li>
+	<li>Polyglot Eröffnungsbuch aktivieren/deaktivieren</li>
+	<li>Polyglot Eröffnungsbuch: externe .bin Datei laden</li>
+	<li>Computerberechnungen: Anzahl der Varianten und Züge</li>
+	<li>Spielstärke (0...100)</li>
+	<li>Aggressivität (0...100), Passivität (0...-100)</li>
+	<li>Protokollaufzeichnungen (Engine-Nachrichten)</li>
+</ul>
+<h3>Entwickler</h3>
+<p><em>ChessForAll</em> wird von <em>Karl Schreiner</em> entwickelt</p>
+<p>Grafische Elemente von <em>Lars Streblow</em></p>
+<p>Java-Engine-Routinen von <em>Peter Österlund</em></p>
+<p>Anwendung der UCI-Engines von <em>Aart Bik</em></p>
+<p><em>Chesspresso</em> (Schach-Logik) von <em>Bernhard Seybold</em></p>
+<h3>Übersetzungen</h3>
+<p>Französisch: <em>Eric Gallula</em></p>
+<p>Spanisch: <em>Sergio Ballesteros</em></p>
+<p>Russisch: <em>Ark (hark, arkpc)</em></p>
+<h3>Lizenz</h3>
+<p><a href="http://www.gnu.org/licenses/gpl.html">GNU GPL v3</a></p>
+	</body></html>

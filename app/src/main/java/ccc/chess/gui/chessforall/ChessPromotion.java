@@ -5,14 +5,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-//import android.util.Log;
 
 public class ChessPromotion extends Dialog implements OnClickListener 
 {
-	C4aMain chessGame;
+	MainActivity chessGame;
 	public interface MyDialogListener 
 	{ 
-        public void onOkClick(int promValue); 
+        void onOkClick(int promValue);
 	} 
 	final String TAG = "ChessPromotion";
 	ImageButton btnQ = null;
@@ -20,7 +19,7 @@ public class ChessPromotion extends Dialog implements OnClickListener
 	ImageButton btnB = null;
 	ImageButton btnN = null;
 	private MyDialogListener promListener;
-    public ChessPromotion(C4aMain cg, MyDialogListener listener)
+    public ChessPromotion(MainActivity cg, MyDialogListener listener)
     { 
     	super(cg);
     	promListener = listener;
@@ -52,13 +51,19 @@ public class ChessPromotion extends Dialog implements OnClickListener
     }
     public void setImages() 
     {
-    	char pc = 'l';
-    	if (!chessGame.gc.cl.p_color.equals("w"))
-    		pc = 'd';
-    	char fc = 'd';
-    	btnQ.setImageDrawable(chessGame.getResources().getDrawable(chessGame.getResources().getIdentifier("q" + pc + fc, "drawable", chessGame.getPackageName())));
-    	btnR.setImageDrawable(chessGame.getResources().getDrawable(chessGame.getResources().getIdentifier("r" + pc + fc, "drawable", chessGame.getPackageName())));
-    	btnB.setImageDrawable(chessGame.getResources().getDrawable(chessGame.getResources().getIdentifier("b" + pc + fc, "drawable", chessGame.getPackageName())));
-    	btnN.setImageDrawable(chessGame.getResources().getDrawable(chessGame.getResources().getIdentifier("n" + pc + fc, "drawable", chessGame.getPackageName())));
+		if (chessGame.gc.cl.p_color.equals("w"))
+		{
+			btnQ.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_wq));
+			btnR.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_wr));
+			btnB.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_wb));
+			btnN.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_wn));
+		}
+		else
+		{
+			btnQ.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_bq));
+			btnR.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_br));
+			btnB.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_bb));
+			btnN.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_bn));
+		}
     }
 }

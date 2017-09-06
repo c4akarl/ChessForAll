@@ -4,16 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Bitmap.Config;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class OptionsEnginePlay extends Activity implements TextWatcher
@@ -21,24 +23,66 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	public void onCreate(Bundle savedInstanceState) 
 	{
         super.onCreate(savedInstanceState);
+		u = new Util();
+		userPrefs = getSharedPreferences("user", 0);
+		runP = getSharedPreferences("run", 0);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
         setContentView(R.layout.optionsengineplay);
-        userPrefs = getSharedPreferences("user", 0);
-        runP = getSharedPreferences("run", 0);
         fileManagerIntent = new Intent(this, PgnFileManager.class);
-        cbEpEngineMessage = (CheckBox) findViewById(R.id.cbEpEngineMessage); 
-        cbEpRandomFirstMove = (CheckBox) findViewById(R.id.cbEpRandomFirstMove); 
-        cbEpAutoStartEngine = (CheckBox) findViewById(R.id.cbEpAutoStartEngine); 
-        cbEpOpeningBook = (CheckBox) findViewById(R.id.cbEpOpeningBook);
+        engineMessage = (CheckBox) findViewById(R.id.cbEpEngineMessage);
+        randomFirstMove = (CheckBox) findViewById(R.id.cbEpRandomFirstMove);
+        autoStartEngine = (CheckBox) findViewById(R.id.cbEpAutoStartEngine);
+        openingBook = (CheckBox) findViewById(R.id.cbEpOpeningBook);
         epBook = (ImageView) findViewById(R.id.epBook);
-        epBook.setImageBitmap(combineImages(R.drawable.btn_b2, R.drawable.btn_pgn_load, 0));
-        tvEpBookName = (TextView) findViewById(R.id.tvEpBookName);
-        etEpMultiPv = (EditText) findViewById(R.id.etEpMultiPv);
-        etEpPvMoves = (EditText) findViewById(R.id.etEpPvMoves);
-        etEpMultiPv.addTextChangedListener(this);
-        etEpPvMoves.addTextChangedListener(this);
-        getPrefs();
-        setTitle(getString(R.string.app_optionsEnginePlay));
+        epBook.setImageBitmap(combineImages(R.drawable.btn_yellow, R.drawable.btn_pgn_load, 0));
+        bookName = (EditText) findViewById(R.id.tvEpBookName);
+        multiPv = (EditText) findViewById(R.id.etEpMultiPv);
+        pvMoves = (EditText) findViewById(R.id.etEpPvMoves);
+        multiPv.addTextChangedListener(this);
+        pvMoves.addTextChangedListener(this);
+		logOn = (CheckBox) findViewById(R.id.logOn);
+		getPrefs();
+
+		// strength (SeekBar)
+		strengthValue = (TextView) this.findViewById(R.id.strengthValue);
+		strengthValue.setText(progressStrength + "% " + getString(R.string.epStrength));
+		strength = (SeekBar) this.findViewById(R.id.strength);
+		strength.setProgress(progressStrength);
+		strength.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+		{
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+			{
+				progressStrength = progress;
+				strengthValue.setText(progressStrength + "% " + getString(R.string.epStrength));
+			}
+			public void onStartTrackingTouch(SeekBar arg0) { }
+			public void onStopTrackingTouch(SeekBar seekBar) { }
+		});
+
+		// aggressiveness (SeekBar)
+		aggressivenessValue = (TextView) this.findViewById(R.id.aggressivenessValue);
+		if (progressAggressiveness - 100 >= 0)
+			aggressivenessValue.setText((progressAggressiveness - 100) + " " + getString(R.string.epAggressivness));
+		else
+			aggressivenessValue.setText((progressAggressiveness - 100) + " " + getString(R.string.epPassivity));
+		aggressiveness = (SeekBar) this.findViewById(R.id.aggressiveness);
+		aggressiveness.setProgress(progressAggressiveness);
+		aggressiveness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+		{
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+			{
+				progressAggressiveness = progress;
+				if (progressAggressiveness - 100 >= 0)
+					aggressivenessValue.setText((progressAggressiveness - 100) + " " + getString(R.string.epAggressivness));
+				else
+					aggressivenessValue.setText((progressAggressiveness - 100) + " " + getString(R.string.epPassivity));
+			}
+			public void onStartTrackingTouch(SeekBar arg0) { }
+			public void onStopTrackingTouch(SeekBar seekBar) { }
+		});
 	}
+
 	public void myClickHandler(View view) 				
     {	// ClickHandler	(ButtonEvents)
 		Intent returnIntent;
@@ -63,19 +107,19 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	{
 		try
 		{
-			if (etEpMultiPv.hasFocus() == true)
+			if (multiPv.hasFocus() == true)
 			{
 				if (s.toString().equals("0"))
-					etEpMultiPv.setText("1");
+					multiPv.setText("1");
 				if (Integer.parseInt(s.toString()) > 4)
-					etEpMultiPv.setText("4");
+					multiPv.setText("4");
 			}
-			if (etEpPvMoves.hasFocus() == true)
+			if (pvMoves.hasFocus() == true)
 			{
 				if (s.toString().equals("0"))
-					etEpPvMoves.setText("1");
+					pvMoves.setText("1");
 				if (Integer.parseInt(s.toString()) > 30)
-					etEpPvMoves.setText("30");
+					pvMoves.setText("30");
 			}
 		}
 		catch 	(NumberFormatException e) {	}
@@ -85,13 +129,14 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) { }
 	public void onActivityResult(int requestCode, int resultCode, Intent data)			
-    {	// subActivity result
+    {
 		switch(requestCode) 
 	    {
 		    case LOAD_OPENING_BOOK_REQUEST_CODE: 
-		    	if (resultCode == C4aMain.RESULT_OK) 					
+		    	if (resultCode == MainActivity.RESULT_OK)
 				{
-					tvEpBookName.setText(data.getStringExtra("filePath") + data.getStringExtra("fileName"));
+					bookName.setText(data.getStringExtra("filePath") + data.getStringExtra("fileName"));
+					bookName.setSelection(bookName.getText().length());
 				}
 				break;
 	    }
@@ -119,44 +164,61 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	protected void setPrefs() 
 	{
 		SharedPreferences.Editor ed = userPrefs.edit();
-        ed.putBoolean("user_options_enginePlay_EngineMessage", cbEpEngineMessage.isChecked());
-        ed.putBoolean("user_options_enginePlay_RandomFirstMove", cbEpRandomFirstMove.isChecked());
-        ed.putBoolean("user_options_enginePlay_AutoStartEngine", cbEpAutoStartEngine.isChecked());
-        ed.putBoolean("user_options_enginePlay_OpeningBook", cbEpOpeningBook.isChecked());
-        ed.putString("user_options_enginePlay_OpeningBookName", tvEpBookName.getText().toString());
+        ed.putBoolean("user_options_enginePlay_EngineMessage", engineMessage.isChecked());
+        ed.putBoolean("user_options_enginePlay_RandomFirstMove", randomFirstMove.isChecked());
+        ed.putBoolean("user_options_enginePlay_AutoStartEngine", autoStartEngine.isChecked());
+        ed.putBoolean("user_options_enginePlay_OpeningBook", openingBook.isChecked());
+        ed.putString("user_options_enginePlay_OpeningBookName", bookName.getText().toString());
         int multiPv = 5;
-        try {multiPv = Integer.parseInt(etEpMultiPv.getText().toString());}
+        try {multiPv = Integer.parseInt(this.multiPv.getText().toString());}
         catch 	(NumberFormatException e) {};
         ed.putInt("user_options_enginePlay_MultiPv", multiPv);
         int pvMoves = 5;
-        try {pvMoves = Integer.parseInt(etEpPvMoves.getText().toString());}
+        try {pvMoves = Integer.parseInt(this.pvMoves.getText().toString());}
         catch 	(NumberFormatException e) {};
         ed.putInt("user_options_enginePlay_PvMoves", pvMoves);
+		ed.putInt("user_options_enginePlay_strength", progressStrength);
+		ed.putInt("user_options_enginePlay_aggressiveness", progressAggressiveness - 100);
+		ed.putBoolean("user_options_enginePlay_logOn", logOn.isChecked());
         ed.commit();
 	}
 	protected void getPrefs() 
 	{
-		cbEpEngineMessage.setChecked(userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true));
-		cbEpRandomFirstMove.setChecked(userPrefs.getBoolean("user_options_enginePlay_RandomFirstMove", false));
-		cbEpAutoStartEngine.setChecked(userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true));
-		cbEpOpeningBook.setChecked(userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true));
-		tvEpBookName.setText(userPrefs.getString("user_options_enginePlay_OpeningBookName", ""));
-		etEpMultiPv.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_MultiPv", 4)));
-		etEpPvMoves.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_PvMoves", 30)));
+		engineMessage.setChecked(userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true));
+		randomFirstMove.setChecked(userPrefs.getBoolean("user_options_enginePlay_RandomFirstMove", false));
+		autoStartEngine.setChecked(userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true));
+		openingBook.setChecked(userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true));
+		bookName.setText(userPrefs.getString("user_options_enginePlay_OpeningBookName", ""));
+		bookName.setSelection(bookName.getText().length());
+		multiPv.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_MultiPv", 4)));
+		pvMoves.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_PvMoves", 6)));
+		progressStrength = userPrefs.getInt("user_options_enginePlay_strength", 100);
+		progressAggressiveness = userPrefs.getInt("user_options_enginePlay_aggressiveness", 0) + 100;
+		logOn.setChecked(userPrefs.getBoolean("user_options_enginePlay_logOn", false));
 	}
-	
+
 	final String TAG = "PlaySettings";
+	Util u;
 	final static int LOAD_OPENING_BOOK_REQUEST_CODE = 91;
 	Intent fileManagerIntent;
 	SharedPreferences userPrefs;
 	SharedPreferences runP;
 //	GUI	
-	CheckBox cbEpEngineMessage;
-	CheckBox cbEpRandomFirstMove;
-	CheckBox cbEpAutoStartEngine;
-	CheckBox cbEpOpeningBook;
+	CheckBox engineMessage;
+	CheckBox randomFirstMove;
+	CheckBox autoStartEngine;
+	CheckBox openingBook;
 	ImageView epBook = null;
-	TextView tvEpBookName = null;
-	EditText etEpMultiPv = null;
-	EditText etEpPvMoves = null;
+	EditText bookName = null;
+	EditText multiPv = null;
+	EditText pvMoves = null;
+	SeekBar strength;
+	TextView strengthValue;
+	SeekBar aggressiveness;
+	TextView aggressivenessValue;
+	CheckBox logOn;
+
+	int progressStrength = 100;
+	int progressAggressiveness = 0;	// uci option contempt, min: -100, max: +100, default: 0 (Stockfish)
+
 }

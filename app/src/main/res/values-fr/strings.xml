@@ -2,21 +2,16 @@
 <resources>
     <string name="app_name">Chess for All</string>
     <string name="app_pgnFileManager">Gestionnaire fichiers PGN</string>
-    <string name="app_chessData">données du jeu</string>
+    <string name="app_chessData">Données du jeu</string>
     <string name="app_chessNotation">Notation</string>
-    <string name="app_optionsChessBoard">Options - Echiquier</string>
-    <string name="app_optionsGUI">Options - Paramètres interface utilisateur</string>
+    <string name="app_optionsGUI">Mode Play - Nouveau jeu</string>
     <string name="app_optionsPlay">Options -Paramètres Jeu</string>
-    <string name="app_optionsEnginePlay">Options - moteur jeu</string>
+    <string name="app_optionsEnginePlay">Moteur Stockfish - réglages</string>
     <string name="app_optionsTimeControl">Options - Réglage du temps</string>
     <string name="app_editChessBoard">Mise en place position</string>
-    <string name="app_playEngineSettings">Batch -Réglage du moteur </string>
+    <string name="app_playEngineSettings">Lecture automatique de moteur</string>
     <string name="comingSoon">à venir</string>
-     
-    <string name="screen_small">SMALL</string>
-    <string name="screen_medium">MEDIUM</string>
-    <string name="screen_large">LARGE</string>
-    
+
     <string name="pieces">KQRBN</string>
     <string name="sendEmail">Envoyer un email</string>
 
@@ -29,8 +24,8 @@
     
     <string name="inputDialog_chess960Id">Chess960-ID(0...959):</string>
     <string name="inputDialog_color">Choix de la couleur:</string>
-    <string name="inputDialog_castling">valeur du roque</string>
-    <string name="inputDialog_enPassant">valeur de la prise en passant</string>
+    <string name="inputDialog_castling">Valeur du roque</string>
+    <string name="inputDialog_enPassant">Valeur de la prise en passant</string>
     <string name="inputDialog_draw50">Nulle,règle des 50 coups</string>
     <string name="inputDialog_moveCounter">contre coup:</string>
     
@@ -61,19 +56,13 @@
     <string name="cl_checkOponent">Echec</string>
     
     <string name="player_move"> votre coup...</string>
-    <string name="engine_thinking"> . . .</string>
     <string name="engine_openingBook"> ouvrant livre  . . .</string>
     <string name="engine_autoPlay"> Jeu automatique</string>
     <string name="engine_paused"> Moteur en pause!</string>
-    <string name="engine_pausedNotConnected"> Moteur en pause! (non connecté)</string>
     <string name="engineProgressDialog">connexion des moteurs  . . .</string>
-    <string name="engineNotFound">moteur introuvable . . . réessayez ></string>
     <string name="engineNoEnginesOnDevice">aucun moteur chargé</string>
-    <string name="engineJustInstalled">Moteur installé, lancez la lecture!</string>
-    <string name="engineAlreadyRunning">Le moteur tourne déjà, fermer les autres applications</string>
     <string name="engine_noRespond">Le moteur ne répond pas </string>
-    <string name="engineSelectDialog">C4A - Dialogue \nSélectionnez un moteur</string>
-    <string name="enginePlayerResign">abandonner la partie en cours</string>
+    <string name="enginePlayerResign">Abandonner la partie en cours</string>
     <string name="enginePlayerDraw">Proposition de partie nulle</string>
     <string name="engineDeclinesDraw">le programme refuse votre proposition </string>
     <string name="engineSearchMessage">Aucun moteur trouvé.\nRecherche pour les moteurs d\'échecs?</string>
@@ -81,54 +70,40 @@
     <string name="engineAnalysisSearch">Analyse . . .   </string>
     <string name="engineAnalysisStopWait">L\'analyse est arrêtée. . . S\'il vous plaît attendez!</string>
     <string name="engineAnalysisStop">Analyse arrêtée!</string>
-    <string name="engineAutoStop">Arrêt automatique, score: </string>
     <string name="engine_timeout">moteur à l\'arrêt (timeout)</string>
-    
-    <string name="menu_title">Menu</string>
+
     <string name="menu_new_game">Nouveau jeu</string>
     <string name="menu_edit_board">Mise en place d\'une position</string>
-    <string name="menu_pgn">PGN</string>
-    <string name="menu_pgn_load">charger  une partie en PGN</string>
-    <string name="menu_pgn_save">sauvegarder la partie en PGN</string>
+    <string name="menu_pgn">Fichier PGN</string>
+    <string name="menu_pgn_load">charger partie</string>
+    <string name="menu_pgn_save">sauvegarder la partie</string>
     <string name="menu_pgn_delete">supprimer une partie en  PGN</string>
-    <string name="menu_pgn_edit">les parties en PGN</string>
+    <string name="menu_pgn_edit">Les parties en PGN</string>
     <string name="menu_modes">jouer, modifier, voir</string>
     <string name="menu_modes_edit">Modifier</string>
     <string name="menu_modes_view">Jouer</string>
     <string name="menu_play_options">Jouer (options)</string>
-    <string name="menu_enginesettings">Réglages des moteurs</string>
-    <string name="menu_enginesettings_engine_1">moteur 1</string>
-    <string name="menu_enginesettings_engine_2">moteur 2</string>
-    <string name="menu_enginesettings_switch">E1 &lt;---&gt; E2</string>
+    <string name="menu_enginesettings">Oordinateur</string>
     <string name="menu_enginesettings_shutdown">Arret des moteurs</string>
-    <string name="menu_enginesettings_settings">paramètres du moteur(E1, E2)</string>
     <string name="menu_enginesettings_playOptions">Options de lecture de moteur</string>
     <string name="menu_usersettings">Réglages</string>
     <string name="menu_usersettings_gui">Interface Options</string>
-    <string name="menu_usersettings_chessBoard">échiquier</string>
     <string name="menu_usersettings_timeControl">Contrôle du temps</string>
     <string name="menu_usersettings_timerAutoPlay">Réglage pendule</string>
     <string name="menu_usersettings_time_white">Heure: blanc</string>
     <string name="menu_usersettings_time_black">Heure: noir</string>
     <string name="menu_specialities_engine_autoplay">Jeu auto</string>
-    <string name="menu_find_engines">Trouver des moteurs d\'echecs</string>
     <string name="menu_about">A propos</string>
     <string name="menu_about_new">Quoi de neuf</string>
-    <string name="menu_about_userManual">Mode d\'emploi(Anglais)</string>
-    <string name="menu_about_c4a">Chess for All</string>
-    <string name="menu_about_developer">Développeur/Licence</string>
-    <string name="menu_about_apps">Testez Escalero!</string>
+    <string name="menu_about_userManual">Mode d\'emploi</string>
+    <string name="menu_about_apps">Mes applications</string>
     <string name="menu_about_website">Site Web</string>
     <string name="menu_about_sourcecode">Source code</string>
     <string name="menu_about_contact">Contact</string>
-    <string name="menu_analysis">Analyse</string>
-    <string name="menu_analysis_stop">arrêter</string>
-    <string name="menu_analysis_moveStop">déplacer et arrêter</string>
-    <string name="menu_analysis_moveContinue">déplacer et continuer</string>
-    
+
     <string name="menu_load_extern">carte SD</string>
     <string name="menu_load_intern">Actifs</string>
-    <string name="menu_load_www">PGN téléchargement</string>
+    <string name="menu_load_www">Télécharger le fichier PGN</string>
     <string name="menu_load_game">Jeu</string>
     <string name="menu_load_game_first">Charger la première partie</string>
     <string name="menu_load_game_last">Charger la dernière partie</string>
@@ -148,12 +123,10 @@
     <string name="menu_edit_board_chess960_random">Chess960 aléatoire</string>
     <string name="menu_edit_board_chess960_number">Chess960 nombre</string>
 
-    <string name="menu_info">jeu d\'action</string>
     <string name="menu_info_turnBoard">tournez échiquier</string>
-    <string name="menu_info_variations">variations</string>
     <string name="menu_info_nag">NAG (+, -, =  . . .)</string>
-    <string name="menu_info_moveNotification">la notification à un coup d\'échecs</string>
-    <string name="menu_info_moveNotation">notation</string>
+    <string name="menu_info_moveNotification">La notification à un coup d\'échecs</string>
+    <string name="menu_info_moveNotation">PGN-Notation</string>
     <string name="menu_info_clipboardCopyPgn">game copy à la planchette</string>
     <string name="menu_info_clipboardCopyFen">copiez la position</string>
     <string name="menu_info_clipboardPaste">collez la planchette</string>
@@ -168,14 +141,12 @@
     <string name="peAutoFlipColor">Auto flip(couleur)</string>
     <string name="peAutoCurrentGame">Le jeu courant</string>
     <string name="peRound">Rondes</string>
-    <string name="peGameCounter">contre</string>
+    <string name="peGameCounter">Contre</string>
     
     <string name="fmLblPath">Chemin</string>
     <string name="fmLblFile">Fichier</string>
-    <string name="fmLblUrl">URL</string>
     <string name="fmTitleLoad">Gestionnaire fichiers PGN - Charger jeu</string>
     <string name="fmTitleSave">Gestionnaire fichiers PGN - Enregistrer jeu</string>
-    <string name="fmTitleDelete">Gestionnaire fichiers PGN - supprimer jeu</string>
     <string name="fmTitleEngineAutoPlay">PGN-FileManager - AutoJeu</string>
     <string name="fmPathError">Erreur chemin d\'accés</string>
     <string name="fmFileError">Fichier non existant ou PGN-Erreur!</string>
@@ -188,25 +159,17 @@
     <string name="fmProgressDialog">Chargement des données PGN ... \nVeuillez patienter...</string>
     <string name="fmProgressQueryDialog">requête de base de données ...\nVeuillez patienter ...</string>
     <string name="fmCreatingPgnDatabase">Création db: </string>
-    <string name="fmCreatingPgnDatabaseToast">a création de base de données  . . .\nplus d\'informations voir les notifications</string>
+    <string name="fmCreatingPgnDatabaseToast">Mise à jour de base de données . . . plus d\'informations voir les notifications</string>
     <string name="fmDropCreateIndex">drop/create index. . . s\'il vous plaît attendez!</string>
     <string name="fmDatabaseLocked">base de données verrouillée, processus en cours</string>
-    <string name="fmDownloadError">Erreur de téléchargement:</string>
-    <string name="fmDownloadFileExists">Fichier existe, opération abandonnée!</string>
-    <string name="fmFileDownloaded">Fichier téléchargé:</string>
-    
+
 
     <string name="daTxtLblWhite">Blanc</string>
     <string name="daTxtLblBlack">Noir</string>
     
     <string name="dgTitleFileDialog">C4A - PGN-Dialog fichier</string>
     <string name="dgTitleDialog">C4A - Dialog</string>
-    
-    <string name="cbC4a">C4a</string>
-    <string name="cbStandard">Standard</string>
-    <string name="cbGreen">Vert</string>
-    <string name="cbBrown">Brun</string>
-    
+
     <string name="guPlayerName">Nom de joueur</string>
     <string name="guStatusBar">Barre d\'état montrer</string>
     <string name="guLastPosition">Charger la dernière position </string>
@@ -215,15 +178,18 @@
     <string name="guEnableSounds">Bruitage</string>
     <string name="guDisplayCoordinates">Coordonnées (a-h, 1-8)</string>
     
-    <string name="epEngineMessage">apparaître un message du moteur</string>
-    <string name="epRandomFirstMove">aléatoire déménagement premier moteur (blanc)</string>
-    <string name="epAutoStartEngine">moteurs à démarrage automatique</string>
+    <string name="epEngineMessage">Afficher les calculs</string>
+    <string name="epRandomFirstMove">aléatoire déménagement premier (blanc)</string>
+    <string name="epAutoStartEngine">démarrage automatique à l\'ouverture du programme</string>
     <string name="epOpeningBook">Livre d\'ouverture Polyglot</string>
-    <string name="epMultiPv">Multi-PV comptage (1...4)</string>
-    <string name="epPvMoves">PV se déplace compter (1...30)</string>
+    <string name="epMultiPv">Variantes</string>
+    <string name="epPvMoves">Se déplace</string>
+    <string name="epStrength">force de jeu</string>
+    <string name="epAggressivness">agressivité</string>
+    <string name="epLogging">Enregistrements du log</string>
     
     <string name="tcGameClock">Chronomètre de jeu</string>
-    <string name="tcMoveTime">temps</string>
+    <string name="tcMoveTime">Temps</string>
     <string name="tcSandGlass">Sablier</string>
     <string name="tcNone">Aucun</string>
  
@@ -233,12 +199,12 @@
     <string name="editError">Erreur: modifier l\'échiquier</string>
     <string name="editChessboardDetection">Détection de l\'échiquier\n  . . .  s\'il vous plaît attendez!</string>
     
-    <string name="play_white">Jouer avec les blancs</string>
-    <string name="play_black">Jouer avec les noirs</string>
-    <string name="play_engine">connexion des moteurs</string>
+    <string name="play_white">Blanc->ordinateur</string>
+    <string name="play_black">Noir->ordinateur</string>
+    <string name="play_engine">Ordinateur->ordinateur</string>
     <string name="play_analysis">Analyse</string>
     <string name="play_two_players">éditer</string>
-    <string name="play_two_players_flip">2 joueurs (conseil flip)</string>
+    <string name="play_two_players_flip">2 joueurs</string>
     <string name="play_newGame">Nouveau jeu</string>
     
     <string name="ccsTitle">Horloge d\'échecs</string>
@@ -272,14 +238,48 @@
     <string name="qDateFormat">aaaa.mm.jj</string>
     <string name="qFrom">à partir de</string>
     <string name="qTo">à</string>
-    <string name="qPlayer">joueur</string>
+    <string name="qPlayer">Joueur</string>
     <string name="qEvent">événement</string>
-    <string name="qSite">site</string>
+    <string name="qSite">Site</string>
     <string name="qDesc">descendant</string>
     <string name="qEco">ECO</string>
     <string name="qOpening">Opening</string>
     <string name="qVariation">Variation</string>
     <string name="qNoResults">Aucun résultat!</string>
     <string name="whatsNew">Quoi de neuf</string>
+    <string name="epBookHint">book.bin</string>
+    <string name="engine_searching">Ordinateur</string>
+    <string name="menu_board_flip">Flip board (après chaque mouvement)</string>
+    <string name="menu_board_clipboard">Presse-papiers</string>
+    <string name="menu_board_coordinates">Coordonnées</string>
+    <string name="menu_board_color_settings">paramètres de couleur</string>
+    <string name="menu_board">options de conseil</string>
+    <string name="epPassivity">Passivité</string>
+    <string name="app_moveAnnotation">Déplacer l\'annotation</string>
+    <string name="clock_stopped">Horloge arrêtée</string>
+    <string name="play_set_clock">Réglage de l\'horloge</string>
+    <string name="play_continue">"continuer "</string>
+    <string name="ccsMessageAutoPlayStopped">jeu automatique arrêté</string>
+    <string name="endOfVariation">Aller à la fin de la variation</string>
+    <string name="guGameNavigationBoard">navigation de jeu (planche)</string>
+    <string name="menu_edit_pgn_before">avant sélectionné</string>
+    <string name="menu_edit_pgn_after">après sélectionné</string>
+    <string name="menu_edit_pgn_replace">remplacer sélectionné</string>
+    <string name="menu_edit_pgn_start">début du fichier</string>
+    <string name="menu_edit_pgn_end">fin de fichier</string>
+    <string name="menu_edit_pgn">sauvegarder la partie?</string>
+    <string name="delete_game">Supprimer le jeu?</string>
+    <string name="btn_Cancel">"Annuler "</string>
+    <string name="game_saved">Jeu sauvegardé!</string>
+    <string name="rebuild_pgn_file">Reconstruire le fichier pgn:</string>
+    <string name="fmInfoSelectFile">Sélectionnez un fichier(.pgn) pour afficher la liste des jeux. Un appui long supprime le fichier correspondant. Appuyez sur le bouton de menu pour plus d\'options.</string>
+    <string name="fmInfoSaveGame">Appuyez sur le bouton OK pour enregistrer le jeu à la fin du fichier. Sélectionnez un jeu pour accéder à d\'autres options d\'enregistrement. Un appui long efface le lot correspondant.</string>
+    <string name="fmInfoLoadGame">Sélectionnez une entrée pour charger une partie. Appuyez sur le bouton OK pour charger le jeu sélectionné. Appuyez sur le bouton de recherche pour ouvrir plus d\'options.</string>
+    <string name="fmInfoLoadBook">Appuyez sur le bouton OK pour charger le fichier sélectionné (.bin). Un appui long efface le fichier sélectionné.</string>
+    <string name="game_deleted">Jeu supprimé!</string>
+    <string name="menu_pgn_create">Recréer le fichier PGN</string>
+    <string name="fmAddFile">Nouveau fichier</string>
+    <string name="fmFileNoWritePermissions">Aucune autorisation d\'écriture:</string>
+    <string name="btn_Continue">Continuer</string>
 
 </resources>

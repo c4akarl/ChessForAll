@@ -2,20 +2,25 @@ package ccc.chess.gui.chessforall;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 public class ChessNotation extends Activity
 {
-	final String TAG = "ChessNotation";
-	TextView notationText = null;
-	public void onCreate(Bundle savedInstanceState) 
+	public void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		u = new Util();
+		userP = getSharedPreferences("user", 0);
+		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", true));
         setContentView(R.layout.notation);
+        title = (TextView) findViewById(R.id.title);
         notationText = (TextView) findViewById(R.id.ntTv);
-        switch (getIntent().getExtras().getInt("textValue")) 
+        switch (getIntent().getExtras().getInt("textValue"))
 		{
 		case 1:
 			notationText.setText(getIntent().getExtras().getString("moves"));
@@ -27,8 +32,7 @@ public class ChessNotation extends Activity
 			notationText.setText(getIntent().getExtras().getString("pgn"));
 			break;
 		}
-        
-        this.setTitle(getIntent().getExtras().getString("white") + " - " + getIntent().getExtras().getString("black"));
+        title.setText(getIntent().getExtras().getString("white") + " - " + getIntent().getExtras().getString("black"));
  	}
 	public void myClickHandler(View view) 		
     {	// ClickHandler	(ButtonEvents)
@@ -51,4 +55,11 @@ public class ChessNotation extends Activity
 			break;
 		}
 	}
+
+	final String TAG = "ChessNotation";
+	Util u;
+	SharedPreferences userP;
+	TextView title = null;
+	TextView notationText = null;
+
 }

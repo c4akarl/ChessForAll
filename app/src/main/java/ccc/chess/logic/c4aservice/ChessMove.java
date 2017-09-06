@@ -1,8 +1,6 @@
 package ccc.chess.logic.c4aservice;
 
-//import android.util.Log;
-
-public class ChessMove 
+public class ChessMove
 {
 	final String TAG = "ChessMove";
 	
@@ -19,7 +17,6 @@ public class ChessMove
 	CharSequence baseIsCheck = "f";	// 11
 	CharSequence control = "0";		// 12
 	
-	CharSequence history = "";		//  CharSequence for ChessHistory (ArrayList) 1 ... 12
 	CharSequence color = "l";		//  move color
 	
 	StringBuilder sb = new StringBuilder();
@@ -27,10 +24,12 @@ public class ChessMove
 	public ChessMove()
     {
     }
+
 	public ChessMove(CharSequence hist)
     {
 		setMoveFromHistory(hist);
     }
+
 	public void setMove(CharSequence mRank, CharSequence mVariant, CharSequence mFields, CharSequence mPgn, CharSequence mFen,			
 			CharSequence mTxt, CharSequence mIsCheck, CharSequence mIsMate, CharSequence mIsStealMate, CharSequence mBaseFen,	
 			CharSequence mBaseIsCheck, CharSequence mControl)		
@@ -50,24 +49,27 @@ public class ChessMove
 		if (!baseFen.equals(""))
 			color = getColorFromFen(baseFen);
     }
+
 	public void setMoveFromHistory(CharSequence moveHistory)		
     {	// creating ChessMove from moveHistory
 		CharSequence[] split = moveHistory.toString().split("\b");
-		rank = split[0];
-		variant = split[1];
-		fields = split[2];
-		pgn = split[3];
-		fen = split[4];
-		txt = split[5];
-		isCheck = split[6];
-		isMate = split[7];
-		isStealMate = split[8];
-		baseFen = split[9];
-		baseIsCheck = split[10];
-		control = split[11];
+			rank = split[0];
+			variant = split[1];
+			fields = split[2];
+			pgn = split[3];
+			fen = split[4];
+			txt = split[5];
+			isCheck = split[6];
+			isMate = split[7];
+			isStealMate = split[8];
+			baseFen = split[9];
+			baseIsCheck = split[10];
+			control = split[11];
+
 		if (!baseFen.equals(""))
 			color = getColorFromFen(baseFen);
     }
+
 	public void setMoveFromMoveList(CharSequence moveList)		
     {	// MoveList (parse game notation)
 		rank = getVal(moveList, 2);
@@ -84,6 +86,7 @@ public class ChessMove
 		control = getVal(moveList, 1);
 		color = getVal(moveList, 5);
     }
+
 	public CharSequence getMoveHistory()		
     {	// creating MoveHistory from ChessMove 
 		sb.setLength(0);
@@ -102,6 +105,7 @@ public class ChessMove
 //		Log.i(TAG, "sb.capacity(): " + sb.capacity());
 		return sb.toString();
     }
+
 	public CharSequence getVal(CharSequence move, int statId)		
     {	// get moveString from MoveHistory
 //		Log.i(TAG, "move: " + move);
@@ -112,6 +116,7 @@ public class ChessMove
 //		Log.i(TAG, "statId, moveValue, txt: " + statId + ", " + moveValue + ">" + moveSplit[5] + "<");
 		return moveValue;
     }
+
 	public CharSequence getColorFromFen(CharSequence fen)		
     {
 //		Log.i(TAG, "getColorFromFen: " + fen);
@@ -121,6 +126,7 @@ public class ChessMove
 			color = "d";
 		return color;
     }
+
 	public CharSequence getMoveNumberFromFen(CharSequence fen)		
     {
 		CharSequence[] split = fen.toString().split(" ");
@@ -129,6 +135,7 @@ public class ChessMove
 		else
 			return "";
     }
+
 	// get methods
 	public CharSequence getRank() 			{return rank;}
 	public CharSequence getVariant() 		{return variant;}
@@ -143,6 +150,7 @@ public class ChessMove
 	public CharSequence getBaseIsCheck() 	{return baseIsCheck;}
 	public CharSequence getControl() 		{return control;}
 	public CharSequence getColor() 			{return color;}
+
 	// set methods
 	public void setRank(CharSequence var) {rank = var;}
 	public void setVariant(CharSequence var) {variant = var;}
@@ -162,4 +170,5 @@ public class ChessMove
 	public void setBaseIsCheck(CharSequence var) {baseIsCheck = var;}
 	public void setControl(CharSequence var) {control = var;}
 	public void setColor(CharSequence var) {color = var;}
+
 }

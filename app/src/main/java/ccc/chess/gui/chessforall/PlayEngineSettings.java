@@ -8,22 +8,27 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 {
+
 	public void onCreate(Bundle savedInstanceState) 
 	{
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playenginesettings);
+		u = new Util();
+		fmPrefs = getSharedPreferences("fm", 0);
+		userPrefs = getSharedPreferences("user", 0);
+		runPrefs = getSharedPreferences("run", 0);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
+		setContentView(R.layout.playenginesettings);
         fileManagerIntent = new Intent(this, PgnFileManager.class);
-        pgnIO = new PgnIO();
+        pgnIO = new PgnIO(this);
         baseDir = pgnIO.getExternalDirectory(0);
-        fmPrefs = getSharedPreferences("fm", 0);
-        userPrefs = getSharedPreferences("user", 0);
-        runPrefs = getSharedPreferences("run", 0);		
         currentBase = runPrefs.getString("run_game0_file_base", "");
 		if (!currentBase.equals("") & !currentBase.equals("assets/") & !currentBase.equals("url"))	// == sd-card
 		{
@@ -53,6 +58,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
         cbPeAutoFlipColor.setChecked(autoFlipColor);
         cbPeAutoCurrentGame.setChecked(autoCurrentGame);
 	}
+
 	@Override
     protected void onDestroy() 					
     {
@@ -63,6 +69,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
     	}
      	super.onDestroy();
     }
+
 	public void myClickHandler(View view) 				
     {	// ClickHandler	(ButtonEvents)
 		Intent returnIntent;
@@ -89,12 +96,13 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 			break;
 		}
 	}
+
 	public void onActivityResult(int requestCode, int resultCode, Intent data)			
-    {	// subActivity result
+    {
 		switch(requestCode) 
 	    {
 		    case ENGINE_AUTOPLAY_REQUEST_CODE: 
-		    	if (resultCode == C4aMain.RESULT_OK) 					
+		    	if (resultCode == MainActivity.RESULT_OK)
 				{
 			    	baseDir = data.getStringExtra("fileBase");
 			    	etPePath.setText(data.getStringExtra("filePath"));
@@ -104,6 +112,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 				break;
 	    }
     }
+
 	@Override
     protected Dialog onCreateDialog(int id) 
 	{
@@ -124,8 +133,10 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
         } 
         return null;
 	}
+
 	@Override
 	public void getCallbackValue(int btnValue) { }
+
 	protected boolean checkFileData(String path, String file) 
 	{
 		boolean fileOk = true;
@@ -155,6 +166,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 		}
 		return fileOk;
 	}
+
 	protected void getPrefs() 
 	{
 		path = userPrefs.getString("user_play_eve_path", currentPath);
@@ -165,6 +177,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 		autoFlipColor = userPrefs.getBoolean("user_play_eve_autoFlipColor", true);
 		autoCurrentGame = userPrefs.getBoolean("user_play_eve_autoCurrentGame", false);
 	}
+
 	protected void setPrefs() 
 	{
 		path = etPePath.getText().toString();
@@ -184,9 +197,10 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
         ed.putBoolean("user_play_eve_autoCurrentGame", cbPeAutoCurrentGame.isChecked());
         ed.commit();
 	}
-	
+
 	final String TAG = "PlayEngineSettings";
 	final static int ENGINE_AUTOPLAY_REQUEST_CODE = 50;
+	Util u;
 	Intent fileManagerIntent;
 	private static final int ENGINE_PROGRESS_DIALOG = 1;
 	ProgressDialog progressDialog = null;
@@ -213,4 +227,5 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 	CheckBox cbPeAutoSave;
 	CheckBox cbPeAutoFlipColor;
 	CheckBox cbPeAutoCurrentGame;
+
 }

@@ -12,11 +12,11 @@ import android.content.res.AssetManager;
 //import android.util.Log;
 
 import ccc.chess.book.C4aBook.BookEntry;
-import ccc.chess.gui.chessforall.C4aMain;
+import ccc.chess.gui.chessforall.MainActivity;
 
 public class PolyglotBook implements IOpeningBook 
 {
-    PolyglotBook(C4aMain cM) 
+    PolyglotBook(MainActivity cM)
     {
     	c4aM = cM;
         bookFile = new File("");
@@ -442,6 +442,6 @@ public class PolyglotBook implements IOpeningBook
     final String TAG = "PolyglotBook";
     final String DATA_BOOK_PATH = "/data/data/ccc.chess.gui.chessforall";
     final String DATA_BOOK_FILE = "book.bin";
-    C4aMain c4aM;
+    MainActivity c4aM;
     private File bookFile;
 }

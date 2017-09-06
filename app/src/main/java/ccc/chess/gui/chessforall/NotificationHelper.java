@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-//import android.util.Log;
 
 public class NotificationHelper 
 {
@@ -22,20 +21,16 @@ public class NotificationHelper
         mContext = context;
         this.notivicationId = notivicationId;
     }
-    public void createNotification(String fileName) 
+    public void createNotification(String title)
     {
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         int icon = R.drawable.stat_db_add;
         CharSequence tickerText = mContext.getString(R.string.app_pgnFileManager);
         long when = System.currentTimeMillis();
-//        mNotification = new Notification(icon, tickerText, when);
-        mContentTitle = mContext.getString(R.string.fmCreatingPgnDatabase)  + fileName; 
+        mContentTitle = title;
         CharSequence contentText = "0%";
         Intent notificationIntent = new Intent();
         mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
-//        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
-//        mNotification.flags = Notification.FLAG_ONGOING_EVENT;
-//        mNotificationManager.notify(notivicationId, mNotification);
         builder = new NotificationCompat.Builder(mContext);
         mNotification = builder.setContentIntent(mContentIntent)
                 .setSmallIcon(icon).setTicker(tickerText).setWhen(when)
@@ -73,8 +68,12 @@ public class NotificationHelper
     			contentText = "100%, creating indexes, please wait  . . .";
     	}
     	else
-    		contentText = fParsedPercentage + "%, " + fGames + " games, " + fParsedD + "(" + fLengthD + ")" + km;
-//        mNotification.setLatestEventInfo(mContext, mContentTitle, contentText, mContentIntent);
+        {
+            if (fGames >= 0)
+                contentText = fParsedPercentage + "%, " + fGames + " games, " + fParsedD + "(" + fLengthD + ")" + km;
+            else
+                contentText = fParsedPercentage + "%, " + fParsedD + "(" + fLengthD + ")" + km;
+        }
         builder.setContentText(contentText);
         mNotification = builder.getNotification();
         mNotification.flags = Notification.FLAG_ONGOING_EVENT;
@@ -86,4 +85,5 @@ public class NotificationHelper
     }
     
     final String TAG = "NotificationHelper";
+
 }

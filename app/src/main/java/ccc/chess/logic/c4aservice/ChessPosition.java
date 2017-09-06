@@ -6,7 +6,6 @@ import chesspresso.Chess;
 import chesspresso.move.IllegalMoveException;
 import chesspresso.move.Move;
 import chesspresso.position.Position;
-//import android.util.Log;
 
 public class ChessPosition 
 {
@@ -15,6 +14,7 @@ public class ChessPosition
 		cpPosition = new Position();
 		chess960SetValues(chess960Id);
     }
+
 	public void setPosition(CharSequence posFen)				
     {
 //		Log.i(TAG, "start setPosition(), fen: " + posFen);
@@ -32,9 +32,10 @@ public class ChessPosition
     		cpPosition = new Position(fen.toString());
     		setMoveNumber(fen);
     	} 
-    	catch (IllegalArgumentException e) {e.printStackTrace(); moveList.clear(); return;}
+    	catch (IllegalArgumentException e) {moveList.clear(); isFenError = true; return;}
     	getAllMoves();
     }
+
 	public boolean validMove(CharSequence move)				
     {	// is in moveList? [cpPosition.getAllMoves()]
 		if (isChess960 & isChess960Castling)
@@ -63,6 +64,7 @@ public class ChessPosition
 //		Log.i(TAG, "validMove(): false");
 		return false;
     }
+
 	public short isValidMove(int from, int to, int piece) 
 	{	// validate fields (from, to)
         try 
@@ -81,12 +83,14 @@ public class ChessPosition
         }
         catch (Exception e) { return 0; }
 	}
+
 	public void doMove(int from, int to, int piece)
     {
 		short m = isValidMove(from, to, piece);
     	try	{cpPosition.doMove(m);} 
     	catch (IllegalMoveException e) { e.printStackTrace(); } // ??? message
     }
+
 	public void doChess960Castling(Position position, CharSequence castlingMove)
     {
 		isChess960Error = false;
@@ -133,6 +137,7 @@ public class ChessPosition
 			setMoveNumber(position.getFEN());
 		}
     }
+
 	public ArrayList<String> getAllMoves()				
     {	
 		moveList.clear();
@@ -149,6 +154,7 @@ public class ChessPosition
 			mv = mv.replace("x", "");
 			moveList.add(mv);
         }
+
 		// for TEST only !
 //		String printList = "";
 //		for (int i = 0; i < moveList.size(); i++)
@@ -160,6 +166,7 @@ public class ChessPosition
 //        }
 //		Log.i(TAG, "move, SAN: " + cpPosition.getMovesAsString(moves, true));
 //		Log.i(TAG, "move, LAN: " + printList);
+
         return moveList;
     }
 	public ArrayList<Short> getShortMovesFromSAN(Position pos, CharSequence sanMove)				
@@ -301,6 +308,7 @@ public class ChessPosition
 		}
 		return shortMoves;
     }
+
 	public CharSequence getMoveFromSAN(CharSequence fen, CharSequence sanMove)				
     {	// SAN = PGN-move; return: LAN
 //		Log.i(TAG, sanMove + ", " + fen);
@@ -348,6 +356,8 @@ public class ChessPosition
 		tmp = tmp.replaceAll("\\{", "");
 		tmp = tmp.replaceAll("\\}", "");
 		sanMoves = tmp.split(",");
+		String tmpSanMove = posSanMove;
+		Boolean isPosSanMove = false;
 		for (int i = 0; i < sanMoves.length; i++)
         {
 			if (sanMove.toString().equals(sanMoves[i]))
@@ -366,9 +376,32 @@ public class ChessPosition
     				chess960SetFenCastling(lanMove);
 				return lanMove;								// move lan (g1f3)
 			}
+			if (tmpSanMove.equals(sanMoves[i]))
+				isPosSanMove = true;
         }
+        if (isPosSanMove)
+		{
+			for (int i = 0; i < sanMoves.length; i++)
+			{
+				if (tmpSanMove.equals(sanMoves[i]))
+				{
+					try {cpPgnPosition.doMove(moves[i]);}
+					catch (IllegalMoveException e) { e.printStackTrace(); return "";}
+					posSanMove = cpPgnPosition.getLastMove().getSAN();
+					lanMove = Move.getString(moves[i]);
+//					if (lanMove.startsWith("O"))
+//						lanMove = getCastlingLAN(fen, lanMove);
+					lanMove = lanMove.replace("-", "");
+					lanMove = lanMove.replace("x", "");
+					if (isChess960)
+						chess960SetFenCastling(lanMove);
+					return lanMove;								// move lan (g1f3)
+				}
+			}
+		}
         return "";
     }
+
 	public CharSequence getNewMove(CharSequence fen, CharSequence sanMove)				
     {	// NEW methode, get lan
 		try {cpPgnPosition = new Position(fen.toString(), true);} 
@@ -392,13 +425,14 @@ public class ChessPosition
     		boolean isMoveOk = true;
 	    	for (int i = 0; i < shortMoves.size(); i++)
 	        {
-//	    		Log.i(TAG, "getShortMovesFromSAN(), move short:    " + shortMoves.get(i));
-	    		try {cpPgnPosition.doMove(shortMoves.get(i));} 
+	    		try {cpPgnPosition.doMove(shortMoves.get(i));}
 				catch (IllegalMoveException e) 	{isMoveOk = false;}
 	    		catch (RuntimeException e) 		{isMoveOk = false;}
+
 	    		if (isMoveOk)
 	    		{
 	    			posSanMove = cpPgnPosition.getLastMove().getSAN();
+//Log.i(TAG, "getShortMovesFromSAN(), sanMove: " + sanMove + ", shortMoves: " + shortMoves.get(i) + ", posSanMove: " + posSanMove);
 		    		if (!isLanNotation & !sanMove.equals(posSanMove))
 		    		{
 		    			String tmp = posSanMove;
@@ -411,19 +445,19 @@ public class ChessPosition
 	    						isMoveOk = true;
 	    				}
 	    				else
-	    					isMoveOk = false;
+							isMoveOk = false;
 		    		}
 	    		}
 	    		if (isMoveOk)
 	    		{
 	    			lanMove = Move.getString(shortMoves.get(i));
-//Log.i(TAG, "NEW, sanMove, posSanMove, lanMove, shortMoves.get(i): " + sanMove + ", " + posSanMove + ", " + lanMove + ", " + shortMoves.get(i));
 					if (lanMove.startsWith("O"))
 						lanMove = getCastlingLAN(fen, lanMove);
 					lanMove = lanMove.replace("-", "");
 					lanMove = lanMove.replace("x", "");
 					if (isChess960)
 	    				chess960SetFenCastling(lanMove);
+//Log.i(TAG, "NEW, sanMove, posSanMove, lanMove, shortMoves.get(i): " + sanMove + ", " + posSanMove + ", " + lanMove + ", " + shortMoves.get(i));
 					return lanMove;		
 	    		}
 	    		else
@@ -438,6 +472,7 @@ public class ChessPosition
     	}
     	return "";
     }
+
 	public String getCastlingLAN(CharSequence fen, String moveCastling)	
 	{	// O-O ---> e1h1>e1g1 [Chess960: e1h1]
 		String castMove = "";
@@ -586,6 +621,7 @@ public class ChessPosition
 			}
 		}
 	}
+
 	public CharSequence getFEN(Position cpPos)	
 	{
 		if (isChess960)
@@ -593,6 +629,7 @@ public class ChessPosition
 		else
 			return cpPos.getFEN();
 	}
+
 	public CharSequence getSAN()	
 	{
 		try
@@ -605,6 +642,7 @@ public class ChessPosition
 		}
 		catch (NullPointerException e) { return ""; } 
 	}
+
 	public boolean isWhiteMove()	
 	{
 		if (isChess960Castling)
@@ -619,7 +657,9 @@ public class ChessPosition
 	}
 	
 	public boolean isSquareEmpty(int sqi)	{ return cpPosition.isSquareEmpty(sqi); }
+
 	public int getColor(int sqi)	{ return cpPosition.getColor(sqi); }	// 0 = white, 1 = black, -1 = empty
+
 	public int getToPlay()			{ return cpPosition.getToPlay(); }		// 0 = white, 1 = black
 	
 	public boolean isLegal()		
@@ -629,11 +669,17 @@ public class ChessPosition
 		else
 			return false;
 	}
+
 	public boolean canMove()		{ return cpPosition.canMove(); }
+
 	public boolean isCheck()		{ return cpPosition.isCheck(); }
+
 	public boolean isMate()			{ return cpPosition.isMate(); }
+
 	public boolean isStaleMate()	{ return cpPosition.isStaleMate(); }
+
 	public int getMoveNumber()		{ return moveNumber; }
+
 	public void setMoveNumber(CharSequence posFen)		
 	{ 
 		String[] fenSplit = posFen.toString().split(" ");
@@ -645,7 +691,9 @@ public class ChessPosition
 		else
 			moveNumber = 0;
 	}
-	public int getHalfMoveClock()	{ return cpPosition.getHalfMoveClock();	}
+
+	public int getHalfMoveClock()	{ return cpPosition.getHalfMoveClock(); }
+
 	public int getSQI(CharSequence field) 
 	{
 		int position = 0;
@@ -659,6 +707,7 @@ public class ChessPosition
         }
 		return position;
 	}
+
 	//	Chess960 castling methods
 	public void chess960SetValues(int chess960ID)				
     {
@@ -711,6 +760,7 @@ public class ChessPosition
 //			Log.i(TAG, "bShortCastC4aLan, bLongCastC4aLan: " + bShortCastC4aLan + ", " + bLongCastC4aLan);
 //		}
     }
+
 	public boolean chess960CanCastling(CharSequence gameFen, CharSequence fen, int toPlay, CharSequence move)	
 	{		// move: d1b1(LAN) | O-O (SAN)
 		if (move.toString().startsWith("O"))
@@ -778,6 +828,7 @@ public class ChessPosition
 //		Log.i(TAG, "can castle !!!");
 		return true;	// castling OK!
 	}
+
 	public CharSequence chess960GetFEN(CharSequence posFEN)	
 	{
 		CharSequence chess960FEN = "";
@@ -789,6 +840,7 @@ public class ChessPosition
 		}
 		return chess960FEN;
 	}
+
 	public CharSequence chess960SetNewFEN(CharSequence posFEN, CharSequence oldCast)	
 	{
 		CharSequence chess960FEN = "";
@@ -800,6 +852,7 @@ public class ChessPosition
 //		Log.i(TAG, "chess960FEN: " + chess960FEN);
 		return chess960FEN;
 	}
+
 	public void chess960SetFenCastling(CharSequence move)	
 	{
 		CharSequence newCast = "";
@@ -841,6 +894,7 @@ public class ChessPosition
 			chess960OldCast = newCast;
 		}
 	}
+
 	public void chess960SetCanCast(CharSequence fen)	
 	{
 		
@@ -873,7 +927,6 @@ public class ChessPosition
 	CharSequence fen = "";
 	//  chesspresso
 	Position cpPosition;
-	Move cpMove;
 	final CharSequence cpFields[] =
         {
         "a1", "b1", "c1", "d1", "e1", "f1", "g1", "h1",
@@ -885,16 +938,16 @@ public class ChessPosition
         "a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7",
         "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8"
         };
+
 // parse PGN-data
 	Position cpPgnPosition;
-	Move cpPgnMove;
-	String cpSanFromPgn = "";
 	int moveNumber = 0;
 	String tmp = "";
 	String lanMove = "";
 	String posSanMove = "";
 	String lanCastMove = "";
 	String[] sanMoves;
+
 	// chess960 - castling
 	Position cpCastPosition;
 	boolean isChess960 = false;
@@ -933,4 +986,6 @@ public class ChessPosition
 	public ArrayList<String> moveList = new ArrayList<String>();
 	boolean isPromotion = false;
 	boolean isLanNotation = false;
+	boolean isFenError = false;
+
 }

@@ -1,17 +1,12 @@
 package ccc.chess.gui.chessforall;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-
-import ccc.chess.logic.c4aservice.ChessHistory;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -23,13 +18,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.RelativeLayout;
-//import android.util.Log;
+import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+
+import ccc.chess.logic.c4aservice.ChessHistory;
 
 public class ChessGameData extends Activity implements OnTouchListener, OnItemSelectedListener, TextWatcher
 {
@@ -37,14 +39,18 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 	public void onCreate(Bundle savedInstanceState) 
 	{
         super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		u = new Util();
         _gameStat = getIntent().getExtras().getCharSequence("gameStat");
         _gameTags = getIntent().getExtras().getCharSequence("gameTags");
+		userP = getSharedPreferences("user", 0);
+		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", true));
         setContentView(R.layout.gamedata);
         String state = getString(R.string.menu_modes_edit);
         if (_gameStat.equals("2"))
         	state = getString(R.string.menu_modes_view);
-        String title = getString(R.string.app_chessData) + " (" + state + ")";
-        setTitle(title);
+        title = (TextView) findViewById(R.id.title);
+        title.setText(getString(R.string.app_chessData) + " (" + state + ")");
         gdBtnOk = (ImageView) findViewById(R.id.gdBtnOk);
         gdBtnTags = (ImageView) findViewById(R.id.gdBtnTags);
         if (_gameStat.equals("2"))
@@ -58,7 +64,8 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
         soundsMap = new HashMap<Integer, Integer>();
         soundsMap.put(1, mSoundPool.load(this, R.raw.move_wrong, 1));
 	}
-	public void setGameTagsToView() 		
+
+	public void setGameTagsToView()
     {
 		int prevId = 0;
 		getDateData();
@@ -79,7 +86,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 				try	{type = Integer.parseInt(txtTags[3].toString());} catch (NumberFormatException e) {type = 0;}
 				int digits = 0;
 				try	{digits = Integer.parseInt(txtTags[4].toString());} catch (NumberFormatException e) {digits = 0;}
-//				Log.i(TAG, "name, value, type, digits: " + name + ", " + value + ", " + type + ", " + digits);
+//Log.i(TAG, "name, value, type, digits: " + name + ", " + value + ", " + type + ", " + digits);
 				RelativeLayout.LayoutParams rPar = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				TextView tv = (TextView)getLayoutInflater().inflate(R.layout.c4atextview, null);
 				EditText et = null;
@@ -166,7 +173,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 				for(int h = 0; h < history.tagState.length; h++)
 			    {
 					String[] txtTagStats = history.tagState[h].toString().split("\b");
-//					Log.i(TAG, "txtTagStats[0], txtTags[0]: " + txtTagStats[0]+ ", " + txtTags[0]);
+//Log.i(TAG, "txtTagStats[0], txtTags[0]: " + txtTagStats[0]+ ", " + txtTags[0]);
 					if (txtTagStats[0].equals(txtTags[0]))
 					{
 						if (initTagState)
@@ -195,7 +202,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 			String tagValue = et.getText().toString();
 			if (tagValue.equals(""))
 				tagValue = txtTagStats[2];
-//			Log.i(TAG, "tags: " + tv.getText().toString() + ", " + et.getText().toString());
+//Log.i(TAG, "tags: " + tv.getText().toString() + ", " + et.getText().toString());
 			newTags = newTags + tv.getText().toString() + "\b" + tagValue + "\n";
 	    }
 		return newTags;
@@ -223,7 +230,8 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 		catch (NullPointerException e) {return;}
 		String data = et.getText().toString();
 		String[] txtSplit = _gameTags.toString().split("\n");
-		String[] txtTags = txtSplit[et.getId() -200].split("\b");
+		int resId = et.getId(); resId -= 200;
+		String[] txtTags = txtSplit[resId].split("\b");
 		int etType = 0;
 		try	{etType = Integer.parseInt(txtTags[3].toString());} catch (NumberFormatException e) {etType = 0;}
 		int cnt = 0;
@@ -297,7 +305,6 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 						if (day > md)
 							day = md;
 						lastDate = data;
-		//				Log.i(TAG, "lastDate: " + lastDate);
 						setEditData(et, true);
 					} 
 					catch (IllegalArgumentException e) { setEditData(et, false); }
@@ -380,7 +387,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 						}
 					}
 		        }
-//				Log.i(TAG, "h, m, s: " + h + ", " + m + ", " + s);
+//Log.i(TAG, "h, m, s: " + h + ", " + m + ", " + s);
 				if (h.length() < 1 | h.length() > 2 | m.length() != 2 | s.length() != 2)
 				{
 					setEditData(et, false);
@@ -401,7 +408,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 				if (!timeOk)
 					et.setText(clockColor + h + ":" + m + ":" + s);
 				setEditData(et, true);
-//				Log.i(TAG, "h, m, s: " + h + ", " + m + ", " + s);
+//Log.i(TAG, "h, m, s: " + h + ", " + m + ", " + s);
 				break;
 		}
 	}
@@ -421,12 +428,14 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 		if (visible)
 		{
 			et.setBackgroundResource(R.drawable.bordergreen);
-			tagError[et.getId() -200] = 0;
+			int resId = et.getId(); resId -= 200;
+			tagError[resId] = 0;
 		}
 		else
 		{
 			et.setBackgroundResource(R.drawable.borderpink);
-			tagError[et.getId() -200] = 1;
+			int resId = et.getId(); resId -= 200;
+			tagError[resId] = 1;
 		}
 		boolean isError = false;
 		int errorId = 0;
@@ -447,6 +456,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 		else
 			gdBtnOk.setVisibility(ImageView.VISIBLE);
 	}
+
 	public void getDateData()
     {
 		Date newDate = new Date();
@@ -457,6 +467,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
         dateYear = calendar.get(Calendar.YEAR);
         lastDate = getDateYYYYMMDD();
     }
+
 	public CharSequence getDateYYYYMMDD()
     {
 		sbDate.setLength(0);
@@ -482,6 +493,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
         	sbDate.append(dateDay);
         return sbDate.toString();
     }
+
 	public void setToday() 
 	{
 		year = dateYear;
@@ -489,13 +501,16 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 		day = dateDay;
 		isEditDate = true;
 	}
+
 	public void playSound(int idx, int loop)
     {
    		mSoundPool.play(soundsMap.get(idx), 0.2f, 0.2f, 1, loop, 1.0f);
     }
+
 	public boolean onTouch(View view, MotionEvent event)
 	{	// Touch Listener
-		TextView tv = (TextView) rl.findViewById(view.getId() -100);
+		int resId = view.getId(); resId -= 100;
+		TextView tv = (TextView) rl.findViewById(resId);
 		if (tv.getText().equals("Result"))
  	    {
 			resultViewId = view.getId();
@@ -504,6 +519,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
  	    }
 		return true;
 	}
+
 	public Dialog onCreateDialog(int id)
 	{	// creating dialog
 		if (id == RESULT_LIST_DIALOG)  
@@ -598,6 +614,8 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 	}
 
 	final String TAG = "ChessGameData";
+	Util u;
+	SharedPreferences userP;
 	final static int RESULT_LIST_DIALOG = 1;
 	final static int TAG_LIST_DIALOG = 2;
 	Intent returnIntent = new Intent();
@@ -608,6 +626,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 	Integer tagError[] = null;
 	
 	RelativeLayout rl = null;
+	TextView title;
 	ImageView gdBtnOk = null;
 	ImageView gdBtnTags = null;
 	int      		resultViewId = 0;

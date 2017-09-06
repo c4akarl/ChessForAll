@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,6 +16,7 @@ public class C4aDialog extends Dialog implements View.OnClickListener
 {
 	final String TAG = "C4aDialog";
 	private final Ic4aDialogCallback c4aCallback;
+	TextView title = null;
 	TextView message = null;
 	EditText inputText = null;
 	Button btn1 = null;
@@ -43,10 +45,11 @@ public class C4aDialog extends Dialog implements View.OnClickListener
     }
     protected void onCreate(Bundle savedInstanceState) 
 	{
-//    	Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.c4adialog);
-        this.setTitle(txtTitle);
+		title = (TextView) findViewById(R.id.dgTitle);
+		title.setText(txtTitle);
 		message = (TextView) findViewById(R.id.dgMessage);
 		inputText = (EditText) findViewById(R.id.dgInputText);
 		if (editControl == 0)
@@ -73,6 +76,7 @@ public class C4aDialog extends Dialog implements View.OnClickListener
 		if (!txtButton1.equals(""))
 		{
 			btn1.setOnClickListener(this);
+			btn1.setVisibility(Button.VISIBLE);
 			btn1.setText(txtButton1);
 		}
 		else
@@ -80,6 +84,7 @@ public class C4aDialog extends Dialog implements View.OnClickListener
 		if (!txtButton2.equals(""))
 		{
 			btn2.setOnClickListener(this);
+			btn2.setVisibility(Button.VISIBLE);
 			btn2.setText(txtButton2);
 		}
 		else
@@ -87,13 +92,14 @@ public class C4aDialog extends Dialog implements View.OnClickListener
 		if (!txtButton3.equals(""))
 		{
 			btn3.setOnClickListener(this);
+			btn3.setVisibility(Button.VISIBLE);
 			btn3.setText(txtButton3);
 		}
 		else
 			btn3.setVisibility(Button.INVISIBLE);
     }
 	public void onClick(View view) 		
-    {	// ClickHandler (ButtonEvents)
+    {
 		int btnValue = 0;
 		switch (view.getId()) 
 		{
@@ -115,10 +121,4 @@ public class C4aDialog extends Dialog implements View.OnClickListener
     	dismiss();
 	}
 	public String getNumber() {return number;}
-//	@Override
-//	public void onCancel(DialogInterface dialog) 
-//	{
-//		c4aCallback.getCallbackValue(9);
-//    	dismiss();
-//	}
 }

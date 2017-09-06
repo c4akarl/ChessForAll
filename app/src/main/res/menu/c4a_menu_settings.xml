@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	<item 	android:id="@+id/menu_usersettings_gui" android:title="@string/menu_usersettings_gui" /> 
-	<item 	android:id="@+id/menu_usersettings_chessBoard" android:title="@string/menu_usersettings_chessBoard" />
-	<item 	android:id="@+id/menu_usersettings_timeControl" android:title="@string/menu_usersettings_timeControl" />
-	<item 	android:id="@+id/menu_usersettings_timerAutoPlay" android:title="@string/menu_usersettings_timerAutoPlay" />
-	<item 	android:id="@+id/menu_usersettings_time_white" android:title="@string/menu_usersettings_time_white" />
-	<item 	android:id="@+id/menu_usersettings_time_black" android:title="@string/menu_usersettings_time_black" />
-</menu>

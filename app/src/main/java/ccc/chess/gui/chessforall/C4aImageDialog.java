@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class C4aImageDialog extends Dialog implements View.OnClickListener
-{	// dialog with 3 image buttons
+{
 	final String TAG = "C4aImageDialog";
 	private final Ic4aDialogCallback c4aCallback;
 	Context context;
@@ -67,7 +67,7 @@ public class C4aImageDialog extends Dialog implements View.OnClickListener
     }
 	@Override
 	public void onClick(View view) 
-	{	// ClickHandler (ButtonEvents)
+	{
 		int btnValue = 0;
 		switch (view.getId()) 
 		{

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:paddingTop="8dip"
+	android:paddingLeft="8dip"
+    android:paddingRight="8dip"
+	android:background="@drawable/background_c4a_2" >
+
+<TextView
+	android:id="@+id/title"
+	style="@style/c4aTV2"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_alignParentLeft="true"
+	android:layout_alignParentTop="true"
+	android:layout_marginLeft="0dip"
+	android:paddingTop="0dip"
+	android:paddingLeft="0dip"
+	android:paddingRight="0dip"
+	android:singleLine="true"
+	android:gravity="center"
+	android:background="@drawable/bordergrey"
+	android:text="@string/app_optionsGUI"
+	android:textColor="#000000" />
+
+<TextView android:id="@+id/tvGuPlayerName" 
+	style="@style/c4aTV1"
+	android:layout_below="@id/title"
+	android:text="@string/guPlayerName"
+	android:layout_marginLeft="3dip"
+	android:layout_marginRight="5dip"
+	android:textSize="18sp"  
+	android:layout_alignParentLeft="true" />
+<EditText android:id="@+id/etGuPlayerName"
+	style="@style/c4aET1"
+	android:layout_below="@id/title"
+	android:layout_toRightOf="@id/tvGuPlayerName" />
+	
+<CheckBox android:id="@+id/cbGuStatusBar"
+	android:layout_below="@id/etGuPlayerName"
+	style="@style/c4aCB1"
+	android:text="@string/guStatusBar" />
+<CheckBox android:id="@+id/cbGuFlipBoard"
+	android:layout_below="@id/cbGuStatusBar"
+	style="@style/c4aCB1"
+	android:text="@string/menu_board_flip" />
+<CheckBox android:id="@+id/cbGuLastPosition"
+	style="@style/c4aCB1"
+	android:layout_below="@id/cbGuFlipBoard"
+	android:text="@string/guLastPosition" />
+<CheckBox android:id="@+id/cbGuDisableScreenTimeout"
+	style="@style/c4aCB1"
+	android:layout_below="@id/cbGuLastPosition"
+	android:text="@string/guDisableScreenTimeout" />
+<CheckBox android:id="@+id/cbGuGameNavigationBoard"
+	style="@style/c4aCB1"
+	android:layout_below="@id/cbGuDisableScreenTimeout"
+	android:text="@string/guGameNavigationBoard" />
+<CheckBox android:id="@+id/cbGuUsePgnDatabase"
+	style="@style/c4aCB1"
+	android:layout_below="@id/cbGuGameNavigationBoard"
+	android:text="@string/guUsePgnDatabase" />
+<CheckBox android:id="@+id/cbGuEnableSounds"
+	style="@style/c4aCB1"
+	android:layout_below="@id/cbGuUsePgnDatabase"
+	android:text="@string/guEnableSounds" />
+<CheckBox android:id="@+id/cbGuCoordinates"
+	style="@style/c4aCB1"
+	android:layout_below="@id/cbGuEnableSounds"
+	android:text="@string/guDisplayCoordinates" />
+
+<ImageView android:id="@+id/btnGuOk"
+	style="@style/c4aImgBtn1"
+    android:src="@drawable/button_ok"
+    android:onClick="myClickHandler" 
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="6dip"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

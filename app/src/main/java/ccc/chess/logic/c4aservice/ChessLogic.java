@@ -1,8 +1,8 @@
 package ccc.chess.logic.c4aservice;
 
 import java.util.ArrayList;
+
 import chesspresso.position.Position;
-//import android.util.Log;
 
 public class ChessLogic
 {
@@ -15,8 +15,10 @@ public class ChessLogic
     	chessMove = new ChessMove();
     	chess960 = new Chess960();
     	p_possibleMoveList = new ArrayList<CharSequence>();		// mv1
+    	p_possibleMoveToList = new ArrayList<CharSequence>();	// move to
     }
-//  C H E S S    L O G I C  -  C H E S S P R E S S O   (direct call from UiControl)
+
+//  C H E S S    L O G I C  -  C H E S S P R E S S O
     public void newPosition(CharSequence chess960ID, CharSequence fen, CharSequence event, CharSequence site,
     		CharSequence date, CharSequence round, CharSequence white, CharSequence black)			// new game	(initialization)
     {
@@ -72,6 +74,7 @@ public class ChessLogic
         history.initMoveHistory(chess960.getFen(), isMate, isStaleMate);
         setPositionValues(stat, message);
     }
+
     public void newPositionFromMove(CharSequence fen, CharSequence mv)					// new position	(new move)
     {
     	CharSequence stat = "9";
@@ -81,6 +84,21 @@ public class ChessLogic
     	boolean gameOver = false;
     	boolean validMove = false;
     	p_variationEnd = false;
+
+		if (p_hasPossibleMovesTo & p_possibleMoveToList.size() >= 2)
+		{
+			for (int i = 0; i < p_possibleMoveToList.size(); i++)
+			{
+				if (p_possibleMoveToList.get(i).toString().substring(0, 2).equals(mv))
+				{
+					mv = p_possibleMoveToList.get(i).toString().substring(0, 4);
+					p_hasPossibleMovesTo = false;
+					p_possibleMoveToList.clear();
+					break;
+				}
+			}
+		}
+
     	if (mv.length() >= 4)                                               	
         {	// move correction: multiple input
         	if (mv.subSequence(0, 2).equals(mv.subSequence(2, 4)))
@@ -130,7 +148,7 @@ public class ChessLogic
     		switch (pos.fast_move)
             {
     	        case 0:     // FAST_MOVE_NO_MOVE
-//    	        	Log.i(TAG, "color: " + pos.getColor(cpGetSQI(mv.subSequence(0, 2))));
+//Log.i(TAG, "fast move");
     	        	message = stringValues.get(9)  + ": " + mv;
     	        	if (pos.isSquareEmpty(pos.getSQI(mv.subSequence(0, 2))))
     	        		message = stringValues.get(13);	// no move
@@ -149,13 +167,16 @@ public class ChessLogic
     	            break;
     	        case 3:     // FAST_MOVE_MULTIPLE_TO
     	        	stat = "2";
-    	        	message = stringValues.get(12);
+//    	        	message = stringValues.get(12);
     	            break;
     	        case 4:     // FAST_MOVE_PROMOTION_TO
     	        	stat = "5";
     	        	mv = fastMove;
     	            break;
             }
+
+//Log.i(TAG, "fastMove: " + fastMove + "\npos.fast_move: " + pos.fast_move + ", stat: " + stat + ", message: " + message);
+
 		}
     	if (!pos.isChess960 & pos.cpPosition.getPiece(pos.getSQI(mv.subSequence(0, 2))) == 6)
     	{
@@ -254,7 +275,7 @@ public class ChessLogic
     		}
     		else
     		{
-//    			Log.i(TAG, "mv, validMove: " + mv + ", " + validMove);
+//Log.i(TAG, "mv, validMove: " + mv + ", " + validMove);
     			stat = "2";
 	        	message = stringValues.get(13);
     		}
@@ -275,13 +296,16 @@ public class ChessLogic
         		)	// main move section
         		history.setGameTag("Result", "*");
         }
-    	
+
+		p_hasPossibleMovesTo = false;
 		if (stat.equals("0"))
-		{
 			setPossileMoves(fastMove);
-		}
 		else
+		{
 			p_hasPossibleMoves = false;
+			if (pos.fast_move == 3 & stat.equals("2"))
+				setPossileMovesTo(mv, pos.moveList);
+		}
 		setPositionValues(stat, message);
 		if (pos.isPromotion)
  			p_move = fastMove;
@@ -291,6 +315,7 @@ public class ChessLogic
 			p_move1 = mv;
 		}
     }
+
     public void newPositionFromFen(CharSequence fen)						// new game	from a FEN(initialization)
     {
     	if (fen.equals(""))
@@ -309,7 +334,6 @@ public class ChessLogic
         {
         	stat = "1";														// processing OK
         	message = "";
-//      		history.setGameFen(fen);								// history: FEN
       		history.setGameTag("FEN", fen.toString());
             history.setIsGameEnd(false);                            		// history: enable move end 
         }
@@ -320,7 +344,7 @@ public class ChessLogic
         	if (!pos.isMate() & !pos.isStaleMate())
         	{
 	        	stat = "2";													
-	        	message = stringValues.get(2);		// cl_wrongBasePosition
+	        	message = stringValues.get(2);								// cl_wrongBasePosition
         	}
         	history.setIsGameEnd(true);                             		// ERROR: set game end
             history.moveIsFirstInVariation = true;
@@ -330,6 +354,7 @@ public class ChessLogic
         history.initMoveHistory(fen, isMate, isStaleMate);
         setPositionValues(stat, message);
     }
+
     public void newPositionFromPgnData(CharSequence fBase, CharSequence fPath, CharSequence fName, CharSequence gameData,
     		boolean isEndPosition, int moveIdx, boolean withMoveHistory)					
     {	// game PGN-data (file)
@@ -341,10 +366,8 @@ public class ChessLogic
         history.setGameData(gameData);
         CharSequence stat = "0";
         CharSequence message = "";
-//        if (!history.getGameFen().equals(""))
         if (!history.getStartFen().equals(""))
         {
-        	
         	chess960.createChessPosition(history.getStartFen());				// creating chess960-ID from FEN
         	history.setChess960Id(chess960.getChess960Id());				// set Chess960 ID in history
         	pos = new ChessPosition(history.chess960Id);
@@ -410,6 +433,7 @@ public class ChessLogic
         }
         setPositionValues(stat, message);
     }
+
     public void getPositionFromMoveHistory(int keyState, int moveIdx)				// get position from moveHistory
     {
     	CharSequence stat = "0";
@@ -426,6 +450,7 @@ public class ChessLogic
 			message = "";
 		setPositionValues(stat, message);
     }
+
     public void deleteMovesFromMoveHistory(boolean deleteMoveIdx)			// delete all moves from moveIdx to variation end in History
     {
 //    	Log.i(TAG, "history.getMoveIdx(): " + history.getMoveIdx());
@@ -444,6 +469,7 @@ public class ChessLogic
     		getPositionFromMoveHistory(0, 0);
         }
     }
+
     public CharSequence getNotationFromInfoPv(CharSequence fen, CharSequence pvMoves)		// notation(PGN) from infoPV moves
     {
 //    	Log.i(TAG, "getNotationFromInfoPv, moves: " + pvMoves);
@@ -534,6 +560,7 @@ public class ChessLogic
 		}
     	return pgnNotation;
     }
+
 //  C H E S S    L O G I C  -  C H E S S P R E S S O   (intern)
     public void initPositionValues()	
     {	// init position values (p_xxx)
@@ -561,6 +588,7 @@ public class ChessLogic
         p_mate = false;
         p_stalemate = false;
     }
+
     public void setPositionValues(CharSequence stat, CharSequence message)	
     {	// set position values (p_xxx)
 //    	Log.i(TAG, "start setPositionValues, message: " + message);
@@ -637,6 +665,7 @@ public class ChessLogic
 //    	Log.i(TAG, "p_stat, p_fen: " + p_stat + ", " + p_fen);
 //    	Log.i(TAG, "p_move, p_move1, p_move2: " + p_move + ", " + p_move1 + ", " + p_move2);
     }
+
     private CharSequence createMoveHistory()	                               	
     {	// create move-History from PGN-Data
     	CharSequence errorMessage = "";
@@ -707,10 +736,17 @@ public class ChessLogic
 	    	                history.addToMoveHistory(chessMove, false);	// add new move variables to moveHistory
 	            		}
 	            		else
-	            			return stringValues.get(23) + " [P3]\n" + chessMove.getPgn() + " (Index: " + i + ")";
+						{
+							return stringValues.get(23) + " [P3]\n" + chessMove.getPgn() + " (Index: " + i + ")";
+						}
 	                }
 	                else
-	                	return stringValues.get(23) + " [P5]\n" + chessMove.getPgn() + " (Index: " + i + ")";
+					{
+						if (pos.isFenError)
+							return stringValues.get(22) + "\n" + "FEN: " + pos.fen;
+						else
+							return stringValues.get(23) + " [P5]\n" + chessMove.getPgn() + " (Index: " + i + ")";
+					}
     			}
     			else	// variation
     			{
@@ -753,6 +789,7 @@ public class ChessLogic
 //    	history.printMoveHistory();	// TEST only
     	return errorMessage;
     }
+
     public void setPossileMoves(CharSequence fastMoves)	
     {
     	p_hasPossibleMoves = false;
@@ -765,6 +802,37 @@ public class ChessLogic
     	if (p_possibleMoveList.size() > 0)
     		p_hasPossibleMoves = true;
     }
+
+	public void setPossileMovesTo(CharSequence moveTo, ArrayList<String> moveList)
+	{
+		p_hasPossibleMovesTo = false;
+		p_possibleMoveToList.clear();
+		for (int i = 0; i < moveList.size(); i++)
+		{
+//Log.i(TAG, "setPossileMovesTo(), moveList.all: " + moveList.get(i));
+			if (moveList.get(i).length() == 9)	// castle: e1h1|e1g1
+			{
+				if (moveList.get(i).toString().substring(7, 9).equals(moveTo))
+				{
+					p_hasPossibleMovesTo = true;
+					p_possibleMoveToList.add(moveList.get(i).toString().substring(5, 9));
+//Log.i(TAG, "setPossileMovesTo(), moveTo: " + moveList.get(i).toString().substring(5, 9));
+				}
+			}
+			else
+			{
+				if (moveList.get(i).length() >= 4)
+				{
+					if (moveList.get(i).toString().substring(2, 4).equals(moveTo))
+					{
+						p_hasPossibleMovesTo = true;
+						p_possibleMoveToList.add(moveList.get(i).toString().substring(0, 4));
+//Log.i(TAG, "setPossileMovesTo(), moveTo: " + moveList.get(i));
+					}
+				}
+			}
+		}
+	}
     
     final String TAG = "ChessLogic";
 	int gameStat = 0;
@@ -802,5 +870,8 @@ public class ChessLogic
     public boolean 			p_mate = false;
     public boolean 			p_stalemate = false;
     public boolean 			p_hasPossibleMoves = false;
+    public boolean 			p_hasPossibleMovesTo = false;
     public ArrayList<CharSequence> p_possibleMoveList;
+    public ArrayList<CharSequence> p_possibleMoveToList;
+
 }

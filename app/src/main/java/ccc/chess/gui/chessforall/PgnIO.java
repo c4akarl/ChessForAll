@@ -1,5 +1,9 @@
 package ccc.chess.gui.chessforall;
 
+import android.content.Context;
+import android.os.Build;
+import android.os.Environment;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,17 +16,119 @@ import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import android.os.Environment;
-//import android.util.Log;
+import java.util.Set;
 
 public class PgnIO
 {
+
+	public PgnIO(Context context)
+	{
+		this.context = context;
+	}
+
 	public String getExternalDirectory(int var)
 	{
-		return Environment.getExternalStorageDirectory().getAbsolutePath()  + "/";
+		return Environment.getExternalStorageDirectory().getAbsolutePath() + SEP;
 	}
+
+	public String[] getExternalDirs()
+	{
+		String[] dirs = null;
+		String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+		// Android API < 19 (Build.VERSION_CODES.KITKAT)
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+		{
+			dirs[0] = externalStorage;
+			return dirs;
+		}
+
+		// Android API >= 19 (Build.VERSION_CODES.KITKAT)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+		{
+			final Set<String> rv = new HashSet<>();
+			//Get primary & secondary external device storage (internal storage & micro SDCARD slot...)
+			File[] listExternalDirs = context.getExternalFilesDirs(null);
+			for (int i = 0; i < listExternalDirs.length; i++)
+			{
+				if (listExternalDirs[i] != null)
+				{
+					String path = listExternalDirs[i].getAbsolutePath();
+//Log.i(TAG, "1 getExternalDirs(), path:         " + i + " " + path);
+//Log.i(TAG, "1 getExternalDirs(), storageState: " + i + " " + storageState);
+					int indexMountRoot = path.indexOf("/Android/data/");
+					if (indexMountRoot >= 0 && indexMountRoot <= path.length())
+					{
+						//Get the root path for the external directory
+						// mounted test only (read/write)
+						String pathSub = path.substring(0, indexMountRoot);
+						isStorageStateMounted(pathSub);
+
+						rv.add(path.substring(0, indexMountRoot));
+					}
+				}
+			}
+			dirs = rv.toArray(new String[rv.size()]);
+			if (dirs == null)
+			{
+				dirs[0] = externalStorage;
+				return dirs;
+			}
+//			for(int i=0; i < dirs.length;i++)
+//			{
+//				Log.i(TAG, "getExternalDirs(), external dirs: " + dirs[i]);
+//			}
+		}
+
+		return dirs;
+
+	}
+
+	public boolean isExternalDir(String path)
+	{
+		if (path.endsWith("/"))
+			path = path.substring(0, path.length() -1);
+		String[] dirs = getExternalDirs();
+		for(int i=0; i < dirs.length;i++)
+		{
+//Log.i(TAG, "isExternalDir(), dirs[i]: " + dirs[i] + ", path: " + path);
+			if (dirs[i].equals(path))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean isStorageStateMounted(String path)
+	{
+		File file = new File(path);
+		boolean isMounted = false;
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+			isMounted = true;
+		else
+		{
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+			{
+				String externalStorageState = Environment.getExternalStorageState(file);
+				if (externalStorageState.equals(Environment.MEDIA_MOUNTED))
+					isMounted = true;
+			}
+			else
+			{
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+				{
+					String storageState = Environment.getStorageState(file);
+					if (storageState.equals(Environment.MEDIA_MOUNTED))
+						isMounted = true;
+				}
+			}
+		}
+//Log.i(TAG, "isStorageStateMounted(), file: " + file + ", isMounted:  " + isMounted);
+		return isMounted;
+	}
+
 	public boolean pathExists(String path)
 	{
 		boolean isPath = false;
@@ -31,6 +137,14 @@ public class PgnIO
 			isPath = true;
 		return isPath;
 	}
+
+
+	public boolean canWrite(String path, String file)
+	{
+		File f = new File(path + file);
+		return f.canWrite();
+	}
+
 	public boolean fileExists(String path, String file)
 	{
 		boolean isFile = true;
@@ -43,9 +157,10 @@ public class PgnIO
 		} 
 		catch (FileNotFoundException e) {isFile = false;} 		// file not exists! 
 		catch (IOException e) 			{isFile = false;} 		// file not exists! 
-//		Log.i(TAG, "fileName, exists?: " + fileName + ", " + isFile);
+//Log.i(TAG, "fileName, exists?: " + fileName + ", " + isFile);
 		return isFile;
 	}
+
 	public boolean fileDelete(String path, String file)
 	{
 		File f = new File(path + file);
@@ -54,11 +169,13 @@ public class PgnIO
 		fDb.delete();			// delete .pgn-db
 		return  f.delete();		// delete .pgn
 	}
+
 	public boolean createDir(String path)
 	{
 		File f = new File(path);
 		return  f.mkdirs();
 	}
+
 	public boolean copyFile(String srcFile, String targetPath)
 	{
 		boolean copyOk = false;
@@ -67,9 +184,9 @@ public class PgnIO
 		File fFrom = new File(srcFile);
 		File fDir = new File(targetPath);
 		File fTo = new File(targetPath, fFrom.getName());
-//		Log.i(TAG, "fFrom: " + fFrom.toString() + ", " + fFrom.exists());
-//		Log.i(TAG, "fDir: " + fDir.toString() + ", " + fDir.isDirectory());
-//		Log.i(TAG, "fTo: " + fTo.toString() + ", " + fTo.exists());
+//Log.i(TAG, "fFrom: " + fFrom.toString() + ", " + fFrom.exists());
+//Log.i(TAG, "fDir: " + fDir.toString() + ", " + fDir.isDirectory());
+//Log.i(TAG, "fTo: " + fTo.toString() + ", " + fTo.exists());
 		if (fFrom.exists() & fDir.isDirectory())
 		{
 			if (!fTo.exists())
@@ -90,29 +207,10 @@ public class PgnIO
 		}
 		return copyOk; 
 	}
-	public boolean moveFile(String srcFile, String targetPath)
-	{
-		boolean copyOk = false;
-		if (srcFile.startsWith("file:"))
-			srcFile = srcFile.replace("file:", "");
-		File fFrom = new File(srcFile);
-		File fDir = new File(targetPath);
-		String fileName = fFrom.getName();
-		File fTo = new File(targetPath, fileName);
-		if (fFrom.exists() & fDir.isDirectory())
-		{
-			if (!fTo.exists())
-			{
-				fFrom.renameTo(fTo);
-				fTo = new File(targetPath, fileName);
-				if (fTo.exists())
-					copyOk = true;
-			}
-		}
-		return copyOk; 
-	}
+
 	public String[] getFileArrayFromPath(String path, boolean allDirectory, String extension)
     {
+//Log.i(TAG, "getFileArrayFromPath(), path: " + path + ", file extension: " + extension);
 		String[] tmpA = null;
 		String[] fileA = null;
 		File f;
@@ -131,7 +229,7 @@ public class PgnIO
 					f = new File(path + tmpA[i]);
 					if (f.isDirectory() & !f.isHidden())
 					{
-//						Log.i(TAG, "File: " + path + tmpA[i]);
+//Log.i(TAG, "File: " + path + tmpA[i]);
 						isPgnFile = false;
 						if (allDirectory)
 							fileA[i] = tmpA[i];
@@ -160,6 +258,7 @@ public class PgnIO
 		catch (NullPointerException e) 		{fileA = null;}
 		return fileA;
     }
+
 	public String[] initArray(String[] filesA)
     {
 		for (int i = 0; i < filesA.length; i++) 
@@ -168,29 +267,7 @@ public class PgnIO
     	}
 		return filesA;
     }
-	public void search(File f) 
-	{ 	// canceled 20120928(v1.29)
-        if ( !f.exists() ) return; 
-        String name = f.getName();
-        if ( f.isDirectory() ) 
-        {
-	        File[] files = f.listFiles();
-// ERROR	v1.4.1  	26.09.2011 05:49:08	        
-	        if (files.length > 0)
-	        {
-		        for( int i = 0 ; i < files.length; i++ ) 
-		        {
-		        	search( files[i] );
-		        }
-	        }
-        }
-        if (name.endsWith(".pgn"))
-        {
-//        	Log.i(TAG, "File: " + f);
-        	isPgnFile = true;
-        	return;
-        }
-    }
+
 	public String[] killSpaceFolder(String[] filesAll)
 	{
 		String[] newA = null;
@@ -224,6 +301,7 @@ public class PgnIO
 			newA = filesAll;
 		return newA;
 	}
+
 	public int getRandomId(long skip) 		
     {	// random number(skip bytes)
     	Random r;
@@ -237,9 +315,10 @@ public class PgnIO
 		catch 	(IllegalArgumentException e) 	{e.printStackTrace(); return 0;}
 		return ir;
     }
+
 	public String dataFromFile(String path, String file, String lastGame, int gameControl, long offest)
     {
-//		Log.i(TAG, "dataFromFile(), gameControl: " + gameControl);
+//Log.i(TAG, "dataFromFile(), gameControl: " + gameControl);
 		String pgnData = "";
 		String previousGame = "";
 		gameCount = 0;
@@ -450,12 +529,14 @@ public class PgnIO
 		printData(gameControl, lastGame, pgnData, pgnStat, offest, gameOffset);
 		return pgnData;
     }
+
 	public void printData(int gameControl, String lastGame, String newGame, String pgnStat, long gameOffset, long newGameOffset)
 	{	// TEST ONLY !!!
 //		Log.i(TAG, "gameControl, pgnStat, gameOffset, newGameOffset: " + gameControl + ", " + pgnStat + ", " + gameOffset + ", " + newGameOffset);
 //		Log.i(TAG, "last game: \n" + lastGame + "\n\n");
 //		Log.i(TAG, "new game: \n" + newGame);
 	}
+
 	public String getDataFromInputStream(InputStream is) 
     {	// for www(pgn)
 		String txt = "";
@@ -467,7 +548,7 @@ public class PgnIO
 				String readString = new String();
 				while((readString = buf.readLine())!= null)
 				{
-//					Log.i(TAG, readString);
+//Log.i(TAG, readString);
 					txt = txt + readString + "\n";
 				}
 				is.close();
@@ -477,7 +558,20 @@ public class PgnIO
 		}
 		return txt;
     }
+
+	public String getNewExternalPath(String oldPath)
+	{
+		if (oldPath.equals(""))
+		{
+			String pathC4a = getExternalDirectory(0) + "c4a/";
+			if (pathExists(pathC4a))
+				return pathC4a;
+		}
+		return getExternalDirectory(0) + oldPath;
+	}
+
 	public String getPgnStat() {return pgnStat;}
+
 	public void dataToFile(String path, String file, String data, boolean append)
     {
 		try
@@ -500,12 +594,15 @@ public class PgnIO
 		catch (FileNotFoundException e) 	{e.printStackTrace();} 
 		catch (IOException e)				{e.printStackTrace();} 
     }
-	
-	final String TAG = "PgnIO"; 
+
+	final String TAG = "PgnIO";
+	final String SEP = "/";
+	Context context;
 	boolean isPgnFile = false;
 	boolean lastGameNotFound = false;
 	boolean isGameEnd = false;
 	int gameCount = 0;
 	String pgnStat = "-";
 	long gameOffset = 0;
+
 }

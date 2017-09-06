@@ -5,26 +5,28 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-//import android.view.Menu;
-//import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-//import android.util.Log;
+import android.widget.TextView;
 
 public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 {
+
 	public void onCreate(Bundle savedInstanceState) 
 	{
         super.onCreate(savedInstanceState);
+		u = new Util();
+		userP = getSharedPreferences("user", 0);
+		runP = getSharedPreferences("run", 0);		//	run Preferences
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", true));
         setContentView(R.layout.optionstimecontrol);
         resultCode = 101;
-        userP = getSharedPreferences("user", 0);
-        runP = getSharedPreferences("run", 0);		//	run Preferences
         tc = new TimeControl();
         getPrefs();
         btnTcApply = (ImageView) findViewById(R.id.btnTcApply);
@@ -43,11 +45,10 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
         tvPlayer = (TextView) findViewById(R.id.tvPlayer);
         tvEngine = (TextView) findViewById(R.id.tvEngine);
         showTimeValues(timeControl);
-        setTitle(getString(R.string.app_optionsTimeControl));
 	}
-//	DIALOG		DIALOG		DIALOG		DIALOG		DIALOG		DIALOG		DIALOG
+
     public Dialog onCreateDialog(int id)
-	{	// creating dialog
+	{
     	activDialog = id;
 		if (id == TIME_SETTINGS_DIALOG)  
         {
@@ -58,6 +59,7 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
         }
 		return null;
 	}
+
     @Override
 	public void getCallbackValue(int btnValue) 
     {
@@ -78,21 +80,8 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 						break;
 					case 21: 	// player (move)
 						resultCode = timeSettingsDialog.getBonus();
-//						Log.i(TAG, "resultCode: " + resultCode);
-						if (resultCode == 1110 | resultCode == 2110)
-				    	{
-//				    		SharedPreferences.Editor runEd = runP.edit();
-//				    		if (resultCode == 1110)
-//				    			runEd.putBoolean("run_isActivate", true);
-//				    		if (resultCode == 2110)
-//				    			runEd.putBoolean("run_isActivate", false);
-//				    		runEd.commit();
-				    	}
-						else
-						{
-							ed.putInt("user_time_player_move", timeSettingsDialog.getBonus());
-							resultCode = 101;
-						}
+						ed.putInt("user_time_player_move", timeSettingsDialog.getBonus());
+						resultCode = 101;
 	    				break;
 					case 22: 	// engine (move)
 	    				ed.putInt("user_time_engine_move", timeSettingsDialog.getBonus());
@@ -110,11 +99,13 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 		}
 		
 	}
+
     public void c4aShowDialog(int dialogId)					
-    {	// show dialog (remove and show)
+    {
 		removeDialog(dialogId);
 		showDialog(dialogId);
     }
+
     public void showTimeValues(int timeControl)					
     {
     	btnPlayer.setVisibility(Button.VISIBLE);
@@ -129,9 +120,9 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
         {
 	        case 1:	
 	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_clock", 300000));
-	        	bonusPlayer = " +" + tc.getShowValues(userP.getInt("user_bonus_player_clock", 5000));
-	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_clock", 60000));
-	        	bonusEngine = " +" + tc.getShowValues(userP.getInt("user_bonus_engine_clock", 2000));
+	        	bonusPlayer = " +" + tc.getShowValues(userP.getInt("user_bonus_player_clock", 3000));
+	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_clock", 300000));
+	        	bonusEngine = " +" + tc.getShowValues(userP.getInt("user_bonus_engine_clock", 3000));
 	        	break;   
 	        case 2:		
 	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_move", 10000));
@@ -151,8 +142,9 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
     	tvPlayer.setText(timePlayer + bonusPlayer);
     	tvEngine.setText(timeEngine + bonusEngine);
     }
+
 	public void myClickHandler(View view) 				
-    {	// ClickHandler	(ButtonEvents)
+    {
 		Intent returnIntent;
 		switch (view.getId()) 
 		{
@@ -181,6 +173,7 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 			break;
 		}
 	}
+
 	public void setTime(boolean isPlayer) 				
     {	
 		switch (timeControl) 
@@ -191,14 +184,14 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	        		chessClockMessage = getString(R.string.ccsMessagePlayerClock);
 	        		chessClockControl = 11;
 					chessClockTimeGame = userP.getInt("user_time_player_clock", 300000);  
-					chessClockTimeBonus = userP.getInt("user_bonus_player_clock", 2000);
+					chessClockTimeBonus = userP.getInt("user_bonus_player_clock", 3000);
 	        	}
 	        	else
 	        	{
 	        		chessClockMessage = getString(R.string.ccsMessageEngineClock);
 	        		chessClockControl = 12;
-					chessClockTimeGame = userP.getInt("user_time_engine_clock", 60000);  
-					chessClockTimeBonus = userP.getInt("user_bonus_engine_clock", 1000);
+					chessClockTimeGame = userP.getInt("user_time_engine_clock", 300000);
+					chessClockTimeBonus = userP.getInt("user_bonus_engine_clock", 3000);
 	        	}
 	            break;
 	        case 2:
@@ -235,13 +228,13 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	            break; 
         }
     }
+
 	private OnCheckedChangeListener rgListener = new OnCheckedChangeListener()		
 	{	// Radio Button Listener
 		@Override 
 		public void onCheckedChanged(RadioGroup arg0, int checkedId) 
 		{ 
-			// Radio Buttons - select chessBoard
-			if (rbTcGameClock.getId() == checkedId) 				
+			if (rbTcGameClock.getId() == checkedId)
 				timeControl = 1;
 			if (rbTcMoveTime.getId() == checkedId) 				
 				timeControl = 2;
@@ -252,19 +245,22 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 			showTimeValues(timeControl);
 		} 
 	};
+
 	protected void setPrefs() 
 	{
 		SharedPreferences.Editor ed = userP.edit();
         ed.putInt("user_options_timeControl", timeControl);
         ed.commit();
 	}
-	protected void getPrefs() 
+
+	protected void getPrefs()
 	{
 		timeControl = userP.getInt("user_options_timeControl", 1);
 	}
 	
-//	C4aMain RequestCode: OPTIONS_TIME_CONTROL_REQUEST_CODE
+//	MainActivity RequestCode: OPTIONS_TIME_CONTROL_REQUEST_CODE
 	final String TAG = "OptionsTimeControl";
+	Util u;
 	final static int TIME_SETTINGS_DIALOG = 400;
 	TimeControl tc;
 	SharedPreferences userP;
@@ -273,7 +269,6 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	int resultCode = 0;
 	int activDialog = 0;
 	int timeControl = 1;
-//	GUI	
 	RadioGroup rgTimeControl;
 	RadioButton rbTcGameClock;
 	RadioButton rbTcMoveTime;
@@ -282,10 +277,9 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	ImageView btnPlayer = null;
 	ImageView btnEngine = null;
 	ImageView btnTcApply = null;
-	
 	TextView tvPlayer = null;
 	TextView tvEngine = null;
-	
+
 //  variables time settings
 	int chessClockControl = 0;
 	String chessClockTitle = "";
@@ -293,4 +287,5 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	int chessClockTimeGame = 0;
 	int chessClockTimeBonus = 0;
 	int chessClockMovesToGo = -1;
+
 }

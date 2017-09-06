@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import kankan.wheel.widget.ArrayWheelAdapter;
-import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.NumericWheelAdapter;
-//import android.util.Log;
+import kankan.wheel.widget.WheelView;
 
 public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 {
+
 	public TimeSettingsDialog(Context context, Ic4aDialogCallback callback, String title, String message,  
 				int timeGame, int timeBonus, int movesToGo)
     {
@@ -40,14 +41,12 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 			showMovesToGo = false;
 		}
     }
+
 	protected void onCreate(Bundle savedInstanceState) 
 	{
-//    	Log.i(TAG, "onCreate, title: " + title);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chessclocksettingsdialog);
-//        this.setTitle(title + " - " + message);
         this.setTitle(message);
-//        tvMovesToGo = (TextView) findViewById(R.id.tvMovesToGo);
         tvTime = (TextView) findViewById(R.id.tvTime);
         tvTimeH = (TextView) findViewById(R.id.tvTimeH);
         tvTimeMin = (TextView) findViewById(R.id.tvTimeMin);
@@ -63,23 +62,25 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
         setClockValues(timeGame, timeBonus);
         setClock();
 	}
+
 	@Override
 	public void onClick(View view) 
-	{	// ClickHandler (ButtonEvents)
+	{
 		switch (view.getId()) 
 		{
 			case R.id.ok: 
-//				Log.i(TAG, "time h, m, s: " + timeH.getCurrentItem() + ", " 
-//							+ timeMin.getCurrentItem()  + ", " 
-//							+ timeSec.getCurrentItem());
-//				Log.i(TAG, "bonus s, ms: " + bonusSec.getCurrentItem() + ", " 
-//							+ msecValues[bonusMsec.getCurrentItem()]);
-//				Log.i(TAG, "time, moves to go: " + movesValues[moves.getCurrentItem()]);
+//Log.i(TAG, "time h, m, s: " + timeH.getCurrentItem() + ", "
+//			+ timeMin.getCurrentItem()  + ", "
+//			+ timeSec.getCurrentItem());
+//Log.i(TAG, "bonus s, ms: " + bonusSec.getCurrentItem() + ", "
+//			+ msecValues[bonusMsec.getCurrentItem()]);
+//Log.i(TAG, "time, moves to go: " + movesValues[moves.getCurrentItem()]);
 				c4aCallback.getCallbackValue(2);
 				dismiss();
 				break;
 		}
 	}
+
 	public void setClockValues(int time, int bonus) 
 	{
 		if (time != 0)
@@ -96,8 +97,8 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 				timeGameS = timeGameS -((timeGameH * 3600) + (timeGameM * 60));
 			}
 		}
-//		Log.i(TAG, "time, bonus: " + time + ", " + bonus);
-//		Log.i(TAG, "h, m, s: " + timeGameH + ", " + timeGameM + ", " + timeGameS);
+//Log.i(TAG, "time, bonus: " + time + ", " + bonus);
+//Log.i(TAG, "h, m, s: " + timeGameH + ", " + timeGameM + ", " + timeGameS);
 		if (bonus != 0)
 		{
 			timeBonusS = bonus / 1000;
@@ -111,9 +112,9 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 				timeBonusMs = bonus % 1000;
 				timeBonusMs = timeBonusMs / 10;
 			}
-			
 		}
 	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setClock() 
 	{
@@ -141,16 +142,6 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 		timeSec.setViewAdapter(timeSecAdapter);
 		timeSec.setCurrentItem(timeGameS);
 		timeSec.setCyclic(true);
-    // moves to go
-//		createMovesArray();
-//		moves = (WheelView) findViewById(R.id.movesToGo);
-//		movesAdapter = new ArrayWheelAdapter(context, movesValues);
-//		movesAdapter.setItemResource(R.layout.wheeltextitem);
-//		movesAdapter.setItemTextResource(R.id.text);
-//		moves.setViewAdapter(movesAdapter);
-//		moves.setCurrentItem(movesToGo);
-//		moves.setCyclic(true);
-			
 	// bonus, seconds
 		bonusSec = (WheelView) findViewById(R.id.bonusSec);
 		bonusSecAdapter = new NumericWheelAdapter(context, 0, 59, "%02d");
@@ -162,7 +153,7 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 	// bonus, mil seconds
         createMsecArray();
         bonusMsec = (WheelView) findViewById(R.id.bonusMilSec);
-//        Log.i(TAG, "msecValues: " + msecValues[15]);
+//Log.i(TAG, "msecValues: " + msecValues[15]);
         bonusMsecAdapter = new ArrayWheelAdapter(context, msecValues);
         bonusMsecAdapter.setItemResource(R.layout.wheeltextitem);
         bonusMsecAdapter.setItemTextResource(R.id.text);
@@ -188,17 +179,9 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 			tvBonusSec.setVisibility(TextView.INVISIBLE);
 			tvBonusMilSec.setVisibility(TextView.INVISIBLE);
 		}
-//		if (!showMovesToGo)
-//		{
-//			moves.setVisibility(WheelView.INVISIBLE);
-//			tvMovesToGo.setVisibility(TextView.INVISIBLE);
-//		}
 	}
-	public void createMovesArray() 
-	{
-		movesValues = context.getResources().getStringArray(R.array.chessClockMoves);
-	}
-	public void createMsecArray() 
+
+	public void createMsecArray()
 	{
 		String msecVal = "000";
 		int n = 0;
@@ -214,16 +197,18 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 				else
 					msecVal = "0" + Integer.toString(n);
 			}
-//			Log.i(TAG, "msecVal: " + msecVal);
+//Log.i(TAG, "msecVal: " + msecVal);
 			msecValues[i] = msecVal;
         }
 	}
+
 	public int getTime() 
 	{	// return time(mil. seconds)
 		return 	timeH.getCurrentItem() * 3600000
 			+ 	timeMin.getCurrentItem() * 60000
 			+	timeSec.getCurrentItem() * 1000;
 	}
+
 	public int getBonus() 
 	{	// return time(mil. seconds)
 		int msec = 0;
@@ -237,26 +222,13 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 		return 	bonusSec.getCurrentItem() * 1000
 			+	msec;
 	}
-//	public int getMovesToGo() 
-//	{
-//		if (!showMovesToGo)
-//			return 0;
-//		else
-//		{
-//			int movesToGo;
-//			try		{movesToGo = Integer.parseInt(movesValues[moves.getCurrentItem()]);}
-//	    	catch 	(NumberFormatException e) {movesToGo = 0;}
-//			return movesToGo;
-//		}
-//	}
-	
+
 	final String TAG = "ChessClockSettingsDialog";
 	boolean showMovesToGo = true;
 	boolean showTime = true;
 	boolean showBonus = true;
 	Context context;
 	private final Ic4aDialogCallback c4aCallback;
-	TextView tvMovesToGo = null;
 	TextView tvTime = null;
 	TextView tvTimeH = null;
 	TextView tvTimeMin = null;
@@ -267,16 +239,13 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 	WheelView timeH;
 	WheelView timeMin;
 	WheelView timeSec;
-//	WheelView moves;
 	WheelView bonusSec;
 	WheelView bonusMsec;
 	NumericWheelAdapter timeHAdapter;
 	NumericWheelAdapter timeMinAdapter;
 	NumericWheelAdapter timeSecAdapter;
-	ArrayWheelAdapter<?> movesAdapter;
 	NumericWheelAdapter bonusSecAdapter;
 	ArrayWheelAdapter<?> bonusMsecAdapter;
-	String movesValues[];
 	String msecValues[] = new String[100];
 	ImageView ok = null;
 	String title = null;
@@ -289,4 +258,5 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 	int timeBonusS = 0;
 	int timeBonusMs = 0;
 	int movesToGo = 0;
+
 }

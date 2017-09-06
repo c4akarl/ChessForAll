@@ -4,38 +4,7 @@ import java.util.Random;
 
 public class Chess960
 {
-	final String TAG = "Chess960";
-	int stat = 0;
-	int chess960Id = 0;
-	CharSequence fen = "";
-	CharSequence basLine = "";
-	CharSequence message = "";
-	final CharSequence kingData[] =
-    {	//	King's table	
-		"qnnrkr", "nqnrkr", "nnqrkr", "nnrqkr",
-		"nnrkqr", "nnrkrq", "qnrnkr", "nqrnkr",
-		"nrqnkr", "nrnqkr", "nrnkqr", "nrnkrq",
-		"qnrknr", "nqrknr", "nrqknr", "nrkqnr",
-		"nrknqr", "nrknrq", "qnrkrn", "nqrkrn",
-		"nrqkrn", "nrkqrn", "nrkrqn", "nrkrnq",
-		"qrnnkr", "rqnnkr", "rnqnkr", "rnnqkr",
-		"rnnkqr", "rnnkrq", "qrnknr", "rqnknr",
-		"rnqknr", "rnkqnr", "rnknqr", "rnknrq",
-		"qrnkrn", "rqnkrn", "rnqkrn", "rnkqrn",
-		"rnkrqn", "rnkrnq", "qrknnr", "rqknnr",
-		"rkqnnr", "rknqnr", "rknnqr", "rknnrq",
-		"qrknrn", "rqknrn", "rkqnrn", "rknqrn",
-		"rknrqn", "rknrnq", "qrkrnn", "rqkrnn",
-		"rkqrnn", "rkrqnn", "rkrnqn", "rkrnnq",
-	};
 
-	final CharSequence bishopData[] =
-    {	//	Bishop's table	
-		"bb------", "b--b----", "b----b--", "b------b", 
-		"-bb-----", "--bb----", "--b--b--", "--b----b",
-		"-b--b---", "---bb---", "----bb--", "----b--b",
-		"-b----b-", "---b--b-", "-----bb-", "------bb"
-	};
     public CharSequence createChessPosition(int chess960ID)
     {	// creating a valid Chess960 position(FEN) from id(0 ... 959); id < 0 | id > 959 : random id
     	setStat(0);
@@ -86,6 +55,7 @@ public class Chess960
     	}
     	return getFen();
     }
+
     public int createChessPosition(CharSequence fen)
     {	// creating a Chess960ID(0 ... 959) from a chess position(FEN)
     	CharSequence baseLine = "";
@@ -151,11 +121,10 @@ public class Chess960
     	}
     	return getChess960Id();
     }
+
 //  get-methods
-    public int getStat() {return stat;}
     public int getChess960Id() {return chess960Id;}
     public CharSequence getFen() {return fen;}
-    public CharSequence getBaseLine() {return basLine;}
     public CharSequence getMessage() {return message;}
 //  set-methods
     public void setStat(int lStat) {stat = lStat;}
@@ -195,7 +164,9 @@ public class Chess960
     	castling = "KQkq";
     	return castling;
     }
+
     public void setMessage(CharSequence lMessage) {message = lMessage;}
+
     public int getRandomId() 							
     {	// random number(0 ... 959)
     	Random r;
@@ -207,4 +178,38 @@ public class Chess960
 		}
 		return ir;
     }
+
+	final String TAG = "Chess960";
+	int stat = 0;
+	int chess960Id = 0;
+	CharSequence fen = "";
+	CharSequence basLine = "";
+	CharSequence message = "";
+	final CharSequence kingData[] =
+			{	//	King's table
+					"qnnrkr", "nqnrkr", "nnqrkr", "nnrqkr",
+					"nnrkqr", "nnrkrq", "qnrnkr", "nqrnkr",
+					"nrqnkr", "nrnqkr", "nrnkqr", "nrnkrq",
+					"qnrknr", "nqrknr", "nrqknr", "nrkqnr",
+					"nrknqr", "nrknrq", "qnrkrn", "nqrkrn",
+					"nrqkrn", "nrkqrn", "nrkrqn", "nrkrnq",
+					"qrnnkr", "rqnnkr", "rnqnkr", "rnnqkr",
+					"rnnkqr", "rnnkrq", "qrnknr", "rqnknr",
+					"rnqknr", "rnkqnr", "rnknqr", "rnknrq",
+					"qrnkrn", "rqnkrn", "rnqkrn", "rnkqrn",
+					"rnkrqn", "rnkrnq", "qrknnr", "rqknnr",
+					"rkqnnr", "rknqnr", "rknnqr", "rknnrq",
+					"qrknrn", "rqknrn", "rkqnrn", "rknqrn",
+					"rknrqn", "rknrnq", "qrkrnn", "rqkrnn",
+					"rkqrnn", "rkrqnn", "rkrnqn", "rkrnnq",
+			};
+
+	final CharSequence bishopData[] =
+			{	//	Bishop's table
+					"bb------", "b--b----", "b----b--", "b------b",
+					"-bb-----", "--bb----", "--b--b--", "--b----b",
+					"-b--b---", "---bb---", "----bb--", "----b--b",
+					"-b----b-", "---b--b-", "-----bb-", "------bb"
+			};
+
 }

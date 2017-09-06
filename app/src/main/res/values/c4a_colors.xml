@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="app_background">#244222</color>
 	<color name="view_background">#ced1d6</color>
 	<color name="query_background">#ee000000</color>
+	<color name="dialog_background">#ee242e3b</color>
 	<color name="tv_background">#c4f8c0</color>
 	<color name="tv_background_grey">#6b6b6b</color>
 	<color name="lv_background">#000000</color>
-	<color name="lv_background2">#000000</color>
-	<color name="divider_background">#738c89</color>
+	<color name="lv_selected">#427e29</color>
+	<color name="divider_background">#63b4aa</color>
+	<color name="field_color_white">#f9f9cc</color>
+	<color name="field_color_black">#e2a156</color>
+	<color name="field_selected">#e1817e</color>
+	<color name="posible_moves">#6fac64</color>
+	<color name="last_move_from">#659f46</color>
+	<color name="last_move_to">#27ea15</color>
 	<color name="move_blank_background">#efe395</color>
-	<color name="move_text_background">#f6fdff</color>
+	<color name="move_text_background">#b2d9e4</color>
 	<color name="move_message_background">#f6d2f4</color>
 	<color name="notation_background">#efe395</color>
+	<color name="color_coordinates">#f43619</color>
 	<color name="text_dark">#000000</color>
 	<color name="text_light">#ffda7b</color>
 	<color name="text_yellow">#e5e19e</color>
-	<color name="text_pink">#ec89d8</color>
+	<color name="text_pink">#c47f72</color>
 	<color name="text_white">#edebed</color>
 	<color name="fm_load">#4f684d</color>
-	<color name="fm_save">#807910</color>
-	<color name="fm_delete">#6b2c2d</color>
+	<color name="fm_save">#6b2c2d</color>
 </resources>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu   xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/menu_query" >
-	<item 	android:id="@+id/menu_query_gameId" android:title="@string/menu_query_gameId" /> 
-	<item 	android:id="@+id/menu_query_player" android:title="@string/menu_query_player" /> 
-	<item 	android:id="@+id/menu_query_event" android:title="@string/menu_query_event" /> 
-	<item 	android:id="@+id/menu_query_eco" android:title="@string/menu_query_eco" /> 
-</menu>

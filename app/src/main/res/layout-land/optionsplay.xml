@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:paddingTop="0dip"
+	android:paddingLeft="0dip"
+    android:paddingRight="0dip"
+	android:background="@drawable/background_c4a_2">
+
+<TextView
+	android:id="@+id/title"
+	style="@style/c4aTV2"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_alignParentLeft="true"
+	android:layout_alignParentTop="true"
+	android:layout_marginBottom="10dip"
+	android:paddingTop="0dip"
+	android:paddingLeft="0dip"
+	android:paddingRight="0dip"
+	android:singleLine="true"
+	android:gravity="center"
+	android:background="@drawable/bordergrey"
+	android:text="@string/app_optionsPlay"
+	android:textColor="#000000" />
+
+<LinearLayout
+	android:layout_below="@id/title"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="horizontal" >
+
+	<RelativeLayout
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_weight="6"
+		android:orientation="vertical" >
+		<RadioGroup android:id="@+id/rgPlay"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+			<RadioButton android:id="@+id/rbPlay_white"
+				style="@style/c4aRB1"
+				android:layout_marginTop="0dp"
+				android:text="@string/play_white" />
+			<RadioButton android:id="@+id/rbPlay_black"
+				style="@style/c4aRB1"
+						 android:layout_marginTop="0dp"
+				android:text="@string/play_black" />
+			<RadioButton android:id="@+id/rbPlay_engine"
+				style="@style/c4aRB1"
+						 android:layout_marginTop="0dp"
+				android:text="@string/play_engine" />
+			<RadioButton android:id="@+id/rbPlay_analysis"
+				style="@style/c4aRB1"
+						 android:layout_marginTop="0dp"
+				android:text="@string/play_analysis" />
+			<RadioButton android:id="@+id/rbPlay_two_players_flip"
+				style="@style/c4aRB1"
+						 android:layout_marginTop="0dp"
+				android:text="@string/play_two_players_flip" />
+			<RadioButton android:id="@+id/rbPlay_two_players"
+				style="@style/c4aRB1"
+						 android:layout_marginTop="0dp"
+				android:text="@string/play_two_players" />
+		</RadioGroup>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_below="@id/title"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_weight="4"
+		android:orientation="vertical" >
+
+		<ImageView android:id="@+id/btnPlay"
+			style="@style/c4aImgBtn1"
+			android:src="@drawable/button_ok"
+			android:onClick="myClickHandler"
+			android:layout_alignParentBottom="true"/>
+
+		<CheckBox android:id="@+id/cbPlay_newGame"
+			android:layout_above="@id/btnPlay"
+			style="@style/c4aCB1"
+			android:text="@string/play_newGame" />
+
+	</RelativeLayout>
+
+</LinearLayout>
+
+</RelativeLayout>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="nag_$1">!</string>
-	<string name="nag_$2">\?</string> 
-	<string name="nag_$3">!!</string>
-	<string name="nag_$4">\??</string>
-	<string name="nag_$5">!?</string>
-	<string name="nag_$6">\?!</string>
+	<string name="nag_1">!</string>
+	<string name="nag_2">\?</string>
+	<string name="nag_3">!!</string>
+	<string name="nag_4">\??</string>
+	<string name="nag_5">!?</string>
+	<string name="nag_6">\?!</string>
 </resources>

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item 	android:id="@+id/menu_load_extern" android:title="@string/menu_load_extern" /> 
-	<item 	android:id="@+id/menu_load_intern" android:title="@string/menu_load_intern" /> 
-	<item 	android:id="@+id/menu_load_www" android:title="@string/menu_load_www" /> 
-	<item 	android:id="@+id/menu_load_game" android:title="@string/menu_load_game" >
-	</item>  
-</menu>

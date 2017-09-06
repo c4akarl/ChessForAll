@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingTop="8dip"
+    android:paddingLeft="8dip"
+    android:paddingRight="8dip"
+    android:paddingBottom="8dip"
+	android:background="@drawable/background_c4a_2" >
+
+	<view
+		class="ccc.chess.gui.chessforall.BoardView"
+		android:id="@+id/editBoardView"
+		android:layout_alignParentLeft="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+
+	<TextView
+		style="@style/c4aTV2"
+		android:id="@+id/fenMes"
+		android:background="#00000000"
+		android:textColor="@color/text_light"
+		android:layout_marginTop="0dip"
+		android:layout_toRightOf="@id/editBoardView"
+		android:layout_alignParentBottom="true"
+		android:layout_marginLeft="0dp"/>
+
+	<TextView
+		style="@style/c4aTV2"
+		android:id="@+id/message"
+		android:background="#00000000"
+		android:textColor="@color/text_light"
+		android:layout_marginTop="100dip"
+		android:layout_toRightOf="@id/editBoardView"
+		android:layout_above="@id/fenMes"
+		android:layout_marginLeft="5dp"/>
+
+	<RelativeLayout
+		android:id="@+id/btn_w"
+		android:layout_toRightOf="@id/editBoardView"
+		android:layout_above="@id/message"
+		android:layout_width="60dp"
+		android:layout_height="fill_parent" >
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="fill_parent"
+			android:weightSum="6"
+			android:orientation="vertical" >
+
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/wKing"
+				android:src="@drawable/_1_wk"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler"
+				android:layout_marginRight="2dip"
+				android:layout_marginBottom="1dip" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/wQueen"
+				android:src="@drawable/_1_wq"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler"
+				android:layout_marginRight="2dip"
+				android:layout_marginBottom="1dip"/>
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/wRook"
+				android:src="@drawable/_1_wr"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler"
+				android:layout_marginRight="2dip"
+				android:layout_marginBottom="1dip" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/wBishop"
+				android:src="@drawable/_1_wb"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler"
+				android:layout_marginRight="2dip"
+				android:layout_marginBottom="1dip" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/wKnight"
+				android:src="@drawable/_1_wn"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler"
+				android:layout_marginRight="2dip"
+				android:layout_marginBottom="1dip" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/wPawn"
+				android:src="@drawable/_1_wp"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler"
+				android:layout_marginRight="2dip" />
+
+		</LinearLayout>
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:id="@+id/btn_b"
+		android:layout_toRightOf="@id/btn_w"
+		android:layout_above="@id/message"
+		android:layout_width="60dp"
+		android:layout_height="fill_parent" >
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="fill_parent"
+			android:weightSum="6"
+			android:orientation="vertical" >
+
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/bKing"
+				android:src="@drawable/_1_bk"
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:layout_marginBottom="1dip"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/bQueen"
+				android:src="@drawable/_1_bq"
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:layout_marginBottom="1dip"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/bRook"
+				android:src="@drawable/_1_br"
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:layout_marginBottom="1dip"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/bBishop"
+				android:src="@drawable/_1_bb"
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:layout_marginBottom="1dip"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/bKnight"
+				android:src="@drawable/_1_bn"
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:layout_marginBottom="1dip"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler" />
+			<ImageView
+				style="@style/c4aImgBtn2"
+				android:id="@+id/bPawn"
+				android:src="@drawable/_1_bp"
+				android:orientation="vertical"
+				android:layout_width="wrap_content"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:layout_marginBottom="1dip"
+				android:scaleType="fitXY"
+				android:adjustViewBounds="true"
+				android:background="@color/field_color_black"
+				android:onClick="myClickHandler" />
+
+		</LinearLayout>
+	</RelativeLayout>
+
+
+
+	<ImageView
+		style="@style/c4aImgBtn2"
+		android:id="@+id/trash"
+		android:src="@drawable/trash"
+		android:background="#80000000"
+		android:onClick="myClickHandler"
+		android:layout_toRightOf="@id/btn_b"
+		android:layout_alignParentTop="true"
+		android:layout_marginLeft="10dp" />
+
+	<ImageView
+		style="@style/c4aImgBtn2"
+		android:id="@+id/color"
+		android:src="@drawable/white"
+		android:background="#80000000"
+		android:onClick="myClickHandler"
+		android:layout_toRightOf="@id/trash"
+		android:layout_alignParentTop="true"
+		android:layout_marginLeft="10dp"/>
+
+	<ImageView
+		android:id="@+id/btnOk"
+		style="@style/c4aImgBtn1"
+		android:src="@drawable/button_ok"
+		android:onClick="myClickHandler"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="10dip"
+		android:layout_marginBottom="0dip"
+		android:layout_toRightOf="@id/btn_b"
+		android:layout_above="@id/message" />
+	<ImageView
+		android:id="@+id/btnFen"
+		style="@style/c4aImgBtn1"
+		android:src="@drawable/button_fen"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="10dip"
+		android:layout_marginBottom="0dip"
+		android:layout_toRightOf="@id/btn_b"
+		android:layout_above="@id/btnOk"/>
+	<ImageView
+		android:id="@+id/btnBoard"
+		style="@style/c4aImgBtn1"
+		android:src="@drawable/button_board"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="10dip"
+		android:layout_marginBottom="0dip"
+		android:layout_toRightOf="@id/btn_b"
+		android:layout_above="@id/btnFen" />
+
+</RelativeLayout>

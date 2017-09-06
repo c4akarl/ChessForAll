@@ -13,7 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-import ccc.chess.gui.chessforall.C4aMain;
+import ccc.chess.gui.chessforall.MainActivity;
 
 public final class C4aBook 
 {
@@ -30,14 +30,14 @@ public final class C4aBook
 	        return TextIO.moveToUCIString(move) + " (" + weight + ")";
 	    }
 	}
-	C4aMain c4aM;
+	MainActivity c4aM;
 	private Random rndGen = new SecureRandom();
 	
 	private IOpeningBook externalBook = new NullBook();
 	private BookOptions options = null;
 	
 	private static final C4aBook INSTANCE = new C4aBook();
-	public C4aBook(C4aMain cM)
+	public C4aBook(MainActivity cM)
     {
 		c4aM = cM;
     }
