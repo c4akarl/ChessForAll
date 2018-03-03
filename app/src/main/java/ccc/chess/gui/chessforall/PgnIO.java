@@ -38,10 +38,16 @@ public class PgnIO
 	{
 		String[] dirs = null;
 		String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
+//err>>>: at ccc.chess.gui.chessforall.PgnIO.getExternalDirs (PgnIO.java:45)
+		if (externalStorage == null)
+			externalStorage = "";
 
 		// Android API < 19 (Build.VERSION_CODES.KITKAT)
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
 		{
+//err>>>: at ccc.chess.gui.chessforall.PgnIO.getExternalDirs (PgnIO.java:45)
+			dirs = new String[1];
+//err: at ccc.chess.gui.chessforall.PgnIO.getExternalDirs (PgnIO.java:45)
 			dirs[0] = externalStorage;
 			return dirs;
 		}

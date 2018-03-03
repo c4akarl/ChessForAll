@@ -171,6 +171,11 @@ public class EngineControl
     public boolean chessEngineInit = false;
     public boolean chessEnginesOpeningBook = false;
     public boolean chessEngineSearching = false;
+
+    public boolean chessEngineSearchingPonder = false;
+    public CharSequence ponderUserMove = "";
+    public CharSequence ponderUserFen = "";
+
     public boolean chessEnginePaused = false;
     public boolean chessEngineProblem = false;
     public boolean lastChessEnginePaused = false;

@@ -1,7 +1,6 @@
 package ccc.chess.gui.chessforall;
 
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -50,15 +49,29 @@ public class ChessEngine
 
     private String getInternalStockFishProcessName()
     {
-        if (Build.CPU_ABI.endsWith("x86"))
-            return ASSET_STOCKFISH_CPU_X86;
-        else
+
+//        if (Build.CPU_ABI.endsWith("x86"))
+//            return ASSET_STOCKFISH_CPU_X86;
+//        else
+//        {
+//            if (android.os.Build.VERSION.SDK_INT >= 21)
+//                return ASSET_STOCKFISH_CPU_STANDARD;
+//            else
+//                return ASSET_STOCKFISH_CPU_OLD;
+//        }
+
+        String arch = System.getProperty("os.arch");
+//Log.i(TAG, "getInternalStockFishProcessName(), arch: " + arch);
+        if (arch.contains("64"))
         {
-            if (android.os.Build.VERSION.SDK_INT >= 21)
-                return ASSET_STOCKFISH_CPU_STANDARD;
-            else
-                return ASSET_STOCKFISH_CPU_OLD;
+            return ASSET_STOCKFISH_ARM_64;
         }
+        if (arch.contains("7"))
+        {
+            return ASSET_STOCKFISH_ARM_7;
+        }
+        return ASSET_STOCKFISH_CPU_OLD;
+
     }
 
     private void writeDefaultEngineToData()
@@ -146,8 +159,9 @@ public class ChessEngine
     }
 
     public void startSearch(CharSequence fen, CharSequence moves, int wTime, int bTime,	int wInc, int bInc,
-                            int movesTime, int movesToGo, boolean isInfinite, boolean isDrawOffer, int mate)
+                            int movesTime, int movesToGo, boolean isInfinite, boolean isGoPonder, int mate)
     {
+Log.i(TAG, "startSearch(), fen: " + fen + "\nmoves: " + moves + ", isGoPonder: " + isGoPonder);
         if (isChess960)
             fen = convertCastlingRight(fen);
         String posStr = "";
@@ -157,7 +171,10 @@ public class ChessEngine
             posStr = posStr + " moves " + moves;						// + move
         writeLineToProcess(posStr);										// writeLineToProcess
         String goStr = "";
-        goStr = goStr + "go ";											// go
+        goStr = goStr + "go ";
+        if (isGoPonder)
+            goStr = goStr + " ponder ";
+        // go
         if (mate > 0)
             goStr = goStr + " mate " + mate;	                        // mate
         else
@@ -215,7 +232,12 @@ public class ChessEngine
                         while (i < nTokens)
                             statPv.add(tokens[i++]);
                         if (statPvIdx == 0)
+                        {
                             statPvBestMove = statPv.get(0);
+                            statPvPonderMove = "";
+                            if (statPv.size() > 1)
+                                statPvPonderMove = statPv.get(1);
+                        }
                         statPVDepth = statCurrDepth;
                 } else if (is.equals("score")) {
 //Log.i(TAG, "tokens: " + tokens[i] + ", " + tokens[i +1]);
@@ -624,6 +646,7 @@ public class ChessEngine
     int statPvBestScore = 0;
     CharSequence statPvMoves = "";
     CharSequence statPvBestMove = "";
+    CharSequence statPvPonderMove = "";
 
     int statPVDepth = 0;
     int statTime = 0;
@@ -650,8 +673,11 @@ public class ChessEngine
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
 
     final String ASSET_STOCKFISH_CPU_OLD = "stockfish-6-ja";
-    final String ASSET_STOCKFISH_CPU_STANDARD = "stockfish-8-armeabi-v7a";
-    final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
+//    final String ASSET_STOCKFISH_CPU_STANDARD = "stockfish-8-armeabi-v7a";
+//    final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
+
+    final String ASSET_STOCKFISH_ARM_64 = "Stockfish-9-arm64v8";
+    final String ASSET_STOCKFISH_ARM_7 = "Stockfish-9-armv7";
 
     boolean isLogOn;			// LogFile on/off(SharedPreferences)
 

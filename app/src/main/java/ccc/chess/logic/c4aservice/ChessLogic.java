@@ -77,7 +77,11 @@ public class ChessLogic
 
     public void newPositionFromMove(CharSequence fen, CharSequence mv)					// new position	(new move)
     {
-    	CharSequence stat = "9";
+//err>>>: at ccc.chess.logic.c4aservice.ChessLogic.newPositionFromMove (ChessLogic.java:119)
+		if (mv.length() < 2)
+			return;
+
+		CharSequence stat = "9";
     	CharSequence gameResult = "*";
     	CharSequence message = "";
     	CharSequence fastMove = "";
@@ -116,6 +120,9 @@ public class ChessLogic
 //    	Log.i(TAG, "mv, fen: " + mv + ", " + fen);
 //    	Log.i(TAG, "mv: " + mv);
 //    	Log.i(TAG, "wShortCastC4aLan: " + pos.wShortCastC4aLan);
+
+
+//err: at ccc.chess.logic.c4aservice.ChessLogic.newPositionFromMove (ChessLogic.java:119)
     	if (pos.isChess960 & (mv.subSequence(0, 2).equals(pos.wK) | mv.subSequence(0, 2).equals(pos.bK)))
 		{
     		if (mv.length() >= 4)

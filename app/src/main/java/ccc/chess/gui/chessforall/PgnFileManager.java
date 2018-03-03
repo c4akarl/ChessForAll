@@ -637,7 +637,18 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 				isCreateDb = false;
 				mesCreateDb = getString(R.string.fmCreatingPgnDatabase) + "\n";
 			}
-			mes = mesCreateDb + getString(R.string.fmFileNoWritePermissions) + "\n" + etPath.getText().toString() + etFile.getText().toString() ;
+//err: at ccc.chess.gui.chessforall.PgnFileManager.onResume (PgnFileManager.java:82)
+//err: at ccc.chess.gui.chessforall.PgnFileManager.onCreateDialog (PgnFileManager.java:640)
+//err>>>: at ccc.chess.gui.chessforall.PgnFileManager.onCreateDialog (PgnFileManager.java:640)
+			String path = "";
+			String file = "";
+			if (etPath != null)
+				path = etPath.getText().toString();
+			if (etFile != null)
+				path = etFile.getText().toString();
+//			mes = mesCreateDb + getString(R.string.fmFileNoWritePermissions) + "\n" + etPath.getText().toString() + etFile.getText().toString();
+			mes = mesCreateDb + getString(R.string.fmFileNoWritePermissions) + "\n" + path + file;
+
 			fileNotExistsDialog = new C4aDialog(this, this, getString(R.string.dgTitleFileDialog),
 					"", getString(R.string.btn_Ok), "", mes, 0, "");
 			fileNotExistsDialog.setOnCancelListener(this);
@@ -1562,7 +1573,8 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 		returnIntent = new Intent();
 		String data = getIntent().getExtras().getString("pgnData");
 		fileName = etFile.getText().toString();
-		save_action_id = 0;
+//		save_action_id = 0;
+		save_action_id = 5;
 		if (userPrefs.getBoolean("user_options_gui_usePgnDatabase", true))
 		{
 			boolean createDb = true;
@@ -1574,8 +1586,10 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 				{
 					long pgnOldLength = pgnDb.pgnLength;
 					save_selected_scroll_game_id = pgnDb.getRowCount(PgnDb.TABLE_NAME);
-					if (save_action_id == 0)
-						save_scroll_game_id = save_selected_scroll_game_id 	+1;
+
+//					if (save_action_id == 0)
+					save_scroll_game_id = save_selected_scroll_game_id 	+1;
+
 //Log.i(TAG, "saveFile(), save_action_id: " + save_action_id);
 //Log.i(TAG, "saveFile(), save_selected_scroll_game_id: " + save_selected_scroll_game_id + ", save_scroll_game_id: " + save_scroll_game_id);
 					pgnIO.dataToFile(etPath.getText().toString(), fileName, data, append);
@@ -2106,6 +2120,9 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			this.context = context;
 			this.notificationId = notificationId;
 			mNotificationHelper = new NotificationHelper(context, notificationId);
+
+			Toast.makeText(context, getString(R.string.fmCreatingPgnDatabaseToast), Toast.LENGTH_LONG).show();
+
 		}
 
 		@Override
@@ -2151,6 +2168,7 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			if (f.exists())
 				return "file exists: " + tmpFile;
 			FileOutputStream fOut;
+
 			try
 			{
 				long startTime = System.currentTimeMillis();
@@ -2458,11 +2476,12 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 		protected void onProgressUpdate(Long... progress) 
 		{
 	        mNotificationHelper.progressUpdate(progress[0], progress[1], progress[2], progress[3]);
+//Log.i(TAG, "onProgressUpdate(), isStartTask: " + isStartTask + ", save_action_id: " + save_action_id);
 	        if (isStartTask)
 			{
-//Log.i(TAG, "onProgressUpdate(), save_action_id: " + save_action_id + ", save_is_start: " + save_is_start + ", save_is_done: " + save_is_done);
-				if (save_action_id > 0)
-					Toast.makeText(context, getString(R.string.fmCreatingPgnDatabaseToast), Toast.LENGTH_SHORT).show();
+				if (save_action_id == 0)
+//				if (save_action_id < 5)
+					Toast.makeText(context, getString(R.string.fmCreatingPgnDatabaseToast), Toast.LENGTH_LONG).show();
 				isStartTask = false;
 			}
 	    }
@@ -2472,10 +2491,17 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 		{
 			if (pgnOffset == 0 & fPgn.length() == 0)	// no data, no create db!
 			{
-				fmBtnAction.setVisibility(ImageView.VISIBLE);
-				lvGames.removeAllViewsInLayout();
-				lvGames.setVisibility(ListView.VISIBLE);
-				emptyLv.setVisibility(TextView.VISIBLE);
+//err: at ccc.chess.gui.chessforall.PgnFileManager$CreateDatabaseTask.onPostExecute (PgnFileManager.java:2475)
+//err>>>: at ccc.chess.gui.chessforall.PgnFileManager$CreateDatabaseTask.onPostExecute (PgnFileManager.java:2475)
+				try
+				{
+					fmBtnAction.setVisibility(ImageView.VISIBLE);
+					lvGames.removeAllViewsInLayout();
+					lvGames.setVisibility(ListView.VISIBLE);
+					emptyLv.setVisibility(TextView.VISIBLE);
+				}
+				catch (NullPointerException e) {e.printStackTrace();}
+
 				return;
 			}
 

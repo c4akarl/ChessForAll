@@ -378,7 +378,8 @@ public class PgnDb
 		int id = 0; 
 		String query = "SELECT MAX(_id) AS max_id FROM " + tableName;
 		try	
-		{ 
+		{
+//err: at ccc.chess.gui.chessforall.PgnDb.getRowCount (PgnDb.java:382)
 			Cursor cursor = db.rawQuery(query, null);
 			if (cursor.moveToFirst())
 			{
@@ -388,6 +389,8 @@ public class PgnDb
 		}
 		catch (IllegalStateException e) 	{e.printStackTrace(); return 0;}
 		catch (SQLException e) 				{e.printStackTrace(); return 0;}
+//err>>>: at ccc.chess.gui.chessforall.PgnDb.getRowCount (PgnDb.java:382)
+		catch (NullPointerException e) 				{e.printStackTrace(); return 0;}
 //Log.i(TAG, "row count table " + tableName + ": " + id);
 		return id;
     }
