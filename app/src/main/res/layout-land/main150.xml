@@ -29,6 +29,7 @@
 
 		<TextView android:id="@+id/lblPlayerTimeA"
 			style="@style/c4aTV50"
+			android:layout_width="70dp"
 			android:clickable="true"
 			android:layout_marginRight="1dip"
 			android:layout_marginBottom="1dip"
@@ -62,6 +63,7 @@
 
 		<TextView android:id="@+id/lblPlayerTimeB"
 			style="@style/c4aTV50"
+			android:layout_width="70dp"
 			android:clickable="true"
 			android:layout_alignParentBottom="true"
 			android:layout_marginRight="1dip"

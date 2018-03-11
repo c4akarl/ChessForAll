@@ -173,6 +173,7 @@ public class EngineControl
     public boolean chessEngineSearching = false;
 
     public boolean chessEngineSearchingPonder = false;
+    public boolean chessEngineStopPonder = false;
     public CharSequence ponderUserMove = "";
     public CharSequence ponderUserFen = "";
 

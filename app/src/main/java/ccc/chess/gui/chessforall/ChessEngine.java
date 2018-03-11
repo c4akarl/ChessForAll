@@ -118,9 +118,24 @@ public class ChessEngine
 
     public boolean syncReady()
     {
+//        isReady = false;
+//        writeLineToProcess("isready");
+//        while (true)
+//        {
+//            CharSequence s = readLineFromProcess(1000);
+//            if (s.equals("readyok"))
+//            {
+//                isReady = true;
+//                break;
+//            }
+//        }
+//        return isReady;
+
         isReady = false;
         writeLineToProcess("isready");
-        while (true)
+        long startTime = System.currentTimeMillis();
+        long checkTime = startTime;
+        while (checkTime - startTime <= 500)
         {
             CharSequence s = readLineFromProcess(1000);
             if (s.equals("readyok"))
@@ -128,7 +143,9 @@ public class ChessEngine
                 isReady = true;
                 break;
             }
+            checkTime = System.currentTimeMillis();
         }
+
         return isReady;
     }
 
@@ -161,7 +178,7 @@ public class ChessEngine
     public void startSearch(CharSequence fen, CharSequence moves, int wTime, int bTime,	int wInc, int bInc,
                             int movesTime, int movesToGo, boolean isInfinite, boolean isGoPonder, int mate)
     {
-Log.i(TAG, "startSearch(), fen: " + fen + "\nmoves: " + moves + ", isGoPonder: " + isGoPonder);
+//Log.i(TAG, "startSearch(), fen: " + fen + "\nmoves: " + moves + ", isGoPonder: " + isGoPonder);
         if (isChess960)
             fen = convertCastlingRight(fen);
         String posStr = "";

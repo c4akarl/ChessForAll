@@ -1597,9 +1597,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			if (btnValue == 1)
 			{
+				String versionName = BuildConfig.VERSION_NAME;
+				int versionCode = BuildConfig.VERSION_CODE;
+				String c4aVersion = "********************\n" + "ChessForAll Version: " + versionName + "(" + versionCode + ")";
+				String versionAndroid = android.os.Build.VERSION.RELEASE;
+				int versionCodeAndroid = android.os.Build.VERSION.SDK_INT;
+				String androidVersion = "\nAndroid Version: " + versionAndroid + "(" + versionCodeAndroid + ")";
+				String deviceName = "\nDevice name: " + android.os.Build.MODEL;
 				Intent send = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", APP_EMAIL.toString(), null));
 				send.putExtra(android.content.Intent.EXTRA_SUBJECT, gc.errorMessage);
-				send.putExtra(android.content.Intent.EXTRA_TEXT, gc.errorPGN);
+				send.putExtra(android.content.Intent.EXTRA_TEXT, gc.errorPGN + c4aVersion + androidVersion + deviceName);
 				startActivity(Intent.createChooser(send, getString(R.string.sendEmail)));
 			}
 		}
@@ -2786,7 +2793,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void startEnginePlay()
 	{	//setting play options and start engine play
 		ec.setPlaySettings(userPrefs);
-Log.i(TAG, "startEnginePlay(), gc.fen: " + gc.fen);
+//Log.i(TAG, "startEnginePlay(), gc.fen: " + gc.fen);
 		ec.setStartPlay(gc.getValueFromFen(gc.fen, 2));
 		cancelSearchTask();
 		if (!ec.getEngine().isReady)
@@ -2865,9 +2872,9 @@ Log.i(TAG, "startEnginePlay(), gc.fen: " + gc.fen);
 
 
 
-Log.i(TAG, "chessEngineBestMove(), fen, w/b, engine: " + fen + ",   moves: " + moves);
-Log.i(TAG, "isGoPonder: " + isGoPonder + ", ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder);
-Log.i(TAG, "ec.ponderUserFen: " + ec.ponderUserFen + ", ec.ponderUserMove: " + ec.ponderUserMove);
+//Log.i(TAG, "chessEngineBestMove(), fen, w/b, engine: " + fen + ",   moves: " + moves);
+//Log.i(TAG, "isGoPonder: " + isGoPonder + ", ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder);
+//Log.i(TAG, "ec.ponderUserFen: " + ec.ponderUserFen + ", ec.ponderUserMove: " + ec.ponderUserMove);
 			if (!isGoPonder & ec.chessEngineSearchingPonder)
 			{
 				ec.ponderUserMove = gc.move;
@@ -2889,7 +2896,7 @@ Log.i(TAG, "ec.ponderUserFen: " + ec.ponderUserFen + ", ec.ponderUserMove: " + e
 	{
 		if (chessEngineSearchTask != null)
 		{
-Log.i(TAG, "cancelSearchTask(), ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder);
+//Log.i(TAG, "cancelSearchTask(), ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder);
 			chessEngineSearchTask.cancel(true);
 		}
 	}
@@ -4004,7 +4011,7 @@ Log.i(TAG, "cancelSearchTask(), ec.chessEngineSearchingPonder: " + ec.chessEngin
 		{
 			taskFen = args[0];
 			taskMoves = args[1];
-Log.i(TAG, "searchTask, doInBackground(), taskFen, taskMoves: " + taskFen + ", " +taskMoves);
+//Log.i(TAG, "searchTask, doInBackground(), taskFen, taskMoves: " + taskFen + ", " +taskMoves);
 
 			CharSequence firstMove = setRandomFirstMove(taskFen);
 			if (!firstMove.equals(""))
@@ -4132,10 +4139,18 @@ Log.i(TAG, "searchTask, doInBackground(), taskFen, taskMoves: " + taskFen + ", "
 					}
 				}
 
+				if (ec.chessEngineStopPonder)
+				{
+//Log.i(TAG, "doInBackground(), stop ponder searching");
+					ec.chessEngineStopPonder = false;
+					ec.getEngine().writeLineToProcess("ponderhit");	// stop with ponderhit
+					// catch bestmove & ignore ??? boolean !!!
+				}
+
 				// pondering: user did make a move (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 				if 	(isPonder & ec.chessEngineSearchingPonder & (!ec.ponderUserMove.equals("") | !ec.ponderUserFen.equals(""))) // engine pondering on
 				{
-Log.i(TAG, "!!! ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder + ", move: " + ec.ponderUserMove + "\nfen" + ec.ponderUserFen);
+//Log.i(TAG, "!!! ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder + ", move: " + ec.ponderUserMove + "\nfen" + ec.ponderUserFen);
 					taskFen = ec.ponderUserFen;
 					taskMoves = "";
 					engineMes = "";
@@ -4143,6 +4158,7 @@ Log.i(TAG, "!!! ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder
 					initInfoArrays(true);
 					if (ec.ponderUserMove.equals(ponderMove))	// ponderhit (ponder move)
 					{
+//Log.i(TAG, "doInBackground(), make ponderMove: " + ponderMove);
 						ec.getEngine().writeLineToProcess("ponderhit");
 					}
 					else
@@ -4151,13 +4167,12 @@ Log.i(TAG, "!!! ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder
 						{
 //							String posStr = "position fen " + ec.ponderUserFen;
 //							ec.getEngine().writeLineToProcess(posStr);
-Log.i(TAG, "doInBackground(), isGoPonder: " + isGoPonder + ", ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder);
+//Log.i(TAG, "doInBackground(), isGoPonder: " + isGoPonder + ", ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder);
 							ec.getEngine().writeLineToProcess("stop");
 							if (ec.getEngine().syncReady())
 								ec.getEngine().startSearch(ec.ponderUserFen, "", wTime, bTime, wInc, bInc, moveTime, movesToGo, ec.chessEngineAnalysis, isGoPonder, mate);
 						}
 					}
-					ec.chessEngineSearchingPonder = false;
 					isNoRespond = false;
 					cancelTask = false;
 					ec.chessEngineSearchingPonder = false;
@@ -4180,7 +4195,7 @@ Log.i(TAG, "doInBackground(), isGoPonder: " + isGoPonder + ", ec.chessEngineSear
 				}
 				if (isNoRespond)
 				{
-					Log.i(TAG, "searchTask, isNoRespond");
+//Log.i(TAG, "searchTask, isNoRespond");
 					return "";
 				}
 				if (isTimeOut)
@@ -4281,7 +4296,7 @@ Log.i(TAG, "doInBackground(), isGoPonder: " + isGoPonder + ", ec.chessEngineSear
 
 		protected void onPostExecute(CharSequence result)
 		{
-Log.i(TAG, "onPostExecute(), result, isSearchTaskStopped: " + result + ", " + isSearchTaskStopped);
+//Log.i(TAG, "onPostExecute(), result, isSearchTaskStopped: " + result + ", " + isSearchTaskStopped);
 			ec.chessEngineAnalysis = false;
 			if (isNoRespond)
 			{
@@ -4314,7 +4329,7 @@ Log.i(TAG, "onPostExecute(), result, isSearchTaskStopped: " + result + ", " + is
 			{
 				if (!ec.getEngine().getSearchAlive())
 				{
-					Log.i(TAG, "!ec.getEngine().getSearchAlive()");
+//Log.i(TAG, "!ec.getEngine().getSearchAlive()");
 					ec.getEngine().searchAlive = true;
 					if (ec.chessEngineInit)
 					{
@@ -4464,7 +4479,7 @@ Log.i(TAG, "onPostExecute(), result, isSearchTaskStopped: " + result + ", " + is
 
 	public void enginePlay(CharSequence result, CharSequence taskFen, CharSequence currentPonderMove)
 	{
-Log.i(TAG, "enginePlay() start, result, taskFen: " + result + "\n" + taskFen);
+//Log.i(TAG, "enginePlay() start, result, taskFen: " + result + "\n" + taskFen);
 		if (!result.equals(""))
 		{
 			searchTaskRestart = false;
@@ -4575,16 +4590,20 @@ Log.i(TAG, "enginePlay() start, result, taskFen: " + result + "\n" + taskFen);
 								setMoveTime();
 						}
 
-Log.i(TAG, "enginePlay(), newFen: " + newFen + "\nresult: " + result + ", ponderMove: " + currentPonderMove);
+//Log.i(TAG, "enginePlay(), newFen: " + newFen + "\nresult: " + result + ", ponderMove: " + currentPonderMove);
+// mod == 1 & w | mod == 2 & b    !!!
 						if 	(		isPonder & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
-								& 	!currentPonderMove.equals("")
+								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
 							)
 						{
-							ec.chessEngineSearchingPonder = true;
-							isGoPonder = true;
-							ponderMove = currentPonderMove;
-Log.i(TAG, "1 chessEngineBestMove()");
-							chessEngineBestMove(newFen, currentPonderMove);	// ponderMove !!!
+//							ec.chessEngineSearchingPonder = true;
+//							isGoPonder = true;
+//							ponderMove = currentPonderMove;
+//							chessEngineBestMove(newFen, currentPonderMove);	// ponderMove !!!
+
+							enginePlayPonder(newFen, currentPonderMove);
+							return;
+
 						}
 						else
 						{
@@ -4619,6 +4638,34 @@ Log.i(TAG, "1 chessEngineBestMove()");
 				updateGui();
 				setInfoMessage(getString(R.string.engine_noRespond), null, null);
 			}
+		}
+	}
+
+	public void enginePlayPonder(CharSequence fen, CharSequence move)
+	{
+//Log.i(TAG, "enginePlayPonder(), fen: " + fen + ", ponderMove: " + ponderMove);
+		ec.chessEngineSearchingPonder = true;
+		ec.chessEngineStopPonder = false;
+		isGoPonder = true;
+		ponderMove = move; //???
+		chessEngineBestMove(fen, ponderMove);	// ponderMove !!!
+
+		playSound(1, 0);
+		handlerChessClock.removeCallbacks(mUpdateChessClock);
+		handlerChessClock.postDelayed(mUpdateChessClock, 20);
+	}
+
+	public void engineStopPonder()
+	{
+		if (ec.chessEngineSearchingPonder)
+		{
+			ec.chessEngineSearchingPonder = false;
+			isGoPonder = false;
+			ec.ponderUserMove = "";
+			ec.ponderUserFen = "";
+
+			ec.chessEngineStopPonder = true;
+
 		}
 	}
 
@@ -4793,7 +4840,7 @@ Log.i(TAG, "1 chessEngineBestMove()");
 			int pos = boardView.getPositionFromTouch((int) event.getRawX(), (int) event.getRawY(), screenXY[0], screenXY[1]);
 //Log.i(TAG, "startBoardMoveAction(), onScreenTouch, x: " + event.getRawX() + ", y: " + event.getRawY());
 //Log.i(TAG, "startBoardMoveAction(), boardView.getLocationOnScreen(), x: " + screenXY[0] + ", y: " + screenXY[1] + ", pos: " + pos);
-Log.i(TAG, "startBoardMoveAction(), ec.chessEngineSearching: " + ec.chessEngineSearching + ", ec.chessEngineSearchingPonder: "+ ec.chessEngineSearchingPonder);
+//Log.i(TAG, "startBoardMoveAction(), ec.chessEngineSearching: " + ec.chessEngineSearching + ", ec.chessEngineSearchingPonder: "+ ec.chessEngineSearchingPonder);
 			gc.isMoveError = false;
 			if (ec.chessEngineSearching & !ec.chessEnginePaused)
 			{
@@ -4812,7 +4859,7 @@ Log.i(TAG, "startBoardMoveAction(), ec.chessEngineSearching: " + ec.chessEngineS
 
 	protected void moveAction(int position)
 	{
-Log.i(TAG, "moveAction(), position: " + position);
+//Log.i(TAG, "moveAction(), position: " + position);
 		if (gc.cl.p_mate | gc.cl.p_stalemate)	// mate, steal mate?
 		{
 			setInfoMessage(getGameOverMessage(), null, null);
@@ -4876,7 +4923,7 @@ Log.i(TAG, "moveAction(), position: " + position);
 						startChessClock();
 					}
 					updateGui();
-Log.i(TAG, "1 moveAction(), ec.chessEngineSearching: " + ec.chessEngineSearching);
+//Log.i(TAG, "1 moveAction(), ec.chessEngineSearching: " + ec.chessEngineSearching);
 					if 	(		ec.chessEngineSearching & gc.cl.p_stat.equals("1")
 							& 	!gc.isGameOver & !gc.cl.p_variationEnd
 							)
@@ -4888,7 +4935,7 @@ Log.i(TAG, "1 moveAction(), ec.chessEngineSearching: " + ec.chessEngineSearching
 						}
 						else
 						{
-Log.i(TAG, "2 moveAction(), gc.cl.p_fen: " + gc.cl.p_fen);
+//Log.i(TAG, "2 moveAction(), gc.cl.p_fen: " + gc.cl.p_fen);
 							isGoPonder = false;
 //							ec.chessEngineSearchingPonder = false;
 //							ec.ponderUserMove = "";
