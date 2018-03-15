@@ -133,13 +133,16 @@ public class EngineControl
     }
 	public final synchronized void stopComputerThinking(boolean shutDown) 
     {
-//Log.i(TAG, "stopComputerThinking, processAlive, shutDown: " + getEngine().processAlive + ", " + shutDown);
+//Log.i(TAG, "stopComputerThinking, processAlive: " + getEngine().processAlive + ", shutDown: " + shutDown);
 		chessEngineStopSearch = true;
 		try
 		{
 			if (getEngine().processAlive)
 	    	{
-	    		getEngine().stopSearch();
+	    		if (!getEngine().syncStopSearch())
+				{
+
+				}
 	    		if (mainA.chessEngineSearchTask != null)
 		    		mainA.chessEngineSearchTask.cancel(true);
 	    	}
@@ -173,13 +176,10 @@ public class EngineControl
     public boolean chessEngineSearching = false;
 
     public boolean chessEngineSearchingPonder = false;
-    public boolean chessEngineStopPonder = false;
-    public CharSequence ponderUserMove = "";
     public CharSequence ponderUserFen = "";
 
     public boolean chessEnginePaused = false;
     public boolean chessEngineProblem = false;
-    public boolean lastChessEnginePaused = false;
     public boolean chessEngineAutoRun = false;
     public boolean chessEngineAnalysis = false;
     public boolean chessEngineStopSearch = false;

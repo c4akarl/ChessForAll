@@ -281,5 +281,6 @@
     <string name="fmAddFile">Nouveau fichier</string>
     <string name="fmFileNoWritePermissions">Aucune autorisation d\'écriture:</string>
     <string name="btn_Continue">Continuer</string>
+    <string name="epPonder">Ponder</string>
 
 </resources>

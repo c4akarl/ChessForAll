@@ -646,7 +646,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 				path = etPath.getText().toString();
 			if (etFile != null)
 				path = etFile.getText().toString();
-//			mes = mesCreateDb + getString(R.string.fmFileNoWritePermissions) + "\n" + etPath.getText().toString() + etFile.getText().toString();
 			mes = mesCreateDb + getString(R.string.fmFileNoWritePermissions) + "\n" + path + file;
 
 			fileNotExistsDialog = new C4aDialog(this, this, getString(R.string.dgTitleFileDialog),
@@ -678,8 +677,11 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
         }
         if (id == PGN_ERROR_DIALOG) 
         {
-        	mes = getString(R.string.fmPgnError) + " (" + etFile.getText().toString() + ")";
-        	pgnDialog = new C4aDialog(this, this, getString(R.string.dgTitleFileDialog), 
+        	String fileName = "";
+        	if (etFile != null)
+				fileName = etFile.getText().toString();
+        	mes = getString(R.string.fmPgnError) + " (" + fileName + ")";
+        	pgnDialog = new C4aDialog(this, this, getString(R.string.dgTitleFileDialog),
         			"", getString(R.string.btn_Ok), "", mes, 0, "");
         	pgnDialog.setOnCancelListener(this);
             return pgnDialog;
@@ -1304,7 +1306,8 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 	public void showFileList(String path) 
 	{
 //Log.i(TAG, "showFileList(), path: " + path);
-		if (fileActionCode == 91)
+//		if (fileActionCode == 91)
+		if (fileActionCode == 91 | fileActionCode == 5)
 			fmBtnAction.setVisibility(ImageView.VISIBLE);
 		else
 			fmBtnAction.setVisibility(ImageView.INVISIBLE);
@@ -1573,7 +1576,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 		returnIntent = new Intent();
 		String data = getIntent().getExtras().getString("pgnData");
 		fileName = etFile.getText().toString();
-//		save_action_id = 0;
 		save_action_id = 5;
 		if (userPrefs.getBoolean("user_options_gui_usePgnDatabase", true))
 		{
@@ -1581,15 +1583,11 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			boolean pgnFilesOk = pgnDb.initPgnFiles(etPath.getText().toString(), fileName);
 			if (pgnFilesOk)
 			{
-//				if (pgnDb.openDb(baseDir + etPath.getText().toString(), fileName, SQLiteDatabase.OPEN_READONLY))
 				if (pgnDb.openDb(etPath.getText().toString(), fileName, SQLiteDatabase.OPEN_READONLY))
 				{
 					long pgnOldLength = pgnDb.pgnLength;
 					save_selected_scroll_game_id = pgnDb.getRowCount(PgnDb.TABLE_NAME);
-
-//					if (save_action_id == 0)
 					save_scroll_game_id = save_selected_scroll_game_id 	+1;
-
 //Log.i(TAG, "saveFile(), save_action_id: " + save_action_id);
 //Log.i(TAG, "saveFile(), save_selected_scroll_game_id: " + save_selected_scroll_game_id + ", save_scroll_game_id: " + save_scroll_game_id);
 					pgnIO.dataToFile(etPath.getText().toString(), fileName, data, append);
@@ -1726,7 +1724,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			gameIdList = getGameIdList(fm_extern_db_game_id_list);
 			if (gameIdList != null)
 			{
-//				Log.i(TAG, "gameIdList.length: " + gameIdList.length);
 				fm_extern_db_cursor_count = gameIdList.length;
 			}
 			scroll_game_id = fm_extern_db_cursor_id +1;
@@ -2480,7 +2477,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 	        if (isStartTask)
 			{
 				if (save_action_id == 0)
-//				if (save_action_id < 5)
 					Toast.makeText(context, getString(R.string.fmCreatingPgnDatabaseToast), Toast.LENGTH_LONG).show();
 				isStartTask = false;
 			}
@@ -2933,7 +2929,10 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 
 			setQueryDataToTitle(fm_extern_db_key_id, gameId, pgnDb.getRowCount(PgnDb.TABLE_NAME), scroll_game_id, queryCount);
 			if (setInfo)
+			{
+				pgnDb.openDb(gamePath, gameFile, SQLiteDatabase.OPEN_READONLY);
 				setInfoValues("DB-Test - startQueryTask()", "cursor_cnt: " + queryCursor.getCount(), pgnDb.getDbVersion());
+			}
 			pgnDb.closeDb();
 			String[] columns = new String[]	{PgnDb.PGN_ID, PgnDb.PGN_WHITE, PgnDb.PGN_BLACK, PgnDb.PGN_EVENT, PgnDb.PGN_DATE, PgnDb.PGN_RESULT};
 			int[] to = new int[] {R.id.text1, R.id.text2, R.id.text3, R.id.text4, R.id.text5, R.id.text6};
@@ -3204,7 +3203,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 		{
 			setTitle(getString(R.string.fmProgressDialog));
 			returnIntent.putExtra("fileData", fileData);
-			//???
 			returnIntent.putExtra("fileBase", baseDir);
 			returnIntent.putExtra("filePath", path);
 			returnIntent.putExtra("fileName", file);

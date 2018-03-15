@@ -28,9 +28,10 @@ public class ChessEngine
         isLogOn = logging;
     }
 
-    public void initProcess()
+    public boolean initProcess()
     {
 //Log.i(TAG, "initProcess()");
+        boolean isInitOk = false;
         engineProcess = "";
         if (!efm.dataFileExist(assetsEngineProcessName))
         {
@@ -41,37 +42,21 @@ public class ChessEngine
         if (efm.dataFileExist(assetsEngineProcessName))
         {
             engineProcess = assetsEngineProcessName;
-            startNewProcess();
+            isInitOk = startNewProcess();
         }
         else
             Log.i(TAG, "initProcess(), install error, dataProcess: " + efm.dataEnginesPath + assetsEngineProcessName);
+        return isInitOk;
     }
 
     private String getInternalStockFishProcessName()
     {
-
-//        if (Build.CPU_ABI.endsWith("x86"))
-//            return ASSET_STOCKFISH_CPU_X86;
-//        else
-//        {
-//            if (android.os.Build.VERSION.SDK_INT >= 21)
-//                return ASSET_STOCKFISH_CPU_STANDARD;
-//            else
-//                return ASSET_STOCKFISH_CPU_OLD;
-//        }
-
         String arch = System.getProperty("os.arch");
 //Log.i(TAG, "getInternalStockFishProcessName(), arch: " + arch);
-        if (arch.contains("64"))
-        {
-            return ASSET_STOCKFISH_ARM_64;
-        }
         if (arch.contains("7"))
-        {
             return ASSET_STOCKFISH_ARM_7;
-        }
-        return ASSET_STOCKFISH_CPU_OLD;
-
+        else
+            return ASSET_STOCKFISH_ARM_64;
     }
 
     private void writeDefaultEngineToData()
@@ -95,19 +80,22 @@ public class ChessEngine
             Log.i(TAG, "writeDefaultEngineToData(), assetsEngineProcess, engineProcess: " + assetsEngineProcessName + ", " + engineProcess);
     }
 
-    private void readUCIOptions()
+    private boolean readUCIOptions()
     {
         int timeout = 1000;
-        while (true)
+        long startTime = System.currentTimeMillis();
+        long checkTime = startTime;
+        while (checkTime - startTime <= 500)
         {
             CharSequence s = readLineFromProcess(timeout);
+            if (s.equals("ERROR"))
+                return false;
             CharSequence[] tokens = tokenize(s);
             if (tokens[0].equals("uciok"))
-            {
-                syncReady();
-                break;
-            }
+                return syncReady();
+            checkTime = System.currentTimeMillis();
         }
+        return false;
     }
 
     public CharSequence[] tokenize(CharSequence cmdLine)
@@ -116,28 +104,45 @@ public class ChessEngine
         return cmdLine.toString().split("\\s+");
     }
 
+    public boolean syncStopSearch()
+    {
+        writeLineToProcess("stop");
+        long startTime = System.currentTimeMillis();
+        long checkTime = startTime;
+        stopBestMove = "";
+        stopPonderMove = "";
+        while (checkTime - startTime <= MAX_SYNC_TIME)
+        {
+            CharSequence s = readLineFromProcess(1000);
+            if (s.equals("ERROR"))
+                return false;
+            if (s.toString().startsWith("bestmove"))
+            {
+                String[] txtSplit = s.toString().split(" ");
+                if (txtSplit.length == 4)
+                {
+                    stopBestMove = txtSplit[1];
+                    stopPonderMove = txtSplit[3];
+//Log.i(TAG, "syncStopSearch(), stopBestMove: " + stopBestMove + ", stopPonderMove: " + stopPonderMove);
+                }
+                return true;
+            }
+            checkTime = System.currentTimeMillis();
+        }
+        return false;
+    }
+
     public boolean syncReady()
     {
-//        isReady = false;
-//        writeLineToProcess("isready");
-//        while (true)
-//        {
-//            CharSequence s = readLineFromProcess(1000);
-//            if (s.equals("readyok"))
-//            {
-//                isReady = true;
-//                break;
-//            }
-//        }
-//        return isReady;
-
         isReady = false;
         writeLineToProcess("isready");
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
-        while (checkTime - startTime <= 500)
+        while (checkTime - startTime <= MAX_SYNC_TIME)
         {
             CharSequence s = readLineFromProcess(1000);
+            if (s.equals("ERROR"))
+                return false;
             if (s.equals("readyok"))
             {
                 isReady = true;
@@ -164,7 +169,7 @@ public class ChessEngine
         return false;
     }
 
-    public void newGame()
+    public boolean newGame()
     {
         if (isChess960)
             writeLineToProcess("setoption name UCI_Chess960 value true");
@@ -172,7 +177,7 @@ public class ChessEngine
             writeLineToProcess("setoption name UCI_Chess960 value false");
 
         writeLineToProcess("ucinewgame");
-        syncReady();
+        return syncReady();
     }
 
     public void startSearch(CharSequence fen, CharSequence moves, int wTime, int bTime,	int wInc, int bInc,
@@ -304,11 +309,6 @@ public class ChessEngine
 
     public boolean getSearchAlive() {return searchAlive;}
 
-    public void stopSearch()
-    {
-        writeLineToProcess("stop");
-    }
-
     public CharSequence convertCastlingRight(CharSequence fen)	// using for chess960(castle rook's line instead of "QKqk")
     {
         CharSequence convertFen = "";
@@ -382,9 +382,6 @@ public class ChessEngine
     {	//quit the ChessEngine(Shut down process)
         if (processAlive)
         {
-            writeLineToProcess("stop");
-            try {Thread.sleep(100);}
-            catch (InterruptedException e) {}
             writeLineToProcess("quit");
             processAlive = false;
             try {Thread.sleep(100);}
@@ -403,9 +400,9 @@ public class ChessEngine
             if (isLogOn)
                 Log.i(TAG, "startNewProcess(), engine process started: " + engineProcess);
             writeLineToProcess("uci");
-            readUCIOptions();
+            processAlive = readUCIOptions();
         }
-        else
+        if (!processAlive)
         {
             if (isLogOn)
                 Log.i(TAG, "startNewProcess(), start error, engine process: " + engineProcess);
@@ -419,11 +416,12 @@ public class ChessEngine
         try {writeToProcess(data + "\n");}
         catch (IOException e)
         {
+            Log.i(TAG, "IOException, writeLineToProcess()");
             e.printStackTrace();
+            engineName = "";
             processAlive = false;
+//            process = null;
         }
-//        if (isLogOn)
-//            Log.i(TAG,  "C4A: " + data);
         if (data.equals("quit"))
         {
             engineName = "";
@@ -438,9 +436,12 @@ public class ChessEngine
         try{message =  readFromProcess();}
         catch (IOException e)
         {
-            if (isLogOn)
-                Log.i(TAG, engineName + " : IOException");
+            Log.i(TAG, "IOException, readLineFromProcess()");
             e.printStackTrace();
+            engineName = "";
+            processAlive = false;
+            process = null;
+            return "ERROR";
         }
         if (message != null)
         {
@@ -622,6 +623,7 @@ public class ChessEngine
     }
 
     final String TAG = "ChessEngine";
+    final long MAX_SYNC_TIME = 200;
     MainActivity mainA;
     public int engineNumber = 1;		                    // default engine (Stockfish)
     private static final String ENGINE_TYPE = "UCI";		//> ChessEngine type: CE(Chess Engines)
@@ -664,6 +666,8 @@ public class ChessEngine
     CharSequence statPvMoves = "";
     CharSequence statPvBestMove = "";
     CharSequence statPvPonderMove = "";
+    CharSequence stopBestMove = "";
+    CharSequence stopPonderMove = "";
 
     int statPVDepth = 0;
     int statTime = 0;
@@ -689,7 +693,7 @@ public class ChessEngine
             13, 13, 13, 14,	15, 16, 17, 17, 17, 17,
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
 
-    final String ASSET_STOCKFISH_CPU_OLD = "stockfish-6-ja";
+//    final String ASSET_STOCKFISH_CPU_OLD = "stockfish-6-ja";
 //    final String ASSET_STOCKFISH_CPU_STANDARD = "stockfish-8-armeabi-v7a";
 //    final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
 

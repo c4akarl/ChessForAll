@@ -28,7 +28,6 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 		setContentView(R.layout.playenginesettings);
         fileManagerIntent = new Intent(this, PgnFileManager.class);
         pgnIO = new PgnIO(this);
-        baseDir = pgnIO.getExternalDirectory(0);
         currentBase = runPrefs.getString("run_game0_file_base", "");
 		if (!currentBase.equals("") & !currentBase.equals("assets/") & !currentBase.equals("url"))	// == sd-card
 		{
@@ -104,7 +103,6 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 		    case ENGINE_AUTOPLAY_REQUEST_CODE: 
 		    	if (resultCode == MainActivity.RESULT_OK)
 				{
-			    	baseDir = data.getStringExtra("fileBase");
 			    	etPePath.setText(data.getStringExtra("filePath"));
 			    	etPeFile.setText(data.getStringExtra("fileName"));
 			    	etPeMessage.setVisibility(EditText.INVISIBLE);
@@ -157,7 +155,6 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 			path = path + "/";
 			etPePath.setText(path);
 		}
-		path = baseDir + path;
 		if (!pgnIO.pathExists(path))
 		{
 			etPeMessage.setVisibility(EditText.VISIBLE);
@@ -205,7 +202,6 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 	private static final int ENGINE_PROGRESS_DIALOG = 1;
 	ProgressDialog progressDialog = null;
 	PgnIO pgnIO;
-	String baseDir = "";
 	String path = "";
 	String file = "";
 	int round = 1;

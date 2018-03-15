@@ -46,6 +46,11 @@
 				android:layout_below="@id/cbEpAutoStartEngine"
 				android:text="@string/epEngineMessage" />
 			<CheckBox
+				android:id="@+id/cbEpPonder"
+				style="@style/c4aCB1"
+				android:layout_below="@id/cbEpEngineMessage"
+				android:text="@string/epPonder" />
+			<CheckBox
 				android:id="@+id/cbEpRandomFirstMove"
 				style="@style/c4aCB1"
 				android:layout_below="@id/cbEpEngineMessage"

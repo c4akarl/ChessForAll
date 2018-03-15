@@ -122,8 +122,12 @@ public class ChessMove
 //		Log.i(TAG, "getColorFromFen: " + fen);
 		CharSequence color = "l";
 		CharSequence[] split = fen.toString().split(" ");
-		if (split[1].equals("b"))
-			color = "d";
+//error 20180319: java.lang.ArrayIndexOutOfBoundsException
+		if (split.length > 1)
+		{
+			if (split[1].equals("b"))
+				color = "d";
+		}
 		return color;
     }
 

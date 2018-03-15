@@ -15,8 +15,10 @@ public class TimeControl
 		this.timeControl = timeControl;
 		this.bonusWhite = bonusWhite;
 		this.bonusBlack = bonusBlack;
-		this.timeWhite = timeWhite + this.bonusWhite;
-		this.timeBlack = timeBlack + this.bonusBlack;
+//		this.timeWhite = timeWhite + this.bonusWhite;
+		this.timeWhite = timeWhite;
+//		this.timeBlack = timeBlack + this.bonusBlack;
+		this.timeBlack = timeBlack;
 		this.movesToGo = movesToGo;
 		clockIsRunning = false;
 		whiteMoves = true;
@@ -71,14 +73,13 @@ public class TimeControl
 
 	public void switchChessClock(boolean whiteMoves, long currentTime)
     {
-//Log.i(TAG, "OLD: timeControl, whiteMoves, currentTime, startTime: " + timeControl + ", " + whiteMoves + ", "
-//		+ this.whiteMoves + ", " + currentTime + ", " + startTime);
-//Log.i(TAG, "OLD: timeWhite: " + timeWhite + ", bonusWhite: " + bonusWhite + ", clockIsRunning: " + clockIsRunning);
-//Log.i(TAG, "OLD: timeBlack: " + timeBlack + ", bonusBlack: " + bonusBlack);
 		if (this.whiteMoves & whiteMoves | !this.whiteMoves & !whiteMoves)
 			colorChanged = false;
 		else
 			colorChanged = true;
+//Log.i(TAG, "OLD: timeControl: " + timeControl + ", whiteMoves: " + whiteMoves + ", currentTime: " + currentTime + ", startTime: " + startTime);
+//Log.i(TAG, "OLD: timeWhite: " + timeWhite + ", bonusWhite: " + bonusWhite + ", clockIsRunning: " + clockIsRunning);
+//Log.i(TAG, "OLD: timeBlack: " + timeBlack + ", bonusBlack: " + bonusBlack + ", colorChanged: " + colorChanged);
 		if (clockIsRunning)
 		{
 			if (timeControl == 11)	// analysis
@@ -254,7 +255,10 @@ public class TimeControl
 			showS = new StringBuilder(10);
 			if (s < 10 & (showModusWhite == 1 |showModusWhite == 2))
 			{
-				showS.append("0");
+				if (h == 0 & m == 0)
+					showModusWhite = 3;
+				else
+					showS.append("0");
 				showS.append(s);
 			}
 			else
@@ -308,7 +312,10 @@ public class TimeControl
 			showS = new StringBuilder(10);
 			if (s < 10 & (showModusBlack == 1 | showModusBlack == 2))
 			{
-				showS.append("0");
+				if (h == 0 & m == 0)
+					showModusBlack = 3;
+				else
+					showS.append("0");
 				showS.append(s);
 			}
 			else

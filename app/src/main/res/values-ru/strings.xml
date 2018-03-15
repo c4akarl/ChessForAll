@@ -259,4 +259,5 @@
   <string name="fmAddFile">Новый файл</string>
   <string name="fmFileNoWritePermissions">Нет прав на запись:</string>
   <string name="btn_Continue">Продолжение</string>
+    <string name="epPonder">размышлять</string>
 </resources>

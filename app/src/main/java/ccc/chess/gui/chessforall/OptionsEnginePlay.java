@@ -31,6 +31,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
         setContentView(R.layout.optionsengineplay);
         fileManagerIntent = new Intent(this, PgnFileManager.class);
         engineMessage = (CheckBox) findViewById(R.id.cbEpEngineMessage);
+        ponder = (CheckBox) findViewById(R.id.cbEpPonder);
         randomFirstMove = (CheckBox) findViewById(R.id.cbEpRandomFirstMove);
         autoStartEngine = (CheckBox) findViewById(R.id.cbEpAutoStartEngine);
         openingBook = (CheckBox) findViewById(R.id.cbEpOpeningBook);
@@ -165,6 +166,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	{
 		SharedPreferences.Editor ed = userPrefs.edit();
         ed.putBoolean("user_options_enginePlay_EngineMessage", engineMessage.isChecked());
+        ed.putBoolean("user_options_enginePlay_Ponder", ponder.isChecked());
         ed.putBoolean("user_options_enginePlay_RandomFirstMove", randomFirstMove.isChecked());
         ed.putBoolean("user_options_enginePlay_AutoStartEngine", autoStartEngine.isChecked());
         ed.putBoolean("user_options_enginePlay_OpeningBook", openingBook.isChecked());
@@ -185,6 +187,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	protected void getPrefs() 
 	{
 		engineMessage.setChecked(userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true));
+		ponder.setChecked(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
 		randomFirstMove.setChecked(userPrefs.getBoolean("user_options_enginePlay_RandomFirstMove", false));
 		autoStartEngine.setChecked(userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true));
 		openingBook.setChecked(userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true));
@@ -205,6 +208,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	SharedPreferences runP;
 //	GUI	
 	CheckBox engineMessage;
+	CheckBox ponder;
 	CheckBox randomFirstMove;
 	CheckBox autoStartEngine;
 	CheckBox openingBook;
