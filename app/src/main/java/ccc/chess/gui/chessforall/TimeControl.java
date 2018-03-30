@@ -7,7 +7,7 @@ public class TimeControl
     {
 //Log.i(TAG, "TimeControl(), initChessClock()");
 		initChessClock(1, 300000, 300000, 0, 0, 0);	// init: 5 minutes + 2 seconds(move)
-		setCurrentShowValues();
+		setCurrentShowValues(1);
     }
 
 	public void initChessClock(int timeControl, int timeWhite, int timeBlack, int movesToGo, int bonusWhite, int bonusBlack)
@@ -15,9 +15,7 @@ public class TimeControl
 		this.timeControl = timeControl;
 		this.bonusWhite = bonusWhite;
 		this.bonusBlack = bonusBlack;
-//		this.timeWhite = timeWhite + this.bonusWhite;
 		this.timeWhite = timeWhite;
-//		this.timeBlack = timeBlack + this.bonusBlack;
 		this.timeBlack = timeBlack;
 		this.movesToGo = movesToGo;
 		clockIsRunning = false;
@@ -27,10 +25,10 @@ public class TimeControl
 		showModusBlack = 2;
 		showWhiteTime = "";
 		showBlackTime = "";
-		setCurrentShowValues();
+		setCurrentShowValues(1);
     }
 
-	public void startChessClock(boolean whiteMoves, long currentTime)
+	public void startChessClock(boolean whiteMoves, long currentTime, int playMod)
     {
 //Log.i(TAG, "1 startChessClock(), clockIsRunning: " + clockIsRunning + ", timeControl: " + timeControl);
 		if (!clockIsRunning & timeControl != 4)
@@ -40,11 +38,11 @@ public class TimeControl
 			startTime = currentTime;
 			if (timeControl == 11)	// analysis
 				timeWhite = 0;
-			setCurrentShowValues();
+			setCurrentShowValues(playMod);
 		}
     }
 
-	public void stopChessClock(long currentTime)
+	public void stopChessClock(long currentTime, int playMod)
     {
 //Log.i(TAG, "stopChessClock()");
 		if (clockIsRunning)
@@ -67,11 +65,11 @@ public class TimeControl
 						timeWhite = timeWhite + (int) (currentTime - startTime);
 				}
 			}
-			setCurrentShowValues();
+			setCurrentShowValues(playMod);
 		}
     }
 
-	public void switchChessClock(boolean whiteMoves, long currentTime)
+	public void switchChessClock(boolean whiteMoves, long currentTime, int playMod)
     {
 		if (this.whiteMoves & whiteMoves | !this.whiteMoves & !whiteMoves)
 			colorChanged = false;
@@ -125,7 +123,7 @@ public class TimeControl
 //Log.i(TAG, "NEW: timeBlack: " + timeBlack + ", bonusBlack: " + bonusBlack);
 			startTime = currentTime;
 			this.whiteMoves = whiteMoves;
-			setCurrentShowValues();
+			setCurrentShowValues(playMod);
 		}
     }
 
@@ -197,7 +195,7 @@ public class TimeControl
 		return showTime;
     }
 
-	public void setCurrentShowValues()
+	public void setCurrentShowValues(int playMod)
     {	// set the current white/black time on screen
 //Log.i(TAG, "OLD time White: " + showModusWhite + ", " + timeWhite + ", " + showWhiteTime);
 //Log.i(TAG, "OLD time Black: " + showModusBlack + ", " + timeBlack + ", " + showBlackTime);
@@ -255,7 +253,7 @@ public class TimeControl
 			showS = new StringBuilder(10);
 			if (s < 10 & (showModusWhite == 1 |showModusWhite == 2))
 			{
-				if (h == 0 & m == 0)
+				if (h == 0 & m == 0 & playMod != 4)
 					showModusWhite = 3;
 				else
 					showS.append("0");
@@ -312,7 +310,7 @@ public class TimeControl
 			showS = new StringBuilder(10);
 			if (s < 10 & (showModusBlack == 1 | showModusBlack == 2))
 			{
-				if (h == 0 & m == 0)
+				if (h == 0 & m == 0 & playMod != 4)
 					showModusBlack = 3;
 				else
 					showS.append("0");

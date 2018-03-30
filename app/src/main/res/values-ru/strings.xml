@@ -260,4 +260,7 @@
   <string name="fmFileNoWritePermissions">Нет прав на запись:</string>
   <string name="btn_Continue">Продолжение</string>
     <string name="epPonder">размышлять</string>
+    <string name="engineDisplayedLines">Отображаемые строки</string>
+    <string name="engineThinking">мышление</string>
+    <string name="engineError">Engine error</string>
 </resources>

@@ -30,7 +30,6 @@ public class ChessEngine
 
     public boolean initProcess()
     {
-//Log.i(TAG, "initProcess()");
         boolean isInitOk = false;
         engineProcess = "";
         if (!efm.dataFileExist(assetsEngineProcessName))
@@ -106,16 +105,26 @@ public class ChessEngine
 
     public boolean syncStopSearch()
     {
+//Log.i(TAG, "syncStopSearch(), start");
         writeLineToProcess("stop");
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
         stopBestMove = "";
         stopPonderMove = "";
+        int cntSpace = 0;
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
             CharSequence s = readLineFromProcess(1000);
             if (s.equals("ERROR"))
                 return false;
+            if (s.equals(""))   // null
+                cntSpace++;
+            else
+                cntSpace = 0;
+            if (cntSpace >= SYNC_CNT)
+            {
+                return false;
+            }
             if (s.toString().startsWith("bestmove"))
             {
                 String[] txtSplit = s.toString().split(" ");
@@ -123,7 +132,6 @@ public class ChessEngine
                 {
                     stopBestMove = txtSplit[1];
                     stopPonderMove = txtSplit[3];
-//Log.i(TAG, "syncStopSearch(), stopBestMove: " + stopBestMove + ", stopPonderMove: " + stopPonderMove);
                 }
                 return true;
             }
@@ -134,23 +142,32 @@ public class ChessEngine
 
     public boolean syncReady()
     {
+//Log.i(TAG, "syncReady(), start");
         isReady = false;
         writeLineToProcess("isready");
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
+        int cntSpace = 0;
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
             CharSequence s = readLineFromProcess(1000);
             if (s.equals("ERROR"))
                 return false;
+            if (s.equals(""))   // null
+                cntSpace++;
+            else
+                cntSpace = 0;
+            if (cntSpace >= SYNC_CNT)
+            {
+                return false;
+            }
             if (s.equals("readyok"))
             {
                 isReady = true;
-                break;
+                return true;
             }
             checkTime = System.currentTimeMillis();
         }
-
         return isReady;
     }
 
@@ -177,7 +194,7 @@ public class ChessEngine
             writeLineToProcess("setoption name UCI_Chess960 value false");
 
         writeLineToProcess("ucinewgame");
-        return syncReady();
+        return true;
     }
 
     public void startSearch(CharSequence fen, CharSequence moves, int wTime, int bTime,	int wInc, int bInc,
@@ -223,7 +240,6 @@ public class ChessEngine
     {
         boolean infoHasPvValues = false;
         statIsMate = false;
-        statPvAction = "";
         statPvIdx = 0;
         try
         {
@@ -233,22 +249,20 @@ public class ChessEngine
             while (i < nTokens - 1)
             {
                 CharSequence is = tokens[i++];
-                if (is.equals("depth")) {
-                    statCurrDepth = Integer.parseInt(tokens[i++].toString());
-                } else if (is.equals("currmove")) {
-                    statCurrMove = tokens[i++];
-                } else if (is.equals("currmovenumber")) {
+//Log.i(TAG, "tokens, i: " + i + "(" + (nTokens -1) + "), is: " + is);
+                if (is.equals("depth"))     {statCurrDepth = Integer.parseInt(tokens[i++].toString());}
+                if (is.equals("seldepth"))  {statCurrSelDepth = Integer.parseInt(tokens[i++].toString());}
+                if (is.equals("time"))      {statTime = Integer.parseInt(tokens[i++].toString());}
+                if (is.equals("nodes"))     {statCurrNodes = Integer.parseInt(tokens[i++].toString());}
+                if (is.equals("nps"))       {statCurrNps = Integer.parseInt(tokens[i++].toString());}
+                if (is.equals("multipv"))
+                {
                     statCurrMoveNr = Integer.parseInt(tokens[i++].toString());
-                } else if (is.equals("time")) {
-                    statTime = Integer.parseInt(tokens[i++].toString());
-                } else if (is.equals("nodes")) {
-                    statNodes = Integer.parseInt(tokens[i++].toString());
-                } else if (is.equals("nps")) {
-                    statNps = Integer.parseInt(tokens[i++].toString());
-                } else if (is.equals("multipv")) {
-                    statPvIdx = ((Integer.parseInt(tokens[i++].toString())) -1);
+                    statPvIdx = statCurrMoveNr -1;
                     engineWithMultiPv = true;
-                } else if (is.equals("pv")) {
+                }
+                if (is.equals("pv"))
+                {
                         infoHasPvValues = true;
                         statPv.clear();
                         while (i < nTokens)
@@ -260,30 +274,33 @@ public class ChessEngine
                             if (statPv.size() > 1)
                                 statPvPonderMove = statPv.get(1);
                         }
+                        statCurrMove = statPv.get(0);
                         statPVDepth = statCurrDepth;
-                } else if (is.equals("score")) {
-//Log.i(TAG, "tokens: " + tokens[i] + ", " + tokens[i +1]);
-                    if (tokens[i].equals("cp"))
-                        statPvScore = Integer.parseInt(tokens[i +1].toString());
-                    if (statPvIdx == 0)
-                        statPvBestScore = statPvScore;
-                    if (tokens[i].equals("mate"))
-                    {
-                        statIsMate = true;
-                        statPvScore = Integer.parseInt(tokens[i +1].toString());
-                        if (statPvScore < 0)
-                            statPvScore = statPvScore * -1;
-                    }
                 }
+                if (is.equals("cp"))
+                    statPvScore = Integer.parseInt(tokens[i++].toString());
+                if (statPvIdx == 0)
+                    statPvBestScore = statPvScore;
+                if (is.equals("mate"))
+                {
+                    statIsMate = true;
+                    statPvScore = Integer.parseInt(tokens[i++].toString());
+                    if (statPvScore < 0)
+                        statPvScore = statPvScore * -1;
+                }
+                if (is.equals("currmove"))
+                    statCurrMove = tokens[i++];
+                if (is.equals("currmovenumber"))
+                    statCurrMoveNr = Integer.parseInt(tokens[i++].toString());
             }
         }
         catch (NumberFormatException nfe) {}
         catch (ArrayIndexOutOfBoundsException aioob) {	}
+
         if (statPv.size() > 0)
         {
             if (infoHasPvValues)
             {
-                statPvAction = "1";
                 statPvMoves = getMoves(statPv, infoPvMoveMax);
             }
         }
@@ -624,6 +641,8 @@ public class ChessEngine
 
     final String TAG = "ChessEngine";
     final long MAX_SYNC_TIME = 200;
+    final int SYNC_CNT = 800;
+
     MainActivity mainA;
     public int engineNumber = 1;		                    // default engine (Stockfish)
     private static final String ENGINE_TYPE = "UCI";		//> ChessEngine type: CE(Chess Engines)
@@ -671,11 +690,14 @@ public class ChessEngine
 
     int statPVDepth = 0;
     int statTime = 0;
+
     int statCurrDepth = 0;
+    int statCurrSelDepth = 0;
     int statCurrMoveNr = 0;
-    int statNodes = 0;
-    int statNps = 0;
     CharSequence statCurrMove = "";
+    int statCurrNodes = 0;
+    int statCurrNps = 0;
+
     boolean statIsMate = false;
     final CharSequence firstMove[] =	{	"a2a3", "a2a4", "b2b3", "b2b4",
             "c2c3", "c2c4", "d2d3", "d2d4",

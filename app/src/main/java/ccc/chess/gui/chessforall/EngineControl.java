@@ -1,9 +1,6 @@
 package ccc.chess.gui.chessforall;
 
 import android.content.SharedPreferences;
-import android.os.Environment;
-
-import java.io.File;
 
 import ccc.chess.book.BookOptions;
 import ccc.chess.book.C4aBook;
@@ -24,12 +21,6 @@ public class EngineControl
 	public final void setBookOptions() 
 	{
 		bookOptions.filename = mainA.userPrefs.getString("user_options_enginePlay_OpeningBookName", "");
-		if (bookOptions.filename.length() > 0) 
-        {
-            File extDir = Environment.getExternalStorageDirectory();
-            CharSequence sep = File.separator;
-            bookOptions.filename = extDir.getAbsolutePath() + sep + bookOptions.filename;
-        }
         book.setOptions(bookOptions);
     }
 
@@ -42,6 +33,13 @@ public class EngineControl
 		twoEngines = false;
 		if (chessEnginePlayMod == 3 | chessEnginePlayMod == 4)	// engine vs engine | analysis
 			chessEngineSearching = true;
+		if 	(		(chessEnginePlayMod == 1 & mainA.gc.cl.p_color.equals("b"))
+				| 	(chessEnginePlayMod == 2 & mainA.gc.cl.p_color.equals("w"))
+			)
+		{
+			chessEngineSearching = true;
+			chessEnginePaused = false;
+		}
     }
 	public void setPlayData(SharedPreferences userP)												
     {	// setting the PGN-Data 

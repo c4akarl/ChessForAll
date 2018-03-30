@@ -93,7 +93,7 @@
 			</RelativeLayout>
 
 			<RelativeLayout
-				android:id="@+id/MultiPv"
+				android:id="@+id/PvMoves"
 				android:layout_below="@id/rlBook"
 				android:layout_width="fill_parent"
 				android:layout_height="match_parent"
@@ -106,7 +106,7 @@
 					android:layout_alignParentLeft="true" />
 				<EditText
 					android:id="@+id/etEpMultiPv"
-					android:layout_marginLeft="@dimen/margin_1"
+					android:layout_marginLeft="10dip"
 					style="@style/c4aET1"
 					android:layout_width="30dip"
 					android:inputType="number"
@@ -122,10 +122,25 @@
 					android:id="@+id/etEpPvMoves"
 					style="@style/c4aET1"
 					android:layout_width="60dip"
-					android:layout_marginLeft="@dimen/margin_1"
+					android:layout_marginLeft="10dip"
 					android:inputType="number"
 					android:maxLength="2"
 					android:layout_toRightOf="@id/tvEpPvMoves" />
+				<TextView
+					android:id="@+id/tvEpDisplayedLines"
+					style="@style/c4aTV1"
+					android:text="@string/engineDisplayedLines"
+					android:layout_marginLeft="30dip"
+					android:layout_toRightOf="@id/etEpPvMoves" />
+				<EditText
+					android:id="@+id/etEpDisplayedLines"
+					android:layout_marginLeft="10dip"
+					style="@style/c4aET1"
+					android:layout_width="30dip"
+					android:inputType="number"
+					android:maxLength="1"
+					android:layout_toRightOf="@id/tvEpDisplayedLines" />
+
 			</RelativeLayout>
 
 			<LinearLayout

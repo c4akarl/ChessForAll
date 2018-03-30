@@ -40,8 +40,10 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
         bookName = (EditText) findViewById(R.id.tvEpBookName);
         multiPv = (EditText) findViewById(R.id.etEpMultiPv);
         pvMoves = (EditText) findViewById(R.id.etEpPvMoves);
+		displayedLines = (EditText) findViewById(R.id.etEpDisplayedLines);
         multiPv.addTextChangedListener(this);
         pvMoves.addTextChangedListener(this);
+		displayedLines.addTextChangedListener(this);
 		logOn = (CheckBox) findViewById(R.id.logOn);
 		getPrefs();
 
@@ -179,6 +181,10 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
         try {pvMoves = Integer.parseInt(this.pvMoves.getText().toString());}
         catch 	(NumberFormatException e) {};
         ed.putInt("user_options_enginePlay_PvMoves", pvMoves);
+		int lines = 4;
+		try {lines = Integer.parseInt(this.displayedLines.getText().toString());}
+		catch 	(NumberFormatException e) {};
+		ed.putInt("user_options_enginePlay_displayedLines", lines);
 		ed.putInt("user_options_enginePlay_strength", progressStrength);
 		ed.putInt("user_options_enginePlay_aggressiveness", progressAggressiveness - 100);
 		ed.putBoolean("user_options_enginePlay_logOn", logOn.isChecked());
@@ -193,8 +199,9 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 		openingBook.setChecked(userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true));
 		bookName.setText(userPrefs.getString("user_options_enginePlay_OpeningBookName", ""));
 		bookName.setSelection(bookName.getText().length());
-		multiPv.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_MultiPv", 4)));
-		pvMoves.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_PvMoves", 6)));
+		multiPv.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_MultiPv", PV_MULTI)));
+		pvMoves.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_PvMoves", PV_MOVES)));
+		displayedLines.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_displayedLines", DISPLAYED_LINES)));
 		progressStrength = userPrefs.getInt("user_options_enginePlay_strength", 100);
 		progressAggressiveness = userPrefs.getInt("user_options_enginePlay_aggressiveness", 0) + 100;
 		logOn.setChecked(userPrefs.getBoolean("user_options_enginePlay_logOn", false));
@@ -203,6 +210,9 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	final String TAG = "PlaySettings";
 	Util u;
 	final static int LOAD_OPENING_BOOK_REQUEST_CODE = 91;
+	final static int PV_MULTI = 4;
+	final static int PV_MOVES = 6;
+	final static int DISPLAYED_LINES = 5;
 	Intent fileManagerIntent;
 	SharedPreferences userPrefs;
 	SharedPreferences runP;
@@ -216,6 +226,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	EditText bookName = null;
 	EditText multiPv = null;
 	EditText pvMoves = null;
+	EditText displayedLines = null;
 	SeekBar strength;
 	TextView strengthValue;
 	SeekBar aggressiveness;

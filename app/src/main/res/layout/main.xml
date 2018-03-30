@@ -193,7 +193,6 @@
 	<ScrollView
 		android:id="@+id/scrlMsgEngine"
 		android:layout_above="@id/rl_btn"
-		android:fillViewport="true"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" >
 		<TextView

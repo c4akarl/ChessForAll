@@ -88,22 +88,13 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
      	super.onDestroy();
     }
 
-    @Override
-    protected void onPause() 					
-    {
-    	super.onPause();
-		setPreferences("");
-    }
-
-    public void startPfm() 
+    public void startPfm()
 	{
 		fileActionCode = getIntent().getExtras().getInt("fileActionCode");
         pgnIO = new PgnIO(this);
         pgnDb = new PgnDb();
 		baseDir = pgnIO.getExternalDirectory(0);
-//Log.i(TAG, "1 ???, fm_extern_load_path: " + fm_extern_load_path + ", fm_extern_save_path: " + fm_extern_save_path);
 		getPreferences();
-//Log.i(TAG, "2 ???, fm_extern_load_path: " + fm_extern_load_path + ", fm_extern_save_path: " + fm_extern_save_path);
         if (fm_extern_load_path.equals("") & pgnIO.pathExists(baseDir + "c4a/"))
         	fm_extern_load_path = baseDir + "c4a/";
         if (fm_extern_save_path.equals("") & !fm_extern_load_path.equals(""))
@@ -637,9 +628,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 				isCreateDb = false;
 				mesCreateDb = getString(R.string.fmCreatingPgnDatabase) + "\n";
 			}
-//err: at ccc.chess.gui.chessforall.PgnFileManager.onResume (PgnFileManager.java:82)
-//err: at ccc.chess.gui.chessforall.PgnFileManager.onCreateDialog (PgnFileManager.java:640)
-//err>>>: at ccc.chess.gui.chessforall.PgnFileManager.onCreateDialog (PgnFileManager.java:640)
 			String path = "";
 			String file = "";
 			if (etPath != null)
@@ -1306,7 +1294,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 	public void showFileList(String path) 
 	{
 //Log.i(TAG, "showFileList(), path: " + path);
-//		if (fileActionCode == 91)
 		if (fileActionCode == 91 | fileActionCode == 5)
 			fmBtnAction.setVisibility(ImageView.VISIBLE);
 		else
@@ -1732,6 +1719,7 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 
 	public void setPreferences(String gameData) 
 	{
+//Log.i(TAG, "setPreferences(), gameData\n" + gameData);
 		if (etPath == null)
 			return;
 
@@ -1799,6 +1787,7 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 
 	public void setSkipPreferences(int location, String gameData) 
 	{
+//Log.i(TAG, "setSkipPreferences(), gameData\n" + gameData);
         SharedPreferences.Editor ed = fmPrefs.edit();
         if (location == 1)
         {
@@ -1821,6 +1810,7 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 
 	public void setDbPreferences() 
 	{
+//Log.i(TAG, "setDbPreferences()");
 		SharedPreferences.Editor edDb = fmPrefs.edit();
 		
 		edDb.putInt("fm_extern_db_game_id", pgnDb.pgnGameId);
@@ -1858,6 +1848,7 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 
 	public void setQueryPreferences(int gameId) 
 	{
+//Log.i(TAG, "setQueryPreferences(), gameId: " + gameId);
 		SharedPreferences.Editor ed = fmPrefs.edit();
 		String white = "";
 		String black = "";
@@ -2487,8 +2478,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 		{
 			if (pgnOffset == 0 & fPgn.length() == 0)	// no data, no create db!
 			{
-//err: at ccc.chess.gui.chessforall.PgnFileManager$CreateDatabaseTask.onPostExecute (PgnFileManager.java:2475)
-//err>>>: at ccc.chess.gui.chessforall.PgnFileManager$CreateDatabaseTask.onPostExecute (PgnFileManager.java:2475)
 				try
 				{
 					fmBtnAction.setVisibility(ImageView.VISIBLE);
@@ -2509,8 +2498,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 	        	return;
 	        }
 	        mNotificationHelper.completed();
-//	        Log.i(TAG, "notificationId: " + notificationId);
-//	        Log.i(TAG, "pgnPath, pgnFile: " + pgnPath + pgnFile);
 	        if (getIntent().getExtras().getInt("displayActivity") == 1)
 	        {
 	        	pgnDb.openDb(pgnPath, pgnFile, SQLiteDatabase.OPEN_READONLY);
@@ -2960,8 +2947,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			if (fm_extern_db_key_id != 0 & queryCursor.getCount() > 0)
 			{
 			   fm_extern_db_cursor_id = 1;
-			   if (queryCursor.moveToPosition(1))
-				   setQueryPreferences(queryCursor.getInt(queryCursor.getColumnIndex("_id")));
 			   fm_extern_db_cursor_count = queryCursor.getCount();
 			   fm_extern_db_game_id_list = getGameIdStringList(queryCursor);
 			   gameIdList = getGameIdList(fm_extern_db_game_id_list);
@@ -3009,7 +2994,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 							if (fm_extern_db_key_id != 0)
 							   queryCount = queryCursor.getCount();
 //Log.i(TAG, "fm_extern_db_key_id, gameId: " + fm_extern_db_key_id + ", " + gameId);
-
 							scroll_game_id = position +1;
 							setQueryDataToTitle(fm_extern_db_key_id, gameId, pgnDb.getRowCount(PgnDb.TABLE_NAME), scroll_game_id, queryCount);
 							pgnDb.getGameId(gameId, 10);	// set pgnStat value
@@ -3323,25 +3307,21 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 				startCreateDatabaseTask(path, file, "0", "idx");
 				break;
 			case STATE_DB_UNCOMPLETED:
-//				Log.i(TAG, "STATE_DB_UNCOMPLETED");
 				pgnDb.initPgnFiles(path, file);
 				if (pgnDb.openDb(path, file, SQLiteDatabase.OPEN_READONLY))
 				{
 					switch (pgnDb.getStateFromLastGame()) 
 					{
 						case 1:	// no data after last game, unlock .pgn-db(set lastModified from .pgn)
-//							Log.i(TAG, "STATE: 1");
 							pgnDb.closeDb();
 							handleDb(path, file, STATE_DB_OK, false);
 							break;
 						case 2:	// games after last game(db), complite db
-//							Log.i(TAG, "STATE: 2");
 							pgnDb.closeDb();
 							notificationId++;
 							startCreateDatabaseTask(path, file, Long.toString(pgnDb.pgnRafOffset), "dropidx");
 							break;
 						case 0:	// delete .pgn-db and start new create db(STATE_DB_NO_DBFILE)
-//							Log.i(TAG, "STATE: 0");
 							pgnDb.closeDb();
 							pgnDb.deleteDbFile();
 							handleDb(path, file, STATE_DB_NO_DBFILE, false);
@@ -3350,7 +3330,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 				}
 				else
 				{
-//					Log.i(TAG, "STATE: !pgnDb.openDb()");
 					pgnDb.deleteDbFile();
 					handleDb(path, file, STATE_DB_NO_DBFILE, false);
 				}
@@ -3384,7 +3363,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 	{
 		if (!pgnIO.canWrite(path, file))
 		{
-//Log.i(TAG, "startCreateDatabaseTask()");
 			isCreateDb = true;
 			removeDialog(FILE_NO_WRITE_PERMISSIONS);
 			showDialog(FILE_NO_WRITE_PERMISSIONS);

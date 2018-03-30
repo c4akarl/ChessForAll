@@ -282,5 +282,8 @@
     <string name="fmFileNoWritePermissions">Aucune autorisation d\'écriture:</string>
     <string name="btn_Continue">Continuer</string>
     <string name="epPonder">Ponder</string>
+    <string name="engineDisplayedLines">Lignes affichées</string>
+    <string name="engineThinking">"En pensant "</string>
+    <string name="engineError">Engine error</string>
 
 </resources>

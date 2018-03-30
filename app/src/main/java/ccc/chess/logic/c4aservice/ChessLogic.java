@@ -77,6 +77,7 @@ public class ChessLogic
 
     public void newPositionFromMove(CharSequence fen, CharSequence mv)					// new position	(new move)
     {
+//Log.i(TAG, "newPositionFromMove(), mv: " + mv + ",   fen: " + fen);
 //err>>>: at ccc.chess.logic.c4aservice.ChessLogic.newPositionFromMove (ChessLogic.java:119)
 		if (mv.length() < 2)
 			return;

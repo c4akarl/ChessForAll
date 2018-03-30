@@ -5,7 +5,7 @@
     <string name="app_chessData">Spieldaten</string>
     <string name="app_chessNotation">Notation</string>
     <string name="app_optionsGUI">Benutzereinstellungen</string>
-    <string name="app_optionsPlay">Spielmodus - Neues Spiel</string>
+    <string name="app_optionsPlay">Spielmodus - Neue Partie</string>
     <string name="app_optionsEnginePlay">Engine Stockfish - Einstellungen</string>
     <string name="app_optionsTimeControl">Optionen - Zeitsteuerung</string>
     <string name="app_editChessBoard">Schachbrett editieren</string>
@@ -62,7 +62,7 @@
     <string name="engineProgressDialog">Verbindungsaufbau...</string>
     <string name="engineNoEnginesOnDevice">Keine Maschine auf dem Gerät</string>
     <string name="engine_noRespond">Maschine gestoppt (keine Rückmeldung)</string>
-    <string name="enginePlayerResign">Aktuelles Spiel aufgeben</string>
+    <string name="enginePlayerResign">Aktuelle Partie aufgeben</string>
     <string name="enginePlayerDraw">Remis anbieten</string>
     <string name="engineDeclinesDraw">Die Maschine lehnt remis ab</string>
     <string name="engineSearchMessage">Keine Maschine gefunden.\nNach Schachmaschinen suchen?</string>
@@ -72,7 +72,7 @@
     <string name="engineAnalysisStop">Analyse gestoppt!</string>
     <string name="engine_timeout">Maschine gestoppt (Timeout)</string>
 
-    <string name="menu_new_game">Neues Spiel</string>
+    <string name="menu_new_game">Neue Partie</string>
     <string name="menu_edit_board">Brett editieren</string>
     <string name="menu_pgn">PGN-Datei</string>
     <string name="menu_pgn_load">Partie laden</string>
@@ -104,11 +104,11 @@
     <string name="menu_load_extern">SD-Card</string>
     <string name="menu_load_intern">Assets</string>
     <string name="menu_load_www">PGN-Datei downloaden</string>
-    <string name="menu_load_game">Spiel</string>
-    <string name="menu_load_game_first">Erstes</string>
-    <string name="menu_load_game_last">Letztes</string>
-    <string name="menu_load_game_next">Nächstes</string>
-    <string name="menu_load_game_previous">Vorheriges</string>
+    <string name="menu_load_game">Partie</string>
+    <string name="menu_load_game_first">Erste</string>
+    <string name="menu_load_game_last">Letzte</string>
+    <string name="menu_load_game_next">Nächste</string>
+    <string name="menu_load_game_previous">Vorherige</string>
     <string name="menu_load_game_random">Zufall</string>
     
     <string name="menu_edit_fen_color">Farbe (w/s)</string>
@@ -132,21 +132,21 @@
     <string name="menu_info_clipboardPaste">Partie von der Zwischenablage</string>
         
     <string name="menu_query">Abfrage - Suche nach Partien</string>
-    <string name="menu_query_gameId">Spiel-ID</string>
+    <string name="menu_query_gameId">Partie-ID</string>
     <string name="menu_query_player">Spieler</string>
     <string name="menu_query_event">Ereignis</string>
     <string name="menu_query_eco">ECO - Eröffnung</string>
     
     <string name="peAutoSave">Automatisch sichern</string>
     <string name="peAutoFlipColor">Automatisches Brettdrehen (Farbe)</string>
-    <string name="peAutoCurrentGame">Aktuelles Spiel</string>
+    <string name="peAutoCurrentGame">Aktuelle Partie</string>
     <string name="peRound">Runde</string>
     <string name="peGameCounter">Zähler</string>
     
     <string name="fmLblPath">Pfad</string>
     <string name="fmLblFile">Datei</string>
-    <string name="fmTitleLoad">PGN-Dateimanager - Spiel laden</string>
-    <string name="fmTitleSave">PGN-Dateimanager - Spiel speichern</string>
+    <string name="fmTitleLoad">PGN-Dateimanager - Partie laden</string>
+    <string name="fmTitleSave">PGN-Dateimanager - Partie speichern</string>
     <string name="fmTitleEngineAutoPlay">PGN-Dateimanager - Automatisches Spiel</string>
     <string name="fmPathError">Pfad existiert nicht!</string>
     <string name="fmFileError">Datei existiert nicht oder PGN-Fehler!</string>
@@ -205,7 +205,7 @@
     <string name="play_analysis">Analyse</string>
     <string name="play_two_players">Editieren</string>
     <string name="play_two_players_flip">Zwei Spieler</string>
-    <string name="play_newGame">Neues Spiel</string>
+    <string name="play_newGame">Neue Partie</string>
     
     <string name="ccsTitle">Schachuhr</string>
     <string name="ccsMessageWhite">Weiss</string>
@@ -225,14 +225,14 @@
     <string name="ccsMs">ms</string>
     
     <string name="qDatabaseQuery">Datenbankabfrage</string>
-    <string name="qgTitle">Abfrage - Spiel-ID</string>
+    <string name="qgTitle">Abfrage - Partie-ID</string>
     <string name="qpTitle">Abfrage - Spieler</string>
     <string name="qeTitle">Abfrage - Veranstaltung, Ort</string>
     <string name="qoTitle">Abfrage - ECO, Eröffnung</string>
-    <string name="qgGameId">Spiel-ID</string>
-    <string name="qGameId">Spiele</string>
+    <string name="qgGameId">Partie-ID</string>
+    <string name="qGameId">Partie</string>
     <string name="qGameIdOrder">Reihenfolge</string>
-    <string name="qCurrentId">Aktuelles Spiel</string>
+    <string name="qCurrentId">Aktuelle Partie</string>
     <string name="qMaxItems">Max. Einträge</string>
     <string name="qDate">Datum</string>
     <string name="qDateFormat">JJJJ.MM.TT</string>
@@ -281,5 +281,8 @@
     <string name="fmFileNoWritePermissions">Keine Schreibrechte:</string>
     <string name="btn_Continue">Weiter</string>
     <string name="epPonder">Vorausberechnung</string>
+    <string name="engineDisplayedLines">Angezeigte Zeilen</string>
+    <string name="engineThinking">Berechung</string>
+    <string name="engineError">Engine-Fehler</string>
 
 </resources>
