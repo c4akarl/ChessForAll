@@ -61,7 +61,7 @@
     <string name="engine_paused">Computer paused!</string>
     <string name="engineProgressDialog">Connecting to engines...</string>
     <string name="engineNoEnginesOnDevice">No engines on device</string>
-    <string name="engine_noRespond">Engine stopped (no respond)</string>
+    <string name="engine_noRespond">Engine stopped</string>
     <string name="enginePlayerResign">Resign the current game</string>
     <string name="enginePlayerDraw">Draw offer</string>
     <string name="engineDeclinesDraw">The engine declines your draw offer</string>

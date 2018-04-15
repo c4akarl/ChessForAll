@@ -139,7 +139,7 @@ public class EngineControl
 	    	{
 	    		if (!getEngine().syncStopSearch())
 				{
-
+//Log.i(TAG, "stopComputerThinking, !getEngine().syncStopSearch(): false");
 				}
 	    		if (mainA.chessEngineSearchTask != null)
 		    		mainA.chessEngineSearchTask.cancel(true);
@@ -172,6 +172,7 @@ public class EngineControl
     public boolean chessEngineInit = false;
     public boolean chessEnginesOpeningBook = false;
     public boolean chessEngineSearching = false;
+    public boolean chessEngineIsInSearchTask = false;
 
     public boolean chessEngineSearchingPonder = false;
     public CharSequence ponderUserFen = "";

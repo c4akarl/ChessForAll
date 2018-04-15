@@ -61,7 +61,7 @@
     <string name="engine_paused">Partida en pausa!</string>
     <string name="engineProgressDialog">conexión  . . .</string>
     <string name="engineNoEnginesOnDevice">ninguna máquina en el dispositivo</string>
-    <string name="engine_noRespond">El motor se ha detenido (no responde)</string>
+    <string name="engine_noRespond">El motor se ha detenido</string>
     <string name="enginePlayerResign">Abandonar la partida</string>
     <string name="enginePlayerDraw">Ofrecer tablas</string>
     <string name="engineDeclinesDraw">La máquina rechaza las tablas</string>

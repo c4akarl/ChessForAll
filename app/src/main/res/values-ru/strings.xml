@@ -56,7 +56,7 @@
   <string name="engine_paused">Пауза!</string>
   <string name="engineProgressDialog">Соединение с движком...</string>
   <string name="engineNoEnginesOnDevice">Нет движков на устройстве</string>
-  <string name="engine_noRespond">Движок остановлен (не отвечает)</string>
+  <string name="engine_noRespond">Движок остановлен</string>
   <string name="enginePlayerResign">Здать текущую игру</string>
   <string name="enginePlayerDraw">Предложить ничью</string>
   <string name="engineDeclinesDraw">Движок отклонил предложение ничьи</string>

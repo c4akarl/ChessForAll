@@ -30,6 +30,9 @@ public class ChessEngine
 
     public boolean initProcess()
     {
+        if (process != null)
+            destroyProcess();
+
         boolean isInitOk = false;
         engineProcess = "";
         if (!efm.dataFileExist(assetsEngineProcessName))
@@ -106,6 +109,10 @@ public class ChessEngine
     public boolean syncStopSearch()
     {
 //Log.i(TAG, "syncStopSearch(), start");
+
+        if (isError())
+            return false;
+
         writeLineToProcess("stop");
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
@@ -148,6 +155,10 @@ public class ChessEngine
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
         int cntSpace = 0;
+
+        if (isError())
+            return false;
+
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
             CharSequence s = readLineFromProcess(1000);
@@ -169,6 +180,31 @@ public class ChessEngine
             checkTime = System.currentTimeMillis();
         }
         return isReady;
+    }
+
+    public boolean isError()
+    {
+        if (process == null)
+            return true;
+
+        boolean isError = false;
+        String errorStream = "";
+        try
+        {
+            InputStream error = process.getErrorStream();
+            for (int i = 0; i < error.available(); i++)
+            {
+                int returnValue = error.read();
+                errorStream = errorStream + returnValue;
+            }
+            if (!errorStream.equals(""))
+            {
+//                Log.i(TAG, "chess engine process, stream error: \n" + errorStream);
+                return true;
+            }
+        }
+        catch (Exception ex) {Log.i(TAG, "chess engine process, stream error(Exception): " + errorStream + "\n"); ex.printStackTrace();}
+        return isError;
     }
 
     public boolean searchIsReady()
@@ -600,10 +636,11 @@ public class ChessEngine
     // NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS
     private final boolean startProcess(String fileName)
     {
-        ProcessBuilder builder = new ProcessBuilder(efm.dataEnginesPath + fileName);
+//        ProcessBuilder builder = new ProcessBuilder(efm.dataEnginesPath + fileName);
+        processBuilder = new ProcessBuilder(efm.dataEnginesPath + fileName);
         try
         {
-            process = builder.start();
+            process = processBuilder.start();
             OutputStream stdout = process.getOutputStream();
             InputStream stdin = process.getInputStream();
             reader = new BufferedReader(new InputStreamReader(stdin));
@@ -616,6 +653,11 @@ public class ChessEngine
                 Log.i(TAG, engineName + ": startProcess, IOException");
             return false;
         }
+    }
+
+    private void destroyProcess()
+    {
+        process.destroy();;
     }
 
     private final void writeToProcess(String data) throws IOException
@@ -641,7 +683,8 @@ public class ChessEngine
 
     final String TAG = "ChessEngine";
     final long MAX_SYNC_TIME = 200;
-    final int SYNC_CNT = 800;
+//    final int SYNC_CNT = 800;
+    final int SYNC_CNT = 200;
 
     MainActivity mainA;
     public int engineNumber = 1;		                    // default engine (Stockfish)
@@ -654,6 +697,7 @@ public class ChessEngine
 
     String assetsEngineProcessName = "";
 
+    ProcessBuilder processBuilder;
     private Process process;
     private BufferedReader reader = null;
     private BufferedWriter writer = null;

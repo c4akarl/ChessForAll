@@ -61,7 +61,7 @@
     <string name="engine_paused">Computer angehalten!</string>
     <string name="engineProgressDialog">Verbindungsaufbau...</string>
     <string name="engineNoEnginesOnDevice">Keine Maschine auf dem Gerät</string>
-    <string name="engine_noRespond">Maschine gestoppt (keine Rückmeldung)</string>
+    <string name="engine_noRespond">Maschine gestoppt</string>
     <string name="enginePlayerResign">Aktuelle Partie aufgeben</string>
     <string name="enginePlayerDraw">Remis anbieten</string>
     <string name="engineDeclinesDraw">Die Maschine lehnt remis ab</string>

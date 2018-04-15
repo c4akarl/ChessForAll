@@ -23,26 +23,39 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	public void onCreate(Bundle savedInstanceState) 
 	{
         super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u = new Util();
 		userPrefs = getSharedPreferences("user", 0);
 		runP = getSharedPreferences("run", 0);
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	}
+
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		start();
+	}
+
+	protected void start()
+	{
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
-        setContentView(R.layout.optionsengineplay);
-        fileManagerIntent = new Intent(this, PgnFileManager.class);
-        engineMessage = (CheckBox) findViewById(R.id.cbEpEngineMessage);
-        ponder = (CheckBox) findViewById(R.id.cbEpPonder);
-        randomFirstMove = (CheckBox) findViewById(R.id.cbEpRandomFirstMove);
-        autoStartEngine = (CheckBox) findViewById(R.id.cbEpAutoStartEngine);
-        openingBook = (CheckBox) findViewById(R.id.cbEpOpeningBook);
-        epBook = (ImageView) findViewById(R.id.epBook);
-        epBook.setImageBitmap(combineImages(R.drawable.btn_yellow, R.drawable.btn_pgn_load, 0));
-        bookName = (EditText) findViewById(R.id.tvEpBookName);
-        multiPv = (EditText) findViewById(R.id.etEpMultiPv);
-        pvMoves = (EditText) findViewById(R.id.etEpPvMoves);
+
+		setContentView(R.layout.optionsengineplay);
+
+		fileManagerIntent = new Intent(this, PgnFileManager.class);
+		engineMessage = (CheckBox) findViewById(R.id.cbEpEngineMessage);
+		ponder = (CheckBox) findViewById(R.id.cbEpPonder);
+		randomFirstMove = (CheckBox) findViewById(R.id.cbEpRandomFirstMove);
+		autoStartEngine = (CheckBox) findViewById(R.id.cbEpAutoStartEngine);
+		openingBook = (CheckBox) findViewById(R.id.cbEpOpeningBook);
+		epBook = (ImageView) findViewById(R.id.epBook);
+		epBook.setImageBitmap(combineImages(R.drawable.btn_yellow, R.drawable.btn_pgn_load, 0));
+		bookName = (EditText) findViewById(R.id.tvEpBookName);
+		multiPv = (EditText) findViewById(R.id.etEpMultiPv);
+		pvMoves = (EditText) findViewById(R.id.etEpPvMoves);
 		displayedLines = (EditText) findViewById(R.id.etEpDisplayedLines);
-        multiPv.addTextChangedListener(this);
-        pvMoves.addTextChangedListener(this);
+		multiPv.addTextChangedListener(this);
+		pvMoves.addTextChangedListener(this);
 		displayedLines.addTextChangedListener(this);
 		logOn = (CheckBox) findViewById(R.id.logOn);
 		getPrefs();
@@ -94,7 +107,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 		case R.id.btnGuOk:
 			setPrefs();
         	returnIntent = new Intent();
-       		setResult(RESULT_OK, returnIntent);
+       		setResult(3, returnIntent);
 			finish();
 			break;
 		case R.id.epBook:
@@ -173,15 +186,15 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
         ed.putBoolean("user_options_enginePlay_AutoStartEngine", autoStartEngine.isChecked());
         ed.putBoolean("user_options_enginePlay_OpeningBook", openingBook.isChecked());
         ed.putString("user_options_enginePlay_OpeningBookName", bookName.getText().toString());
-        int multiPv = 5;
+        int multiPv = PV_MULTI;
         try {multiPv = Integer.parseInt(this.multiPv.getText().toString());}
         catch 	(NumberFormatException e) {};
         ed.putInt("user_options_enginePlay_MultiPv", multiPv);
-        int pvMoves = 5;
+        int pvMoves = PV_MOVES;
         try {pvMoves = Integer.parseInt(this.pvMoves.getText().toString());}
         catch 	(NumberFormatException e) {};
         ed.putInt("user_options_enginePlay_PvMoves", pvMoves);
-		int lines = 4;
+		int lines = DISPLAYED_LINES;
 		try {lines = Integer.parseInt(this.displayedLines.getText().toString());}
 		catch 	(NumberFormatException e) {};
 		ed.putInt("user_options_enginePlay_displayedLines", lines);
