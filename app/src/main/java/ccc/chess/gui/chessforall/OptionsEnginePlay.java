@@ -112,9 +112,11 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 			break;
 		case R.id.epBook:
 		case R.id.tvEpBookName:
-			fileManagerIntent.putExtra("fileActionCode", 91);
+//			fileManagerIntent.putExtra("fileActionCode", 91);
+			fileManagerIntent.putExtra("fileActionCode", LOAD_OPENING_BOOK_REQUEST_CODE);
 	    	fileManagerIntent.putExtra("displayActivity", 1);
-	    	this.startActivityForResult(fileManagerIntent, 91);
+//	    	this.startActivityForResult(fileManagerIntent, 91);
+	    	this.startActivityForResult(fileManagerIntent, LOAD_OPENING_BOOK_REQUEST_CODE);
 			break;
 		}
 	}
@@ -146,13 +148,14 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	public void onTextChanged(CharSequence s, int start, int before, int count) { }
 	public void onActivityResult(int requestCode, int resultCode, Intent data)			
     {
-		switch(requestCode) 
+		switch(requestCode)
 	    {
 		    case LOAD_OPENING_BOOK_REQUEST_CODE: 
-		    	if (resultCode == MainActivity.RESULT_OK)
+		    	if (resultCode == RESULT_OK)
 				{
 					bookName.setText(data.getStringExtra("filePath") + data.getStringExtra("fileName"));
 					bookName.setSelection(bookName.getText().length());
+					setPrefs();
 				}
 				break;
 	    }

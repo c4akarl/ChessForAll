@@ -1,5 +1,6 @@
 package ccc.chess.gui.chessforall;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -15,23 +16,25 @@ import java.util.Random;
 
 public class ChessEngine
 {
-    public ChessEngine(MainActivity cM, int eNumber, boolean logging)
+    public ChessEngine(Context con, int eNumber)
     {
-        mainA = cM;	// main thread for UI-actions!
+        this.context = con;
         engineNumber = eNumber;
         processAlive = false;
         isReady = false;
         efm = new EngineFileManager();
-        efm.dataEnginesPath = mainA.getApplicationContext().getFilesDir() + "/engines/";
+        efm.dataEnginesPath = context.getFilesDir() + "/engines/";
         assetsEngineProcessName = getInternalStockFishProcessName();
-        userPrefs = mainA.getSharedPreferences("user", 0);
-        isLogOn = logging;
+        userPrefs = context.getSharedPreferences("user", 0);
+        isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
     }
 
     public boolean initProcess()
     {
         if (process != null)
+        {
             destroyProcess();
+        }
 
         boolean isInitOk = false;
         engineProcess = "";
@@ -65,7 +68,7 @@ public class ChessEngine
     {
         try
         {
-            InputStream istream = mainA.getAssets().open(assetsEngineProcessName);
+            InputStream istream = context.getAssets().open(assetsEngineProcessName);
             if (efm.writeEngineToData("", assetsEngineProcessName, istream))
                 engineProcess = assetsEngineProcessName;
             else
@@ -150,14 +153,15 @@ public class ChessEngine
     public boolean syncReady()
     {
 //Log.i(TAG, "syncReady(), start");
+
+        if (isError())
+            return false;
+
         isReady = false;
         writeLineToProcess("isready");
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
         int cntSpace = 0;
-
-        if (isError())
-            return false;
 
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
@@ -636,7 +640,6 @@ public class ChessEngine
     // NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS
     private final boolean startProcess(String fileName)
     {
-//        ProcessBuilder builder = new ProcessBuilder(efm.dataEnginesPath + fileName);
         processBuilder = new ProcessBuilder(efm.dataEnginesPath + fileName);
         try
         {
@@ -683,10 +686,9 @@ public class ChessEngine
 
     final String TAG = "ChessEngine";
     final long MAX_SYNC_TIME = 200;
-//    final int SYNC_CNT = 800;
     final int SYNC_CNT = 200;
 
-    MainActivity mainA;
+    Context context;
     public int engineNumber = 1;		                    // default engine (Stockfish)
     private static final String ENGINE_TYPE = "UCI";		//> ChessEngine type: CE(Chess Engines)
     SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
@@ -698,7 +700,7 @@ public class ChessEngine
     String assetsEngineProcessName = "";
 
     ProcessBuilder processBuilder;
-    private Process process;
+    public Process process;
     private BufferedReader reader = null;
     private BufferedWriter writer = null;
 

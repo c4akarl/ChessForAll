@@ -101,7 +101,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 		switch(requestCode) 
 	    {
 		    case ENGINE_AUTOPLAY_REQUEST_CODE: 
-		    	if (resultCode == MainActivity.RESULT_OK)
+		    	if (resultCode == RESULT_OK)
 				{
 			    	etPePath.setText(data.getStringExtra("filePath"));
 			    	etPeFile.setText(data.getStringExtra("fileName"));

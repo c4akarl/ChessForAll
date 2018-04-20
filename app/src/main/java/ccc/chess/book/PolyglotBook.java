@@ -1,5 +1,8 @@
 package ccc.chess.book;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -8,17 +11,16 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import android.content.res.AssetManager;
-//import android.util.Log;
 
 import ccc.chess.book.C4aBook.BookEntry;
-import ccc.chess.gui.chessforall.MainActivity;
+
+//import android.util.Log;
 
 public class PolyglotBook implements IOpeningBook 
 {
-    PolyglotBook(MainActivity cM)
+    PolyglotBook(Context context)
     {
-    	c4aM = cM;
+        this.context = context;
         bookFile = new File("");
     }
 
@@ -47,7 +49,8 @@ public class PolyglotBook implements IOpeningBook
 		    	try 
 		    	{	
 		    		File file = new File(DATA_BOOK_PATH + "/" + DATA_BOOK_FILE);
-					AssetManager am = c4aM.getResources().getAssets();
+//					AssetManager am = c4aM.getResources().getAssets();
+                    AssetManager am = context.getAssets();
 					InputStream is = am.open(DATA_BOOK_FILE);
 					FileOutputStream fos = new FileOutputStream(file);
 					byte[] b = new byte[1024];
@@ -442,6 +445,7 @@ public class PolyglotBook implements IOpeningBook
     final String TAG = "PolyglotBook";
     final String DATA_BOOK_PATH = "/data/data/ccc.chess.gui.chessforall";
     final String DATA_BOOK_FILE = "book.bin";
-    MainActivity c4aM;
+//    MainActivity c4aM;
+    Context context;
     private File bookFile;
 }

@@ -1,5 +1,6 @@
 package ccc.chess.gui.chessforall;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import ccc.chess.book.BookOptions;
@@ -7,24 +8,25 @@ import ccc.chess.book.C4aBook;
 
 public class EngineControl 
 {
-	EngineControl(MainActivity mA)
+	EngineControl(Context context)
     {
-		mainA = mA;						// main thread MainActivity for UI-actions
+		this.context = context;
+		userPrefs = context.getSharedPreferences("user", 0);
 		createEngines();
     }
 	public void createEngines()
 	{
-		en_1 = new ChessEngine(mainA, 1, mainA.userPrefs.getBoolean("user_options_enginePlay_logOn", false));	// engine number 1
-		book = new C4aBook(mainA);
+		en_1 = new ChessEngine(context, 1);	// engine number 1
+		book = new C4aBook(context);
 		book.getInstance();
 	}
 	public final void setBookOptions() 
 	{
-		bookOptions.filename = mainA.userPrefs.getString("user_options_enginePlay_OpeningBookName", "");
+		bookOptions.filename = userPrefs.getString("user_options_enginePlay_OpeningBookName", "");
         book.setOptions(bookOptions);
     }
 
-	public void setPlaySettings(SharedPreferences userP)
+	public void setPlaySettings(SharedPreferences userP, CharSequence color)
     {	// get play settings data from userPrefs + setting engine number
 		// play settings data from userPrefs
 		chessEnginePlayMod = userP.getInt("user_play_playMod", 1);
@@ -33,15 +35,15 @@ public class EngineControl
 		twoEngines = false;
 		if (chessEnginePlayMod == 3 | chessEnginePlayMod == 4)	// engine vs engine | analysis
 			chessEngineSearching = true;
-		if 	(		(chessEnginePlayMod == 1 & mainA.gc.cl.p_color.equals("b"))
-				| 	(chessEnginePlayMod == 2 & mainA.gc.cl.p_color.equals("w"))
+		if 	(		(chessEnginePlayMod == 1 & color.equals("b"))
+				| 	(chessEnginePlayMod == 2 & color.equals("w"))
 			)
 		{
 			chessEngineSearching = true;
 			chessEnginePaused = false;
 		}
     }
-	public void setPlayData(SharedPreferences userP)												
+	public void setPlayData(SharedPreferences userP, String engineWhite, String engineBlack)
     {	// setting the PGN-Data 
 		chessEngineEvent = "Android " + android.os.Build.VERSION.RELEASE;
 		chessEngineSite = android.os.Build.MODEL;
@@ -72,8 +74,10 @@ public class EngineControl
 	        		chessEnginePlayerBlack = en_1.engineName;
 	        		break;
 	        	case 4:	
-	        		chessEnginePlayerWhite = mainA.gc.cl.history.getGameTagValue("White");
-	        		chessEnginePlayerBlack = mainA.gc.cl.history.getGameTagValue("Black");
+//	        		chessEnginePlayerWhite = mainA.gc.cl.history.getGameTagValue("White");
+	        		chessEnginePlayerWhite = engineWhite;
+//	        		chessEnginePlayerBlack = mainA.gc.cl.history.getGameTagValue("Black");
+	        		chessEnginePlayerBlack = engineBlack;
 	        		break;
 	        }
 		}
@@ -91,17 +95,6 @@ public class EngineControl
 //        	case 2:		return en_2;
         	default:	return en_1;
         }
-    }
-
-
-
-	public void stopAllEngines() 
-    {	//>381 shutdownEngine() and releaseEngineService()
-    	setEngineNumber(1);
-    	if (getEngine() != null)	
-    		stopComputerThinking(true);
-    	if (!mainA.isAppEnd)
-    		chessEnginePaused = true;
     }
 
 	public void setStartPlay(CharSequence color)
@@ -129,35 +122,10 @@ public class EngineControl
 		}
 //		Log.i(TAG, "setStartPlay(), playMod: " + chessEnginePlayMod + ", color: " + color + ", makeMove: " + makeMove);
     }
-	public final synchronized void stopComputerThinking(boolean shutDown) 
-    {
-//Log.i(TAG, "stopComputerThinking, processAlive: " + getEngine().processAlive + ", shutDown: " + shutDown);
-		chessEngineStopSearch = true;
-		try
-		{
-			if (getEngine().processAlive)
-	    	{
-	    		if (!getEngine().syncStopSearch())
-				{
-//Log.i(TAG, "stopComputerThinking, !getEngine().syncStopSearch(): false");
-				}
-	    		if (mainA.chessEngineSearchTask != null)
-		    		mainA.chessEngineSearchTask.cancel(true);
-	    	}
-			if (shutDown)
-	    	{
-				getEngine().shutDown();
-				if (mainA.chessEngineSearchTask != null)
-	    			mainA.chessEngineSearchTask.cancel(true);
-				try {Thread.sleep(sleepTime);}
-				catch (InterruptedException e) {}
-	    	}
-		}
-		catch (NullPointerException e) {e.printStackTrace();}
-    }
 
 	final String TAG = "EngineControl";
-	MainActivity mainA;
+	Context context;
+	SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
 	ChessEngine en_1;	// default: Stockfish
 	C4aBook book;
 	BookOptions bookOptions = new BookOptions();
@@ -167,8 +135,7 @@ public class EngineControl
     int chessEnginePlayMod = 1;				// 1 = player vs engine, 2 = engine vs player, 3 = engine vs engine, 4 = engine analysis
     				                        // 5 = player vs player, 6 = edit
 	boolean initClockAfterAnalysis = false;
-	long sleepTime = 200;
-    
+
     public boolean chessEngineInit = false;
     public boolean chessEnginesOpeningBook = false;
     public boolean chessEngineSearching = false;

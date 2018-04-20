@@ -69,7 +69,7 @@ public class OptionsGUI extends Activity
 		cbGuFlipBoard.setChecked(userPrefs.getBoolean("user_options_gui_FlipBoard", false));
 		cbGuLastPosition.setChecked(userPrefs.getBoolean("user_options_gui_LastPosition", false));
 		cbGuDisableScreenTimeout.setChecked(userPrefs.getBoolean("user_options_gui_disableScreenTimeout", false));
-		cbGuGameNavigationBoard.setChecked(userPrefs.getBoolean("user_options_gui_gameNavigationBoard", true));
+		cbGuGameNavigationBoard.setChecked(userPrefs.getBoolean("user_options_gui_gameNavigationBoard", false));
 		cbGuUsePgnDatabase.setChecked(userPrefs.getBoolean("user_options_gui_usePgnDatabase", true));
 		cbGuEnableSounds.setChecked(userPrefs.getBoolean("user_options_gui_enableSounds", true));
 		cbGuCoordinates.setChecked(userPrefs.getBoolean("user_options_gui_Coordinates", false));

@@ -1,14 +1,15 @@
 package ccc.chess.gui.chessforall;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.ImageButton;
 
 public class ChessPromotion extends Dialog implements OnClickListener 
 {
-	MainActivity chessGame;
+	Context context;
 	public interface MyDialogListener 
 	{ 
         void onOkClick(int promValue);
@@ -19,18 +20,18 @@ public class ChessPromotion extends Dialog implements OnClickListener
 	ImageButton btnB = null;
 	ImageButton btnN = null;
 	private MyDialogListener promListener;
-    public ChessPromotion(MainActivity cg, MyDialogListener listener)
-    { 
-    	super(cg);
+    public ChessPromotion(Context context, MyDialogListener listener, CharSequence color)
+    {
+    	super(context);
     	promListener = listener;
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     	setContentView(R.layout.promotion);
-    	chessGame = cg;
+    	this.context = context;
     	btnQ = (ImageButton) findViewById(R.id.promQ);
     	btnR = (ImageButton) findViewById(R.id.promR);
     	btnB = (ImageButton) findViewById(R.id.promB);
     	btnN = (ImageButton) findViewById(R.id.promN);
-    	setImages();
+    	setImages(color);
     	btnQ.setOnClickListener(this);
     	btnR.setOnClickListener(this);
     	btnB.setOnClickListener(this);
@@ -49,21 +50,21 @@ public class ChessPromotion extends Dialog implements OnClickListener
     	promListener.onOkClick(promValue);
     	dismiss();
     }
-    public void setImages() 
+    public void setImages(CharSequence color)
     {
-		if (chessGame.gc.cl.p_color.equals("w"))
+		if (color.equals("w"))
 		{
-			btnQ.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_wq));
-			btnR.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_wr));
-			btnB.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_wb));
-			btnN.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_wn));
+			btnQ.setImageDrawable(context.getResources().getDrawable(R.drawable._1_wq));
+			btnR.setImageDrawable(context.getResources().getDrawable(R.drawable._1_wr));
+			btnB.setImageDrawable(context.getResources().getDrawable(R.drawable._1_wb));
+			btnN.setImageDrawable(context.getResources().getDrawable(R.drawable._1_wn));
 		}
 		else
 		{
-			btnQ.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_bq));
-			btnR.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_br));
-			btnB.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_bb));
-			btnN.setImageDrawable(chessGame.getResources().getDrawable(R.drawable._1_bn));
+			btnQ.setImageDrawable(context.getResources().getDrawable(R.drawable._1_bq));
+			btnR.setImageDrawable(context.getResources().getDrawable(R.drawable._1_br));
+			btnB.setImageDrawable(context.getResources().getDrawable(R.drawable._1_bb));
+			btnN.setImageDrawable(context.getResources().getDrawable(R.drawable._1_bn));
 		}
     }
 }

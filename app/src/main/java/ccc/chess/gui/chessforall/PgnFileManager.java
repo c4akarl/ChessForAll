@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.database.sqlite.SQLiteDiskIOException;
@@ -394,7 +395,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 					ed.putString("fm_extern_book_file", etFile.getText().toString());
 					ed.commit();
 					returnIntent = new Intent();
-					returnIntent.putExtra("fileBase", baseDir);
 					returnIntent.putExtra("filePath", etPath.getText().toString());
 					returnIntent.putExtra("fileName", etFile.getText().toString());
 					setResult(RESULT_OK, returnIntent);
@@ -2347,6 +2347,8 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			{
 				try	{db = SQLiteDatabase.openOrCreateDatabase(fPgnDb, null);}	// create database (file: .pgn-db)
 				catch (SQLiteDiskIOException e) {e.printStackTrace(); testMessage = "EX 99"; db.close(); return null;}
+//error 20180419: android.database.sqlite.SQLiteCantOpenDatabaseException:
+				catch (SQLiteCantOpenDatabaseException e) {e.printStackTrace(); testMessage = "EX 99"; db.close(); return null;}
 	    		executeSQLScript(db, "create.sql");								// create table: pgn
 	    		db.close();
 			}

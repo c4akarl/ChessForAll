@@ -1,5 +1,7 @@
 package ccc.chess.book;
 
+import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,8 +14,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-
-import ccc.chess.gui.chessforall.MainActivity;
 
 public final class C4aBook 
 {
@@ -30,16 +30,17 @@ public final class C4aBook
 	        return TextIO.moveToUCIString(move) + " (" + weight + ")";
 	    }
 	}
-	MainActivity c4aM;
+//	MainActivity c4aM;
+	Context context;
 	private Random rndGen = new SecureRandom();
 	
 	private IOpeningBook externalBook = new NullBook();
 	private BookOptions options = null;
 	
 	private static final C4aBook INSTANCE = new C4aBook();
-	public C4aBook(MainActivity cM)
+	public C4aBook(Context context)
     {
-		c4aM = cM;
+		this.context = context;
     }
 	public C4aBook getInstance() 
 	{ 
@@ -50,7 +51,8 @@ public final class C4aBook
 	public final void setOptions(BookOptions options) 
 	{
 	    this.options = options;
-	    externalBook = new PolyglotBook(c4aM);
+//	    externalBook = new PolyglotBook(c4aM);
+	    externalBook = new PolyglotBook(context);
 	    externalBook.setOptions(options);
 	}
 
