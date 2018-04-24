@@ -64,7 +64,8 @@ public class OptionsPlay extends Activity
 		if (playItem == 1) {rbPlay_white.setChecked(true);}
 		if (playItem == 2) {rbPlay_black.setChecked(true);}
 		if (playItem == 3) {rbPlay_engine.setChecked(true);}
-		if (playItem == 4) {rbPlay_analysis.setChecked(true); cbPlay_newGame.setVisibility(CheckBox.INVISIBLE);}
+//		if (playItem == 4) {rbPlay_analysis.setChecked(true); cbPlay_newGame.setVisibility(CheckBox.INVISIBLE);}
+		if (playItem == 4) {rbPlay_analysis.setChecked(true);}
 		if (playItem == 5) {rbPlay_two_players_flip.setChecked(true);}
 		if (playItem == 6) {rbPlay_two_players.setChecked(true);}
 		rgPlay.setOnCheckedChangeListener(rgListener);
@@ -99,7 +100,7 @@ public class OptionsPlay extends Activity
 			if (rbPlay_analysis.getId() == checkedId) 
 			{
 				playItem = 4;
-				cbPlay_newGame.setVisibility(CheckBox.INVISIBLE);
+//				cbPlay_newGame.setVisibility(CheckBox.INVISIBLE);
 			}
 			if (rbPlay_two_players_flip.getId() == checkedId) 				
 				playItem = 5;

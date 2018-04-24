@@ -56,7 +56,7 @@
     <string name="cl_checkOponent">Echec</string>
     
     <string name="player_move"> votre coup...</string>
-    <string name="engine_openingBook"> ouvrant livre  . . .</string>
+    <string name="engine_openingBook">ouvrant livre</string>
     <string name="engine_autoPlay"> Jeu automatique</string>
     <string name="engine_paused"> Moteur en pause!</string>
     <string name="engineProgressDialog">connexion des moteurs  . . .</string>
@@ -285,5 +285,6 @@
     <string name="engineDisplayedLines">Lignes affichées</string>
     <string name="engineThinking">"En pensant "</string>
     <string name="engineError">Engine error</string>
+    <string name="epShowBookHints">Montrer les conseils du livre</string>
 
 </resources>

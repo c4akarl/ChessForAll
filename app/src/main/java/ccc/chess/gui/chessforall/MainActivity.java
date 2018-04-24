@@ -64,6 +64,7 @@ import java.util.List;
 
 import ccc.chess.book.ChessParseError;
 import ccc.chess.book.Move;
+import ccc.chess.book.Pair;
 import ccc.chess.book.TextIO;
 import ccc.chess.logic.c4aservice.Chess960;
 import ccc.chess.logic.c4aservice.ChessPosition;
@@ -2096,6 +2097,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (requestCode == OPTIONS_ENGINE_PLAY_REQUEST_CODE)
 					{
 						ec.getEngine().isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
+						ec.setBookOptions();
 						msgEngine.setMaxLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
 						msgEngine.setLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
 					}
@@ -2418,7 +2420,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
 		tc.timeControl = runP.getInt("run_timeControl", 1);
 		tc.timeWhite = runP.getInt("run_timeWhite", 300000);
-		tc.timeBlack = runP.getInt("run_timeBlack", 300000);
+		tc.timeBlack = runP.getInt("run_timeBlack", 60000);
 		tc.movesToGo = runP.getInt("run_movesToGo", 0);
 		tc.bonusWhite = runP.getInt("run_bonusWhite", 0);
 		tc.bonusBlack = runP.getInt("run_bonusBlack", 0);
@@ -2528,8 +2530,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //Log.i(TAG, "stopComputerThinking, processAlive: " + getEngine().processAlive + ", shutDown: " + shutDown);
 		if (!ec.chessEngineIsInSearchTask)
 		{
-			if (!ec.getEngine().isError())
-				return;
+//			if (!ec.getEngine().isError())
+//				return;
+			if (shutDown & ec.getEngine().processAlive)
+				ec.getEngine().shutDown();
+			return;
 		}
 
 		ec.chessEngineStopSearch = true;
@@ -2986,6 +2991,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			}
 			else
 			{
+//Log.i(TAG, "chessEngineBestMove(), fen, w/b, engine: " + fen + ",   moves: " + moves);
 				if (!isGoPonder)
 					cancelSearchTask();
 				searchTaskFen = fen;
@@ -3110,7 +3116,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				{
 					case 1:
 						timeWhite = userPrefs.getInt("user_time_player_clock", 300000);
-						timeBlack = userPrefs.getInt("user_time_engine_clock", 300000);
+						timeBlack = userPrefs.getInt("user_time_engine_clock", 60000);
 						bonusWhite = userPrefs.getInt("user_bonus_player_clock", 3000);
 						bonusBlack = userPrefs.getInt("user_bonus_engine_clock", 3000);
 						break;
@@ -3132,7 +3138,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				switch (timeControl)
 				{
 					case 1:
-						timeWhite = userPrefs.getInt("user_time_engine_clock", 300000);
+						timeWhite = userPrefs.getInt("user_time_engine_clock", 60000);
 						timeBlack = userPrefs.getInt("user_time_player_clock", 300000);
 						bonusWhite = userPrefs.getInt("user_bonus_engine_clock", 3000);
 						bonusBlack = userPrefs.getInt("user_bonus_player_clock", 3000);
@@ -3155,8 +3161,8 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				switch (timeControl)
 				{
 					case 1:
-						timeWhite = userPrefs.getInt("user_time_engine_clock", 300000);
-						timeBlack = userPrefs.getInt("user_time_engine_clock", 300000);
+						timeWhite = userPrefs.getInt("user_time_engine_clock", 60000);
+						timeBlack = userPrefs.getInt("user_time_engine_clock", 60000);
 						bonusWhite = userPrefs.getInt("user_bonus_engine_clock", 3000);
 						bonusBlack = userPrefs.getInt("user_bonus_engine_clock", 3000);
 						break;
@@ -3389,6 +3395,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 //Log.i(TAG,"setInfoMessage(), searchTaskFen: " + searchTaskFen);
 			engine = "";
 		}
+
 		if (msgMoves == null | gc.cl.p_stat.equals(""))
 			return;
 
@@ -3407,6 +3414,27 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				engine = engine.toString().replace(getString(R.string.engineThinking) + ":", getString(R.string.engine_paused));
 			}
 			messageEngine = engine;
+		}
+
+		// show book hints
+		if 	(
+//					userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true)
+				 	userPrefs.getBoolean("user_options_enginePlay_ShowBookHints", true)
+				& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2 | ec.chessEnginePlayMod == 5)
+				& 	messageEngine.equals("")
+			)
+		{
+			Pair<String, ArrayList<Move>> bi = null;
+			try {bi = ec.book.getAllBookMoves(TextIO.readFEN(gc.cl.p_fen.toString()));}
+			catch (ChessParseError e1) {e1.printStackTrace();}
+			if (bi.first != null)
+			{
+			    if (!bi.first.equals(""))
+                {
+                    messageEngine = getString(R.string.engine_openingBook) + ":\n";
+                    messageEngine = messageEngine + bi.first;
+                }
+			}
 		}
 
 		// msgShort
@@ -3454,14 +3482,6 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			msgMoves.setBackgroundResource(R.drawable.borderpink);
 		msgMoves.setText(gc.cl.history.createGameNotationFromHistory(600, false, true, true, false, false, true, 2));
 
-		if (msgMoves.getText().toString().equals(" *"))
-		{
-			setPlayModeButton(ec.chessEnginePlayMod, gc.cl.p_color, ec.chessEnginePaused, ec.chessEngineSearching, gc.isBoardTurn);
-			return;
-		}
-
-		setSpanableToMsgMoves();
-
 		// msgEngine
 		if (!messageEngine.equals("") & userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true))
 		{
@@ -3473,6 +3493,26 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			msgEngine.setVisibility(TextView.GONE);
 			msgEngine.setText("");
 		}
+
+		if (msgMoves.getText().toString().equals(" *"))
+		{
+			setPlayModeButton(ec.chessEnginePlayMod, gc.cl.p_color, ec.chessEnginePaused, ec.chessEngineSearching, gc.isBoardTurn);
+			return;
+		}
+
+		setSpanableToMsgMoves();
+
+//		// msgEngine
+//		if (!messageEngine.equals("") & userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true))
+//		{
+//			msgEngine.setVisibility(TextView.VISIBLE);
+//			msgEngine.setText(messageEngine);
+//		}
+//		else
+//		{
+//			msgEngine.setVisibility(TextView.GONE);
+//			msgEngine.setText("");
+//		}
 
 		gc.cl.p_message = "";
 		setPlayModeButton(userPrefs.getInt("user_play_playMod", 1), gc.cl.p_color, ec.chessEnginePaused, ec.chessEngineSearching, gc.isBoardTurn);
@@ -3877,15 +3917,15 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 		String[] lineSplit = engineMes.toString().split("\n");
 		for (int i = 0; i < lineSplit.length; i++)
 		{
-			if (lineSplit[i].contains("#1(") | lineSplit[i].contains(">1("))
+			if (lineSplit[i].contains("*1(") | lineSplit[i].contains(">1("))
 			{
 				String[] txtSplit = lineSplit[i].split(" ");
-				if (txtSplit[0].startsWith("#1(") | txtSplit[0].startsWith(">1("))
+				if (txtSplit[0].startsWith("*1(") | txtSplit[0].startsWith(">1("))
 				{
 					String bestMove = txtSplit[1];
 					if (bestMove.contains("..."))
 						bestMove = bestMove + txtSplit[2];
-					String bestScore = txtSplit[0].replace("#1(", "");
+					String bestScore = txtSplit[0].replace("*1(", "");
 					bestScore = bestScore.replace(">1(", "");
 					bestScore = bestScore.replace(")", "");
 					infoShort = bestScore + "  " + bestMove;
@@ -4195,6 +4235,8 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				if (bookMove != null)
 				{
 //Log.i(TAG, "searchTask, doInBackground(), tc.clockIsRunning: " + tc.clockIsRunning + ", tc.timeWhite: " + tc.timeWhite + ", tc.timeBlack: " + tc.timeBlack);
+//Log.i(TAG, "searchTask, doInBackground(), bookMove: " + bookMove.toString());
+
 					if (ec.chessEnginePlayMod == 3)
 						tc.clockIsRunning = false;
 					ec.chessEnginesOpeningBook = true;
@@ -4229,6 +4271,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			}
 			else
 			{
+
 				return "";
 			}
 
@@ -4329,7 +4372,8 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				{
 					if (ec.getEngine().syncStopSearch())
 						currentBestMove = ec.getEngine().stopBestMove;
-					return currentBestMove;
+					if (!currentBestMove.equals(""))
+						return currentBestMove;
 				}
 
 				if (tokens[0].equals("bestmove") & ec.chessEnginePlayMod != 4)
@@ -4654,7 +4698,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				CharSequence displayScore = getDisplayScore(statPvScore, fen);
 				if (isMate & statPvScore > 0)
 					displayScore = "M" + statPvScore;
-				sbMoves.setLength(0); sbMoves.append("#"); sbMoves.append((statPvIdx +1)); sbMoves.append("(");
+				sbMoves.setLength(0); sbMoves.append("*"); sbMoves.append((statPvIdx +1)); sbMoves.append("(");
 				CharSequence notation = gc.cl.getNotationFromInfoPv(fen, statPvMoves);
 				if (notation.equals(""))
 					return "";
@@ -4683,7 +4727,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				infoStat = getString(R.string.epPonder);
 			CharSequence notation = gc.cl.getNotationFromInfoPv(fen, move);
 			int nodesK = nodes / 1000;
-			infoStat = infoStat + ":  #" + moveNumber + ": " + notation + "  d:" + depth + "/" + selDepth + "  n:" + nodesK + "k\n";
+			infoStat = infoStat + ":  *" + moveNumber + ": " + notation + "  d:" + depth + "/" + selDepth + "  n:" + nodesK + "k\n";
 			return infoStat;
 		}
 
@@ -4919,6 +4963,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				ec.chessEngineInit = true;
 				ec.chessEnginePaused = true;
 				updateGui();
+				stopChessClock();
 				setInfoMessage(getString(R.string.engine_noRespond) + " (8)", null, null);
 			}
 		}
@@ -5245,9 +5290,10 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 					updateGui();
 					if 	(		ec.chessEngineSearching & gc.cl.p_stat.equals("1")
 							& 	!gc.isGameOver & !gc.cl.p_variationEnd
-							)
+						)
 					{
-						if (!ec.chessEnginePaused & ec.chessEnginePlayMod == 4)
+//						if (!ec.chessEnginePaused & ec.chessEnginePlayMod == 4)
+						if (!ec.chessEnginePaused & (ec.chessEnginePlayMod == 3 | ec.chessEnginePlayMod == 4))
 						{
 							stopThreads(false);
 							startEnginePlay(false);
@@ -5418,7 +5464,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			if (ec.chessEnginePlayMod == 3 & ec.chessEngineAutoRun)
 			{
 				int cnt = userPrefs.getInt("user_play_eve_gameCounter", 1);
-				showGameCount = " #" + cnt;
+				showGameCount = " *" + cnt;
 			}
 			else
 				showGameCount = "";

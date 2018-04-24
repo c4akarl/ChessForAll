@@ -56,7 +56,7 @@
     <string name="cl_checkOponent">Gegner im Schach!</string>
     
     <string name="player_move">Du bist am Zug...</string>
-    <string name="engine_openingBook">Eröffnungsbuch...</string>
+    <string name="engine_openingBook">Eröffnungsbuch</string>
     <string name="engine_autoPlay">Automatisches Spiel</string>
     <string name="engine_paused">Computer angehalten!</string>
     <string name="engineProgressDialog">Verbindungsaufbau...</string>
@@ -284,5 +284,6 @@
     <string name="engineDisplayedLines">Angezeigte Zeilen</string>
     <string name="engineThinking">Berechung</string>
     <string name="engineError">Engine-Fehler</string>
+    <string name="epShowBookHints">Eröffnungsbuch-Hinweise</string>
 
 </resources>

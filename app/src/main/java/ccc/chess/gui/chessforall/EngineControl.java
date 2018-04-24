@@ -17,11 +17,13 @@ public class EngineControl
 	public void createEngines()
 	{
 		en_1 = new ChessEngine(context, 1);	// engine number 1
-		book = new C4aBook(context);
-		book.getInstance();
+//		book = new C4aBook(context);
+//		book.getInstance();
 	}
 	public final void setBookOptions() 
 	{
+		book = new C4aBook(context);
+		book.getInstance();
 		bookOptions.filename = userPrefs.getString("user_options_enginePlay_OpeningBookName", "");
         book.setOptions(bookOptions);
     }

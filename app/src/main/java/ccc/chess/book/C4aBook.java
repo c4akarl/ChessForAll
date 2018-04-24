@@ -1,5 +1,6 @@
 package ccc.chess.book;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import java.io.BufferedReader;
@@ -15,12 +16,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-public final class C4aBook 
+public class C4aBook
 {
 	static class BookEntry 
 	{
 	    Move move;
-	    double weight;
+//	    double weight;
+		float weight;
 	    BookEntry(Move move) {
 	        this.move = move;
 	        weight = 1;
@@ -30,8 +32,11 @@ public final class C4aBook
 	        return TextIO.moveToUCIString(move) + " (" + weight + ")";
 	    }
 	}
-//	MainActivity c4aM;
+
+    final String TAG = "C4aBook";
 	Context context;
+
+	@SuppressLint("TrulyRandom")
 	private Random rndGen = new SecureRandom();
 	
 	private IOpeningBook externalBook = new NullBook();
@@ -90,7 +95,8 @@ public final class C4aBook
 	    }
 	    return bookMoves.get(nMoves-1).move;
 	}
-	
+
+
 	private final double scaleWeight(double w) 
 	{
 	    if (w <= 0)
@@ -106,7 +112,7 @@ public final class C4aBook
 	}
 
 	/** Return a string describing all book moves. */
-	public final Pair<String,ArrayList<Move>> getAllBookMoves(Position pos) 
+	public Pair<String,ArrayList<Move>> getAllBookMoves(Position pos)
 	{
 	    StringBuilder ret = new StringBuilder();
 	    ArrayList<Move> bookMoveList = new ArrayList<Move>();
@@ -139,15 +145,19 @@ public final class C4aBook
 	        for (BookEntry be : bookMoves)
 	            totalWeight += scaleWeight(be.weight);
 	        if (totalWeight <= 0) totalWeight = 1;
-	        for (BookEntry be : bookMoves) {
+	        for (BookEntry be : bookMoves)
+	        {
 	            Move m = be.move;
 	            bookMoveList.add(m);
-	            String moveStr = TextIO.moveToString(pos, m, false);
-	            ret.append(moveStr);
-	            ret.append(':');
-	            int percent = (int)Math.round(scaleWeight(be.weight) * 100 / totalWeight);
-	            ret.append(percent);
-	            ret.append(' ');
+	            float percent = (float) (scaleWeight(be.weight) * 100 / totalWeight);
+				String s = String.format("%.2f", percent);
+				String moveStr = TextIO.moveToString(pos, m, false);
+				if (percent < 10)
+					ret.append("0");
+				ret.append(s);
+				ret.append("%\u0009\u0009\u0009");
+				ret.append(moveStr);
+	            ret.append("\n");
 	        }
 	    }
 	    return new Pair<String, ArrayList<Move>>(ret.toString(), bookMoveList);

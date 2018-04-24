@@ -1562,6 +1562,13 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 		}
 		returnIntent = new Intent();
 		String data = getIntent().getExtras().getString("pgnData");
+
+//20180501, at ccc.chess.gui.chessforall.PgnIO.dataToFile: (PgnIO.java:596)java.lang.NullPointerException:
+		if (data == null)
+			return;
+		if (data.equals(""))
+			return;
+
 		fileName = etFile.getText().toString();
 		save_action_id = 5;
 		if (userPrefs.getBoolean("user_options_gui_usePgnDatabase", true))

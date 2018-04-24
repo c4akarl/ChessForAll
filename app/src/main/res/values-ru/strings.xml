@@ -51,7 +51,7 @@
   <string name="cl_variationError">Вариант: unequal parentheses неравные круглые скобки</string>
   <string name="cl_checkOponent">Оппонент подшахом</string>
   <string name="player_move">Ваш ход...</string>
-  <string name="engine_openingBook">Книга дебютов...</string>
+  <string name="engine_openingBook">Книга дебютов</string>
   <string name="engine_autoPlay">Автоматическая игра</string>
   <string name="engine_paused">Пауза!</string>
   <string name="engineProgressDialog">Соединение с движком...</string>
@@ -263,4 +263,5 @@
     <string name="engineDisplayedLines">Отображаемые строки</string>
     <string name="engineThinking">мышление</string>
     <string name="engineError">Engine error</string>
+    <string name="epShowBookHints">Показать подсказки книги</string>
 </resources>

@@ -56,7 +56,7 @@
     <string name="cl_checkOponent">oponente en jaque</string>
     
     <string name="player_move"> Usted mueve . . .</string>
-    <string name="engine_openingBook"> Libro de aperturas  . . .</string>
+    <string name="engine_openingBook">Libro de aperturas</string>
     <string name="engine_autoPlay"> Juego automático</string>
     <string name="engine_paused">Partida en pausa!</string>
     <string name="engineProgressDialog">conexión  . . .</string>
@@ -284,5 +284,6 @@
     <string name="engineDisplayedLines">Líneas visualizadas</string>
     <string name="engineThinking">"Pensando "</string>
     <string name="engineError">Engine error</string>
+    <string name="epShowBookHints">Mostrar las jugadas del Libro</string>
 
 </resources>

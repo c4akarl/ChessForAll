@@ -598,7 +598,9 @@ public class PgnIO
             osw.close();
 		} 
 		catch (FileNotFoundException e) 	{e.printStackTrace();} 
-		catch (IOException e)				{e.printStackTrace();} 
+		catch (IOException e)				{e.printStackTrace();}
+//20180501, at ccc.chess.gui.chessforall.PgnIO.dataToFile: (PgnIO.java:596)java.lang.NullPointerException:
+		catch (NullPointerException e)		{e.printStackTrace();}
     }
 
 	final String TAG = "PgnIO";

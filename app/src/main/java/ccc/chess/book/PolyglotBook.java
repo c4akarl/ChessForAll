@@ -27,10 +27,10 @@ public class PolyglotBook implements IOpeningBook
     @Override
     public final void setOptions(BookOptions options) 
     {
+//Log.i(TAG, "options.filename: " + options.filename);
     	File f;
     	if (options.filename.endsWith(".bin"))
     	{	// external book
-//    		Log.i(TAG, "external book: " + options.filename);
     		f = new File(options.filename);
     		bookFile = f;
     	}

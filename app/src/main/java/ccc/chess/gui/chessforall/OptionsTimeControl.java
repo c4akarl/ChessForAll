@@ -121,7 +121,7 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	        case 1:	
 	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_clock", 300000));
 	        	bonusPlayer = " +" + tc.getShowValues(userP.getInt("user_bonus_player_clock", 3000));
-	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_clock", 300000));
+	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_clock", 60000));
 	        	bonusEngine = " +" + tc.getShowValues(userP.getInt("user_bonus_engine_clock", 3000));
 	        	break;   
 	        case 2:		
@@ -190,7 +190,7 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	        	{
 	        		chessClockMessage = getString(R.string.ccsMessageEngineClock);
 	        		chessClockControl = 12;
-					chessClockTimeGame = userP.getInt("user_time_engine_clock", 300000);
+					chessClockTimeGame = userP.getInt("user_time_engine_clock", 60000);
 					chessClockTimeBonus = userP.getInt("user_bonus_engine_clock", 3000);
 	        	}
 	            break;

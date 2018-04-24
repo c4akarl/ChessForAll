@@ -48,6 +48,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 		randomFirstMove = (CheckBox) findViewById(R.id.cbEpRandomFirstMove);
 		autoStartEngine = (CheckBox) findViewById(R.id.cbEpAutoStartEngine);
 		openingBook = (CheckBox) findViewById(R.id.cbEpOpeningBook);
+		showBookHints = (CheckBox) findViewById(R.id.cbEpShowBookHints);
 		epBook = (ImageView) findViewById(R.id.epBook);
 		epBook.setImageBitmap(combineImages(R.drawable.btn_yellow, R.drawable.btn_pgn_load, 0));
 		bookName = (EditText) findViewById(R.id.tvEpBookName);
@@ -188,6 +189,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
         ed.putBoolean("user_options_enginePlay_RandomFirstMove", randomFirstMove.isChecked());
         ed.putBoolean("user_options_enginePlay_AutoStartEngine", autoStartEngine.isChecked());
         ed.putBoolean("user_options_enginePlay_OpeningBook", openingBook.isChecked());
+        ed.putBoolean("user_options_enginePlay_ShowBookHints", showBookHints.isChecked());
         ed.putString("user_options_enginePlay_OpeningBookName", bookName.getText().toString());
         int multiPv = PV_MULTI;
         try {multiPv = Integer.parseInt(this.multiPv.getText().toString());}
@@ -213,6 +215,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 		randomFirstMove.setChecked(userPrefs.getBoolean("user_options_enginePlay_RandomFirstMove", false));
 		autoStartEngine.setChecked(userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true));
 		openingBook.setChecked(userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true));
+		showBookHints.setChecked(userPrefs.getBoolean("user_options_enginePlay_ShowBookHints", true));
 		bookName.setText(userPrefs.getString("user_options_enginePlay_OpeningBookName", ""));
 		bookName.setSelection(bookName.getText().length());
 		multiPv.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_MultiPv", PV_MULTI)));
@@ -238,6 +241,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	CheckBox randomFirstMove;
 	CheckBox autoStartEngine;
 	CheckBox openingBook;
+	CheckBox showBookHints;
 	ImageView epBook = null;
 	EditText bookName = null;
 	EditText multiPv = null;

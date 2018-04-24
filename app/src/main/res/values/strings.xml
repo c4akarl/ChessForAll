@@ -56,7 +56,7 @@
     <string name="cl_checkOponent">Opponent in check</string>
     
     <string name="player_move">Your move...</string>
-    <string name="engine_openingBook">Opening book...</string>
+    <string name="engine_openingBook">Opening book</string>
     <string name="engine_autoPlay">Automatic play</string>
     <string name="engine_paused">Computer paused!</string>
     <string name="engineProgressDialog">Connecting to engines...</string>
@@ -284,5 +284,6 @@
     <string name="engineDisplayedLines">Displayed lines</string>
     <string name="engineThinking">Thinking</string>
     <string name="engineError">Engine error</string>
+    <string name="epShowBookHints">Show book hints</string>
 
 </resources>

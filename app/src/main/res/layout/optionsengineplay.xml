@@ -54,18 +54,13 @@
 				style="@style/c4aCB1"
 				android:layout_below="@id/cbEpPonder"
 				android:text="@string/epRandomFirstMove" />
-			<CheckBox
-				android:id="@+id/cbEpOpeningBook"
-				style="@style/c4aCB1"
-				android:layout_below="@id/cbEpRandomFirstMove"
-				android:text="@string/epOpeningBook" />
 
 			<RelativeLayout
 				android:id="@+id/rlBook"
 				android:layout_width="fill_parent"
 				android:layout_height="match_parent"
 				android:layout_marginLeft="@dimen/margin_1"
-				android:layout_below="@id/cbEpOpeningBook"
+				android:layout_below="@id/cbEpRandomFirstMove"
 				android:orientation="horizontal" >
 				<ImageView
 					android:id="@+id/epBook"
@@ -90,10 +85,20 @@
 					android:layout_alignParentLeft="true"
 					android:layout_toLeftOf="@id/epBook" />
 			</RelativeLayout>
+			<CheckBox
+				android:id="@+id/cbEpOpeningBook"
+				style="@style/c4aCB1"
+				android:layout_below="@id/rlBook"
+				android:text="@string/epOpeningBook" />
+			<CheckBox
+				android:id="@+id/cbEpShowBookHints"
+				style="@style/c4aCB1"
+				android:layout_below="@id/cbEpOpeningBook"
+				android:text="@string/epShowBookHints" />
 
 			<RelativeLayout
 				android:id="@+id/MultiPv"
-				android:layout_below="@id/rlBook"
+				android:layout_below="@id/cbEpShowBookHints"
 				android:layout_width="fill_parent"
 				android:layout_height="match_parent"
 				android:layout_marginLeft="@dimen/margin_1"
