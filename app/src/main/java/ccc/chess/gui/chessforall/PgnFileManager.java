@@ -428,7 +428,7 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 					String newPath = getNewPath(etPath.getText().toString());
 					etPath.setText(newPath);
 					etPath.setSelection(etPath.getText().length());
-					if (fileActionCode == 1)
+					if (fileActionCode == 1 | fileActionCode == 91)
 						etFile.setText("");
 					showFileList(newPath);
 				}
@@ -568,7 +568,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 				{
 					if (!pgnIO.fileExists(folder, newFile))
 					{
-//Log.i(TAG, "2 folder/file: " + folder + newFile);
 						pgnIO.dataToFile(folder, newFile, "", false);
 						etFile.setText(newFile);
 						showFileList(folder);

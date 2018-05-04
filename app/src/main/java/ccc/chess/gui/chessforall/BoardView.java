@@ -1,10 +1,12 @@
 package ccc.chess.gui.chessforall;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -18,13 +20,21 @@ public class BoardView extends View
     {
         super(context, attrs);
         this.context = context;
-        init();
+        setColor();
+        initPieces();
     }
 
-    private void init()
+    public void setColor()
+    {
+        userPrefs = this.context.getSharedPreferences("user", 0);
+        initColors();
+        initPieces();
+    }
+    private void initPieces()
     {
         mPaint = new Paint();
         mRect = new Rect();
+
         whiteK = BitmapFactory.decodeResource(getResources(), R.drawable._1_wk).copy(Bitmap.Config.ARGB_8888, true);
         whiteQ = BitmapFactory.decodeResource(getResources(), R.drawable._1_wq).copy(Bitmap.Config.ARGB_8888, true);
         whiteR = BitmapFactory.decodeResource(getResources(), R.drawable._1_wr).copy(Bitmap.Config.ARGB_8888, true);
@@ -37,6 +47,32 @@ public class BoardView extends View
         blackB = BitmapFactory.decodeResource(getResources(), R.drawable._1_bb).copy(Bitmap.Config.ARGB_8888, true);
         blackN = BitmapFactory.decodeResource(getResources(), R.drawable._1_bn).copy(Bitmap.Config.ARGB_8888, true);
         blackP = BitmapFactory.decodeResource(getResources(), R.drawable._1_bp).copy(Bitmap.Config.ARGB_8888, true);
+
+        changePieceColor(whiteK, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(whiteK, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(whiteQ, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(whiteQ, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(whiteR, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(whiteR, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(whiteB, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(whiteB, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(whiteN, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(whiteN, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(whiteP, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(whiteP, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(blackK, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(blackK, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(blackQ, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(blackQ, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(blackR, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(blackR, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(blackB, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(blackB, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(blackN, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(blackN, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+        changePieceColor(blackP, Color.WHITE, cv.getColor(cv.COLOR_PIECE_WHITE_3));
+        changePieceColor(blackP, Color.BLACK, cv.getColor(cv.COLOR_PIECE_BLACK_4));
+
     }
 
     public void updateBoardView(CharSequence fen, boolean boardTurn, ArrayList<CharSequence> possibleMoves,
@@ -150,6 +186,57 @@ public class BoardView extends View
         return position;
     }
 
+    public void initColors()
+    {
+        cv = new ColorValues();
+        int colorId = userPrefs.getInt("colorId", 0);
+        switch (colorId)
+        {
+            case 0:
+                cv.setColors(colorId, userPrefs.getString("colors_0", ""));
+                break;
+            case 1:
+                cv.setColors(colorId, userPrefs.getString("colors_1", ""));
+                break;
+            case 2:
+                cv.setColors(colorId, userPrefs.getString("colors_2", ""));
+                break;
+            case 3:
+                cv.setColors(colorId, userPrefs.getString("colors_3", ""));
+                break;
+            case 4:
+                cv.setColors(colorId, userPrefs.getString("colors_4", ""));
+                break;
+        }
+    }
+
+    void changePieceColor(Bitmap bitmap, int originalColor, int newColor)
+    {
+//        Log.i(TAG, "changePieceColor(), originalColor:     " + originalColor + ", newColor: " + newColor);
+        if (Math.abs(originalColor - newColor) <= COLOR_CHECK_DIFF)
+            return;
+
+        int[] pixels = new int[bitmap.getHeight() * bitmap.getWidth()];
+        bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+        for (int i=0; i < pixels.length; i++)
+        {
+            if (pixels[i] < 0)
+            {
+                if (originalColor == -1)
+                {
+                    if (pixels[i] > COLOR_CHECK_WHITE_BLACK)
+                        pixels[i] = newColor;
+                } else
+                {
+//                    if (pixels[i] <= COLOR_CHECK_BLACK)
+                    if (pixels[i] <= COLOR_CHECK_WHITE_BLACK)
+                        pixels[i] = newColor;
+                }
+            }
+        }
+        bitmap.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
@@ -158,7 +245,6 @@ public class BoardView extends View
         int height = getMeasuredHeight();
         int sqSizeW = getSqSizeW(width);
         int sqSizeH = getSqSizeH(height);
-//        fieldSize = Math.min(getSqSizeW(width), getSqSizeH(height));
         int sqSize = Math.min(sqSizeW, sqSizeH);
         if (height > width) {
             int p = getMaxHeightPercentage();
@@ -205,13 +291,13 @@ public class BoardView extends View
                 int circleY = y * fieldSize + fieldSize / 2;
                 int circleR = fieldSize / 4;
                 if (isBlack)
-                    mPaint.setColor(getResources().getColor(R.color.field_color_white));
+                    mPaint.setColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
                 else
-                    mPaint.setColor(getResources().getColor(R.color.field_color_black));
+                    mPaint.setColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
                 if (lastMoveFrom == boardPos)
-                    mPaint.setColor(getResources().getColor(R.color.last_move_from));
+                    mPaint.setColor(cv.getColor(cv.COLOR_FIELD_FROM_5));
                 if (lastMoveTo == boardPos)
-                    mPaint.setColor(getResources().getColor(R.color.last_move_to));
+                    mPaint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
                 canvas.drawRect(mRect, mPaint);
 //Log.d(TAG, "fenMes, boardPos: " + boardPos + ", Char: " + posFen.charAt(boardPos));
                 switch (charFen[boardPos])
@@ -234,7 +320,7 @@ public class BoardView extends View
                 {
                     if (possibleMoves.size() > 0)
                     {
-                        mPaint.setColor(getResources().getColor(R.color.posible_moves));
+                        mPaint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
                         mPaint.setStyle(Paint.Style.FILL);
 
                         for (int i = 0; i < possibleMoves.size(); i++)
@@ -245,7 +331,7 @@ public class BoardView extends View
                                 int posibleMovePos = getPosition(possibleMoves.get(i).subSequence(2, 4), isBoardTurn);
                                 if (posibleMovePos == boardPos)
                                 {
-                                    mPaint.setColor(getResources().getColor(R.color.posible_moves));
+                                    mPaint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
                                     canvas.drawCircle(circleX, circleY, circleR, mPaint);
                                 }
                             }
@@ -257,7 +343,7 @@ public class BoardView extends View
                             int selectedFieldPos = getPosition(possibleMoves.get(0).subSequence(0, 2), isBoardTurn);
                             if (selectedFieldPos == boardPos)
                             {
-                                mPaint.setColor(getResources().getColor(R.color.field_selected));
+                                mPaint.setColor(cv.getColor(cv.COLOR_FIELD_FROM_5));
                                 canvas.drawCircle(circleX, circleY, circleR, mPaint);
                             }
                         }
@@ -267,7 +353,7 @@ public class BoardView extends View
                 {
                     if (possibleMovesTo.size() >= 2)
                     {
-                        mPaint.setColor(getResources().getColor(R.color.posible_moves));
+                        mPaint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
                         mPaint.setStyle(Paint.Style.FILL);
 
                         for (int i = 0; i < possibleMovesTo.size(); i++)
@@ -278,7 +364,7 @@ public class BoardView extends View
                                 int posibleMovePos = getPosition(possibleMovesTo.get(i).subSequence(0, 2), isBoardTurn);
                                 if (posibleMovePos == boardPos)
                                 {
-                                    mPaint.setColor(getResources().getColor(R.color.posible_moves));
+                                    mPaint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
                                     canvas.drawCircle(circleX, circleY, circleR, mPaint);
                                 }
                             }
@@ -290,7 +376,7 @@ public class BoardView extends View
                             int selectedFieldPos = getPosition(possibleMovesTo.get(0).subSequence(2, 4), isBoardTurn);
                             if (selectedFieldPos == boardPos)
                             {
-                                mPaint.setColor(getResources().getColor(R.color.field_selected));
+                                mPaint.setColor(cv.getColor(cv.COLOR_FIELD_FROM_5));
                                 canvas.drawCircle(circleX, circleY, circleR, mPaint);
                             }
                         }
@@ -303,7 +389,7 @@ public class BoardView extends View
                     int y18 = y*fieldSize +5 + textSize;
                     int xAH = x*fieldSize +fieldSize -(fieldSize/4);
                     int yAH = y*fieldSize +fieldSize -8;
-                    mPaint.setColor(getResources().getColor(R.color.color_coordinates));
+                    mPaint.setColor(cv.getColor(cv.COLOR_COORDINATES_23));
                     mPaint.setTextSize(textSize);
                     CharSequence coo = coordinates[boardPos];
                     String coo18 = "";
@@ -346,6 +432,10 @@ public class BoardView extends View
     final String TAG = "BoardView";
 
     Context context;
+    SharedPreferences userPrefs;
+    ColorValues cv;
+    final static int COLOR_CHECK_DIFF = 1000000;
+    final static int COLOR_CHECK_WHITE_BLACK = -10000000;
 
     Bitmap whiteK;
     Bitmap whiteQ;

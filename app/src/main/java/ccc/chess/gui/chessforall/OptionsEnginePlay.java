@@ -52,6 +52,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 		epBook = (ImageView) findViewById(R.id.epBook);
 		epBook.setImageBitmap(combineImages(R.drawable.btn_yellow, R.drawable.btn_pgn_load, 0));
 		bookName = (EditText) findViewById(R.id.tvEpBookName);
+		bookName.setHint(R.string.epBookHint);
 		multiPv = (EditText) findViewById(R.id.etEpMultiPv);
 		pvMoves = (EditText) findViewById(R.id.etEpPvMoves);
 		displayedLines = (EditText) findViewById(R.id.etEpDisplayedLines);
@@ -113,10 +114,8 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 			break;
 		case R.id.epBook:
 		case R.id.tvEpBookName:
-//			fileManagerIntent.putExtra("fileActionCode", 91);
 			fileManagerIntent.putExtra("fileActionCode", LOAD_OPENING_BOOK_REQUEST_CODE);
 	    	fileManagerIntent.putExtra("displayActivity", 1);
-//	    	this.startActivityForResult(fileManagerIntent, 91);
 	    	this.startActivityForResult(fileManagerIntent, LOAD_OPENING_BOOK_REQUEST_CODE);
 			break;
 		}
@@ -154,7 +153,10 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 		    case LOAD_OPENING_BOOK_REQUEST_CODE: 
 		    	if (resultCode == RESULT_OK)
 				{
-					bookName.setText(data.getStringExtra("filePath") + data.getStringExtra("fileName"));
+					if (!data.getStringExtra("fileName").endsWith(".bin"))
+						bookName.setText("");
+					else
+						bookName.setText(data.getStringExtra("filePath") + data.getStringExtra("fileName"));
 					bookName.setSelection(bookName.getText().length());
 					setPrefs();
 				}

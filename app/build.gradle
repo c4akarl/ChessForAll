@@ -8,8 +8,8 @@ android {
         applicationId "ccc.chess.gui.chessforall"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 67
-        versionName "2.7"
+        versionCode 68
+        versionName "2.8"
     }
 
     buildTypes {

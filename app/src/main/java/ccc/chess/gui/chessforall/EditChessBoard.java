@@ -661,6 +661,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		CharSequence tmp[] = ((String) fen).split(" ");
 		if (tmp.length == 6)
 			nFen = tmp[0] + " " + tmp[1] + " " + tmp[2] + " " + tmp[3] + " " + tmp[4] + " 1";
+		//err java.lang.ArrayIndexOutOfBoundsException: 6. Mai 10:32 in der App-Version 67
+		else
+			nFen = start960Fen;
 		return nFen;
     }
 	public CharSequence changeColor(CharSequence fen) 		

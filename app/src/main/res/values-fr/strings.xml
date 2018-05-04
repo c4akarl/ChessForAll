@@ -286,5 +286,24 @@
     <string name="engineThinking">"En pensant "</string>
     <string name="engineError">Engine error</string>
     <string name="epShowBookHints">Montrer les conseils du livre</string>
+    <string name="menu_colorsettings">Paramètres de couleur</string>
+    <string name="menu_colorsettings_standard">La norme</string>
+    <string name="menu_colorsettings_brown">Marron</string>
+    <string name="menu_colorsettings_grey">Gris</string>
+    <string name="menu_colorsettings_blue">Bleu</string>
+    <string name="menu_colorsettings_green">Vert</string>
+    <string name="colorFields">des champs</string>
+    <string name="colorPieces">pièces</string>
+    <string name="colorFromTo">de/à</string>
+    <string name="colorLastMove">dernier mouvement</string>
+    <string name="colorMoveList">déplacer la liste</string>
+    <string name="colorEngineList">liste des moteurs</string>
+    <string name="colorInfo">info</string>
+    <string name="colorData">Les données</string>
+    <string name="colorTime">temps</string>
+    <string name="colorHighlighting">mise en évidence</string>
+    <string name="colorReset">"Réinitialiser "</string>
+    <string name="colorCoordinates">coordonnées</string>
+    <string name="colorApply">appliquer</string>
 
 </resources>

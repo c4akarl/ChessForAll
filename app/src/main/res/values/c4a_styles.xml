@@ -45,6 +45,14 @@
         <item name="android:textSize">@dimen/tv_text_size</item>
         <item name="android:textColor">@color/text_light</item>
     </style>
+    <style name="c4aTVColor" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">@dimen/tv_color_size</item>
+        <item name="android:layout_height">@dimen/tv_color_size</item>
+        <item name="android:background">@drawable/rectangle_with_border</item>
+        <item name="android:layout_marginTop">@dimen/tv_color_margin_1</item>
+        <item name="android:layout_marginBottom">@dimen/tv_color_margin_1</item>
+        <item name="android:layout_marginRight">@dimen/tv_color_margin_2</item>
+    </style>
     <style name="c4aDialogTitle" parent="@android:style/Widget.TextView">
         <item name="android:layout_marginLeft">5dp</item>
         <item name="android:layout_width">400dp</item>
@@ -73,6 +81,14 @@
     <style name="c4aImgBtn2" parent="@android:style/Widget.ImageButton">
         <item name="android:layout_width">44dp</item>
         <item name="android:layout_height">44dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="c4aImgBtn3" parent="@android:style/Widget.ImageButton">
+        <item name="android:layout_width">@dimen/margin_2</item>
+        <item name="android:layout_height">@dimen/margin_2</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:focusable">true</item>
@@ -114,5 +130,10 @@
         <item name="android:background">@color/dialog_background</item>
         <item name="android:textColor">@color/move_text_background</item>
         <item name="android:textColorPrimary">@color/move_message_background</item>
+    </style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 </resources>

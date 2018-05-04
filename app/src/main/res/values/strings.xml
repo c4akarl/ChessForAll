@@ -285,5 +285,24 @@
     <string name="engineThinking">Thinking</string>
     <string name="engineError">Engine error</string>
     <string name="epShowBookHints">Show book hints</string>
+    <string name="menu_colorsettings">Color settings</string>
+    <string name="menu_colorsettings_standard">Standard</string>
+    <string name="menu_colorsettings_brown">Brown</string>
+    <string name="menu_colorsettings_grey">Grey</string>
+    <string name="menu_colorsettings_blue">Blue</string>
+    <string name="menu_colorsettings_green">Green</string>
+    <string name="colorFields">fields</string>
+    <string name="colorPieces">pieces</string>
+    <string name="colorFromTo">from/to</string>
+    <string name="colorLastMove">last move</string>
+    <string name="colorMoveList">move list</string>
+    <string name="colorEngineList">engine list</string>
+    <string name="colorInfo">info</string>
+    <string name="colorData">data</string>
+    <string name="colorTime">time</string>
+    <string name="colorHighlighting">highlighting</string>
+    <string name="colorReset">reset</string>
+    <string name="colorCoordinates">coordinates</string>
+    <string name="colorApply">apply</string>
 
 </resources>

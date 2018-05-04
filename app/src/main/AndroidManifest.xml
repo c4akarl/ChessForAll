@@ -34,6 +34,7 @@
         <activity android:name=".OptionsTimeControl" android:label="@string/app_optionsTimeControl" > </activity>
         <activity android:name=".OptionsPlay" android:label="@string/menu_modes" > </activity>
         <activity android:name=".OptionsEnginePlay" android:label="@string/app_optionsEnginePlay" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
+        <activity android:name=".OptionsColor" android:label="@string/menu_colorsettings" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
         <activity android:name=".EditChessBoard" android:label="@string/app_editChessBoard" > </activity>
         <activity android:name=".PlayEngineSettings" android:label="@string/app_playEngineSettings" > </activity>
 

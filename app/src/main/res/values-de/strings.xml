@@ -285,5 +285,23 @@
     <string name="engineThinking">Berechung</string>
     <string name="engineError">Engine-Fehler</string>
     <string name="epShowBookHints">Eröffnungsbuch-Hinweise</string>
-
+    <string name="menu_colorsettings">Farbeinstellungen</string>
+    <string name="menu_colorsettings_standard">Standard</string>
+    <string name="menu_colorsettings_brown">Braun</string>
+    <string name="menu_colorsettings_grey">Grau</string>
+    <string name="menu_colorsettings_blue">Blau</string>
+    <string name="menu_colorsettings_green">Grün</string>
+    <string name="colorFields">Felder</string>
+    <string name="colorPieces">Figuren</string>
+    <string name="colorFromTo">von/bis</string>
+    <string name="colorLastMove">letzter Zug</string>
+    <string name="colorMoveList">Zugliste</string>
+    <string name="colorEngineList">Engine-Liste</string>
+    <string name="colorInfo">Info</string>
+    <string name="colorData">Daten</string>
+    <string name="colorTime">Zeit</string>
+    <string name="colorHighlighting">hervorheben</string>
+    <string name="colorReset">Zurücksetzen</string>
+    <string name="colorCoordinates">Koordinaten</string>
+    <string name="colorApply">anwenden</string>
 </resources>

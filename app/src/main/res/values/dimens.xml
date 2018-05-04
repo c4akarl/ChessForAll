@@ -6,4 +6,7 @@
     <dimen name="title_text_size">22sp</dimen>
     <dimen name="margin_1">10dp</dimen>
     <dimen name="margin_2">20dp</dimen>
+    <dimen name="tv_color_size">25dp</dimen>
+    <dimen name="tv_color_margin_1">5dp</dimen>
+    <dimen name="tv_color_margin_2">20dp</dimen>
 </resources>

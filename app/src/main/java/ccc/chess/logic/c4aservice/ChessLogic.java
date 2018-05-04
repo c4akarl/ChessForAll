@@ -186,13 +186,21 @@ public class ChessLogic
 //Log.i(TAG, "fastMove: " + fastMove + "\npos.fast_move: " + pos.fast_move + ", stat: " + stat + ", message: " + message);
 
 		}
-    	if (!pos.isChess960 & pos.cpPosition.getPiece(pos.getSQI(mv.subSequence(0, 2))) == 6)
-    	{
-	    	if (mv.equals(pos.wShortCastC4aLan.subSequence(0, 4))) mv = mv.subSequence(0, 2).toString() + pos.WK_SHORT;
-	    	if (mv.equals(pos.wLongCastC4aLan.subSequence(0, 4))) mv = mv.subSequence(0, 2).toString() + pos.WK_LONG;
-	    	if (mv.equals(pos.bShortCastC4aLan.subSequence(0, 4))) mv = mv.subSequence(0, 2).toString() + pos.BK_SHORT;
-	    	if (mv.equals(pos.bLongCastC4aLan.subSequence(0, 4))) mv = mv.subSequence(0, 2).toString() + pos.BK_LONG;
-    	}
+		//err java.lang.StringIndexOutOfBoundsException: 12. Mai 15:10 in der App-Version 67
+		if (mv.length() >= 2)
+		{
+			if (!pos.isChess960 & pos.cpPosition.getPiece(pos.getSQI(mv.subSequence(0, 2))) == 6)
+			{
+				if (mv.equals(pos.wShortCastC4aLan.subSequence(0, 4)))
+					mv = mv.subSequence(0, 2).toString() + pos.WK_SHORT;
+				if (mv.equals(pos.wLongCastC4aLan.subSequence(0, 4)))
+					mv = mv.subSequence(0, 2).toString() + pos.WK_LONG;
+				if (mv.equals(pos.bShortCastC4aLan.subSequence(0, 4)))
+					mv = mv.subSequence(0, 2).toString() + pos.BK_SHORT;
+				if (mv.equals(pos.bLongCastC4aLan.subSequence(0, 4)))
+					mv = mv.subSequence(0, 2).toString() + pos.BK_LONG;
+			}
+		}
     	validMove = pos.validMove(mv);
     	// Chess960 is castling ???
 //    	Log.i(TAG, "mv, validMove: " + mv + ", " + validMove);

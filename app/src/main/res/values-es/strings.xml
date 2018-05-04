@@ -285,5 +285,24 @@
     <string name="engineThinking">"Pensando "</string>
     <string name="engineError">Engine error</string>
     <string name="epShowBookHints">Mostrar las jugadas del Libro</string>
+    <string name="menu_colorsettings">Configuraciones de color</string>
+    <string name="menu_colorsettings_standard">Estándar</string>
+    <string name="menu_colorsettings_brown">Marrón</string>
+    <string name="menu_colorsettings_grey">Gris</string>
+    <string name="menu_colorsettings_blue">Azul</string>
+    <string name="menu_colorsettings_green">Verde</string>
+    <string name="colorFields">campos</string>
+    <string name="colorPieces">piezas</string>
+    <string name="colorFromTo">desde/hasta</string>
+    <string name="colorLastMove">última jugada</string>
+    <string name="colorMoveList">lista de movimientos</string>
+    <string name="colorEngineList">lista de motores</string>
+    <string name="colorInfo">información</string>
+    <string name="colorData">datos</string>
+    <string name="colorTime">hora</string>
+    <string name="colorHighlighting">destacando</string>
+    <string name="colorReset">Reiniciar</string>
+    <string name="colorCoordinates">coordenadas</string>
+    <string name="colorApply">aplicar</string>
 
 </resources>

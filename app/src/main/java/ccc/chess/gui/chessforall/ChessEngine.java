@@ -437,13 +437,10 @@ public class ChessEngine
 
     public final void shutDown()
     {	//quit the ChessEngine(Shut down process)
-        if (processAlive)
-        {
-            writeLineToProcess("quit");
-            processAlive = false;
-            try {Thread.sleep(100);}
-            catch (InterruptedException e) {}
-        }
+        writeLineToProcess("quit");
+        processAlive = false;
+        try {Thread.sleep(100);}
+        catch (InterruptedException e) {}
     }
 
 
@@ -477,7 +474,6 @@ public class ChessEngine
             e.printStackTrace();
             engineName = "";
             processAlive = false;
-//            process = null;
         }
         if (data.equals("quit"))
         {

@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -74,6 +75,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+//Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -83,6 +85,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
         moveHistory = moveHistoryP.getString("run_moveHistory", "");
         userPrefs = getSharedPreferences("user", 0);	// 	user Preferences
         fmPrefs = getSharedPreferences("fm", 0);		// 	fileManager(PGN) Preferences
+		initColors();
         setStringsValues();
         gc = new GameControl(stringValues, moveHistory);
         ec = new EngineControl(this);				//>011 engine controller
@@ -92,11 +95,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		chess960 = new Chess960();	// needed for "create your own chess position"
 		pgnIO = new PgnIO(this);
 
-        startC4a();
+		startGui();
 
     }
 
-	public void startC4a()
+	//	GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI
+	public void startGui()
 	{
 		getRunPrefs();	// run preferences
 		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
@@ -107,107 +111,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		setWakeLock(useWakeLock);
 		getChessFieldSize();
 
-		startGui();
-
-		mSoundPool = new SoundPool(2, AudioManager.STREAM_RING, 100);
-		soundsMap = new HashMap<Integer, Integer>();
-		soundsMap.put(1, mSoundPool.load(this, R.raw.move_ok, 1));
-		soundsMap.put(2, mSoundPool.load(this, R.raw.move_wrong, 1));
-		gc.cl.history.setFigurineAlgebraicNotation(getString(R.string.pieces));
-		if (gc.initPrefs & userPrefs.getBoolean("user_options_gui_StatusBar", true))
-		{
-			gc.initPrefs = false;
-			u.updateFullscreenStatus(this, false);
-		}
-		getGameData(gc.fileBase, gc.filePath, gc.fileName, gc.startPgn, true, false, gc.startMoveIdx,false);
-		if ((ec.chessEnginePlayMod == 3 | ec.chessEnginePlayMod == 4) & !gc.isGameOver & !gc.cl.p_variationEnd)
-			ec.chessEngineSearching = true;
-		gc.startFen = gc.cl.history.getStartFen();
-		if (gc.cl.p_chess960ID == 518)
-			gc.isChess960 = false;
-		else
-			gc.isChess960 = true;
-
-		if (progressDialog != null)
-		{
-			if (progressDialog.isShowing())
-				dismissDialog(FILE_LOAD_PROGRESS_DIALOG);
-		}
-		ec.chessEngineInit = true;
-		// autoStart engines after loading application
-        boolean isNewApp = false;
-        if  (userPrefs.getInt("user", 0) == 0)
-        {
-            isNewApp = true;
-            SharedPreferences.Editor ed = userPrefs.edit();
-            ed.putInt("user", 1);
-            ed.commit();
-        }
-        if  (	isNewApp
-                |   (       userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true)
-                        & 	!gc.isGameOver & !ec.chessEnginePaused
-                    )
-            )
-		{
-
-			ec.chessEnginePaused = false;
-//Log.i(TAG, "moveIdx: " + gc.cl.p_moveIdx );
-//Log.i(TAG, "history.getStartFen(): "  + gc.cl.history.getStartFen());
-			setMoveTime();
-			if (gc.cl.p_moveIdx == 0 & gc.cl.history.getStartFen().toString().contains("/8/8/8/8/"))	// move idx 0, new game
-				startPlay(true, true);
-			else
-				startPlay(false, true);
-		}
-		else
-		{
-			if (!userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true))
-			{
-				ec.chessEnginePaused = true;
-				setInfoMessage(getEnginePausedMessage(), null, null);
-			}
-			if (gc.isGameOver | gc.cl.p_variationEnd)
-			{
-				ec.chessEnginePaused = true;
-				ec.chessEngineSearching = false;
-				setInfoMessage(getGameOverMessage(), null, null);
-			}
-			else
-			{
-
-				if (ec.chessEnginePaused)
-					setInfoMessage(getEnginePausedMessage(), null, null);
-				else
-				{
-					if (gc.cl.p_message.equals(""))
-						setInfoMessage(getString(R.string.engine_paused), null, null);
-					else
-						setInfoMessage(gc.cl.p_message, null, null);
-				}
-			}
-			ec.chessEnginePaused = true;
-			ec.chessEngineSearching = false;
-			if (ec.chessEnginePlayMod == 5)
-				startEdit(false, true);
-		}
-		updateCurrentPosition("");
-		getDataFromIntent(getIntent());
-
-// 	!!! DIALOG FOR NEW MESSAGE (do not delete)
-//		if (userPrefs.getInt("user", 0) == 0)
-//		{
-//			SharedPreferences.Editor ed = userPrefs.edit();
-//			ed.putInt("user", 1);
-//			ed.commit();
-//			showDialog(C4A_NEW_DIALOG);
-//		}
-// 	!!! DIALOG FOR NEW MESSAGE (do not delete)
-
-	}
-
-	//	GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI
-	public void startGui()
-	{
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
 		aspectRatio = u.getAspectRatio(this);
 		if (aspectRatio > 150)
@@ -280,8 +183,107 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		optionsTimeControlIntent = new Intent(this, OptionsTimeControl.class);
 		optionsPlayIntent = new Intent(this, OptionsPlay.class);
 		optionsEnginePlayIntent = new Intent(this, OptionsEnginePlay.class);
+		optionsColorIntent = new Intent(this, OptionsColor.class);
 		editChessBoardIntent = new Intent(this, EditChessBoard.class);
 	}
+
+	public void startGame()
+	{
+		mSoundPool = new SoundPool(2, AudioManager.STREAM_RING, 100);
+		soundsMap = new HashMap<Integer, Integer>();
+		soundsMap.put(1, mSoundPool.load(this, R.raw.move_ok, 1));
+		soundsMap.put(2, mSoundPool.load(this, R.raw.move_wrong, 1));
+		gc.cl.history.setFigurineAlgebraicNotation(getString(R.string.pieces));
+		if (gc.initPrefs & userPrefs.getBoolean("user_options_gui_StatusBar", true))
+		{
+			gc.initPrefs = false;
+			u.updateFullscreenStatus(this, false);
+		}
+		getGameData(gc.fileBase, gc.filePath, gc.fileName, gc.startPgn, true, false, gc.startMoveIdx,false);
+		if ((ec.chessEnginePlayMod == 3 | ec.chessEnginePlayMod == 4) & !gc.isGameOver & !gc.cl.p_variationEnd)
+			ec.chessEngineSearching = true;
+		gc.startFen = gc.cl.history.getStartFen();
+		if (gc.cl.p_chess960ID == 518)
+			gc.isChess960 = false;
+		else
+			gc.isChess960 = true;
+
+		if (progressDialog != null)
+		{
+			if (progressDialog.isShowing())
+				dismissDialog(FILE_LOAD_PROGRESS_DIALOG);
+		}
+		ec.chessEngineInit = true;
+		// autoStart engines after loading application
+		boolean isNewApp = false;
+		if  (userPrefs.getInt("user", 0) == 0)
+		{
+			isNewApp = true;
+			SharedPreferences.Editor ed = userPrefs.edit();
+			ed.putInt("user", 1);
+			ed.commit();
+		}
+		if  (	isNewApp
+				|   (       userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true)
+				& 	!gc.isGameOver & !ec.chessEnginePaused
+		)
+				)
+		{
+
+			ec.chessEnginePaused = false;
+//Log.i(TAG, "moveIdx: " + gc.cl.p_moveIdx );
+//Log.i(TAG, "history.getStartFen(): "  + gc.cl.history.getStartFen());
+			setMoveTime();
+			if (gc.cl.p_moveIdx == 0 & gc.cl.history.getStartFen().toString().contains("/8/8/8/8/"))	// move idx 0, new game
+				startPlay(true, true);
+			else
+				startPlay(false, true);
+		}
+		else
+		{
+			if (!userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true))
+			{
+				ec.chessEnginePaused = true;
+				setInfoMessage(getEnginePausedMessage(), null, null);
+			}
+			if (gc.isGameOver | gc.cl.p_variationEnd)
+			{
+				ec.chessEnginePaused = true;
+				ec.chessEngineSearching = false;
+				setInfoMessage(getGameOverMessage(), null, null);
+			}
+			else
+			{
+
+				if (ec.chessEnginePaused)
+					setInfoMessage(getEnginePausedMessage(), null, null);
+				else
+				{
+					if (gc.cl.p_message.equals(""))
+						setInfoMessage(getString(R.string.engine_paused), null, null);
+					else
+						setInfoMessage(gc.cl.p_message, null, null);
+				}
+			}
+			ec.chessEnginePaused = true;
+			ec.chessEngineSearching = false;
+			if (ec.chessEnginePlayMod == 5)
+				startEdit(false, true);
+		}
+		updateCurrentPosition("");
+		getDataFromIntent(getIntent());
+
+// 	!!! DIALOG FOR NEW MESSAGE (do not delete)
+//		if (userPrefs.getInt("user", 0) == 0)
+//		{
+//			SharedPreferences.Editor ed = userPrefs.edit();
+//			ed.putInt("user", 1);
+//			ed.commit();
+//			showDialog(C4A_NEW_DIALOG);
+//		}
+// 	!!! DIALOG FOR NEW MESSAGE (do not delete)
+	}
+
 
 	// Initialize the drawer part of the user interface.
 	final int MENU_EDIT  		= 1;
@@ -419,7 +421,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					ec.chessEngineInit = false;
 					initChessClock();
 					msgEngine.setVisibility(TextView.GONE);
-					startPlay(true, true);
+					messageInfo 		= "";
+					messageEngine 		= "";
+					messageEngineShort  = "";
+					if (ec.chessEnginePlayMod == 5)
+						startEdit(true, true);
+					else
+						startPlay(true, true);
 				}
 				else
 					startActivityForResult(optionsPlayIntent, OPTIONS_PLAY_REQUEST_CODE);
@@ -485,6 +493,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
     {
     	isAppEnd = true;
     	isSearchTaskStopped = true;
+
     	stopTimeHandler(true);
     	try {Thread.sleep(200);} 
 		catch (InterruptedException e) {}
@@ -505,11 +514,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
     protected void onResume()
     {
 //Log.i(TAG, "onResume(): " + ec.chessEnginePaused + ", isAppStart: " + isAppStart + ", gc.isAutoPlay: " + gc.isAutoPlay);
+		if (isAppStart)
+			startGame();
+
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
     	if (!isAppStart & gc.isAutoPlay)
 				handlerAutoPlay.postDelayed(mUpdateAutoplay, 100);
-    	else
-    		isAppStart = false;
     	setWakeLock(useWakeLock);
     	if (progressDialog != null)
     	{
@@ -518,6 +528,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
     	}
         super.onResume();
     }
+
+	@Override
+	protected void onPause()
+	{
+//Log.i(TAG, "onPause()(), isAppStart: " + isAppStart);
+		super.onPause();
+		if (!isAppStart)
+        	setTextViewColors(lblPlayerNameA, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+		isAppStart = false;
+	}
 
     @Override
     protected void onNewIntent(Intent intent)
@@ -608,7 +628,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 	}
 
-//	SUBACTIVITYS		SUBACTIVITYS		SUBACTIVITYS		SUBACTIVITYS
+//	SUBACTIVITIES
 	public void startPgnDownload()
 	{
 		String url = "http://c4akarl.blogspot.co.at/p/pgn-download.html";	// PGN download from "Karl's Blog" (MediaFire file links)
@@ -1060,18 +1080,18 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			final int MENU_EDIT_BOARD     	= 0;
 			final int MENU_CLIPBOARD    	= 1;
-//			final int MENU_COLOR_SETTINGS  	= 2;
+			final int MENU_COLOR		  	= 2;
 			final int MENU_COORDINATES      = 3;
 			final int MENU_FLIP_BOARD    	= 4;
 			final int MENU_FILE  			= 5;
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
 			List<Integer> actions = new ArrayList<Integer>();
 			arrayAdapter.add(getString(R.string.menu_edit_board));     				actions.add(MENU_EDIT_BOARD);
-			arrayAdapter.add(getString(R.string.menu_board_clipboard)); 						actions.add(MENU_CLIPBOARD);
-//			arrayAdapter.add(getString(R.string.menu_board_color_settings)); 				actions.add(MENU_COLOR_SETTINGS);
-			arrayAdapter.add(getString(R.string.menu_board_coordinates)); 					actions.add(MENU_COORDINATES);
-			arrayAdapter.add(getString(R.string.menu_board_flip)); 	actions.add(MENU_FLIP_BOARD);
-			arrayAdapter.add(getString(R.string.fmLblFile)); 	actions.add(MENU_FILE);
+			arrayAdapter.add(getString(R.string.menu_board_clipboard)); 			actions.add(MENU_CLIPBOARD);
+			arrayAdapter.add(getString(R.string.menu_board_color_settings)); 		actions.add(MENU_COLOR);
+			arrayAdapter.add(getString(R.string.menu_board_coordinates)); 			actions.add(MENU_COORDINATES);
+			arrayAdapter.add(getString(R.string.menu_board_flip)); 					actions.add(MENU_FLIP_BOARD);
+			arrayAdapter.add(getString(R.string.fmLblFile)); 						actions.add(MENU_FILE);
 			final List<Integer> finalActions = actions;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
 			builder.setCancelable(true);
@@ -1096,9 +1116,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							removeDialog(MENU_CLIPBOARD_DIALOG);
 							showDialog(MENU_CLIPBOARD_DIALOG);
 							break;
-//						case MENU_COLOR_SETTINGS:
-//							// different color design for th board
-//							break;
+						case MENU_COLOR:
+							removeDialog(MENU_COLOR_SETTINGS);
+							showDialog(MENU_COLOR_SETTINGS);
+							break;
 						case MENU_COORDINATES:
 							SharedPreferences.Editor ed = userPrefs.edit();
 							if (userPrefs.getBoolean("user_options_gui_Coordinates", false))
@@ -1284,6 +1305,41 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			return alert;
 		}
 
+		if (id == MENU_COLOR_SETTINGS)
+		{
+			final int MENU_COLOR_SETTINGS_STANDARD    	= 0;
+			final int MENU_COLOR_SETTINGS_BROWN 		= 1;
+			final int MENU_COLOR_SETTINGS_GREY    		= 2;
+			final int MENU_COLOR_SETTINGS_BLUE   		= 3;
+			final int MENU_COLOR_SETTINGS_GREEN    		= 4;
+			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice);
+			List<Integer> actions = new ArrayList<Integer>();
+			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_STANDARD)); 		actions.add(MENU_COLOR_SETTINGS_STANDARD);
+			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_BROWN)); 			actions.add(MENU_COLOR_SETTINGS_BROWN);
+			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_GREY)); 			actions.add(MENU_COLOR_SETTINGS_GREY);
+			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_BLUE)); 			actions.add(MENU_COLOR_SETTINGS_BLUE);
+			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_GREEN)); 			actions.add(MENU_COLOR_SETTINGS_GREEN);
+			final List<Integer> finalActions = actions;
+			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
+			builder.setCancelable(true);
+			TextView tv = new TextView(getApplicationContext());
+			tv.setText(R.string.menu_colorsettings);
+			tv.setTextAppearance(this, R.style.c4aDialogTitle);
+			tv.setGravity(Gravity.CENTER_HORIZONTAL);
+			builder.setCustomTitle(tv );
+			builder.setSingleChoiceItems(arrayAdapter, userPrefs.getInt("colorId", 0), new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int item)
+				{
+					optionsColorIntent.putExtra("colorId", finalActions.get(item));
+					startActivityForResult(optionsColorIntent, OPTIONS_COLOR_SETTINGS);
+					removeDialog(MENU_COLOR_SETTINGS);
+				}
+			});
+			AlertDialog alert = builder.create();
+			return alert;
+		}
+
 		if (id == MENU_ENGINES_DIALOG)
 		{
 			final int MENU_ENGINE_SETTINGS 		= 0;
@@ -1405,6 +1461,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 									ec.chessEnginePaused = false;
 									ec.chessEngineInit = false;
 									msgEngine.setVisibility(TextView.GONE);
+									messageInfo 		= "";
+									messageEngine 		= "";
+									messageEngineShort  = "";
 									startPlay(true, true);
 									break;
 								case 5:     // two players
@@ -1483,20 +1542,22 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			final int MENU_SETTINGS_GUI     		= 0;
 			final int MENU_SETTINGS_COMPUTER		= 1;
-			final int MENU_SETTINGS_TIME_CONTROL    = 2;
-			final int MENU_SETTINGS_TIMER_AUTOPLAY	= 3;
-			final int MENU_SETTINGS_TIME_WHITE 		= 4;
-			final int MENU_SETTINGS_TIME_BLACK 		= 5;
+			final int MENU_SETTINGS_COLOR			= 2;
+			final int MENU_SETTINGS_TIME_CONTROL    = 3;
+			final int MENU_SETTINGS_TIMER_AUTOPLAY	= 4;
+			final int MENU_SETTINGS_TIME_WHITE 		= 5;
+			final int MENU_SETTINGS_TIME_BLACK 		= 6;
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
 			List<Integer> actions = new ArrayList<Integer>();
-			arrayAdapter.add(getString(R.string.menu_usersettings_gui));     									actions.add(MENU_SETTINGS_GUI);
-			arrayAdapter.add(getString(R.string.menu_enginesettings_playOptions)); 	actions.add(MENU_SETTINGS_COMPUTER);
-			arrayAdapter.add(getString(R.string.menu_usersettings_timeControl));   									actions.add(MENU_SETTINGS_TIME_CONTROL);
-			arrayAdapter.add(getString(R.string.menu_usersettings_timerAutoPlay));     								actions.add(MENU_SETTINGS_TIMER_AUTOPLAY);
+			arrayAdapter.add(getString(R.string.menu_usersettings_gui));     			actions.add(MENU_SETTINGS_GUI);
+			arrayAdapter.add(getString(R.string.menu_enginesettings_playOptions)); 		actions.add(MENU_SETTINGS_COMPUTER);
+			arrayAdapter.add(getString(R.string.menu_colorsettings)); 					actions.add(MENU_SETTINGS_COLOR);
+			arrayAdapter.add(getString(R.string.menu_usersettings_timeControl));   		actions.add(MENU_SETTINGS_TIME_CONTROL);
+			arrayAdapter.add(getString(R.string.menu_usersettings_timerAutoPlay));     	actions.add(MENU_SETTINGS_TIMER_AUTOPLAY);
 			if (ec.chessEnginePlayMod < 4)
 			{
-				arrayAdapter.add(getString(R.string.menu_usersettings_time_white)); 									actions.add(MENU_SETTINGS_TIME_WHITE);
-				arrayAdapter.add(getString(R.string.menu_usersettings_time_black)); 									actions.add(MENU_SETTINGS_TIME_BLACK);
+				arrayAdapter.add(getString(R.string.menu_usersettings_time_white)); 	actions.add(MENU_SETTINGS_TIME_WHITE);
+				arrayAdapter.add(getString(R.string.menu_usersettings_time_black)); 	actions.add(MENU_SETTINGS_TIME_BLACK);
 			}
 			final List<Integer> finalActions = actions;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
@@ -1508,6 +1569,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			builder.setCustomTitle(tv );
 			builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener()
 			{
+				@Override
 				public void onClick(DialogInterface dialog, int item)
 				{
 					switch (finalActions.get(item))
@@ -1517,6 +1579,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							break;
 						case MENU_SETTINGS_COMPUTER:
 							startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
+							break;
+						case MENU_SETTINGS_COLOR:
+							removeDialog(MENU_COLOR_SETTINGS);
+							showDialog(MENU_COLOR_SETTINGS);
 							break;
 						case MENU_SETTINGS_TIME_CONTROL:
 							startActivityForResult(optionsTimeControlIntent, OPTIONS_TIME_CONTROL_REQUEST_CODE);
@@ -1873,6 +1939,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					{
 						setPauseValues(false, gc.fen, ec.chessEnginePlayMod, messageEngine);
 						stopThreads(false);
+						updateTime(gc.cl.p_color);
 						setInfoMessage(getString(R.string.engine_paused), null, null);
 					}
 					ec.chessEngineAnalysisStat = 0;
@@ -2092,6 +2159,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{	// set playOption and play
 					gc.isGameLoaded = false;
 					msgEngine.setVisibility(TextView.GONE);
+					messageInfo 		= "";
+					messageEngine 		= "";
+					messageEngineShort  = "";
 					ec.chessEngineAutoRun = false;
 					twoPlayerPaused = false;
 					if (requestCode == OPTIONS_ENGINE_PLAY_REQUEST_CODE)
@@ -2215,6 +2285,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				break;
 			case NOTATION_REQUEST_CODE:
 				updateCurrentPosition("");
+				break;
+			case OPTIONS_COLOR_SETTINGS:
+                initColors();
+				boardView.setColor();
+				updateGui();
 				break;
 			case OPTIONS_CHESSBOARD_REQUEST_CODE:
 			case OPTIONS_GUI_REQUEST_CODE:
@@ -2528,16 +2603,18 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public final synchronized void stopComputerThinking(boolean shutDown)
 	{
 //Log.i(TAG, "stopComputerThinking, processAlive: " + getEngine().processAlive + ", shutDown: " + shutDown);
-		if (!ec.chessEngineIsInSearchTask)
+		ec.chessEngineStopSearch = true;
+		if (shutDown)
 		{
-//			if (!ec.getEngine().isError())
-//				return;
-			if (shutDown & ec.getEngine().processAlive)
-				ec.getEngine().shutDown();
+			ec.getEngine().shutDown();
 			return;
 		}
 
-		ec.chessEngineStopSearch = true;
+		if (!ec.chessEngineIsInSearchTask)
+		{
+			ec.chessEngineStopSearch = false;
+			return;
+		}
 
 		if (chessEngineSearchTask != null)
 		{
@@ -2556,7 +2633,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 		if (isStop)
 		{
-Log.i(TAG, "stopComputerThinking, getEngine().isError()");
+//Log.i(TAG, "stopComputerThinking, getEngine().isError()");
             if (ec.getEngine().process != null)
 			    ec.getEngine().process.destroy();
 			stopChessClock();
@@ -2575,10 +2652,6 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				{
 //Log.i(TAG, "stopComputerThinking, !getEngine().syncStopSearch(): false");
 				}
-			}
-			if (shutDown)
-			{
-				ec.getEngine().shutDown();
 			}
 		}
 		catch (NullPointerException e) {e.printStackTrace();}
@@ -2740,6 +2813,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 
 	public void startEdit(boolean isNewGame, boolean setClock)
 	{
+//Log.i(TAG, "startEdit(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 		ec.chessEngineSearching = false;
 		gc.isGameOver = false;
 		gc.isGameUpdated = true;
@@ -2759,12 +2833,18 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			if (isNewGame | setClock)
 				initChessClock();
 			if (!twoPlayerPaused)
-				startChessClock();
+            {
+                if (!(gc.fen.equals(gc.startFen) & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 5)))
+                    startChessClock();
+                else
+					updateCurrentPosition("");
+            }
 		}
 	}
 
 	public void startPlay(boolean isNewGame, boolean setClock)
 	{
+//Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 		ec.chessEngineSearching = false;
 		ec.chessEnginePaused = false;
 		gc.cl.pos = new ChessPosition(gc.cl.history.chess960Id);
@@ -2814,7 +2894,10 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 					initChessClock();
 			}
 			if (ec.chessEnginePlayMod <= 5)
-				startChessClock();
+			{
+				if (!(gc.fen.equals(gc.startFen) & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 5)))
+					startChessClock();
+			}
 			if (ec.chessEnginePlayMod <= 4)
 				startEnginePlay(isNewGame);
 			else
@@ -2942,7 +3025,8 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 		else
 		{
 			ec.chessEngineProblem = true;
-			startChessClock();
+			if (!(gc.fen.equals(gc.startFen) & ec.chessEnginePlayMod == 1))
+				startChessClock();
 			messageEngineShort  = "";
 			setInfoMessage(getString(R.string.player_move), null, null);
 			ec.chessEngineSearching = false;
@@ -3393,7 +3477,12 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 		{
 //Log.i(TAG,"setInfoMessage(), gc.cl.p_fen:   " + gc.cl.p_fen);
 //Log.i(TAG,"setInfoMessage(), searchTaskFen: " + searchTaskFen);
-			engine = "";
+//Log.i(TAG,"setInfoMessage(), engine: " + engine + ", messageEngine: " + messageEngine);
+			if (!messageEngine.equals(""))
+				engine = messageEngine;		// show current engine message
+			else
+				engine = "";
+
 		}
 
 		if (msgMoves == null | gc.cl.p_stat.equals(""))
@@ -3418,7 +3507,6 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 
 		// show book hints
 		if 	(
-//					userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true)
 				 	userPrefs.getBoolean("user_options_enginePlay_ShowBookHints", true)
 				& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2 | ec.chessEnginePlayMod == 5)
 				& 	messageEngine.equals("")
@@ -3427,13 +3515,18 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			Pair<String, ArrayList<Move>> bi = null;
 			try {bi = ec.book.getAllBookMoves(TextIO.readFEN(gc.cl.p_fen.toString()));}
 			catch (ChessParseError e1) {e1.printStackTrace();}
-			if (bi.first != null)
+//20180504, java.lang.NullPointerException:
+//			if (bi.first != null)
+			if (bi != null)
 			{
-			    if (!bi.first.equals(""))
-                {
-                    messageEngine = getString(R.string.engine_openingBook) + ":\n";
-                    messageEngine = messageEngine + bi.first;
-                }
+				if (bi.first != null)
+				{
+					if (!bi.first.equals(""))
+					{
+						messageEngine = getString(R.string.engine_openingBook) + ":\n";
+						messageEngine = messageEngine + bi.first;
+					}
+				}
 			}
 		}
 
@@ -3472,20 +3565,23 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				msgShort.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 		}
 
+		setTextViewColors(msgShort, cv.COLOR_INFO_BACKGROUND_14, cv.COLOR_INFO_TEXT_15);
+		setTextViewColors(msgShort2, cv.COLOR_INFO_BACKGROUND_14, cv.COLOR_INFO_TEXT_15);
 		msgShort.setText(messageShort);
 		msgShort2.setText(messageInfo);
 
 		// msgMoves
 		if (gc.errorMessage.equals(""))
-			msgMoves.setBackgroundResource(R.drawable.borderyellow);
+			setTextViewColors(msgMoves, cv.COLOR_MOVES_BACKGROUND_8, cv.COLOR_MOVES_TEXT_9);
 		else
-			msgMoves.setBackgroundResource(R.drawable.borderpink);
+			setTextViewColors(msgMoves, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_MOVES_TEXT_9);
 		msgMoves.setText(gc.cl.history.createGameNotationFromHistory(600, false, true, true, false, false, true, 2));
 
 		// msgEngine
 		if (!messageEngine.equals("") & userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true))
 		{
 			msgEngine.setVisibility(TextView.VISIBLE);
+			setTextViewColors(msgEngine, cv.COLOR_ENGINE_BACKGROUND_12, cv.COLOR_ENGINE_TEXT_13);
 			msgEngine.setText(messageEngine);
 		}
 		else
@@ -3501,18 +3597,6 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 		}
 
 		setSpanableToMsgMoves();
-
-//		// msgEngine
-//		if (!messageEngine.equals("") & userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true))
-//		{
-//			msgEngine.setVisibility(TextView.VISIBLE);
-//			msgEngine.setText(messageEngine);
-//		}
-//		else
-//		{
-//			msgEngine.setVisibility(TextView.GONE);
-//			msgEngine.setText("");
-//		}
 
 		gc.cl.p_message = "";
 		setPlayModeButton(userPrefs.getInt("user_play_playMod", 1), gc.cl.p_color, ec.chessEnginePaused, ec.chessEngineSearching, gc.isBoardTurn);
@@ -4240,6 +4324,8 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 					if (ec.chessEnginePlayMod == 3)
 						tc.clockIsRunning = false;
 					ec.chessEnginesOpeningBook = true;
+					if (!tc.clockIsRunning & ec.chessEnginePlayMod == 1)
+						startChessClock();
 					return bookMove.toString();
 				}
 			}
@@ -4254,7 +4340,9 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			ec.getEngine().statTime = 0;
 			ec.getEngine().statPvBestMove = "";
 			ec.getEngine().statPvScore = 0;
-			if (ec.getEngine().searchIsReady())
+
+//			if (ec.getEngine().searchIsReady())
+			if (ec.getEngine().syncReady())
 			{
 				if (ec.chessEnginePlayMod == 4)
 				{
@@ -4270,10 +4358,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				isGoPonder = false;
 			}
 			else
-			{
-
-				return "";
-			}
+				return "ERROR_READY";
 
 			isTimeCheck = false;
 			timeCheckStart = System.currentTimeMillis();
@@ -4564,13 +4649,16 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				return;
 			}
 
-			if (result.equals("ERROR"))
+			if (result.equals("ERROR") | result.equals("ERROR_READY"))
 			{
 				stopChessClock();
 				ec.chessEngineSearching = false;
 				ec.chessEnginePaused = true;
 				ec.chessEngineInit = true;
-				setInfoMessage(getString(R.string.engine_noRespond) + " (5)", null, null);
+				if (result.equals("ERROR"))
+					setInfoMessage(getString(R.string.engine_noRespond) + " (10)", null, null);
+				if (result.equals("ERROR_READY"))
+					setInfoMessage(getString(R.string.engine_noRespond) + " (11)", null, null);
 				return;
 			}
 
@@ -4807,9 +4895,6 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 					{
 						newFen = "";
 						setPauseEnginePlay(false);
-
-//						ec.getEngine().newGame();
-
 					}
 
 					stopChessClock();
@@ -4847,46 +4932,11 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 					{
 						if (ec.chessEnginePlayMod == 3)
 						{	// engine vs engine
-
-
-							// v2.7 ?!
-							// bestScore ???
-							// autostop and set game result 1/2-1/2 if >= 60 moves and bestScore <= 0.20
-//							ChessMove cm = new ChessMove();
-//							CharSequence moveTxt = cm.getMoveNumberFromFen(gc.cl.p_fen);
-//							int moveNumber;
-//							try		{moveNumber = Integer.parseInt(moveTxt.toString());}
-//							catch 	(NumberFormatException e) {moveNumber = 0;}
-//							if (moveNumber > 60 & Math.abs(ec.getEngine().statPvBestScore) <= 20 & !ec.getEngine().statIsMate)
-//							{
-//Log.i(TAG, "enginePlay() PlayMod == 3, bestScore: " + ec.getEngine().statPvBestScore);
-//Log.i(TAG, "enginePlay() PlayMod == 3, moveNumber: " + moveNumber + ", : gc.cl.p_moveRank: " + gc.cl.p_moveRank);
-//								if 	(		gc.cl.p_moveRank.equals("0")			// rank
-//										&	gc.cl.p_moveVariant.equals("0")			// variant
-//										&	gc.cl.p_moveIsLastInVariation			// move is last in variation
-//									)
-//								{
-//								    String mvText = ec.getEngine().engineName + " (0." + Math.abs(ec.getEngine().statPvBestScore) + ")";
-//									startC4aService315("1/2-1/2", mvText);
-//									Toast toast = Toast.makeText(this,"1/2-1/2, " + mvText, Toast.LENGTH_LONG);
-//									toast.setGravity(Gravity.CENTER, 0, 0);
-//									toast.show();
-//								}
-//								else
-//								{
-//									gc.cl.history.setMoveText("$10 score: 0." + Math.abs(ec.getEngine().statPvBestScore));
-//									gc.cl.p_variationEnd = true;
-//								}
-//							}
-
-
-
-
 							if (ec.chessEngineAutoRun)
 							{
 //Log.i(TAG, "gameOver, variationEnd, result: " + gc.isGameOver + ", " + gc.cl.p_variationEnd + ", " + gc.cl.history.getGameResult());
-								if 		(	gc.isGameOver | result.equals("(none)")
-										| gc.cl.p_variationEnd | gc.cl.p_mate | gc.cl.p_stalemate
+								if 		(		gc.isGameOver | result.equals("(none)")
+											| 	gc.cl.p_variationEnd | gc.cl.p_mate | gc.cl.p_stalemate
 										)
 								{
 									if (userPrefs.getBoolean("user_play_eve_autoSave", true))
@@ -4931,7 +4981,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 
 //Log.i(TAG, "enginePlay(), newFen: " + newFen + "\nresult: " + result + ", ponderMove: " + currentPonderMove);
 						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
-								& (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+								& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
 							)
 						{
@@ -4960,11 +5010,16 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			}
 			else
 			{
+				ec.chessEngineSearching = false;
 				ec.chessEngineInit = true;
 				ec.chessEnginePaused = true;
 				updateGui();
 				stopChessClock();
-				setInfoMessage(getString(R.string.engine_noRespond) + " (8)", null, null);
+				if (ec.getEngine().initProcess())
+					setInfoMessage(getString(R.string.engine_paused) + " (8)", null, null);
+				else
+					setInfoMessage(getString(R.string.engine_noRespond) + " (9)", null, null);
+				return;
 			}
 		}
 	}
@@ -5117,6 +5172,91 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			infoPv.add("");
 			infoMessage.add("");
 		}
+	}
+
+	public void initColors()
+	{
+		cv = new ColorValues();
+		int colorId = userPrefs.getInt("colorId", 0);
+		switch (colorId)
+		{
+			case 0:
+				cv.setColors(colorId, userPrefs.getString("colors_0", ""));
+				break;
+			case 1:
+				cv.setColors(colorId, userPrefs.getString("colors_1", ""));
+				break;
+			case 2:
+				cv.setColors(colorId, userPrefs.getString("colors_2", ""));
+				break;
+			case 3:
+				cv.setColors(colorId, userPrefs.getString("colors_3", ""));
+				break;
+			case 4:
+				cv.setColors(colorId, userPrefs.getString("colors_4", ""));
+				break;
+		}
+	}
+
+	public String getColorName(int colorId)
+	{
+		String colorName = "";
+		switch (colorId)
+		{
+			case 0:
+				colorName = getString(R.string.menu_colorsettings_standard);
+				if (!userPrefs.getString("colors_0", "").equals(""))
+				{
+					String[] split = userPrefs.getString("colors_0", "").split(" ");
+					if (!split[0].equals("?"))
+						colorName = split[0];
+				}
+				break;
+			case 1:
+				colorName = getString(R.string.menu_colorsettings_brown);
+				if (!userPrefs.getString("colors_1", "").equals(""))
+				{
+					String[] split = userPrefs.getString("colors_1", "").split(" ");
+					if (!split[0].equals("?"))
+						colorName = split[0];
+				}
+				break;
+			case 2:
+				colorName = getString(R.string.menu_colorsettings_grey);
+				if (!userPrefs.getString("colors_2", "").equals(""))
+				{
+					String[] split = userPrefs.getString("colors_2", "").split(" ");
+					if (!split[0].equals("?"))
+						colorName = split[0];
+				}
+				break;
+			case 3:
+				colorName = getString(R.string.menu_colorsettings_blue);
+				if (!userPrefs.getString("colors_3", "").equals(""))
+				{
+					String[] split = userPrefs.getString("colors_3", "").split(" ");
+					if (!split[0].equals("?"))
+						colorName = split[0];
+				}
+				break;
+			case 4:
+				colorName = getString(R.string.menu_colorsettings_green);
+				if (!userPrefs.getString("colors_4", "").equals(""))
+				{
+					String[] split = userPrefs.getString("colors_4", "").split(" ");
+					if (!split[0].equals("?"))
+						colorName = split[0];
+				}
+				break;
+		}
+		return colorName;
+	}
+
+	public void setTextViewColors(TextView tv, int tvColor, int tvTextColor)
+	{
+		GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
+		tvBackground.setColor(cv.getColor(tvColor));
+		tv.setTextColor(cv.getColor(tvTextColor));
 	}
 
     public void setStringsValues()
@@ -5282,6 +5422,11 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 						if (gc.cl.p_stat.equals("1") & !gc.isGameOver & !gc.cl.p_variationEnd)
 							ec.chessEngineSearching = true;
 					}
+					if (!tc.clockIsRunning & ec.chessEnginePlayMod == 5 & gc.cl.p_stat.equals("1"))
+					{
+						twoPlayerPaused = false;
+						startChessClock();
+					}
 					if (ec.chessEnginePlayMod == 5 & twoPlayerPaused & gc.cl.p_stat.equals("1"))
 					{
 						twoPlayerPaused = false;
@@ -5292,7 +5437,6 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 							& 	!gc.isGameOver & !gc.cl.p_variationEnd
 						)
 					{
-//						if (!ec.chessEnginePaused & ec.chessEnginePlayMod == 4)
 						if (!ec.chessEnginePaused & (ec.chessEnginePlayMod == 3 | ec.chessEnginePlayMod == 4))
 						{
 							stopThreads(false);
@@ -5346,8 +5490,8 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				tc.switchChessClock(false, System.currentTimeMillis(), ec.chessEnginePlayMod);
 			if (ec.chessEnginePlayMod == 4)
 			{
-				updateTimeBackground(lblPlayerTimeA, 2);
-				updateTimeBackground(lblPlayerTimeB, 2);
+				updateTimeBackground(lblPlayerTimeA, 2, tc.clockIsRunning, tc.whiteMoves);
+				updateTimeBackground(lblPlayerTimeB, 2, tc.clockIsRunning, tc.whiteMoves);
 				lblPlayerTimeA.setText("");
 				lblPlayerTimeB.setText("");
 				if (!gc.isBoardTurn)
@@ -5369,16 +5513,16 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			{
 				if (!gc.isBoardTurn)
 				{
-					updateTimeBackground(lblPlayerTimeA, tc.showModusBlack);
+					updateTimeBackground(lblPlayerTimeA, tc.showModusBlack, tc.clockIsRunning, tc.whiteMoves);
 					lblPlayerTimeA.setText(tc.showBlackTime);
-					updateTimeBackground(lblPlayerTimeB, tc.showModusWhite);
+					updateTimeBackground(lblPlayerTimeB, tc.showModusWhite, tc.clockIsRunning, tc.whiteMoves);
 					lblPlayerTimeB.setText(tc.showWhiteTime);
 				}
 				else
 				{
-					updateTimeBackground(lblPlayerTimeA, tc.showModusWhite);
+					updateTimeBackground(lblPlayerTimeA, tc.showModusWhite, tc.clockIsRunning, tc.whiteMoves);
 					lblPlayerTimeA.setText(tc.showWhiteTime);
-					updateTimeBackground(lblPlayerTimeB, tc.showModusBlack);
+					updateTimeBackground(lblPlayerTimeB, tc.showModusBlack, tc.clockIsRunning, tc.whiteMoves);
 					lblPlayerTimeB.setText(tc.showBlackTime);
 				}
 			}
@@ -5393,17 +5537,51 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 		}
 	}
 
-	public void updateTimeBackground(TextView tv, int colorId)
+	public void updateTimeBackground(TextView tv, int colorShowId, boolean isClockRunning, boolean isWhiteMove)
 	{
-		switch (colorId)
+//Log.i(TAG, "updateTimeBackground(), tv.getId(): " + tv.getId() + ", isClockRunning: " + isClockRunning + ", isWhiteMove: " + isWhiteMove);
+		if (!isClockRunning)
+        {
+            setTextViewColors(lblPlayerTimeA, cv.COLOR_TIME2_BACKGROUND_20, cv.COLOR_TIME2_TEXT_21);
+            setTextViewColors(lblPlayerTimeB, cv.COLOR_TIME2_BACKGROUND_20, cv.COLOR_TIME2_TEXT_21);
+        }
+		else
 		{
-			case 1:     // >= 10 min
-			case 2:     // >= 10 sec
-				tv.setBackgroundResource(R.drawable.bordergrey);
-				break;
-			case 3:     // < 10 sec
-				tv.setBackgroundResource(R.drawable.borderpink);
-				break;
+			switch (colorShowId)
+			{
+				case 1:     // >= 10 min
+				case 2:     // >= 10 sec
+					if (!gc.isBoardTurn)
+					{
+						if (isWhiteMove & lblPlayerTimeB.getId() == tv.getId())
+						{
+							setTextViewColors(tv, cv.COLOR_TIME_BACKGROUND_18, cv.COLOR_TIME_TEXT_19);
+							setTextViewColors(lblPlayerTimeA, cv.COLOR_TIME2_BACKGROUND_20, cv.COLOR_TIME2_TEXT_21);
+						}
+						if (!isWhiteMove & lblPlayerTimeA.getId() == tv.getId())
+						{
+							setTextViewColors(tv, cv.COLOR_TIME_BACKGROUND_18, cv.COLOR_TIME_TEXT_19);
+							setTextViewColors(lblPlayerTimeB, cv.COLOR_TIME2_BACKGROUND_20, cv.COLOR_TIME2_TEXT_21);
+						}
+					}
+					else
+					{
+						if (isWhiteMove & lblPlayerTimeA.getId() == tv.getId())
+						{
+							setTextViewColors(tv, cv.COLOR_TIME_BACKGROUND_18, cv.COLOR_TIME_TEXT_19);
+							setTextViewColors(lblPlayerTimeB, cv.COLOR_TIME2_BACKGROUND_20, cv.COLOR_TIME2_TEXT_21);
+						}
+						if (!isWhiteMove & lblPlayerTimeB.getId() == tv.getId())
+						{
+							setTextViewColors(tv, cv.COLOR_TIME_BACKGROUND_18, cv.COLOR_TIME_TEXT_19);
+							setTextViewColors(lblPlayerTimeA, cv.COLOR_TIME2_BACKGROUND_20, cv.COLOR_TIME2_TEXT_21);
+						}
+					}
+					break;
+				case 3:     // < 10 sec
+					setTextViewColors(tv, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_TIME_TEXT_19);
+					break;
+			}
 		}
 	}
 
@@ -5456,7 +5634,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 
 	public void updateGui()
 	{
-//Log.i(TAG, "start updateGui(), gc.isBoardTurn: " + gc.isBoardTurn);
+//Log.i(TAG, "start updateGui(), gc.isBoardTurn: " + gc.isBoardTurn + ", gc.cl.p_color: " + gc.cl.p_color);
 		CharSequence messInfo = 	"";
 		if (!gc.isGameOver & !gc.cl.p_variationEnd & gc.cl.p_message.equals(""))
 		{
@@ -5509,6 +5687,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 		}
 
 		setPlayerData();
+//Log.i(TAG, "start updateGui(), gc.cl.p_fen: " + gc.cl.p_fen + ", gc.isBoardTurn: " + gc.isBoardTurn);
 		if (!gc.cl.p_fen.equals(""))
 		{
 			gc.fen = gc.cl.p_fen;
@@ -5516,26 +5695,34 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 			{
 				if (!gc.isBoardTurn)
 				{
-					lblPlayerNameA.setBackgroundResource(R.drawable.bordergreen);
-					lblPlayerNameB.setBackgroundResource(R.drawable.borderpink);
+					setTextViewColors(lblPlayerNameA, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerEloA, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerNameB, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerEloB, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
 				}
 				else
 				{
-					lblPlayerNameA.setBackgroundResource(R.drawable.borderpink);
-					lblPlayerNameB.setBackgroundResource(R.drawable.bordergreen);
+					setTextViewColors(lblPlayerNameA, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerEloA, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerNameB, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerEloB, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
 				}
 			}
 			else
 			{
 				if (!gc.isBoardTurn)
 				{
-					lblPlayerNameA.setBackgroundResource(R.drawable.borderpink);
-					lblPlayerNameB.setBackgroundResource(R.drawable.bordergreen);
+					setTextViewColors(lblPlayerNameA, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerEloA, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerNameB, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerEloB, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
 				}
 				else
 				{
-					lblPlayerNameA.setBackgroundResource(R.drawable.bordergreen);
-					lblPlayerNameB.setBackgroundResource(R.drawable.borderpink);
+					setTextViewColors(lblPlayerNameA, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerEloA, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerNameB, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
+					setTextViewColors(lblPlayerEloB, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
 				}
 			}
 		}
@@ -5547,12 +5734,12 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 		{
 			if (!gc.errorMessage.equals(""))
 			{
-				msgMoves.setBackgroundResource(R.drawable.borderpink);
+				setTextViewColors(msgMoves, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_DATA_TEXT_17);
 				messInfo = gc.errorMessage;
 			}
 		}
 		else
-			msgMoves.setBackgroundResource(R.drawable.borderblue);
+			setTextViewColors(msgMoves, cv.COLOR_MOVES_ANOTATION_11, cv.COLOR_DATA_TEXT_17);
 		if (!messInfo.equals(""))
 		{
 			if (gc.cl.p_message.equals(""))
@@ -5612,6 +5799,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 				lblPlayerTimeA.setText(tc.showWhiteTime);
 				lblPlayerTimeB.setText(tc.showBlackTime);
 			}
+			updateTime(gc.cl.p_color);
 		}
 	}
 
@@ -5648,6 +5836,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 	EngineControl ec;
 	TimeControl tc;
 	Chess960 chess960;
+	ColorValues cv;
 
 	ChessPromotion promotionDialog;
 	PgnIO pgnIO;
@@ -5665,6 +5854,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 	Intent optionsTimeControlIntent;
 	Intent optionsPlayIntent;
 	Intent optionsEnginePlayIntent;
+	Intent optionsColorIntent;
 	Intent editChessBoardIntent;
 
 	//	subActivities RequestCode
@@ -5683,6 +5873,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 	final static int OPTIONS_TIME_CONTROL_REQUEST_CODE = 18;
 	final static int OPTIONS_PLAY_REQUEST_CODE = 19;
 	final static int OPTIONS_ENGINE_PLAY_REQUEST_CODE = 21;
+	final static int OPTIONS_COLOR_SETTINGS = 22;
 	final static int EDIT_CHESSBOARD_REQUEST_CODE = 17;
 	final static int CHESS960_POSITION_REQUEST_CODE = 20;
 	final static int ENGINE_SETTING_REQUEST_CODE = 41;
@@ -5708,6 +5899,7 @@ Log.i(TAG, "stopComputerThinking, getEngine().isError()");
 	final static int MENU_PAUSE_CONTINUE = 707;
 	final static int MENU_PGN_DIALOG = 730;
 	final static int MENU_CLIPBOARD_DIALOG = 731;
+	final static int MENU_COLOR_SETTINGS = 732;
 	final static int INFO_DIALOG = 909;
 	final static int ENGINE_ERROR_DIALOG = 990;
 	final static int C4A_NEW_DIALOG = 999;

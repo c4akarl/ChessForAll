@@ -204,15 +204,16 @@
 
 			</LinearLayout>
 
+			<CheckBox
+				android:id="@+id/logOn"
+				style="@style/c4aCB1"
+				android:layout_below="@id/seekBars"
+				android:text="@string/epLogging" />
+
 		</LinearLayout>
 	</ScrollView>
 
-	<CheckBox
-		android:id="@+id/logOn"
-		style="@style/c4aCB1"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentBottom="true"
-		android:text="@string/epLogging" />
+
 	<ImageView
 		android:id="@+id/btnGuOk"
 		style="@style/c4aImgBtn1"

@@ -264,4 +264,23 @@
     <string name="engineThinking">мышление</string>
     <string name="engineError">Engine error</string>
     <string name="epShowBookHints">Показать подсказки книги</string>
+    <string name="menu_colorsettings">Настройки цвета</string>
+  <string name="menu_colorsettings_standard">стандарт</string>
+  <string name="menu_colorsettings_brown">коричневый</string>
+  <string name="menu_colorsettings_grey">Серый</string>
+  <string name="menu_colorsettings_blue">синий</string>
+  <string name="menu_colorsettings_green">зеленый</string>
+    <string name="colorFields">поля</string>
+  <string name="colorPieces">куски</string>
+  <string name="colorFromTo">от/до</string>
+  <string name="colorLastMove">последний ход</string>
+  <string name="colorMoveList">переместить список</string>
+  <string name="colorEngineList">Список движков</string>
+  <string name="colorInfo">Информация</string>
+  <string name="colorData">данные</string>
+  <string name="colorTime">время</string>
+  <string name="colorHighlighting">подсветка</string>
+    <string name="colorReset">"Сброс "</string>
+    <string name="colorCoordinates">координаты</string>
+    <string name="colorApply">подать заявление</string>
 </resources>
