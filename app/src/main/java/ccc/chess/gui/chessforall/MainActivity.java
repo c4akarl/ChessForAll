@@ -14,7 +14,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
@@ -1783,6 +1782,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //Log.i(TAG, "0 onTouch(), minScrollingWidth: " + minScrollingWidth + ", downRawX: " + downRawX + ", upRawX: " + upRawX);
 			if (Math.abs(downRawX - upRawX) > minScrollingWidth | Math.abs(downRawY - upRawY) > minScrollingWidth)
 			{
+//				if (view.getId() == R.id.msgMoves)
+//				{
+//					if (!msgMoves.getText().equals(""))
+//						msgMoves.setText("");
+//					return true;
+//				}
 				boolean isBoardView = u.isViewInBounds(boardView, (int) upRawX, (int) upRawY);
 				int[] loc = new int[2];
 				btn_1.getLocationOnScreen(loc);
@@ -3759,9 +3764,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			if (infoMoveEndX > infoMoveStartX & !gc.cl.p_moveIsFirst)
 			{
 				if (gc.cl.p_moveText.equals(""))
-					sb.setSpan(new BackgroundColorSpan(Color.rgb(120, 175, 100)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// green (move)
+//					sb.setSpan(new BackgroundColorSpan(Color.rgb(120, 175, 100)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// green (move)
+					sb.setSpan(new BackgroundColorSpan(cv.getColor(cv.COLOR_MOVES_SELECTED_10)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// green (move)
 				else
-					sb.setSpan(new BackgroundColorSpan(Color.rgb(154, 218, 236)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// blue (move comment)
+//					sb.setSpan(new BackgroundColorSpan(Color.rgb(154, 218, 236)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// blue (move comment)
+					sb.setSpan(new BackgroundColorSpan(cv.getColor(cv.COLOR_MOVES_ANOTATION_11)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// blue (move comment)
 			}
 			boolean startLine = true;
 			boolean isMain = false;

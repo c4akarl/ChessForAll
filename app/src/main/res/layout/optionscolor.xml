@@ -128,22 +128,22 @@
     <View android:id="@+id/div4" style="@style/Divider" android:layout_below="@id/iFromTo1" />
 
     <TextView
-        android:id="@+id/tLastMove"
+        android:id="@+id/tCoordinates"
         style="@style/c4aTV1"
         android:layout_below="@id/div4"
-        android:text="@string/colorLastMove"
+        android:text="@string/colorCoordinates"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="50dp"
         android:layout_alignParentLeft="true" />
     <TextView
-        android:id="@+id/iLastMove1"
+        android:id="@+id/iCoordinates1"
         style="@style/c4aTVColor"
         android:layout_below="@id/div4"
         android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tLastMove"
+        android:layout_toRightOf="@id/tCoordinates"
         android:onClick="myClickHandler" />
-    <View android:id="@+id/div5" style="@style/Divider" android:layout_below="@id/iLastMove1" />
+    <View android:id="@+id/div5" style="@style/Divider" android:background="@android:color/holo_green_light" android:layout_below="@id/iCoordinates1" />
 
     <TextView
         android:id="@+id/tMoveList"
@@ -306,24 +306,6 @@
         android:layout_toRightOf="@id/tHighlighting"
         android:onClick="myClickHandler" />
     <View android:id="@+id/div11" style="@style/Divider" android:layout_below="@id/iHighlighting1" />
-
-    <TextView
-        android:id="@+id/tCoordinates"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div11"
-        android:text="@string/colorCoordinates"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iCoordinates1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div11"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tCoordinates"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div12" style="@style/Divider" android:layout_below="@id/iCoordinates1" />
 
     </RelativeLayout>
     </ScrollView>

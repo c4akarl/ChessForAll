@@ -275,7 +275,7 @@
   <string name="colorFromTo">от/до</string>
   <string name="colorLastMove">последний ход</string>
   <string name="colorMoveList">переместить список</string>
-  <string name="colorEngineList">Список движков</string>
+  <string name="colorEngineList">список двигателей</string>
   <string name="colorInfo">Информация</string>
   <string name="colorData">данные</string>
   <string name="colorTime">время</string>

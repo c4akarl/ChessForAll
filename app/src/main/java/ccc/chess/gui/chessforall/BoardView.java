@@ -389,7 +389,7 @@ public class BoardView extends View
                     int y18 = y*fieldSize +5 + textSize;
                     int xAH = x*fieldSize +fieldSize -(fieldSize/4);
                     int yAH = y*fieldSize +fieldSize -8;
-                    mPaint.setColor(cv.getColor(cv.COLOR_COORDINATES_23));
+                    mPaint.setColor(cv.getColor(cv.COLOR_COORDINATES_7));
                     mPaint.setTextSize(textSize);
                     CharSequence coo = coordinates[boardPos];
                     String coo18 = "";

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -40,7 +41,6 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         iPieces2 = (TextView) findViewById(R.id.iPieces2);
         iFromTo1 = (TextView) findViewById(R.id.iFromTo1);
         iFromTo2 = (TextView) findViewById(R.id.iFromTo2);
-        iLastMove1 = (TextView) findViewById(R.id.iLastMove1);
         iMoveList1 = (TextView) findViewById(R.id.iMoveList1);
         iMoveList2 = (TextView) findViewById(R.id.iMoveList2);
         iMoveList3 = (TextView) findViewById(R.id.iMoveList3);
@@ -79,7 +79,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             case R.id.iPieces2: showDialog(null, cv.COLOR_PIECE_BLACK_4, getString(R.string.colorPieces) + "(2)"); currentView = iPieces2; currentColor = cv.COLOR_PIECE_BLACK_4; break;
             case R.id.iFromTo1: showDialog(null, cv.COLOR_FIELD_FROM_5, getString(R.string.colorFromTo) + "(1)"); currentView = iFromTo1; currentColor = cv.COLOR_FIELD_FROM_5; break;
             case R.id.iFromTo2: showDialog(null, cv.COLOR_FIELD_TO_6, getString(R.string.colorFromTo) + "(2)"); currentView = iFromTo2; currentColor = cv.COLOR_FIELD_TO_6; break;
-            case R.id.iLastMove1: showDialog(null, cv.COLOR_LAST_MOVE_7, getString(R.string.colorLastMove)); currentView = iLastMove1; currentColor = cv.COLOR_LAST_MOVE_7; break;
+            case R.id.iCoordinates1: showDialog(null, cv.COLOR_COORDINATES_7, getString(R.string.colorCoordinates)); currentView = iCoordinates1; currentColor = cv.COLOR_COORDINATES_7; break;
             case R.id.iMoveList1: showDialog(null, cv.COLOR_MOVES_BACKGROUND_8, getString(R.string.colorMoveList) + "(1)"); currentView = iMoveList1; currentColor = cv.COLOR_MOVES_BACKGROUND_8; break;
             case R.id.iMoveList2: showDialog(null, cv.COLOR_MOVES_TEXT_9, getString(R.string.colorMoveList) + "(2)"); currentView = iMoveList2; currentColor = cv.COLOR_MOVES_TEXT_9; break;
             case R.id.iMoveList3: showDialog(null, cv.COLOR_MOVES_SELECTED_10, getString(R.string.colorMoveList) + "(3)"); currentView = iMoveList3; currentColor = cv.COLOR_MOVES_SELECTED_10; break;
@@ -95,7 +95,6 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             case R.id.iTime3: showDialog(null, cv.COLOR_TIME2_BACKGROUND_20, getString(R.string.colorTime) + "(3)"); currentView = iTime3; currentColor = cv.COLOR_TIME2_BACKGROUND_20; break;
             case R.id.iTime4: showDialog(null, cv.COLOR_TIME2_TEXT_21, getString(R.string.colorTime) + "(4)"); currentView = iTime4; currentColor = cv.COLOR_TIME2_TEXT_21; break;
             case R.id.iHighlighting1: showDialog(null, cv.COLOR_HIGHLIGHTING_22, getString(R.string.colorHighlighting)); currentView = iHighlighting1; currentColor = cv.COLOR_HIGHLIGHTING_22; break;
-            case R.id.iCoordinates1: showDialog(null, cv.COLOR_COORDINATES_23, getString(R.string.colorCoordinates)); currentView = iCoordinates1; currentColor = cv.COLOR_COORDINATES_23; break;
 
             case R.id.btnMenu:
                 removeDialog(MENU_COLOR_SETTINGS);
@@ -248,7 +247,8 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             colors = colors + cv.colors[i] + " ";
         }
 
-//Log.i(TAG, "setPrefs(), colorId: " + colorId + ", colors: " + colors);
+//karl: zum Kopieren der Farben von Logcat ---> ColorValues.COLORS_0...4
+Log.i(TAG, "colors: " + colors);
 
         SharedPreferences.Editor ed = userPrefs.edit();
         ed.putInt("colorId", colorId);
@@ -337,7 +337,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         setTextViewColors(iPieces2, cv.COLOR_PIECE_BLACK_4);
         setTextViewColors(iFromTo1, cv.COLOR_FIELD_FROM_5);
         setTextViewColors(iFromTo2, cv.COLOR_FIELD_TO_6);
-        setTextViewColors(iLastMove1, cv.COLOR_LAST_MOVE_7);
+        setTextViewColors(iCoordinates1, cv.COLOR_COORDINATES_7);
         setTextViewColors(iMoveList1, cv.COLOR_MOVES_BACKGROUND_8);
         setTextViewColors(iMoveList2, cv.COLOR_MOVES_TEXT_9);
         setTextViewColors(iMoveList3, cv.COLOR_MOVES_SELECTED_10);
@@ -353,7 +353,6 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         setTextViewColors(iTime3, cv.COLOR_TIME2_BACKGROUND_20);
         setTextViewColors(iTime4, cv.COLOR_TIME2_TEXT_21);
         setTextViewColors(iHighlighting1, cv.COLOR_HIGHLIGHTING_22);
-        setTextViewColors(iCoordinates1, cv.COLOR_COORDINATES_23);
 
     }
 
@@ -387,7 +386,6 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
     TextView iPieces2 = null;
     TextView iFromTo1 = null;
     TextView iFromTo2 = null;
-    TextView iLastMove1 = null;
     TextView iMoveList1 = null;
     TextView iMoveList2 = null;
     TextView iMoveList3 = null;
