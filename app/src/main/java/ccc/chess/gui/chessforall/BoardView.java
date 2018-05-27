@@ -78,7 +78,7 @@ public class BoardView extends View
     public void updateBoardView(CharSequence fen, boolean boardTurn, ArrayList<CharSequence> possibleMoves,
                                 ArrayList<CharSequence> possibleMovesTo, CharSequence lastMove, boolean coordinates)
     {
-//        Log.d(TAG, "updateBoardView()");
+//Log.d(TAG, "updateBoardView()");
         posFen = "";
         isBoardTurn = boardTurn;
         this.possibleMoves = possibleMoves;

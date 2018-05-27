@@ -305,5 +305,6 @@
     <string name="colorReset">"Réinitialiser "</string>
     <string name="colorCoordinates">coordonnées</string>
     <string name="colorApply">appliquer</string>
+    <string name="menu_show_list">Afficher la liste (o/n)</string>
 
 </resources>

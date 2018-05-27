@@ -55,11 +55,10 @@
 	android:layout_width="fill_parent" />
 <ImageView
 	android:id="@+id/btnPeAutoSetFile"
+	style="@style/c4aImgBtn1"
 	android:src="@drawable/pgn"
 	android:onClick="myClickHandler"
 	android:layout_below="@id/etPePath"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
 	android:layout_alignParentRight="true"/>
 
 <TextView
@@ -117,10 +116,9 @@
 
 <ImageView
 	android:id="@+id/btnPeAutoPlay"
+	style="@style/c4aImgBtn1"
     android:src="@drawable/button_ok"
-    android:onClick="myClickHandler" 
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:onClick="myClickHandler"
 	android:layout_marginRight="50dip"
     android:layout_alignParentBottom="true"
     android:layout_alignParentRight="true"/>

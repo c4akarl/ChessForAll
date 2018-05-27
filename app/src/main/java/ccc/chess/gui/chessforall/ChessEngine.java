@@ -33,6 +33,8 @@ public class ChessEngine
     {
         if (process != null)
         {
+            reader = null;
+            writer = null;
             destroyProcess();
         }
 
@@ -97,7 +99,8 @@ public class ChessEngine
                 return false;
             CharSequence[] tokens = tokenize(s);
             if (tokens[0].equals("uciok"))
-                return syncReady();
+//                return syncReady();
+                return true;
             checkTime = System.currentTimeMillis();
         }
         return false;
@@ -203,7 +206,7 @@ public class ChessEngine
             }
             if (!errorStream.equals(""))
             {
-//                Log.i(TAG, "chess engine process, stream error: \n" + errorStream);
+                Log.i(TAG, "chess engine process, stream error: \n" + errorStream);
                 return true;
             }
         }
@@ -455,6 +458,12 @@ public class ChessEngine
                 Log.i(TAG, "startNewProcess(), engine process started: " + engineProcess);
             writeLineToProcess("uci");
             processAlive = readUCIOptions();
+
+            if (!syncReady())
+            {
+                // ???
+            }
+
         }
         if (!processAlive)
         {

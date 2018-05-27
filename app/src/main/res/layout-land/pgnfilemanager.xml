@@ -89,8 +89,6 @@
 				android:src="@drawable/arrowleft"
 				android:layout_below="@id/fmEtPath"
 				android:onClick="myClickHandler"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:layout_marginTop="7dip"
 				android:layout_marginRight="0dip"
 				android:layout_marginBottom="3dip"
@@ -119,8 +117,6 @@
 				style="@style/c4aImgBtn1"
 				android:src="@drawable/button_ok"
 				android:onClick="myClickHandler"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:layout_below="@id/btnDirBack"
 				android:layout_alignParentRight="true"
 				android:layout_marginTop="7dip"
@@ -133,8 +129,6 @@
 				android:layout_alignParentRight="true"
 				android:src="@drawable/find"
 				android:onClick="myClickHandler"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:layout_marginLeft="3dip"
 				android:layout_marginTop="7dip"
 				android:layout_marginBottom="3dip" />
@@ -145,8 +139,6 @@
 				android:layout_alignParentRight="true"
 				android:src="@drawable/button_menu2"
 				android:onClick="myClickHandler"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
 				android:layout_marginTop="7dip"
 				android:layout_marginBottom="3dip" />
 

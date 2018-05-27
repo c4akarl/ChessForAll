@@ -9,4 +9,5 @@
     <dimen name="tv_color_size">40dp</dimen>
     <dimen name="tv_color_margin_1">10dp</dimen>
     <dimen name="tv_color_margin_2">40dp</dimen>
+    <dimen name="btn1_width">100dp</dimen>
 </resources>

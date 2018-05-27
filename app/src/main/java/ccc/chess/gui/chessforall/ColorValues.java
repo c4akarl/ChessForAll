@@ -49,7 +49,9 @@ public class ColorValues
     final static String COLORS_0 = "? #f9f9cc #e2a156 #ffffff #000000 #e1817e #27ea15 #f43619 #efe395 #000000 #427e29 #b2d9e4 #ced1d6 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4";
     final static String COLORS_1 = "? #E3C392 #C18A48 #ffffff #000000 #e1817e #F7EE04 #EC1855 #DBC39D #121201 #396f39 #21accf #CCD6E7 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #EAA7E6";
     final static String COLORS_2 = "? #BDBDB2 #817D74 #ffffff #000000 #e1817e #E1D465 #f43619 #ABAB95 #100F01 #396f39 #21accf #ced1d6 #000000 #f6d2f4 #000000 #D5E9D4 #000000 #EBABE8 #000000 #c4f8c0 #000000 #D0AFCE";
-    final static String COLORS_3 = "? #D2EEE9 #85CDDF #c6beaf #000000 #e1817e #F0DC24 #f43619 #D3E9E8 #101002 #396f39 #21accf #ced1d6 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4";
+    /*#larsie#*/
+    final static String COLORS_3 = "? #EEEEEE #506080 #F4F4F4 #0B0B0B #C08080F0 #C070D070 #000000 #F0F0F0 #000000 #8080C0" +
+            " #A0A0F0 #F0F0F0 #000000 #F0F0F0 #000000 #F0F0F0 #000000 #F0F0F0 #000000 #F0F0F0 #000000 #F0B0F0";
     final static String COLORS_4 = "? #f9f9cc #85AB81 #ffffff #000000 #e1817e #7BA1CC #f43619 #E5DDA5 #000000 #427e29 #245B6A #ced1d6 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4";
 
     // color id(COLORS_0...4):

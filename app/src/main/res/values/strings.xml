@@ -304,5 +304,6 @@
     <string name="colorReset">reset</string>
     <string name="colorCoordinates">coordinates</string>
     <string name="colorApply">apply</string>
+    <string name="menu_show_list">Show list (y/n)</string>
 
 </resources>

@@ -105,6 +105,7 @@
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentBottom="true"
 		android:layout_marginTop="0dip"
+		android:paddingLeft="2dp"
 		android:singleLine="true"
 		android:background="@drawable/borderpink"
 		android:textColor="#000000" />

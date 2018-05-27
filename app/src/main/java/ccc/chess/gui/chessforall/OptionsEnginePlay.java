@@ -50,7 +50,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 		openingBook = (CheckBox) findViewById(R.id.cbEpOpeningBook);
 		showBookHints = (CheckBox) findViewById(R.id.cbEpShowBookHints);
 		epBook = (ImageView) findViewById(R.id.epBook);
-		epBook.setImageBitmap(combineImages(R.drawable.btn_yellow, R.drawable.btn_pgn_load, 0));
+//		epBook.setImageBitmap(combineImages(R.drawable.btn_yellow, R.drawable.btn_pgn_load, 0));
 		bookName = (EditText) findViewById(R.id.tvEpBookName);
 		bookName.setHint(R.string.epBookHint);
 		multiPv = (EditText) findViewById(R.id.etEpMultiPv);

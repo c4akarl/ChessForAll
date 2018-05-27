@@ -68,8 +68,6 @@
 					style="@style/c4aImgBtn1"
 					android:src="@drawable/btn_pgn_load"
 					android:onClick="myClickHandler"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
 					android:layout_marginBottom="1dip" />
 				<EditText
@@ -79,8 +77,6 @@
 					android:focusable="false"
 					android:onClick="myClickHandler"
 					android:hint="@string/epBookHint"
-					android:layout_width="fill_parent"
-					android:layout_height="wrap_content"
 					android:layout_marginTop="@dimen/margin_1"
 					android:layout_marginRight="5dip"
 					android:layout_alignParentLeft="true"
@@ -219,8 +215,6 @@
 		style="@style/c4aImgBtn1"
 		android:src="@drawable/button_ok"
 		android:onClick="myClickHandler"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
 		android:layout_marginBottom="6dip"
 		android:layout_centerHorizontal="true"
 		android:layout_alignParentBottom="true"/>

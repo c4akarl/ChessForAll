@@ -283,4 +283,5 @@
     <string name="colorReset">"Сброс "</string>
     <string name="colorCoordinates">координаты</string>
     <string name="colorApply">подать заявление</string>
+  <string name="menu_show_list">Показать список (y/n)</string>
 </resources>

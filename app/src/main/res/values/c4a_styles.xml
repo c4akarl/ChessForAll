@@ -66,8 +66,10 @@
         <item name="android:textColor">#f1e622</item>
     </style>
     <style name="c4aImgBtn1" parent="@android:style/Widget.ImageButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">@dimen/btn1_width</item>
+        <item name="android:layout_height">@dimen/btn1_width</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:adjustViewBounds">true</item>
         <item name="android:layout_marginTop">1dp</item>
         <item name="android:layout_marginBottom">20dp</item>
         <item name="android:layout_marginLeft">1dp</item>

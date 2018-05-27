@@ -9,4 +9,5 @@
     <dimen name="tv_color_size">25dp</dimen>
     <dimen name="tv_color_margin_1">5dp</dimen>
     <dimen name="tv_color_margin_2">20dp</dimen>
+    <dimen name="btn1_width">60dp</dimen>
 </resources>
