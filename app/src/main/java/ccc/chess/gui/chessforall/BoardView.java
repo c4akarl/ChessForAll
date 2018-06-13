@@ -20,8 +20,6 @@ public class BoardView extends View
     {
         super(context, attrs);
         this.context = context;
-        setColor();
-        initPieces();
     }
 
     public void setColor()
@@ -78,7 +76,6 @@ public class BoardView extends View
     public void updateBoardView(CharSequence fen, boolean boardTurn, ArrayList<CharSequence> possibleMoves,
                                 ArrayList<CharSequence> possibleMovesTo, CharSequence lastMove, boolean coordinates)
     {
-//Log.d(TAG, "updateBoardView()");
         posFen = "";
         isBoardTurn = boardTurn;
         this.possibleMoves = possibleMoves;
@@ -228,7 +225,6 @@ public class BoardView extends View
                         pixels[i] = newColor;
                 } else
                 {
-//                    if (pixels[i] <= COLOR_CHECK_BLACK)
                     if (pixels[i] <= COLOR_CHECK_WHITE_BLACK)
                         pixels[i] = newColor;
                 }
@@ -260,6 +256,7 @@ public class BoardView extends View
         fieldSize = getSqSizeW(boardSize);
         textSize = fieldSize / 3;
 //Log.d(TAG, "onMeasure(), BoardView, width: " + width + ", height: " + height + ", boardSize: " + boardSize + ", fieldSize: " + fieldSize);
+
         setMeasuredDimension(boardSize, boardSize);
     }
 
@@ -267,7 +264,7 @@ public class BoardView extends View
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-//Log.d(TAG, "onDraw(), width: " + width + ", height: " + height + ", sqSize: " + sqSize);
+//Log.d(TAG, "onDraw()");
         boolean isBlack = true;
         int boardPos = 0;   // 0 . . . 63
         int lastMoveFrom = -1;

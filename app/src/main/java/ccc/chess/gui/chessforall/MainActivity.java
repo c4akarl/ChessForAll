@@ -138,7 +138,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		msgShort2 = (TextView) findViewById(R.id.msgShort2);
 		msgShort2.setOnTouchListener(this);
 		scrlMsgMoves = (ScrollView) findViewById(R.id.scrlMsgMoves);
-//		scrlMsgMoves.setOnTouchListener(this);
 		scrlMsgMoves.setVerticalFadingEdgeEnabled(false);
 		msgMoves = (TextView) findViewById(R.id.msgMoves);
 		msgMoves.setOnTouchListener(this);
@@ -167,6 +166,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		btn_7.setOnTouchListener(this);
 
 		boardView = (BoardView) findViewById(R.id.boardView);
+        boardView.setColor();
 		boardView.setOnTouchListener(this);
 		boardView.updateBoardView(gc.fen, gc.isBoardTurn, null, null,
 				null, false);
@@ -734,8 +734,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void startNotation(int textValue)
 	{
 		notationIntent.putExtra("textValue", textValue);
-		notationIntent.putExtra("moves", gc.cl.history.createGameNotationFromHistory(600, false, true, true, false, false, true, 0));
-		notationIntent.putExtra("moves_text", gc.cl.history.createGameNotationFromHistory(600, true, true, true, false, false, true, 2));
+		notationIntent.putExtra("moves", gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, false, true, true, false, false, true, 0));
+		notationIntent.putExtra("moves_text", gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, true, true, true, false, false, true, 2));
 		notationIntent.putExtra("pgn", gc.cl.history.createPgnFromHistory(1));
 		notationIntent.putExtra("white", gc.cl.history.getGameTagValue("White"));
 		gc.cl.history.getGameTagValue("FEN");
@@ -1903,14 +1903,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						startPlay(false, true);
 					}
 				}
-
-				if (isDownBtn4 & isUpMsgView)
-				{
-Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgView);
-					removeDialog(MENU_SHOW_LIST);
-					showDialog(MENU_SHOW_LIST);
-					return true;
-				}
+// canceled ???
+//				if (isDownBtn4 & isUpMsgView)
+//				{
+//Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgView);
+//					removeDialog(MENU_SHOW_LIST);
+//					showDialog(MENU_SHOW_LIST);
+//					return true;
+//				}
 
 //    Log.i(TAG, "onTouch(), isDownBtn: " + isDownBtn + ", isUpBtn: " + isUpBtn);
 				if (isDownBtn & isUpBtn)
@@ -2190,6 +2190,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 
 				break;
 			case R.id.btn_6:    // first move (initial position)
+				cancelEngineMessage();
 				gc.isGameOver = false;
 				nextMove(3, 0);
 				if (!ec.chessEnginePaused)
@@ -2199,17 +2200,18 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 				}
 				break;
 			case R.id.btn_7:    // last move
+				cancelEngineMessage();
 				if (startVariation())
-				c4aShowDialog(VARIATION_DIALOG);
-			else
-			{
-				nextMove(4, 0);
-				if (!ec.chessEnginePaused)
+					c4aShowDialog(VARIATION_DIALOG);
+				else
 				{
-					stopThreads(false);
-					startPlay(false, true);
+					nextMove(4, 0);
+					if (!ec.chessEnginePaused)
+					{
+						stopThreads(false);
+						startPlay(false, true);
+					}
 				}
-			}
 				break;
 
 			case R.id.lblPlayerTimeA:    // time control
@@ -2700,7 +2702,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 
 	public final synchronized void stopComputerThinking(boolean shutDown)
 	{
-//Log.i(TAG, "stopComputerThinking, processAlive: " + getEngine().processAlive + ", shutDown: " + shutDown);
+//Log.i(TAG, "stopComputerThinking, processAlive: " + ec.getEngine().processAlive + ", shutDown: " + shutDown + ", ec.chessEngineIsInSearchTask: " + ec.chessEngineIsInSearchTask);
 		ec.chessEngineStopSearch = true;
 		if (shutDown)
 		{
@@ -2823,7 +2825,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 			else
 			{
 				gc.errorMessage = gc.cl.p_message;
-				gc.errorPGN = ">>>PGN-PARSE-DATA<<< \n" + gc.cl.history.createGameNotationFromHistory(600, false, true, true, false, false, true, 2) + "\n\n"
+				gc.errorPGN = ">>>PGN-PARSE-DATA<<< \n" + gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, false, true, true, false, false, true, 2) + "\n\n"
 						+ ">>>PGN-INPUT-DATA<<< \n" + startPgn + "\n";
 				updateGui();
 				if (!gc.cl.p_stat.equals("4"))
@@ -3056,18 +3058,6 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 				}
 			}
 
-//			if (ec.getEngine().initProcess())
-//				startNewGame(ec.getEngine().engineNumber);
-//			else
-//			{
-//				stopChessClock();
-//				ec.chessEngineSearching = false;
-//				ec.chessEnginePaused = true;
-//				ec.chessEngineInit = true;
-//				stopThreads(false);
-//				setInfoMessage(getString(R.string.engine_noRespond) + " (1)", null, null);
-//				return;
-//			}
 			if (!restartEngine())
 				return;
 		}
@@ -3138,6 +3128,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 
 	public boolean restartEngine()
 	{
+//Log.i(TAG, "restartEngine()");
 		if (ec.getEngine().initProcess())
 		{
 			startNewGame(ec.getEngine().engineNumber);
@@ -3198,22 +3189,8 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 			else
 			{
 //Log.i(TAG, "chessEngineBestMove(), fen, w/b, engine: " + fen + ",   moves: " + moves);
-//				if (!isGoPonder)
-//					cancelSearchTask();
 				if (!ec.getEngine().syncReady())
 				{
-//					if (ec.getEngine().initProcess())
-//						startNewGame(ec.getEngine().engineNumber);
-//					else
-//					{
-//						stopChessClock();
-//						ec.chessEngineSearching = false;
-//						ec.chessEnginePaused = true;
-//						ec.chessEngineInit = true;
-//						stopThreads(false);
-//						setInfoMessage(getString(R.string.engine_noRespond) + " (11)", null, null);
-//						return;
-//					}
 					if (!restartEngine())
 						return;
 				}
@@ -3593,7 +3570,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 
 	public void setInfoMessage(CharSequence info, CharSequence engine, CharSequence moveNotification)
 	{
-//		Log.i(TAG,"setInfoMessage(), gc.cl.p_moveText: " + gc.cl.p_moveText);
+//Log.i(TAG,"1 setInfoMessage(), gc.cl.p_moveText: " + gc.cl.p_moveText);
 //    	Log.i(TAG,"setInfoMessage()info: " + info);
 //    	Log.i(TAG,"engine: " + engine);
 //    	Log.i(TAG,"engine: " + engine + ", pause_messageEngine:\n" + pause_messageEngine);
@@ -3665,8 +3642,6 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 			Pair<String, ArrayList<Move>> bi = null;
 			try {bi = ec.book.getAllBookMoves(TextIO.readFEN(gc.cl.p_fen.toString()));}
 			catch (ChessParseError e1) {e1.printStackTrace();}
-//20180504, java.lang.NullPointerException:
-//			if (bi.first != null)
 			if (bi != null)
 			{
 				if (bi.first != null)
@@ -3725,8 +3700,16 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 			setTextViewColors(msgMoves, cv.COLOR_MOVES_BACKGROUND_8, cv.COLOR_MOVES_TEXT_9);
 		else
 			setTextViewColors(msgMoves, cv.COLOR_HIGHLIGHTING_22, cv.COLOR_MOVES_TEXT_9);
-
-		msgMoves.setText(gc.cl.history.createGameNotationFromHistory(600, false, true, true, false, false, true, 2));
+//Log.i(TAG,"2 setInfoMessage()");
+		boolean updateMoves = true;
+		if (moveNotification != null)
+		{
+			if (moveNotification.equals("ENGINE_UPDATE"))
+				updateMoves = false;
+		}
+		if (updateMoves)
+			msgMoves.setText(gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_60000, false, true, true, false, false, true, 2));
+//Log.i(TAG,"3 setInfoMessage()");
 
 		// msgEngine
 		if (!messageEngine.equals("") & userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true))
@@ -3746,63 +3729,75 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 			setPlayModeButton(ec.chessEnginePlayMod, gc.cl.p_color, ec.chessEnginePaused, ec.chessEngineSearching, gc.isBoardTurn);
 			return;
 		}
-//Log.i(TAG,"setInfoMessage(), user_options_gui_moveList:   " + userPrefs.getBoolean("user_options_gui_moveList", true));
 		if (userPrefs.getBoolean("user_options_gui_moveList", true))
-			setSpanableToMsgMoves();
+        {
+            if (updateMoves)
+                setSpanableToMsgMoves();
+            else
+				scrollMsgMoves();
+        }
 		else
 			msgMoves.setText("");
-
 		gc.cl.p_message = "";
 		setPlayModeButton(userPrefs.getInt("user_play_playMod", 1), gc.cl.p_color, ec.chessEnginePaused, ec.chessEngineSearching, gc.isBoardTurn);
+//Log.i(TAG,"4 setInfoMessage()");
 	}
 
 	public void setPlayModeButton(int playMode, CharSequence color, boolean isEnginePaused, boolean isEngineSearching, boolean isBoardTurn)
 	{	// btn_1
-//Log.i(TAG,"setPlayModeButton(), playMode: " +playMode + ", color: " +color + ", isEnginePaused: " +isEnginePaused + ", isEngineSearching: " +isEngineSearching + ", isBoardTurn: " +isBoardTurn);
+//Log.i(TAG,"1 setPlayModeButton(), playMode: " +playMode + ", color: " +color + ", isEnginePaused: " +isEnginePaused + ", isEngineSearching: " +isEngineSearching + ", isBoardTurn: " +isBoardTurn);
 		Bitmap drawBitmap = null;
 		Bitmap imageBackground = null;
-		Bitmap imageHuman = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_human);
-		Bitmap imageComputer = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_computer);
-		Bitmap imageAnalysis = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_analysis);
-		Bitmap imageWhite = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_white);
-		Bitmap imageBlack = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_black);
+
+		if (imageHuman == null)
+		{
+			imageHuman = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_human);
+			imageComputer = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_computer);
+			imageAnalysis = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_analysis);
+			imageWhite = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_white);
+			imageBlack = BitmapFactory.decodeResource(getResources(), R.drawable.btn1_black);
+			imageBlue = BitmapFactory.decodeResource(getResources(), R.drawable.btn_blue);
+			imageYellow = BitmapFactory.decodeResource(getResources(), R.drawable.btn_yellow);
+			imagePink = BitmapFactory.decodeResource(getResources(), R.drawable.btn_pink);
+		}
+
 		try
 		{
 			if (playMode == 5)
 			{
 				if (twoPlayerPaused)
-					imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_blue);
+					imageBackground = imageBlue;
 				else
-					imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_yellow);
+					imageBackground = imageYellow;
 			}
 			else
 			{
 				if (isEnginePaused)
 				{
 					if (playMode == 6)
-						imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_yellow);
+						imageBackground = imageYellow;
 					else
-						imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_blue);
+						imageBackground = imageBlue;
 				}
 				else
 				{
 					if (playMode == 4)
-						imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_pink);
+						imageBackground = imagePink;
 					else
 					{
 						if (playMode == 1 | playMode == 2)
 						{
 							if ((playMode == 1 & color.equals("b")) | (playMode == 2 & color.equals("w")))
-								imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_pink);
+								imageBackground = imagePink;
 							else
-								imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_yellow);
+								imageBackground = imageYellow;
 						}
 						else
 						{
 							if (isEngineSearching)
-								imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_pink);
+								imageBackground = imagePink;
 							else
-								imageBackground = BitmapFactory.decodeResource(getResources(), R.drawable.btn_yellow);
+								imageBackground = imageYellow;
 						}
 					}
 				}
@@ -3913,10 +3908,8 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 			if (infoMoveEndX > infoMoveStartX & !gc.cl.p_moveIsFirst)
 			{
 				if (gc.cl.p_moveText.equals(""))
-//					sb.setSpan(new BackgroundColorSpan(Color.rgb(120, 175, 100)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// green (move)
 					sb.setSpan(new BackgroundColorSpan(cv.getColor(cv.COLOR_MOVES_SELECTED_10)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// green (move)
 				else
-//					sb.setSpan(new BackgroundColorSpan(Color.rgb(154, 218, 236)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// blue (move comment)
 					sb.setSpan(new BackgroundColorSpan(cv.getColor(cv.COLOR_MOVES_ANOTATION_11)), infoMoveStartX, infoMoveEndX, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// blue (move comment)
 			}
 			boolean startLine = true;
@@ -3973,37 +3966,39 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 				sb.setSpan(new StyleSpan(Typeface.BOLD), startX, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);	// bold
 			msgMoves.setText(sb, TextView.BufferType.SPANNABLE);
 
-
-			scrlMsgMoves.post(new Runnable()
-			{
-				//		        	@Override
-				public void run()
-				{
-					try
-					{
-						Layout layout = msgMoves.getLayout();
-						if (layout != null)
-						{
-							int scrollLine = layout.getLineForOffset(infoMoveStartX);
-							if (scrollLine > 0)
-								scrollLine--;
-
-
-							if (!infoMoveIsSelected)
-								scrlMsgMoves.scrollTo(0, layout.getLineTop(scrollLine));
-
-
-						}
-						infoMoveIsSelected = false;
-					}
-					catch (NullPointerException e) {e.printStackTrace();}
-					catch (IndexOutOfBoundsException e) {}
-				}
-			});
-
+			scrollMsgMoves();
 
 		}
 		catch (IndexOutOfBoundsException e) {e.printStackTrace();}
+	}
+
+	public void scrollMsgMoves()
+	{
+		scrlMsgMoves.post(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
+					Layout layout = msgMoves.getLayout();
+					if (layout != null)
+					{
+						int scrollLine = layout.getLineForOffset(infoMoveStartX);
+						if (scrollLine > 0)
+							scrollLine--;
+
+
+						if (!infoMoveIsSelected)
+							scrlMsgMoves.scrollTo(0, layout.getLineTop(scrollLine));
+
+
+					}
+					infoMoveIsSelected = false;
+				}
+				catch (NullPointerException e) {e.printStackTrace();}
+				catch (IndexOutOfBoundsException e) {}
+			}
+		});
 	}
 
 	public void setInfoMoveValuesFromView(View view, MotionEvent event)
@@ -4497,24 +4492,18 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 			ec.getEngine().statPvBestMove = "";
 			ec.getEngine().statPvScore = 0;
 
-//			if (ec.getEngine().searchIsReady())
-//			if (ec.getEngine().syncReady())
-//			{
-				if (ec.chessEnginePlayMod == 4)
-				{
-					ec.chessEngineAnalysis = true;
-					ec.chessEngineAnalysisStat = 9;
-				}
-				else
-				{
-					ec.chessEngineAnalysis = false;
-					ec.chessEngineAnalysisStat = 0;
-				}
-				ec.getEngine().startSearch(taskFen, taskMoves, wTime, bTime, wInc, bInc, moveTime, movesToGo, ec.chessEngineAnalysis, isGoPonder, mate);
-				isGoPonder = false;
-//			}
-//			else
-//				return "ERROR_READY";
+			if (ec.chessEnginePlayMod == 4)
+			{
+				ec.chessEngineAnalysis = true;
+				ec.chessEngineAnalysisStat = 9;
+			}
+			else
+			{
+				ec.chessEngineAnalysis = false;
+				ec.chessEngineAnalysisStat = 0;
+			}
+			ec.getEngine().startSearch(taskFen, taskMoves, wTime, bTime, wInc, bInc, moveTime, movesToGo, ec.chessEngineAnalysis, isGoPonder, mate);
+			isGoPonder = false;
 
 			isTimeCheck = false;
 			timeCheckStart = System.currentTimeMillis();
@@ -4570,7 +4559,6 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 				boolean isPV = false;
 				if (tokens[0].equals("info"))
 				{
-//					isInfo = true;
 					ec.getEngine().parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves", OptionsEnginePlay.PV_MOVES));
 					int depth = ec.getEngine().statCurrDepth;
 					int selDepth = ec.getEngine().statCurrSelDepth;
@@ -4580,7 +4568,6 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 					engineStat = getInfoStat(depth, selDepth, moveNumber, nodes, move, taskFen);
 //Log.i(TAG, "searchTask, info, s: " + s + "\ninfoShowPv: " + infoShowPv);
 					if (infoShowPv & s.toString().contains("multipv"))
-//					if (s.toString().contains("multipv"))
 					{
 						try
 						{
@@ -4603,7 +4590,6 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 //		+ ", engineMes: " + engineMes + ", engineStat: " + engineStat + "\ns: " + s);
 				}
 				if ((!s.equals("") & isInfo) | isPV)
-//				if (isInfo)
 				{
 					if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME | isPV)
 					{
@@ -4738,6 +4724,9 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 			CharSequence pvAction = args[0];
 			CharSequence engineMes = args[1];
 			CharSequence engineStat = args[2];
+			String engineUpdate = "";
+			if (isUpdated)
+				engineUpdate = "ENGINE_UPDATE";
 //Log.i(TAG, "onProgressUpdate(), pvAction: " + pvAction);
 //Log.i(TAG, "onProgressUpdate(), engineMes: " + engineMes);
 //Log.i(TAG, "onProgressUpdate(), engineStat: " + engineStat);
@@ -4756,7 +4745,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 						ec.chessEngineSearching = false;
 					}
 					updateCurrentPosition("");
-					setInfoMessage(getGameOverMessage(), engineMes, null);
+					setInfoMessage(getGameOverMessage(), engineMes, engineUpdate);
 				}
 				else
 				{
@@ -4770,9 +4759,9 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 				if (ec.chessEnginesOpeningBook)
 				{
 					if (!ec.chessEngineAutoRun)
-						setInfoMessage(getString(R.string.engine_openingBook), "", null);
+						setInfoMessage(getString(R.string.engine_openingBook), "", engineUpdate);
 					else
-						setInfoMessage(getString(R.string.engine_autoPlay) + showGameCount + "\n" + getString(R.string.engine_openingBook), "", null);
+						setInfoMessage(getString(R.string.engine_autoPlay) + showGameCount + "\n" + getString(R.string.engine_openingBook), "", engineUpdate);
 				}
 				else
 				{
@@ -4781,12 +4770,13 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 						if (getEngineThinkingMessage().equals(getString(R.string.engineAnalysisStopWait)))
 							engineStat = "";
 						if (!ec.chessEngineStopSearch)
-							setInfoMessage(getEngineThinkingMessage() + " " + engineStat, engineMes, null);
+							setInfoMessage(getEngineThinkingMessage() + " " + engineStat, engineMes, engineUpdate);
 					}
 					else
-						setInfoMessage(null, engineMes, null);
+						setInfoMessage(null, engineMes, engineUpdate);
 				}
 			}
+			isUpdated = true;
 		}
 
 		protected void onPostExecute(CharSequence result)
@@ -4814,10 +4804,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 				ec.chessEngineSearching = false;
 				ec.chessEnginePaused = true;
 				ec.chessEngineInit = true;
-//				if (result.equals("ERROR"))
 				setInfoMessage(getString(R.string.engine_noRespond) + " (10)", null, null);
-//				if (result.equals("ERROR_READY"))
-//					setInfoMessage(getString(R.string.engine_noRespond) + " (11)", null, null);
 				return;
 			}
 
@@ -5013,15 +5000,15 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 		long searchStartTimeInfo = 0;		// info != ""
 		int MAX_SEARCH_TIMEOUT = 180000;	// max. search time engine timeout (3 min: no info message)
 		int MAX_SEARCH_CANCEL_TIMEOUT = 1500;	// max. search time engine timeout
-//		int MIN_PUBLISH_TIME = 300;				// min. time for publishing
-		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
+		int MIN_PUBLISH_TIME = 300;				// min. time for publishing
+//		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
 		boolean cancelTask = false;
 
 		boolean isTimeCheck = false;
 		long timeCheckStart = 0;
 		long timeCheck = 0;
 		long timeCheckControl = 300;
-
+		boolean isUpdated = false;
 	}
 	//  end ENGINE-SearchTask
 
@@ -5072,13 +5059,10 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 					{
 						if (ec.chessEngineAnalysisStat == 2)
 						{
-//							ec.getEngine().newGame();
-//							startNewGame(ec.getEngine().engineNumber);
 							startChessClock();
 							isGoPonder = false;
 							chessEngineBestMove(newFen, "");
-//							if (ec.chessEnginePlayMod == 4)
-								ec.chessEngineSearching = true;
+							ec.chessEngineSearching = true;
 						}
 						else
 							updateCurrentPosition("");
@@ -5796,7 +5780,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 
 	public void updateGui()
 	{
-//Log.i(TAG, "start updateGui(), gc.isBoardTurn: " + gc.isBoardTurn + ", gc.cl.p_color: " + gc.cl.p_color);
+//Log.i(TAG, "1 updateGui(), gc.isBoardTurn: " + gc.isBoardTurn + ", gc.cl.p_color: " + gc.cl.p_color);
 		CharSequence messInfo = 	"";
 		if (!gc.isGameOver & !gc.cl.p_variationEnd & gc.cl.p_message.equals(""))
 		{
@@ -5854,7 +5838,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 		}
 
 		setPlayerData();
-//Log.i(TAG, "start updateGui(), gc.cl.p_fen: " + gc.cl.p_fen + ", gc.isBoardTurn: " + gc.isBoardTurn);
+//Log.i(TAG, "2 updateGui(), gc.cl.p_fen: " + gc.cl.p_fen + ", gc.isBoardTurn: " + gc.isBoardTurn);
 		if (!gc.cl.p_fen.equals(""))
 		{
 			gc.fen = gc.cl.p_fen;
@@ -5893,7 +5877,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 				}
 			}
 		}
-
+//Log.i(TAG, "3 updateGui()");
 		if (gc.cl.p_message.equals("*"))
 			gc.cl.p_message = "";
 
@@ -5926,6 +5910,7 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 
 		if (!gc.cl.p_fen.equals(""))
 		{
+//Log.i(TAG, "4 updateGui()");
 //Log.i(TAG, "gc.cl.p_move, possibleMoves: " + gc.cl.p_move + ", " + gc.cl.p_hasPossibleMoves);
 //Log.i(TAG, "gc.cl.p_move1, gc.cl.p_move2: " + gc.cl.p_move1 + ", " + gc.cl.p_move2);
 //Log.i(TAG, "gc.cl.p_moveShow1, gc.cl.p_moveShow2: " + gc.cl.p_moveShow1 + ", " + gc.cl.p_moveShow2);
@@ -5951,7 +5936,8 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 						lastMove = gc.cl.p_moveShow1.toString() + gc.cl.p_moveShow2;
 				}
 			}
-			boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, possibleMoves, possibleMovesTo,
+//Log.i(TAG, "5 updateGui()");
+            boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, possibleMoves, possibleMovesTo,
 					lastMove, userPrefs.getBoolean("user_options_gui_Coordinates", false));
 		}
 		if (ec.chessEnginePlayMod != 6)
@@ -5967,7 +5953,8 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 				lblPlayerTimeB.setText(tc.showBlackTime);
 			}
 			updateTime(gc.cl.p_color);
-		}
+//Log.i(TAG, "6 updateGui()");
+        }
 	}
 
 
@@ -6172,6 +6159,15 @@ Log.i(TAG, "onTouch(), isDownBtn4: " + isDownBtn4 + ", isUpMsgView: " + isUpMsgV
 	String queryControl = "w";
 
 	CharSequence engineErrorMessage = "";
+
+	Bitmap imageHuman = null;
+	Bitmap imageComputer = null;
+	Bitmap imageAnalysis = null;
+	Bitmap imageWhite = null;
+	Bitmap imageBlack = null;
+	Bitmap imageBlue = null;
+	Bitmap imageYellow = null;
+	Bitmap imagePink = null;
 
 	int mate = 0;
 

@@ -54,6 +54,7 @@ public class ChessHistory
         addToMoveHistory(chessMove, false);	// end   variation ("9")
         setMoveIdx(0);			// set move-history-Index to first index
         setNextMoveHistory(0);
+		sbNotation.setLength(0);
     }
     public void addToMoveHistory(ChessMove chessMove, boolean addToVariationEnd)
     {
@@ -620,7 +621,11 @@ public class ChessHistory
     public CharSequence createGameNotationFromHistory(int moveIdx, boolean isOutputMoveText, boolean isResult, boolean figurineAlgebraicNotaion, 
     							boolean rankOnly, boolean lastSixMoves, boolean isSpaceAfterNumber, int nagControl)
     {	// nagControl: 0 = none, 1 = variable name(e.g. $11), 2 nag symbol (e.g.: =)
-//    	Log.i(TAG, "createGameNotationFromHistory(): " + isOutputMoveText);
+//Log.i(TAG, "1 createGameNotationFromHistory(), isOutputMoveText: " + isOutputMoveText);
+
+		if (moveIdx == MOVE_HISTORY_MAX_60000 & sbNotation.length() != 0 & moveHistorySize == moveHistory.size())
+			return sbNotation;
+
     	sbNotation.setLength(0);
         boolean isFirstMove = true;
         boolean isNewVariation = false;
@@ -636,7 +641,6 @@ public class ChessHistory
         int fromIdx = 0;
         if (moveIdx > moveHistory.size() -1)
         	moveIdx = moveHistory.size() -1;
-// ERROR	v1.8	24.11.2011 10:25:37
         try
         {
 	        if (rankOnly)
@@ -857,7 +861,9 @@ public class ChessHistory
         	sbNotation.append(getGameTagValue("Result"));
         }
 //        if (!isOutputMoveText)
-//        	Log.i(TAG, "sbNotation: \n" + sbNotation);
+//		Log.i(TAG, "sbNotation: \n" + sbNotation);
+//Log.i(TAG, "2 createGameNotationFromHistory()");
+		moveHistorySize = moveHistory.size();
         return sbNotation.toString();
     }
     public CharSequence createPgnFromHistory(int nagControl)
@@ -909,6 +915,7 @@ public class ChessHistory
 	    setPgnData(pgn);
 	    CharSequence[] pgnSplit = pgn.toString().split("\n|\r");
 	    sbGameNotation.setLength(0);
+		sbGameNotation = new StringBuilder(8000);
 	    gameTags = "";
 	    for(int i = 0; i < pgnSplit.length; i++)
 	    {
@@ -2033,7 +2040,6 @@ public class ChessHistory
     			}
     		}
     	}
-//    	if (!token.equals("") & pMoveControl == -1)
     	if (!token.equals("") & pMoveControl == -1 & (!isGameEnd | !pIsEnd))
     	{
     		if (pErrorMessage.toString().equals(""))
@@ -2374,6 +2380,8 @@ public class ChessHistory
     StringBuilder sbDate = new StringBuilder(10);
     StringBuilder sbMoveValues = new StringBuilder(50);
     StringBuilder sbGameData = new StringBuilder(200);
+
+    int moveHistorySize = 0;
     
     String[] pTokens;
     private final String GAME_RESULT_NONE = "*";
@@ -2396,9 +2404,12 @@ public class ChessHistory
     CharSequence pMoveComment = "";
     CharSequence pMoveColor = "l";
     public CharSequence pErrorMessage = "";
+
 // moveHistory - control
     public ArrayList<CharSequence> moveHistory;
     ArrayList<CharSequence> moveHistoryCopy;
+	public final int MOVE_HISTORY_MAX_50000 = 50000;
+	public final int MOVE_HISTORY_MAX_60000 = 60000;
     int moveIdx;								// index of moveHistory
 // variation control
     int cntRank = 0;	// moveRank

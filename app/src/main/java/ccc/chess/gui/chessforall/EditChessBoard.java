@@ -77,6 +77,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
         bKnight = (ImageView) findViewById(R.id.bKnight);
         bPawn = (ImageView) findViewById(R.id.bPawn);
 		boardView = (BoardView) findViewById(R.id.editBoardView);
+		boardView.setColor();
 		boardView.setOnTouchListener(this);
 		boardView.updateBoardView(newFen, false, null, null, null,
 				userPrefs.getBoolean("user_options_gui_Coordinates", false));
