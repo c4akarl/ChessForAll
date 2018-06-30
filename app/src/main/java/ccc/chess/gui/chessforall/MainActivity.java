@@ -3141,7 +3141,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			ec.chessEnginePaused = true;
 			ec.chessEngineInit = true;
 			stopThreads(false);
-			setInfoMessage(getString(R.string.engine_noRespond) + " (?)", null, null);
+			setInfoMessage(getString(R.string.engine_noRespond) + " (restartEngine)", null, null);
 			return false;
 		}
 	}
@@ -3191,8 +3191,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //Log.i(TAG, "chessEngineBestMove(), fen, w/b, engine: " + fen + ",   moves: " + moves);
 				if (!ec.getEngine().syncReady())
 				{
+// ANR 20180704: at ccc.chess.gui.chessforall.MainActivity.restartEngine (MainActivity.java:3132)
 					if (!restartEngine())
+					{
 						return;
+					}
 				}
 
 				searchTaskFen = fen;
@@ -5163,7 +5166,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				if (ec.getEngine().initProcess())
 					setInfoMessage(getString(R.string.engine_paused) + " (8)", null, null);
 				else
-					setInfoMessage(getString(R.string.engine_noRespond) + " (9)", null, null);
+					setInfoMessage(getString(R.string.engine_noRespond) + " (searchTaskRestart)", null, null);
 				return;
 			}
 		}

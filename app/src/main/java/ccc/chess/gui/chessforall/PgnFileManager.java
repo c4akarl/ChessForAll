@@ -125,11 +125,19 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 	        title = (TextView) findViewById(R.id.title);
 	        lblFile = (TextView) findViewById(R.id.fmLblFile);
 	        etPath = (EditText) findViewById(R.id.fmEtPath);
+			etPath.setText("");
 	        etUrl  = (EditText) findViewById(R.id.fmEtUrl);
 	        etFile = (EditText) findViewById(R.id.fmEtFile);
-			etFile.setFocusable(false);
-	        etPath.setText("");
+			if (fileActionCode == 2)
+			{
+				etFile.setFocusable(true);
+				etFile.addTextChangedListener(this);
+
+			}
+			else
+				etFile.setFocusable(false);
 	        etFile.setText("");
+
 	        etUrl.setText("");
 	        btnMenu = (ImageView) findViewById(R.id.btnMenu);
 	        fmBtnAction = (ImageView) findViewById(R.id.fmBtnAction);
@@ -930,6 +938,9 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 									Long.toString(gameReplaceStart), Long.toString(0), Long.toString(0));
 							break;
 						case EDIT_PGN_AFTER:
+							if (gameReplaceEnd == pgnLength)
+								saveFile(true);
+							else
 							startEditPgnTask(gamePath, gameFile, gameData, Integer.toString(EDIT_PGN_AFTER),
 									Long.toString(gameReplaceEnd +1), Long.toString(0), Long.toString(0));
 							break;
@@ -961,6 +972,14 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 	public void afterTextChanged(Editable s) 
 	{
 		isQueryInputError = false;
+		if (fileActionCode == 2 & !pgnIO.fileExists(etPath.getText().toString(), etFile.getText().toString()))
+		{
+		    if (lvGames != null)
+            {
+				if (lvGames.isShown())
+					lvGames.setVisibility(ListView.INVISIBLE);
+            }
+		}
 		if (setQueryData == 0)
 		{	// query game-ID
 			int game_count = Integer.parseInt(qGameCount.getText().toString());
@@ -2114,8 +2133,8 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			this.context = context;
 			this.notificationId = notificationId;
 			mNotificationHelper = new NotificationHelper(context, notificationId);
-
-			Toast.makeText(context, getString(R.string.fmCreatingPgnDatabaseToast), Toast.LENGTH_LONG).show();
+			if (pgnLength > 50000)
+				Toast.makeText(context, getString(R.string.fmCreatingPgnDatabaseToast), Toast.LENGTH_LONG).show();
 
 		}
 
@@ -2143,7 +2162,6 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			save_action_id = action;
 //Log.i(TAG, "pgnPath: " + pgnPath + ", pgnFile: " + pgnFile + ", pgnData:\n" + pgnData);
 //Log.i(TAG, "action: " + action + ", replaceStart: " + replaceStart + ", replaceEnd: " + replaceEnd + ", moveStart: " + moveStart);
-
 			mNotificationHelper.createNotification(getString(R.string.rebuild_pgn_file) + " " + pgnFile);
 
 			RandomAccessFile pgnRaf;
@@ -2160,7 +2178,10 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 			tmpFile = pgnFile.replace(".pgn", ".tmp");;
 			File f = new File(pgnPath + tmpFile);
 			if (f.exists())
+			{
+				f.delete();
 				return "file exists: " + tmpFile;
+			}
 			FileOutputStream fOut;
 
 			try
@@ -2228,7 +2249,8 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 		@Override
 		protected void onProgressUpdate(Long... progress)
 		{
-			mNotificationHelper.progressUpdate(progress[0], progress[1], progress[2], -0L);
+			if (pgnLength > 50000)
+				mNotificationHelper.progressUpdate(progress[0], progress[1], progress[2], -0L);
 		}
 
 		@Override
@@ -2475,7 +2497,8 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 //Log.i(TAG, "onProgressUpdate(), isStartTask: " + isStartTask + ", save_action_id: " + save_action_id);
 	        if (isStartTask)
 			{
-				if (save_action_id == 0)
+//				if (save_action_id == 0)
+				if (save_action_id == 0 & rafLength > 50000)
 					Toast.makeText(context, getString(R.string.fmCreatingPgnDatabaseToast), Toast.LENGTH_LONG).show();
 				isStartTask = false;
 			}
@@ -2986,6 +3009,8 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 									gameReplaceEnd = gameReplaceStart + gameLength;
 									if (replaceEnd > 0 & replaceEnd > gameReplaceStart)
 										gameReplaceEnd = replaceEnd;
+									pgnLength = pgnDb.pgnLength;
+//Log.i(TAG, "gameReplaceEnd: " + gameReplaceEnd + ", pgnDb.pgnLength: " + pgnDb.pgnLength);
 								}
 								catch (NumberFormatException e)	{return;}
 								gameMoveStart = 0;
@@ -3626,6 +3651,7 @@ public class PgnFileManager extends Activity implements Ic4aDialogCallback, Dial
 	public long gameReplaceStart = 0;
 	public long gameReplaceEnd = 0;
 	public long gameMoveStart = 0;
+	public long pgnLength = 0;
 
 //		DB-TEST			DB-TEST			DB-TEST			DB-TEST
 	String testMessage = "";

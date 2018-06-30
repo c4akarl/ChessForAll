@@ -31,12 +31,17 @@ public class ChessEngine
 
     public boolean initProcess()
     {
+//        if (process != null)
+//        {
+//            reader = null;
+//            writer = null;
+//            destroyProcess();
+//        }
         if (process != null)
-        {
-            reader = null;
-            writer = null;
             destroyProcess();
-        }
+        process = null;
+        reader = null;
+        writer = null;
 
         boolean isInitOk = false;
         engineProcess = "";
@@ -459,11 +464,11 @@ public class ChessEngine
             writeLineToProcess("uci");
             processAlive = readUCIOptions();
 
-            if (!syncReady())
-            {
-                // ???
-            }
-
+// ANR 20180704: at ccc.chess.gui.chessforall.ChessEngine.startNewProcess (ChessEngine.java:462)
+//            if (!syncReady())
+//            {
+//                // ???
+//            }
         }
         if (!processAlive)
         {
