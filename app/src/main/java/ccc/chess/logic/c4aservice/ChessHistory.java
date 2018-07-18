@@ -621,11 +621,12 @@ public class ChessHistory
     public CharSequence createGameNotationFromHistory(int moveIdx, boolean isOutputMoveText, boolean isResult, boolean figurineAlgebraicNotaion, 
     							boolean rankOnly, boolean lastSixMoves, boolean isSpaceAfterNumber, int nagControl)
     {	// nagControl: 0 = none, 1 = variable name(e.g. $11), 2 nag symbol (e.g.: =)
-//Log.i(TAG, "1 createGameNotationFromHistory(), isOutputMoveText: " + isOutputMoveText);
+//Log.i(TAG, "1a createGameNotationFromHistory(), isOutputMoveText: " + isOutputMoveText);
+//Log.i(TAG, "1a createGameNotationFromHistory(), moveIdx: " + moveIdx + ", isResult: " + isResult);
 
 		if (moveIdx == MOVE_HISTORY_MAX_60000 & sbNotation.length() != 0 & moveHistorySize == moveHistory.size())
 			return sbNotation;
-
+//Log.i(TAG, "1b createGameNotationFromHistory(), moveHistorySize: " + moveHistorySize + ", moveHistory.size(): " + moveHistory.size());
     	sbNotation.setLength(0);
         boolean isFirstMove = true;
         boolean isNewVariation = false;
@@ -859,6 +860,7 @@ public class ChessHistory
         	else
         		sbNotation.append(pgnIndent);
         	sbNotation.append(getGameTagValue("Result"));
+//Log.i(TAG, "2 createGameNotationFromHistory(), Result: " + getGameTagValue("Result"));
         }
 //        if (!isOutputMoveText)
 //		Log.i(TAG, "sbNotation: \n" + sbNotation);

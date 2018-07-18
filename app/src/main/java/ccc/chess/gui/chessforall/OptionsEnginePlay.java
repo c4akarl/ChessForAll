@@ -230,8 +230,8 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	final String TAG = "PlaySettings";
 	Util u;
 	final static int LOAD_OPENING_BOOK_REQUEST_CODE = 91;
-	final static int PV_MULTI = 4;
-	final static int PV_MOVES = 6;
+	final static int PV_MULTI = 2;
+	final static int PV_MOVES = 16;
 	final static int DISPLAYED_LINES = 5;
 	Intent fileManagerIntent;
 	SharedPreferences userPrefs;

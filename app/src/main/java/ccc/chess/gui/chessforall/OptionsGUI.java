@@ -59,17 +59,13 @@ public class OptionsGUI extends Activity
        	ed.putBoolean("user_options_gui_usePgnDatabase", cbGuUsePgnDatabase.isChecked());
        	ed.putBoolean("user_options_gui_enableSounds", cbGuEnableSounds.isChecked());
        	ed.putBoolean("user_options_gui_Coordinates", cbGuCoordinates.isChecked());
-
-       	// layout + prefs !!!
-//		ed.putBoolean("user_options_gui_moveList", true);
-
         ed.commit();
 	}
 
 	protected void getPrefs() 
 	{
 		etGuPlayerName.setText(userPrefs.getString("user_options_gui_playerName", "Me"));
-		cbGuStatusBar.setChecked(userPrefs.getBoolean("user_options_gui_StatusBar", true));
+		cbGuStatusBar.setChecked(userPrefs.getBoolean("user_options_gui_StatusBar", false));	// fullScreen !!!
 		cbGuFlipBoard.setChecked(userPrefs.getBoolean("user_options_gui_FlipBoard", false));
 		cbGuLastPosition.setChecked(userPrefs.getBoolean("user_options_gui_LastPosition", false));
 		cbGuDisableScreenTimeout.setChecked(userPrefs.getBoolean("user_options_gui_disableScreenTimeout", false));
@@ -77,9 +73,6 @@ public class OptionsGUI extends Activity
 		cbGuUsePgnDatabase.setChecked(userPrefs.getBoolean("user_options_gui_usePgnDatabase", true));
 		cbGuEnableSounds.setChecked(userPrefs.getBoolean("user_options_gui_enableSounds", true));
 		cbGuCoordinates.setChecked(userPrefs.getBoolean("user_options_gui_Coordinates", false));
-
-		// layout + prefs !!!
-//		userPrefs.getBoolean("user_options_gui_moveList", true);
 
 	}
 

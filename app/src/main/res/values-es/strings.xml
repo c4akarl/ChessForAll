@@ -90,8 +90,8 @@
     <string name="menu_usersettings_gui">Opciones de usuario</string>
     <string name="menu_usersettings_timeControl">Control del tiempo</string>
     <string name="menu_usersettings_timerAutoPlay">Temporizador automático</string>
-    <string name="menu_usersettings_time_white">Hora: blanco</string>
-    <string name="menu_usersettings_time_black">Hora: negro</string>
+    <string name="menu_usersettings_time_white">Hora blanco</string>
+    <string name="menu_usersettings_time_black">Hora negro</string>
     <string name="menu_specialities_engine_autoplay">Juego de la máquina automático</string>
     <string name="menu_about">Detalles</string>
     <string name="menu_about_new">Qué hay de nuevo</string>
@@ -170,17 +170,17 @@
     <string name="dgTitleDialog">C4A - diálogo</string>
 
     <string name="guPlayerName">Nombre del jugador</string>
-    <string name="guStatusBar">mostrar la barra de estado</string>
-    <string name="guLastPosition">Ver la última posición (cargar)</string>
-    <string name="guDisableScreenTimeout">Desactivar tiempo de espera de la pantalla</string>
+    <string name="guStatusBar">Pantalla completa</string>
+    <string name="guLastPosition">Ultima posición</string>
+    <string name="guDisableScreenTimeout">Tiempo de espera de la pantalla</string>
     <string name="guUsePgnDatabase">utilizar la base de datos PGN</string>
     <string name="guEnableSounds">Efectos de sonido</string>
     <string name="guDisplayCoordinates">Coordenadas (a-h, 1-8)</string>
     
     <string name="epEngineMessage">Mostrar cálculos</string>
     <string name="epRandomFirstMove">primer movimiento aleatorio de la máquina (blancas))</string>
-    <string name="epAutoStartEngine">inicio automático en la apertura del programa</string>
-    <string name="epOpeningBook">Libro de aperturas Polyglot</string>
+    <string name="epAutoStartEngine">Arranque automático</string>
+    <string name="epOpeningBook">Libro de aperturas</string>
     <string name="epMultiPv">Variantes</string>
     <string name="epPvMoves">Movimientos</string>
     <string name="epStrength">fuerza de juego</string>
@@ -197,13 +197,27 @@
     <string name="editChess960">Posición Chess960</string>
     <string name="editError">Error: Editar tablero</string>
     <string name="editChessboardDetection">Detección de tablero de ajedrez\n  . . .  por favor espere!</string>
-    
-    <string name="play_white">Blanco->computadora</string>
-    <string name="play_black">Negro->computadora</string>
-    <string name="play_engine">Computadora->computadora</string>
+
+    <string name="play_fullScreen">Pantalla completa</string>
+    <string name="play_lastPosition">Ultima posicion</string>
+    <string name="play_screenTimeout">Tiempo de espera</string>
+    <string name="play_audio">Efectos de sonido</string>
+    <string name="play_posibleMoves">Movimientos posibles</string>
+    <string name="play_coordinates">Coordenadas</string>
+    <string name="play_engineAutostart">automático motor</string>
+    <string name="play_openingBook">Libro de apertura</string>
+    <string name="play_openingBookHints">Mostrar de libros</string>
+    <string name="play_thinking">Pensando</string>
+    <string name="play_ponder">Reflexionar</string>
+    <string name="play_moveList">Mueven la lista</string>
+
+    <string name="play_white">jugar blanco</string>
+    <string name="play_black">jugar negro</string>
+    <string name="play_engine">Computadora</string>
     <string name="play_analysis">Análisis</string>
     <string name="play_two_players">Editar</string>
     <string name="play_two_players_flip">Dos jugadores</string>
+
     <string name="play_newGame">Nueva partida</string>
     
     <string name="ccsTitle">Reloj de ajedrez</string>
@@ -248,7 +262,7 @@
     <string name="whatsNew">Qué hay de nuevo</string>
     <string name="epBookHint">book.bin</string>
     <string name="engine_searching">Ordenador</string>
-    <string name="menu_board_flip">Flip board (después de cada movimiento)</string>
+    <string name="menu_board_flip">Flip board</string>
     <string name="menu_board_clipboard">Portapapeles</string>
     <string name="menu_board_coordinates">Coordenadas</string>
     <string name="menu_board_color_settings">configuración de color</string>
@@ -305,5 +319,16 @@
     <string name="colorCoordinates">coordenadas</string>
     <string name="colorApply">aplicar</string>
     <string name="menu_show_list">Mostrar lista (s/n)</string>
+    <string name="menu_title">Menú</string>
+    <string name="pause_delay">retrasar</string>
+    <string name="pause_start">"comienzo "</string>
+    <string name="pause_stop">detener</string>
+    <string name="pause_white">juega con blanco</string>
+    <string name="pause_black">jugar con negro</string>
+    <string name="pause_engine">computadora / computadora</string>
+    <string name="pause_two_players_flip">dos jugadores</string>
+    <string name="displayDisabled">Pantalla del motor deshabilitada</string>
+    <string name="disabled">discapacitado</string>
+    <string name="enabled">habilitado</string>
 
 </resources>

@@ -90,8 +90,8 @@
     <string name="menu_usersettings_gui">UI options</string>
     <string name="menu_usersettings_timeControl">Time control</string>
     <string name="menu_usersettings_timerAutoPlay">Timer auto play</string>
-    <string name="menu_usersettings_time_white">Time: white</string>
-    <string name="menu_usersettings_time_black">Time: black</string>
+    <string name="menu_usersettings_time_white">Time white</string>
+    <string name="menu_usersettings_time_black">Time black</string>
     <string name="menu_specialities_engine_autoplay">Automatic play</string>
     <string name="menu_about">About</string>
     <string name="menu_about_new">What\'s new</string>
@@ -169,16 +169,16 @@
     <string name="dgTitleDialog">C4A - Dialog</string>
 
     <string name="guPlayerName">Player name</string>
-    <string name="guStatusBar">Show status bar</string>
-    <string name="guLastPosition">Show last position (load)</string>
-    <string name="guDisableScreenTimeout">Disable screen timeout</string>
+    <string name="guStatusBar">Fullscreen mode</string>
+    <string name="guLastPosition">Last position</string>
+    <string name="guDisableScreenTimeout">Screen timeout</string>
     <string name="guUsePgnDatabase">Use PGN database</string>
     <string name="guEnableSounds">Sound effects</string>
     <string name="guDisplayCoordinates">Coordinates (a-h, 1-8)</string>
     
     <string name="epEngineMessage">Show calculations</string>
     <string name="epRandomFirstMove">Random first move (white)</string>
-    <string name="epAutoStartEngine">Automatic start at program opening</string>
+    <string name="epAutoStartEngine">Engine auto start</string>
     <string name="epOpeningBook">Polyglot opening book</string>
     <string name="epBookHint">book.bin</string>
     <string name="epMultiPv">Variants</string>
@@ -197,13 +197,27 @@
     <string name="editChess960">Chess960 position</string>
     <string name="editError">Error: edit board</string>
     <string name="editChessboardDetection">Chessboard detection...\nPlease wait!</string>
-    
-    <string name="play_white">White->computer</string>
-    <string name="play_black">Black->computer</string>
-    <string name="play_engine">Computer->computer</string>
+
+    <string name="play_fullScreen">Fullscreen mode</string>
+    <string name="play_lastPosition">Last position</string>
+    <string name="play_screenTimeout">Screen timeout</string>
+    <string name="play_audio">Sound effects</string>
+    <string name="play_posibleMoves">Posible moves</string>
+    <string name="play_coordinates">Coordinates</string>
+    <string name="play_engineAutostart">Engine auto start</string>
+    <string name="play_openingBook">Opening book</string>
+    <string name="play_openingBookHints">Show book hints</string>
+    <string name="play_thinking">Thinking</string>
+    <string name="play_ponder">Ponder</string>
+    <string name="play_moveList">Move list</string>
+
+    <string name="play_white">play white</string>
+    <string name="play_black">play black</string>
+    <string name="play_engine">Computer</string>
     <string name="play_analysis">Analysis</string>
     <string name="play_two_players">Edit</string>
     <string name="play_two_players_flip">Two Players</string>
+
     <string name="play_newGame">New game</string>
     
     <string name="ccsTitle">Chess clock</string>
@@ -247,7 +261,7 @@
     <string name="qNoResults">No Results!</string>
     <string name="whatsNew">What\'s New</string>
     <string name="engine_searching">Engine searching</string>
-    <string name="menu_board_flip">Flip board (after each move)</string>
+    <string name="menu_board_flip">Flip board</string>
     <string name="menu_board_clipboard">Clipboard</string>
     <string name="menu_board_coordinates">Coordinates</string>
     <string name="menu_board_color_settings">Color settings</string>
@@ -305,5 +319,16 @@
     <string name="colorCoordinates">coordinates</string>
     <string name="colorApply">apply</string>
     <string name="menu_show_list">Show list (y/n)</string>
+    <string name="menu_title">Menu</string>
+    <string name="pause_delay">delay</string>
+    <string name="pause_start">start</string>
+    <string name="pause_stop">stop</string>
+    <string name="pause_white">play with white</string>
+    <string name="pause_black">play with black</string>
+    <string name="pause_engine">computer / computer</string>
+    <string name="pause_two_players_flip">two players</string>
+    <string name="displayDisabled">Engine display disabled</string>
+    <string name="disabled">disabled</string>
+    <string name="enabled">enabled</string>
 
 </resources>

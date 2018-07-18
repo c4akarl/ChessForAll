@@ -90,8 +90,8 @@
     <string name="menu_usersettings_gui">Anwenderoptionen</string>
     <string name="menu_usersettings_timeControl">Zeitkontrolle</string>
     <string name="menu_usersettings_timerAutoPlay">Zeit automatisches Spiel</string>
-    <string name="menu_usersettings_time_white">Zeit: weiß</string>
-    <string name="menu_usersettings_time_black">Zeit: schwarz</string>
+    <string name="menu_usersettings_time_white">Zeit Weiß</string>
+    <string name="menu_usersettings_time_black">Zeit Schwarz</string>
     <string name="menu_specialities_engine_autoplay">Automatisches Spiel</string>
     <string name="menu_about">Informationen</string>
     <string name="menu_about_new">Was ist neu</string>
@@ -170,17 +170,17 @@
     <string name="dgTitleDialog">C4A - Dialog</string>
 
     <string name="guPlayerName">Spielername</string>
-    <string name="guStatusBar">Statusbar anzeigen</string>
-    <string name="guLastPosition">Letzte Stellung anzeigen (laden)</string>
-    <string name="guDisableScreenTimeout">Bildschirm-Timeout deaktivieren</string>
+    <string name="guStatusBar">Vollbild-Anzeige</string>
+    <string name="guLastPosition">Letzte Stellung</string>
+    <string name="guDisableScreenTimeout">Bildschirm-Timeout</string>
     <string name="guUsePgnDatabase">PGN-Datenbank verwenden</string>
     <string name="guEnableSounds">Toneffekte</string>
     <string name="guDisplayCoordinates">Koordinaten (a-h, 1-8)</string>
     
     <string name="epEngineMessage">Berechnungen anzeigen</string>
     <string name="epRandomFirstMove">Zufälliger erster Zug (weiss)</string>
-    <string name="epAutoStartEngine">Automatischer Start bei Programmöffnung</string>
-    <string name="epOpeningBook">Polyglot Eröffnungsbuch</string>
+    <string name="epAutoStartEngine">Engine Autostart</string>
+    <string name="epOpeningBook">Eröffnungs-buch</string>
     <string name="epBookHint">book.bin</string>
     <string name="epMultiPv">Varianten</string>
     <string name="epPvMoves">Züge</string>
@@ -199,12 +199,26 @@
     <string name="editError">Fehler: Brett editieren</string>
     <string name="editChessboardDetection">Schachbrett-Ermittlung...\nBitte warten!</string>
     
-    <string name="play_white">Weiß->Computer</string>
-    <string name="play_black">Schwarz->Computer</string>
-    <string name="play_engine">Computer->Computer</string>
+    <string name="play_fullScreen">Vollbild-Anzeige</string>
+    <string name="play_lastPosition">Letzte Stellung</string>
+    <string name="play_screenTimeout">Bildschirm-Timeout</string>
+    <string name="play_audio">Toneffekte</string>
+    <string name="play_posibleMoves">Zugmöglich keiten</string>
+    <string name="play_coordinates">Koordinaten</string>
+    <string name="play_engineAutostart">Engine Autostart</string>
+    <string name="play_openingBook">Eröffnungs-buch</string>
+    <string name="play_openingBookHints">EB-Hinweise</string>
+    <string name="play_thinking">Berechnung</string>
+    <string name="play_ponder">Voraus berechnung</string>
+    <string name="play_moveList">Zugliste</string>
+
+    <string name="play_white">mit Weiß</string>
+    <string name="play_black">mit Schwarz</string>
+    <string name="play_engine">Computer</string>
     <string name="play_analysis">Analyse</string>
     <string name="play_two_players">Editieren</string>
     <string name="play_two_players_flip">Zwei Spieler</string>
+
     <string name="play_newGame">Neue Partie</string>
     
     <string name="ccsTitle">Schachuhr</string>
@@ -248,7 +262,7 @@
     <string name="qNoResults">Keine Ergebnisse!</string>
     <string name="whatsNew">Was ist neu</string>
     <string name="engine_searching">Computer rechnet</string>
-    <string name="menu_board_flip">Nach Zug die Seite wechseln</string>
+    <string name="menu_board_flip">Seitenwechsel</string>
     <string name="menu_board_clipboard">Zwischenablage</string>
     <string name="menu_board_coordinates">Koordinaten</string>
     <string name="menu_board_color_settings">Farbeinstellungen</string>
@@ -284,7 +298,7 @@
     <string name="engineDisplayedLines">Angezeigte Zeilen</string>
     <string name="engineThinking">Berechung</string>
     <string name="engineError">Engine-Fehler</string>
-    <string name="epShowBookHints">Eröffnungsbuch-Hinweise</string>
+    <string name="epShowBookHints">EB-Hinweise</string>
     <string name="menu_colorsettings">Farbeinstellungen</string>
     <string name="menu_colorsettings_standard">Standard</string>
     <string name="menu_colorsettings_brown">Braun</string>
@@ -305,4 +319,15 @@
     <string name="colorCoordinates">Koordinaten</string>
     <string name="colorApply">anwenden</string>
     <string name="menu_show_list">Liste anzeigen (j /n)</string>
+    <string name="menu_title">Menü</string>
+    <string name="pause_delay">Verzögerung</string>
+    <string name="pause_start">starten</string>
+    <string name="pause_stop">Stop</string>
+    <string name="pause_white">mit Weiß spielen</string>
+    <string name="pause_black">mit Schwarz spielen</string>
+    <string name="pause_engine">Computer / Computer</string>
+    <string name="pause_two_players_flip">Zwei Spieler</string>
+    <string name="displayDisabled">Engine-Anzeige deaktiviert</string>
+    <string name="disabled">deaktiviert</string>
+    <string name="enabled">aktiviert</string>
 </resources>

@@ -52,7 +52,6 @@
 <ImageView android:id="@+id/btnPlay"
 	style="@style/c4aImgBtn1"
     android:src="@drawable/button_ok"
-    android:onClick="myClickHandler" 
    	android:layout_centerHorizontal="true"
     android:layout_alignParentBottom="true"/>
 

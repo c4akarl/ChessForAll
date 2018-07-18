@@ -154,20 +154,19 @@ public class TimeControl
         }
     }
 
-	public String getShowValues(int milSeconds)
+	public String getShowValues(int milSeconds, boolean secOnly)
     {
 		String showTime = "";
+		int h = 0;
+		int m = 0;
+		int s = 0;
+		int ms = 0;
+		ms = getValueFromMilSeconds(milSeconds, 1);
+		s = getValueFromMilSeconds(milSeconds, 2);
+		m = getValueFromMilSeconds(milSeconds, 3);
+		h = getValueFromMilSeconds(milSeconds, 4);
 		if (milSeconds > 0)
 		{
-			int h = 0;
-			int m = 0;
-			int s = 0;
-			int ms = 0;
-			
-			ms = getValueFromMilSeconds(milSeconds, 1);
-			s = getValueFromMilSeconds(milSeconds, 2);
-			m = getValueFromMilSeconds(milSeconds, 3);
-			h = getValueFromMilSeconds(milSeconds, 4);
 			if (h != 0)
 				showTime = h + ":";
 			if (m != 0 | !showTime.equals(""))
@@ -176,9 +175,16 @@ public class TimeControl
 					showTime = showTime + "0";
 				showTime = showTime + m + ":";
 			}
+			else
+			{
+				if (m == 0)
+					showTime = showTime + m + ":";
+			}
 			if (s < 10 & !showTime.equals(""))
 				showTime = showTime + "0";
 			showTime = showTime + s;
+			if (secOnly & h == 0 & m == 0)
+				showTime = "" + s;
 			if (ms != 0)
 			{
 				showTime = showTime + ".";
@@ -192,6 +198,11 @@ public class TimeControl
 				showTime = showTime + ms;
 			}
 		}
+		if (s == 0 & showTime.equals(""))
+			showTime = "0:00";
+		if (secOnly)
+			showTime = showTime + "s";
+//Log.i(TAG, "getShowValues(), showTime: " + showTime);
 		return showTime;
     }
 

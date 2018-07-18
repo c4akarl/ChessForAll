@@ -22,11 +22,13 @@ public class ChessEngine
         engineNumber = eNumber;
         processAlive = false;
         isReady = false;
+        userPrefs = context.getSharedPreferences("user", 0);
+        isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
         efm = new EngineFileManager();
         efm.dataEnginesPath = context.getFilesDir() + "/engines/";
         assetsEngineProcessName = getInternalStockFishProcessName();
-        userPrefs = context.getSharedPreferences("user", 0);
-        isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
+        if (isLogOn)
+            Log.i(TAG, "ChessEngine(), assetsEngineProcessName: " + assetsEngineProcessName);
     }
 
     public boolean initProcess()
@@ -64,7 +66,10 @@ public class ChessEngine
     private String getInternalStockFishProcessName()
     {
         String arch = System.getProperty("os.arch");
-//Log.i(TAG, "getInternalStockFishProcessName(), arch: " + arch);
+        if (isLogOn)
+            Log.i(TAG, "getInternalStockFishProcessName(), arch: " + arch);
+        if (arch.contains("86"))
+            return ASSET_STOCKFISH_CPU_X86;
         if (arch.contains("7"))
             return ASSET_STOCKFISH_ARM_7;
         else
@@ -340,6 +345,8 @@ public class ChessEngine
                     statCurrMove = tokens[i++];
                 if (is.equals("currmovenumber"))
                     statCurrMoveNr = Integer.parseInt(tokens[i++].toString());
+                if (statCurrMoveNr > statCurrMoveCnt)
+                    statCurrMoveCnt = statCurrMoveNr;
             }
         }
         catch (NumberFormatException nfe) {}
@@ -750,6 +757,7 @@ public class ChessEngine
     int statCurrDepth = 0;
     int statCurrSelDepth = 0;
     int statCurrMoveNr = 0;
+    int statCurrMoveCnt = 0;
     CharSequence statCurrMove = "";
     int statCurrNodes = 0;
     int statCurrNps = 0;
@@ -771,10 +779,7 @@ public class ChessEngine
             13, 13, 13, 14,	15, 16, 17, 17, 17, 17,
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
 
-//    final String ASSET_STOCKFISH_CPU_OLD = "stockfish-6-ja";
-//    final String ASSET_STOCKFISH_CPU_STANDARD = "stockfish-8-armeabi-v7a";
-//    final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
-
+    final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
     final String ASSET_STOCKFISH_ARM_64 = "Stockfish-9-arm64v8";
     final String ASSET_STOCKFISH_ARM_7 = "Stockfish-9-armv7";
 

@@ -84,8 +84,8 @@
   <string name="menu_usersettings_gui">UI опции</string>
   <string name="menu_usersettings_timeControl">Контроль времени</string>
   <string name="menu_usersettings_timerAutoPlay">Таймер автоигра</string>
-  <string name="menu_usersettings_time_white">Время: белые</string>
-  <string name="menu_usersettings_time_black">Время: чёрные</string>
+  <string name="menu_usersettings_time_white">Время белые</string>
+  <string name="menu_usersettings_time_black">Время чёрные</string>
   <string name="menu_specialities_engine_autoplay">Автоигра</string>
   <string name="menu_about">Описание</string>
   <string name="menu_about_new">Что нового?</string>
@@ -154,15 +154,15 @@
   <string name="dgTitleFileDialog">C4A - PGN-файл-Диалог</string>
   <string name="dgTitleDialog">C4A - Диалог</string>
   <string name="guPlayerName">Имя игрока</string>
-  <string name="guStatusBar">Показывать строку состояния</string>
-  <string name="guLastPosition">Показывать последнюю позицию (при запуске)</string>
+  <string name="guStatusBar">Полноэкранный режим</string>
+  <string name="guLastPosition">Показывать последнюю позицию</string>
   <string name="guDisableScreenTimeout">Скрыть окно таймаута</string>
   <string name="guUsePgnDatabase">Использовать PGN базу данных</string>
   <string name="guEnableSounds">Звуковые эффекты</string>
   <string name="guDisplayCoordinates">Координаты (a-h, 1-8)</string>
   <string name="epEngineMessage">Показывать варианты</string>
   <string name="epRandomFirstMove">Случайный первый ход (белые)</string>
-  <string name="epAutoStartEngine">Автоматически загружать книгу дебютов</string>
+  <string name="epAutoStartEngine">запуск двигателя</string>
   <string name="epOpeningBook">Расширенная книга дебютов</string>
   <string name="epBookHint">book.bin</string>
   <string name="epMultiPv">Варианты</string>
@@ -179,13 +179,29 @@
   <string name="editChess960">Chess960 позиция</string>
   <string name="editError">Ошибка: редактирования доски</string>
   <string name="editChessboardDetection">Поиск шахмотной доски...\nПожалуйста жди!</string>
-  <string name="play_white">Белые-&gt;компьютер</string>
-  <string name="play_black">Чёрные-&gt;компьютер</string>
-  <string name="play_engine">Комп-&gt;комп</string>
+
+  <string name="play_fullScreen">Полноэкранный режим</string>
+  <string name="play_lastPosition">Последняя позиция</string>
+  <string name="play_screenTimeout">Тайм-аут экрана</string>
+  <string name="play_audio">Звуковые эффекты</string>
+  <string name="play_posibleMoves">Положительные движения</string>
+  <string name="play_coordinates">Координаты</string>
+  <string name="play_engineAutostart">Автом. запуск двигателя</string>
+  <string name="play_openingBook">Открытие книги</string>
+  <string name="play_openingBookHints">Показать подсказки книги</string>
+  <string name="play_thinking">мышление</string>
+  <string name="play_ponder">Вдумайтесь</string>
+  <string name="play_moveList">Переместить список</string>
+
+  <string name="play_white">играть белым</string>
+  <string name="play_black">играть черным</string>
+  <string name="play_engine">Комп Комп</string>
   <string name="play_analysis">Анализирование</string>
   <string name="play_two_players">Редактор</string>
   <string name="play_two_players_flip">Два игрока</string>
+
   <string name="play_newGame">Новая партия</string>
+
   <string name="ccsTitle">Шахматные часы</string>
   <string name="ccsMessageWhite">Белые</string>
   <string name="ccsMessageBlack">Чёрные</string>
@@ -226,7 +242,7 @@
   <string name="qNoResults">Нет результата!</string>
   <string name="whatsNew">Что нового?</string>
   <string name="engine_searching">Поиск движка</string>
-  <string name="menu_board_flip">Поворачивать доску после каждого хода</string>
+  <string name="menu_board_flip">Поворачивать</string>
   <string name="menu_board_clipboard">Буфер обмена</string>
   <string name="menu_board_coordinates">Координаты</string>
   <string name="menu_board_color_settings">Настройка цвета</string>
@@ -270,7 +286,7 @@
   <string name="menu_colorsettings_grey">Серый</string>
   <string name="menu_colorsettings_blue">синий</string>
   <string name="menu_colorsettings_green">зеленый</string>
-    <string name="colorFields">поля</string>
+  <string name="colorFields">поля</string>
   <string name="colorPieces">куски</string>
   <string name="colorFromTo">от/до</string>
   <string name="colorLastMove">последний ход</string>
@@ -280,8 +296,20 @@
   <string name="colorData">данные</string>
   <string name="colorTime">время</string>
   <string name="colorHighlighting">подсветка</string>
-    <string name="colorReset">"Сброс "</string>
-    <string name="colorCoordinates">координаты</string>
-    <string name="colorApply">подать заявление</string>
+  <string name="colorReset">"Сброс "</string>
+  <string name="colorCoordinates">координаты</string>
+  <string name="colorApply">подать заявление</string>
   <string name="menu_show_list">Показать список (y/n)</string>
+  <string name="menu_title">Меню</string>
+  <string name="pause_delay">задержка</string>
+  <string name="pause_start">Начало</string>
+  <string name="pause_stop">стоп</string>
+  <string name="pause_white">играть с белым</string>
+  <string name="pause_black">играть с черным</string>
+  <string name="pause_engine">Компьютер / компьютер</string>
+  <string name="pause_two_players_flip">Два игрока</string>
+  <string name="displayDisabled">Дисплей двигателя отключен</string>
+    <string name="disabled">отключен</string>
+  <string name="enabled">включен</string>
+
 </resources>

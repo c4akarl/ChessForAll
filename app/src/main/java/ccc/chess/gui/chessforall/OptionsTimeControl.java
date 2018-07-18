@@ -53,7 +53,7 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 		if (id == TIME_SETTINGS_DIALOG)  
         {
 			chessClockTitle = getString(R.string.ccsTitle);
-			timeSettingsDialog = new TimeSettingsDialog(this, this, chessClockTitle, chessClockMessage, 
+			timeSettingsDialog = new TimeSettingsDialog(this, this, chessClockTitle, chessClockMessage,
 					chessClockTimeGame, chessClockTimeBonus, chessClockMovesToGo);
 			return timeSettingsDialog;
         }
@@ -80,11 +80,11 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 						break;
 					case 21: 	// player (move)
 						resultCode = timeSettingsDialog.getBonus();
-						ed.putInt("user_time_player_move", timeSettingsDialog.getBonus());
+						ed.putInt("user_time_player_move", timeSettingsDialog.getTime());
 						resultCode = 101;
 	    				break;
 					case 22: 	// engine (move)
-	    				ed.putInt("user_time_engine_move", timeSettingsDialog.getBonus());
+	    				ed.putInt("user_time_engine_move", timeSettingsDialog.getTime());
 	    				break;
 					case 31: 	// player (sand glass)
 	    				ed.putInt("user_time_player_sand", timeSettingsDialog.getTime());
@@ -119,18 +119,18 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
     	switch (timeControl)
         {
 	        case 1:	
-	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_clock", 300000));
-	        	bonusPlayer = " +" + tc.getShowValues(userP.getInt("user_bonus_player_clock", 3000));
-	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_clock", 60000));
-	        	bonusEngine = " +" + tc.getShowValues(userP.getInt("user_bonus_engine_clock", 3000));
+	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_clock", 300000), false);
+	        	bonusPlayer = " +" + tc.getShowValues(userP.getInt("user_bonus_player_clock", 3000), false);
+	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_clock", 60000), false);
+	        	bonusEngine = " +" + tc.getShowValues(userP.getInt("user_bonus_engine_clock", 3000), false);
 	        	break;   
 	        case 2:		
-	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_move", 10000));
-	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_move", 3000));
+	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_move", 600000), false);
+	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_move", 60000), false);
 	        	break;
 	        case 3:		
-	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_sand", 600000));
-	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_sand", 1000));
+	        	timePlayer = tc.getShowValues(userP.getInt("user_time_player_sand", 600000), false);
+	        	timeEngine = tc.getShowValues(userP.getInt("user_time_engine_sand", 60000), false);
 	        	break;
 	        case 4:
 	        	btnPlayer.setVisibility(Button.INVISIBLE);
@@ -199,15 +199,15 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	        	{
 	        		chessClockMessage = getString(R.string.ccsMessagePlayerMove);
 					chessClockControl = 21;
-					chessClockTimeGame = -1;  
-					chessClockTimeBonus = userP.getInt("user_time_player_move", 10000);
+					chessClockTimeGame = userP.getInt("user_time_player_move", 600000);
+					chessClockTimeBonus = -1;
 	        	}
 	        	else
 	        	{
 	        		chessClockMessage = getString(R.string.ccsMessageEngineMove);
 					chessClockControl = 22;
-					chessClockTimeGame = -1;  
-					chessClockTimeBonus = userP.getInt("user_time_engine_move", 3000);
+					chessClockTimeGame = userP.getInt("user_time_engine_move", 60000);
+					chessClockTimeBonus = -1;
 	        	}
 	            break; 
 	        case 3:
@@ -215,14 +215,14 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	        	{
 	        		chessClockMessage = getString(R.string.ccsMessagePlayerSand);
 					chessClockControl = 31;
-					chessClockTimeGame = userP.getInt("ccsMessageSandGlass", 600000);  
+					chessClockTimeGame = userP.getInt("user_time_player_sand", 600000);
 					chessClockTimeBonus = -1;
 	        	}
 	        	else
 	        	{
 	        		chessClockMessage = getString(R.string.ccsMessageEngineSand);
 					chessClockControl = 32;
-					chessClockTimeGame = userP.getInt("ccsMessageSandGlass", 60000);  
+					chessClockTimeGame = userP.getInt("user_time_engine_sand", 60000);
 					chessClockTimeBonus = -1;
 	        	}
 	            break; 

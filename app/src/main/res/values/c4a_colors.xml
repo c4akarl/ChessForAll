@@ -10,6 +10,7 @@
 	<color name="divider_background">#63b4aa</color>
 	<color name="field_color_white">#f9f9cc</color>
 	<color name="field_color_black">#e2a156</color>
+	<color name="field_color_green">#93dc8c</color>
 	<color name="field_selected">#e1817e</color>
 	<color name="posible_moves">#6fac64</color>
 	<color name="last_move_from">#659f46</color>
@@ -26,4 +27,5 @@
 	<color name="text_white">#edebed</color>
 	<color name="fm_load">#4f684d</color>
 	<color name="fm_save">#6b2c2d</color>
+	<color name="dialog_green">#6fac64</color>
 </resources>
