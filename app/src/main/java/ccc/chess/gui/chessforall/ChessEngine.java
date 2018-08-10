@@ -33,12 +33,6 @@ public class ChessEngine
 
     public boolean initProcess()
     {
-//        if (process != null)
-//        {
-//            reader = null;
-//            writer = null;
-//            destroyProcess();
-//        }
         if (process != null)
             destroyProcess();
         process = null;
@@ -68,12 +62,17 @@ public class ChessEngine
         String arch = System.getProperty("os.arch");
         if (isLogOn)
             Log.i(TAG, "getInternalStockFishProcessName(), arch: " + arch);
+
         if (arch.contains("86"))
             return ASSET_STOCKFISH_CPU_X86;
         if (arch.contains("7"))
             return ASSET_STOCKFISH_ARM_7;
         else
             return ASSET_STOCKFISH_ARM_64;
+
+        // ENGINE TEST
+//        return ASSET_ENGINE_TEST;
+
     }
 
     private void writeDefaultEngineToData()
@@ -109,7 +108,6 @@ public class ChessEngine
                 return false;
             CharSequence[] tokens = tokenize(s);
             if (tokens[0].equals("uciok"))
-//                return syncReady();
                 return true;
             checkTime = System.currentTimeMillis();
         }
@@ -782,6 +780,14 @@ public class ChessEngine
     final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
     final String ASSET_STOCKFISH_ARM_64 = "Stockfish-9-arm64v8";
     final String ASSET_STOCKFISH_ARM_7 = "Stockfish-9-armv7";
+
+//    final String ASSET_ENGINE_TEST = "Ethereal_8.98.AG_uci.arm7.pie";
+//    final String ASSET_ENGINE_TEST = "armFish_20180219_uci.arm8";
+//    final String ASSET_ENGINE_TEST = "Cfish_20180215.ACH_uci.arm8";
+//    final String ASSET_ENGINE_TEST = "Cheese_1.9.2.PD_uci.arm8";    // ERROR
+//    final String ASSET_ENGINE_TEST = "Cichess_2.0.20180216.ACH_uci.arm8";
+//    final String ASSET_ENGINE_TEST = "Matefinder_9.0.ACH_uci.arm8";
+//    final String ASSET_ENGINE_TEST = "mateFish_20180219_uci.arm8";
 
     boolean isLogOn;			// LogFile on/off(SharedPreferences)
 

@@ -212,7 +212,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	protected void getPrefs() 
 	{
 		engineMessage.setChecked(userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true));
-		ponder.setChecked(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
+		ponder.setChecked(userPrefs.getBoolean("user_options_enginePlay_Ponder", true));
 		randomFirstMove.setChecked(userPrefs.getBoolean("user_options_enginePlay_RandomFirstMove", false));
 		autoStartEngine.setChecked(userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true));
 		openingBook.setChecked(userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true));

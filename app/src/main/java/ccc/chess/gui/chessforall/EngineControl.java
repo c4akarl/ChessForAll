@@ -17,8 +17,6 @@ public class EngineControl
 	public void createEngines()
 	{
 		en_1 = new ChessEngine(context, 1);	// engine number 1
-//		book = new C4aBook(context);
-//		book.getInstance();
 	}
 	public final void setBookOptions() 
 	{
@@ -76,9 +74,7 @@ public class EngineControl
 	        		chessEnginePlayerBlack = en_1.engineName;
 	        		break;
 	        	case 4:	
-//	        		chessEnginePlayerWhite = mainA.gc.cl.history.getGameTagValue("White");
 	        		chessEnginePlayerWhite = engineWhite;
-//	        		chessEnginePlayerBlack = mainA.gc.cl.history.getGameTagValue("Black");
 	        		chessEnginePlayerBlack = engineBlack;
 	        		break;
 	        }
@@ -147,6 +143,7 @@ public class EngineControl
     public CharSequence ponderUserFen = "";
 
     public boolean chessEnginePaused = false;
+    public boolean chessEnginePausedPrev = false;
     public boolean chessEngineProblem = false;
     public boolean chessEngineAutoRun = false;
     public boolean chessEngineAnalysis = false;

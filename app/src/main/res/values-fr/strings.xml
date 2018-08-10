@@ -173,9 +173,9 @@
     <string name="guPlayerName">Nom de joueur</string>
     <string name="guStatusBar">Mode plein écran</string>
     <string name="guLastPosition">Dernière position</string>
-    <string name="guDisableScreenTimeout">Veille de l\'écran</string>
+    <string name="guDisableScreenTimeout">Écran mode veille</string>
     <string name="guUsePgnDatabase">utiliser la base de données PGN</string>
-    <string name="guEnableSounds">Bruitage</string>
+    <string name="guEnableSounds">Effets sonores</string>
     <string name="guDisplayCoordinates">Coordonnées (a-h, 1-8)</string>
     
     <string name="epEngineMessage">Afficher les calculs</string>
@@ -203,23 +203,23 @@
     <string name="play_lastPosition">Dernière position</string>
     <string name="play_screenTimeout">Veille de l\'écran</string>
     <string name="play_audio">Effets sonores</string>
-    <string name="play_posibleMoves">Mouvements posibles</string>
+    <string name="play_posibleMoves">Coups éventuels</string>
     <string name="play_coordinates">Coordonnées</string>
-    <string name="play_engineAutostart">Démarrage automatique</string>
-    <string name="play_openingBook">Livre d\'ouverture</string>
-    <string name="play_openingBookHints">Astuces de livre</string>
-    <string name="play_thinking">En pensant</string>
-    <string name="play_ponder">Réflechir</string>
-    <string name="play_moveList">Déplacer la liste</string>
+    <string name="play_engineAutostart">Démarrage automatique du moteur de jeu</string>
+    <string name="play_openingBook">Répertoire  de la bibliothèque d \' ouvertures</string>
+    <string name="play_openingBookHints">"Montrer les coups  de la bibliothèquouverture "</string>
+    <string name="play_thinking">Réflexion</string>
+    <string name="play_ponder">Réflexion durant le temps de l \'adversaire</string>
+    <string name="play_moveList">Liste des coups</string>
 
-    <string name="play_white">jouer blanc</string>
-    <string name="play_black">jouer noir</string>
+    <string name="play_white">Trait aux blancs</string>
+    <string name="play_black">Trait aux noirs</string>
     <string name="play_engine">Ordinateur</string>
     <string name="play_analysis">Analyse</string>
-    <string name="play_two_players">éditer</string>
-    <string name="play_two_players_flip">2 joueurs</string>
+    <string name="play_two_players">Édition</string>
+    <string name="play_two_players_flip">Mode 2 joueurs</string>
 
-    <string name="play_newGame">Nouveau jeu</string>
+    <string name="play_newGame">Nouvelle partie</string>
     
     <string name="ccsTitle">Horloge d\'échecs</string>
     <string name="ccsMessageWhite">Blanc</string>
@@ -324,12 +324,12 @@
     <string name="pause_delay">retard</string>
     <string name="pause_start">début</string>
     <string name="pause_stop">Arrêtez</string>
-    <string name="pause_white">jouer avec le blanc</string>
-    <string name="pause_black">jouer avec le noir</string>
+    <string name="pause_white">Jouer avec les blancs</string>
+    <string name="pause_black">Jouer avec les noirs</string>
     <string name="pause_engine">ordinateur / ordinateur</string>
     <string name="pause_two_players_flip">Deux joueurs</string>
     <string name="displayDisabled">Affichage du moteur désactivé</string>
-    <string name="disabled">désactivée</string>
-    <string name="enabled">activée</string>
+    <string name="disabled">désamorcé</string>
+    <string name="enabled">amorcé</string>
 
 </resources>
