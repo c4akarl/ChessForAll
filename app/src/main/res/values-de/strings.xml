@@ -83,9 +83,9 @@
     <string name="menu_modes_edit">Editieren</string>
     <string name="menu_modes_view">Spielen</string>
     <string name="menu_play_options">Spielen (Optionen)</string>
-    <string name="menu_enginesettings">Computer</string>
+    <string name="menu_enginesettings">Schach-Engine</string>
     <string name="menu_enginesettings_shutdown">Computerspiel beenden</string>
-    <string name="menu_enginesettings_playOptions">Computer-Spieloptionen</string>
+    <string name="menu_enginesettings_playOptions">Engine-Spieloptionen</string>
     <string name="menu_usersettings">Einstellungen</string>
     <string name="menu_usersettings_gui">Anwenderoptionen</string>
     <string name="menu_usersettings_timeControl">Zeitkontrolle</string>
@@ -330,4 +330,18 @@
     <string name="displayDisabled">Engine-Anzeige deaktiviert</string>
     <string name="disabled">deaktiviert</string>
     <string name="enabled">aktiviert</string>
+    <string name="rate_title">Bewerte Chess For All</string>
+    <string name="rate_text">Gefällt dir Chess For All? \nHast du kurz Zeit um die App zu bewerten? \nDanke für deine Unterstützung!</string>
+    <string name="rate_no">Nein, danke</string>
+    <string name="menu_enginesettings_install">Schach-Engine installieren</string>
+    <string name="menu_enginesettings_select">Schach-Engine auswählen</string>
+    <string name="engine_new">Neue Engine:</string>
+    <string name="engineNoRespond">keine Rückmeldung</string>
+    <string name="engineStartProcess">Prozess wird gestartet</string>
+    <string name="engineInstalled">installiert</string>
+    <string name="engineNotInstalled">nicht installiert</string>
+    <string name="fmInfoInstallEngine">Installationsanleitung: Wähle eine Engine aus und drücke die OK-Taste. Durch langes Drücken wird die entsprechende Datei gelöscht.</string>
+    <string name="fmInfoSelectEngine">Wähle eine Engine aus und drücke die OK-Taste. Durch langes Drücken wird die entsprechende Datei gelöscht.</string>
+    <string name="cl_draw">Remis</string>
+    <string name="menu_colorsettings_violet">Violett</string>
 </resources>

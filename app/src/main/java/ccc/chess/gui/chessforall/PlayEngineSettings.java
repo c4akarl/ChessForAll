@@ -26,8 +26,8 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
 		setContentView(R.layout.playenginesettings);
-        fileManagerIntent = new Intent(this, PgnFileManager.class);
-        pgnIO = new PgnIO(this);
+        fileManagerIntent = new Intent(this, FileManager.class);
+        fileIO = new FileIO(this);
         currentBase = runPrefs.getString("run_game0_file_base", "");
 		if (!currentBase.equals("") & !currentBase.equals("assets/") & !currentBase.equals("url"))	// == sd-card
 		{
@@ -87,7 +87,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 		case R.id.btnPeAutoSetFile:
 			fileManagerIntent.putExtra("fileActionCode", 5);
 	    	fileManagerIntent.putExtra("displayActivity", 1);
-	    	startActivityForResult(fileManagerIntent, ENGINE_AUTOPLAY_REQUEST_CODE);		// start PgnFileManager - Activity(with GUI)
+	    	startActivityForResult(fileManagerIntent, ENGINE_AUTOPLAY_REQUEST_CODE);		// start FileManager - Activity(with GUI)
 			break;
 		case R.id.etPePath:
 		case R.id.etPeFile:
@@ -155,7 +155,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 			path = path + "/";
 			etPePath.setText(path);
 		}
-		if (!pgnIO.pathExists(path))
+		if (!fileIO.pathExists(path))
 		{
 			etPeMessage.setVisibility(EditText.VISIBLE);
 			etPeMessage.setText(getString(R.string.fmPathError));
@@ -201,7 +201,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 	Intent fileManagerIntent;
 	private static final int ENGINE_PROGRESS_DIALOG = 1;
 	ProgressDialog progressDialog = null;
-	PgnIO pgnIO;
+	FileIO fileIO;
 	String path = "";
 	String file = "";
 	int round = 1;

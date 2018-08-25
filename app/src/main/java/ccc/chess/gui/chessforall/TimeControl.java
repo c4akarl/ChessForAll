@@ -44,7 +44,6 @@ public class TimeControl
 
 	public void stopChessClock(long currentTime, int playMod)
     {
-//Log.i(TAG, "stopChessClock()");
 		if (clockIsRunning)
 		{
 			clockIsRunning = false;

@@ -77,9 +77,9 @@
   <string name="menu_modes_edit">Редактор</string>
   <string name="menu_modes_view">Играй</string>
   <string name="menu_play_options">Игра(опции)</string>
-  <string name="menu_enginesettings">Компьютер</string>
+  <string name="menu_enginesettings">Шахматный движок</string>
   <string name="menu_enginesettings_shutdown">Отключение движка</string>
-  <string name="menu_enginesettings_playOptions">Опции игры компьютера</string>
+  <string name="menu_enginesettings_playOptions">Опции игры</string>
   <string name="menu_usersettings">Настройки</string>
   <string name="menu_usersettings_gui">UI опции</string>
   <string name="menu_usersettings_timeControl">Контроль времени</string>
@@ -311,5 +311,19 @@
   <string name="displayDisabled">Дисплей движка отключен</string>
     <string name="disabled">отключен</string>
   <string name="enabled">включен</string>
+    <string name="rate_title">Оценить Chess for All</string>
+  <string name="rate_text">Если вам нравится использовать Chess for All,  не могли бы Вы улучить момент, чтобы оценить его?  Спасибо за вашу поддержку!</string>
+  <string name="rate_no">Нет, спасибо</string>
+    <string name="menu_enginesettings_install">Установка движка</string>
+  <string name="menu_enginesettings_select">Выберите движок</string>
+    <string name="engine_new">Новый движок:</string>
+    <string name="engineNoRespond">нет ответа</string>
+    <string name="engineStartProcess">начать процесс</string>
+  <string name="engineInstalled">установлен</string>
+  <string name="engineNotInstalled">не установлен</string>
+    <string name="fmInfoInstallEngine">Инструкции по установке: выберите движок и нажмите кнопку OK. Длительное нажатие удаляет соответствующий файл.</string>
+    <string name="fmInfoSelectEngine">Выберите двигатель и нажмите кнопку OK. Длительное нажатие удаляет соответствующий файл.</string>
+    <string name="cl_draw">ничья</string>
+    <string name="menu_colorsettings_violet">фиолетовый</string>
 
 </resources>

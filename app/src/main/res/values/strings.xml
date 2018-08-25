@@ -83,9 +83,9 @@
     <string name="menu_modes_edit">Edit</string>
     <string name="menu_modes_view">Play</string>
     <string name="menu_play_options">Playing (options)</string>
-    <string name="menu_enginesettings">Computer</string>
+    <string name="menu_enginesettings">Chess engine</string>
     <string name="menu_enginesettings_shutdown">Shutdown engines</string>
-    <string name="menu_enginesettings_playOptions">Computer play options</string>
+    <string name="menu_enginesettings_playOptions">Engine play options</string>
     <string name="menu_usersettings">Settings</string>
     <string name="menu_usersettings_gui">UI options</string>
     <string name="menu_usersettings_timeControl">Time control</string>
@@ -330,5 +330,19 @@
     <string name="displayDisabled">Engine display disabled</string>
     <string name="disabled">disabled</string>
     <string name="enabled">enabled</string>
+    <string name="rate_title">Rate Chess For All</string>
+    <string name="rate_no">No, thanks</string>
+    <string name="rate_text">If you enjoy using Chess for All, would you mind taking a moment to rate it? Thanks for your support!</string>
+    <string name="menu_enginesettings_install">Install engine</string>
+    <string name="menu_enginesettings_select">Select engine</string>
+    <string name="engine_new">New engine:</string>
+    <string name="engineNoRespond">no respond</string>
+    <string name="engineStartProcess">start process</string>
+    <string name="engineInstalled">installed</string>
+    <string name="engineNotInstalled">not installed</string>
+    <string name="fmInfoInstallEngine">Installation instructions: Select an engine and press the OK button. A long press deletes the corresponding file.</string>
+    <string name="fmInfoSelectEngine">Select an engine and press the OK button. A long press deletes the corresponding file.</string>
+    <string name="cl_draw">draw</string>
+    <string name="menu_colorsettings_violet">Violet</string>
 
 </resources>

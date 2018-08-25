@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class PgnIO
+public class FileIO
 {
 
-	public PgnIO(Context context)
+	public FileIO(Context context)
 	{
 		this.context = context;
 	}
@@ -38,16 +38,16 @@ public class PgnIO
 	{
 		String[] dirs = null;
 		String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
-//err>>>: at ccc.chess.gui.chessforall.PgnIO.getExternalDirs (PgnIO.java:45)
+//err>>>: at ccc.chess.gui.chessforall.FileIO.getExternalDirs (FileIO.java:45)
 		if (externalStorage == null)
 			externalStorage = "";
 
 		// Android API < 19 (Build.VERSION_CODES.KITKAT)
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
 		{
-//err>>>: at ccc.chess.gui.chessforall.PgnIO.getExternalDirs (PgnIO.java:45)
+//err>>>: at ccc.chess.gui.chessforall.FileIO.getExternalDirs (FileIO.java:45)
 			dirs = new String[1];
-//err: at ccc.chess.gui.chessforall.PgnIO.getExternalDirs (PgnIO.java:45)
+//err: at ccc.chess.gui.chessforall.FileIO.getExternalDirs (FileIO.java:45)
 			dirs[0] = externalStorage;
 			return dirs;
 		}
@@ -233,16 +233,21 @@ public class PgnIO
 				else
 				{
 					f = new File(path + tmpA[i]);
-					if (f.isDirectory() & !f.isHidden())
+					if (f.isFile() & extension.equals(""))
+						fileA[i] = tmpA[i];
+					else
 					{
-//Log.i(TAG, "File: " + path + tmpA[i]);
-						isPgnFile = false;
-						if (allDirectory)
-							fileA[i] = tmpA[i];
-						else
+						if (f.isDirectory() & !f.isHidden())
 						{
-							if (isPgnFile)
+//Log.i(TAG, "File: " + path + tmpA[i] + ", allDirectory: " + allDirectory);
+							isPgnFile = false;
+							if (allDirectory)
 								fileA[i] = tmpA[i];
+							else
+							{
+								if (isPgnFile)
+									fileA[i] = tmpA[i];
+							}
 						}
 					}
 				}
@@ -599,11 +604,11 @@ public class PgnIO
 		} 
 		catch (FileNotFoundException e) 	{e.printStackTrace();} 
 		catch (IOException e)				{e.printStackTrace();}
-//20180501, at ccc.chess.gui.chessforall.PgnIO.dataToFile: (PgnIO.java:596)java.lang.NullPointerException:
+//20180501, at ccc.chess.gui.chessforall.FileIO.dataToFile: (FileIO.java:596)java.lang.NullPointerException:
 		catch (NullPointerException e)		{e.printStackTrace();}
     }
 
-	final String TAG = "PgnIO";
+	final String TAG = "FileIO";
 	final String SEP = "/";
 	Context context;
 	boolean isPgnFile = false;

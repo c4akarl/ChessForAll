@@ -83,7 +83,7 @@
     <string name="menu_modes_edit">Editar</string>
     <string name="menu_modes_view">jugar</string>
     <string name="menu_play_options">Jugar (opciones)</string>
-    <string name="menu_enginesettings">Computadora</string>
+    <string name="menu_enginesettings">Motor de ajedrez</string>
     <string name="menu_enginesettings_shutdown">Apagar motores</string>
     <string name="menu_enginesettings_playOptions">Opciones del motor de juego</string>
     <string name="menu_usersettings">Configuración</string>
@@ -330,5 +330,19 @@
     <string name="displayDisabled">Pantalla del motor deshabilitada</string>
     <string name="disabled">discapacitado</string>
     <string name="enabled">habilitado</string>
+    <string name="rate_title">Califica el Chess For All</string>
+    <string name="rate_text">"Si disfrutas usando Chess for All, ¿Te importaría tomar un momento para calificarlo? ¡Gracias por su apoyo! "</string>
+    <string name="rate_no">No, gracias</string>
+    <string name="menu_enginesettings_install">Instalar el motor</string>
+    <string name="menu_enginesettings_select">Seleccionar motor</string>
+    <string name="engine_new">Nuevo motor:</string>
+    <string name="engineNoRespond">no responde</string>
+    <string name="engineStartProcess">iniciar proceso</string>
+    <string name="engineInstalled">instalado</string>
+    <string name="engineNotInstalled">no instalado</string>
+    <string name="fmInfoInstallEngine">Instrucciones de instalación: seleccione un motor y presione el botón OK. Una pulsación larga borra el archivo correspondiente.</string>
+    <string name="fmInfoSelectEngine">Seleccione un motor y presione el botón OK. Una pulsación larga borra el archivo correspondiente.</string>
+    <string name="cl_draw">dibujar</string>
+    <string name="menu_colorsettings_violet">violeta</string>
 
 </resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginLeft="20dp"
+     android:layout_marginRight="20dp"
+     android:layout_marginTop="20dp"
+     android:layout_marginBottom="20dp"
+     android:background="@android:color/black">
+
+    <TextView
+        android:id="@+id/rate_title"
+        style="@style/c4aTV4"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:gravity="center"
+        android:textColor="@color/text_light"
+        android:layout_marginBottom="10dp"
+        android:text="@string/rate_title" />
+
+    <TextView
+        android:id="@+id/rate_text"
+        style="@style/c4aTV4"
+        android:layout_below="@id/rate_title"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:gravity="center_vertical|left"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/text_white"
+        android:text="@string/rate_text" />
+
+    <TextView
+        android:id="@+id/btn_rate"
+        style="@style/c4aTV4"
+        android:layout_below="@id/rate_text"
+        android:layout_width="fill_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bordergreen"
+        android:text="@string/rate_title" />
+
+    <TextView
+        android:id="@+id/btn_no"
+        style="@style/c4aTV4"
+        android:layout_below="@id/btn_rate"
+        android:layout_width="fill_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/borderwhite"
+        android:text="@string/rate_no" />
+
+</RelativeLayout>

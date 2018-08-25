@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -244,11 +243,32 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             cv.colors[0] = name;
         for (int i = 0; i < cv.colors.length; i++)
         {
+            if (i == 0 & name.equals("?"))
+            {
+                switch (colorId)
+                {
+                    case 0:
+                        cv.colors[i] = getString(R.string.menu_colorsettings_brown);
+                        break;
+                    case 1:
+                        cv.colors[i] = getString(R.string.menu_colorsettings_violet);
+                        break;
+                    case 2:
+                        cv.colors[i] = getString(R.string.menu_colorsettings_grey);
+                        break;
+                    case 3:
+                        cv.colors[i] = getString(R.string.menu_colorsettings_blue);
+                        break;
+                    case 4:
+                        cv.colors[i] = getString(R.string.menu_colorsettings_green);
+                        break;
+                }
+            }
             colors = colors + cv.colors[i] + " ";
         }
 
 //karl: zum Kopieren der Farben von Logcat ---> ColorValues.COLORS_0...4
-Log.i(TAG, "colors: " + colors);
+//Log.i(TAG, "colors: " + colors);
 
         SharedPreferences.Editor ed = userPrefs.edit();
         ed.putInt("colorId", colorId);

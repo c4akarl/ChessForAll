@@ -22,7 +22,7 @@
 		android:layout_marginRight="0dip"
 		android:singleLine="true"
 		android:gravity="center"
-		android:background="@drawable/bordergrey"
+		android:background="@drawable/bordergreen"
 		android:text="@string/fmTitleLoad"
 		android:textColor="#000000" />
 

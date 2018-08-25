@@ -83,7 +83,7 @@
     <string name="menu_modes_edit">Modifier</string>
     <string name="menu_modes_view">Jouer</string>
     <string name="menu_play_options">Jouer (options)</string>
-    <string name="menu_enginesettings">Oordinateur</string>
+    <string name="menu_enginesettings">moteur de jeu</string>
     <string name="menu_enginesettings_shutdown">Arret des moteurs</string>
     <string name="menu_enginesettings_playOptions">Options de lecture de moteur</string>
     <string name="menu_usersettings">Réglages</string>
@@ -297,7 +297,7 @@
     <string name="btn_Continue">Continuer</string>
     <string name="epPonder">Ponder</string>
     <string name="engineDisplayedLines">Lignes affichées</string>
-    <string name="engineThinking">"En pensant "</string>
+    <string name="engineThinking">"Réflexion "</string>
     <string name="engineError">Engine error</string>
     <string name="epShowBookHints">Montrer les conseils du livre</string>
     <string name="menu_colorsettings">Paramètres de couleur</string>
@@ -331,5 +331,19 @@
     <string name="displayDisabled">Affichage du moteur désactivé</string>
     <string name="disabled">désamorcé</string>
     <string name="enabled">amorcé</string>
+    <string name="rate_title">Evaluer Chess for all</string>
+    <string name="rate_text">Si vous avez eu plaisir à utiliser Chess for All, cela vous dérangerait de prendre un moment pour l\'évaluer? Merci pour votre aide!</string>
+    <string name="rate_no">Non, merci</string>
+    <string name="menu_enginesettings_install">Installer des moteurs</string>
+    <string name="menu_enginesettings_select">Sélectionner un moteur</string>
+    <string name="engine_new">Nouveau moteur:</string>
+    <string name="engineNoRespond">pas de réponse</string>
+    <string name="engineStartProcess">processus de démarrage</string>
+    <string name="engineInstalled">installé</string>
+    <string name="engineNotInstalled">pas installé</string>
+    <string name="fmInfoInstallEngine">Instructions pour l\'installation: Sélectionner un moteur et appuyer sur le bouton OK. Un appui long supprime le fichier correspondant.</string>
+    <string name="fmInfoSelectEngine">Sélectionnez un moteur et appuyez sur le bouton OK. Un appui long supprime le fichier correspondant.</string>
+    <string name="cl_draw">dessiner</string>
+    <string name="menu_colorsettings_violet">Violet</string>
 
 </resources>

@@ -42,7 +42,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 
 		setContentView(R.layout.optionsengineplay);
 
-		fileManagerIntent = new Intent(this, PgnFileManager.class);
+		fileManagerIntent = new Intent(this, FileManager.class);
 		engineMessage = (CheckBox) findViewById(R.id.cbEpEngineMessage);
 		ponder = (CheckBox) findViewById(R.id.cbEpPonder);
 		randomFirstMove = (CheckBox) findViewById(R.id.cbEpRandomFirstMove);
@@ -231,8 +231,8 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 	Util u;
 	final static int LOAD_OPENING_BOOK_REQUEST_CODE = 91;
 	final static int PV_MULTI = 2;
-	final static int PV_MOVES = 16;
-	final static int DISPLAYED_LINES = 5;
+	final static int PV_MOVES = 8;
+	final static int DISPLAYED_LINES = 3;
 	Intent fileManagerIntent;
 	SharedPreferences userPrefs;
 	SharedPreferences runP;

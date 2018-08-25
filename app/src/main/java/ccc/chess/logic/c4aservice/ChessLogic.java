@@ -603,6 +603,7 @@ public class ChessLogic
         p_gameOver = false;
         p_mate = false;
         p_stalemate = false;
+		p_auto_draw = false;
     }
 
     public void setPositionValues(CharSequence stat, CharSequence message)	
@@ -666,8 +667,13 @@ public class ChessLogic
 	    		p_gameEnd = true;
 	    	else
 	    		p_gameEnd = false;
+			cntPieces(p_fen);
+			p_auto_draw = isAutoDraw();										// auto draw
+			if (p_auto_draw)
+				history.setGameTag("Result", "1/2-1/2");
 	    	if (p_gameEnd & !history.getGameTagValue("Result").equals("*"))	// game over
-	    		p_gameOver = true;	
+	    		p_gameOver = true;
+//Log.i(TAG, "setPositionValues(), p_gameOver: " + p_gameOver + ", p_auto_draw: " + p_auto_draw);
 	    	if (chessMove.getIsMate().equals("t"))							// mate
 	    		p_mate = true;
 	    	else
@@ -675,7 +681,8 @@ public class ChessLogic
 	    	if (chessMove.getIsStealMate().equals("t"))						// stalemate
 	    		p_stalemate = true;
 	    	else
-	    		p_stalemate = false;	
+	    		p_stalemate = false;
+
     	}
         catch (IndexOutOfBoundsException e) {e.printStackTrace(); p_stat = "0";}
 //    	Log.i(TAG, "p_stat, p_fen: " + p_stat + ", " + p_fen);
@@ -819,6 +826,92 @@ public class ChessLogic
     		p_hasPossibleMoves = true;
     }
 
+	public void cntPieces(CharSequence fen)
+	{
+//Log.i(TAG, "cntPieces(), fen: " + fen);
+		StringBuilder sbFenCheck = new StringBuilder(200);
+		sbFenCheck.setLength(0);
+		for (int i = 0; i < fen.length(); i++)
+		{
+			if (fen.charAt(i) == ' ')
+				break;
+			else
+			{
+				if (fen.charAt(i) > '8' | fen.charAt(i) == '/')
+				{
+					if (fen.charAt(i) != '/')
+						sbFenCheck.append(fen.charAt(i));
+				}
+				else
+				{
+					if (fen.charAt(i) == '1') {sbFenCheck.append("-");}
+					if (fen.charAt(i) == '2') {sbFenCheck.append("--");}
+					if (fen.charAt(i) == '3') {sbFenCheck.append("---");}
+					if (fen.charAt(i) == '4') {sbFenCheck.append("----");}
+					if (fen.charAt(i) == '5') {sbFenCheck.append("-----");}
+					if (fen.charAt(i) == '6') {sbFenCheck.append("------");}
+					if (fen.charAt(i) == '7') {sbFenCheck.append("-------");}
+					if (fen.charAt(i) == '8') {sbFenCheck.append("--------");}
+				}
+			}
+		}
+		fen = sbFenCheck.toString();
+		cntWK = cntWQ = cntWR = cntWBl = cntWBd = cntWN = cntWP = 0;
+		cntBK = cntBQ = cntBR = cntBBl = cntBBd = cntBN = cntBP = 0;
+		for (int i = 0; i < fen.length(); i++)
+		{
+			switch (fen.charAt(i))
+			{
+				case 'K': cntWK++; break;
+				case 'Q': cntWQ++; break;
+				case 'R': cntWR++; break;
+				case 'B': if (fldLD[i].equals("l")) cntWBl++; else cntWBd++; break;
+				case 'N': cntWN++; break;
+				case 'P': cntWP++; break;
+
+				case 'k': cntBK++; break;
+				case 'q': cntBQ++; break;
+				case 'r': cntBR++; break;
+				case 'b': if (fldLD[i].equals("l")) cntBBl++; else cntBBd++; break;
+				case 'n': cntBN++; break;
+				case 'p': cntBP++; break;
+			}
+		}
+	}
+
+	public boolean isAutoDraw()
+	{
+		int cntK = cntWK + cntBK;
+		int cntQRP = cntWQ + cntWR + cntWP + cntBQ + cntBR + cntBP;
+		int cntN = cntWN + cntBN;
+		int cntBl = cntWBl + cntBBl;
+		int cntBd = cntWBd + cntBBd;
+		int cntB = cntBl + cntBd;
+		int cntAll = cntK + + cntQRP + cntN + cntB;
+
+//Log.i(TAG, "isAutoDraw(), cntQRP: " + cntQRP + ", cntBl: " + cntBl + ", cntBd: " + cntBd + ", cntN: " + cntN + ", cntAll: " + cntAll);
+		if (cntK != 2 | cntQRP > 0)
+		 	return false;
+		if (cntWBl > 0 & cntWBd > 0)
+			return false;
+		if (cntBBl > 0 & cntBBd > 0)
+			return false;
+
+		if (cntAll == 2)	// k + k
+			return true;
+		if (cntAll == 3 & (cntB == 1 | cntN == 1)) // k + k + (b | n)
+			return true;
+//		if (cntAll == 4 & (cntWN == 2 | cntBN == 2)) // k + k + n & n (black or white)
+//			return true;
+		if (cntQRP == 0 & cntN == 0 & (cntBl > 0 | cntBd == 0)) // k + k + b (color light)
+			return true;
+		if (cntQRP == 0 & cntN == 0 & (cntBd > 0 | cntBl == 0)) // k + k + b (color dark)
+			return true;
+
+		return false;
+
+	}
+
 	public void setPossileMovesTo(CharSequence moveTo, ArrayList<String> moveList)
 	{
 		p_hasPossibleMovesTo = false;
@@ -885,9 +978,22 @@ public class ChessLogic
     public boolean 			p_variationEnd = false;
     public boolean 			p_mate = false;
     public boolean 			p_stalemate = false;
+    public boolean 			p_auto_draw = false;
     public boolean 			p_hasPossibleMoves = false;
     public boolean 			p_hasPossibleMovesTo = false;
     public ArrayList<CharSequence> p_possibleMoveList;
     public ArrayList<CharSequence> p_possibleMoveToList;
 
+	final CharSequence fldLD[] =
+			{		"l", "d", "l", "d", "l", "d", "l", "d",
+					"d", "l", "d", "l", "d", "l", "d", "l",
+					"l", "d", "l", "d", "l", "d", "l", "d",
+					"d", "l", "d", "l", "d", "l", "d", "l",
+					"l", "d", "l", "d", "l", "d", "l", "d",
+					"d", "l", "d", "l", "d", "l", "d", "l",
+					"l", "d", "l", "d", "l", "d", "l", "d",
+					"d", "l", "d", "l", "d", "l", "d", "l"};
+
+	int cntWK, cntWQ, cntWR, cntWBl, cntWBd, cntWN, cntWP;
+	int cntBK, cntBQ, cntBR, cntBBl, cntBBd, cntBN, cntBP;
 }

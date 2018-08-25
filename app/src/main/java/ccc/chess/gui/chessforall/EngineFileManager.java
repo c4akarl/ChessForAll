@@ -1,7 +1,5 @@
 package ccc.chess.gui.chessforall;
 
-import android.os.Environment;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,65 +15,20 @@ import java.util.Comparator;
 
 public class EngineFileManager 
 {
-
-	// currently not used (2018.01.16)
-
-	// install/uninstall engines from SD-Card; managing engines on package file system: /data/data/ccc.chess.engines/engines : !!! dataEnginesPath
-	//	FILE (SD-CARD)		FILE (SD-CARD)		FILE (SD-CARD)		FILE (SD-CARD)		FILE (SD-CARD)
-	public String getExternalDirectoryPath()
-	{
-		String pathExternal = Environment.getExternalStorageDirectory().getAbsolutePath();
-//		if (!pathExternal.equals(""))
-//			Log.i(TAG, "pathExternal: " + pathExternal + ", state: " + state);
-		return pathExternal;
-	}
-
-	public String getParentFile(String path)
-    {
-		String newPath = "";
-		File f = new File(path);
-		try 	{newPath = f.getParentFile().toString();}
-		catch 	(NullPointerException e) {return path;}
-		return newPath;
-    }
-	public String[] getFileArrayFromPath(String path)
-    {
-		String[] sortedFiles = null;
-		try
-		{
-			File f = new File(path);
-			sortedFiles = f.list();
-			if (sortedFiles != null)
-				Arrays.sort(sortedFiles, new AlphabeticComparator());
-			currentFilePath = path;
-		}
-		catch (NullPointerException e) {e.printStackTrace();}
-		return sortedFiles;
-    }
-	public boolean fileIsDirectory(String fileName)
-	{
-		File f = new File(currentFilePath, fileName);
-		return f.isDirectory();
-	}
+	//  managing engines on package file system: /data/data
 	//	FILE (DATA)		FILE (DATA)		FILE (DATA)		FILE (DATA)		FILE (DATA)
-	public String[] getFileArrayFromData()
+	public String[] getFileArrayFromData(String dataPath)
     {
 		String[] sortedFiles = null;
 		File f;
-		f = new File(dataEnginesPath);
+		f = new File(dataPath);
 		sortedFiles = f.list();
 		if (sortedFiles != null)
 			Arrays.sort(sortedFiles, new AlphabeticComparator());
 		return sortedFiles;
     }
-	public int getCountFromData(String[] dataArray)
-	{
-		if (dataArray == null)
-			return 0;
-		else
-			return dataArray.length;
-	}
-	public boolean writeEngineToData(String filePath, String fileName, InputStream is) 
+
+	public boolean writeEngineToData(String filePath, String fileName, InputStream is)
 	{
 		// if no engine exists in >/data/data/ccc.chess.engines/engines< install default engine! !!! dataEnginesPath
         File file = new File(dataEnginesPath);
@@ -90,6 +43,7 @@ public class EngineFileManager
 		{
 			try
 			{
+//Log.i(TAG, "1 writeEngineToData(), f.exists(): " + f);
 				String cmd[] = { "chmod", "744", f.getAbsolutePath() };
 				Process process = Runtime.getRuntime().exec(cmd);
 				try 
@@ -108,6 +62,7 @@ public class EngineFileManager
 				deleteFileFromData(fileName);
 				return false;
 			}
+//Log.i(TAG, "2 writeEngineToData(), f.exists(): " + f);
 		} 
 		else
 		{
@@ -144,6 +99,7 @@ public class EngineFileManager
 						deleteFileFromData(fileName);
 						return false;
 					}
+//Log.i(TAG, "3 writeEngineToData(), engineUpdated: " + engineUpdated);
 				} 
 				catch (IOException e) 
 				{
@@ -152,6 +108,7 @@ public class EngineFileManager
 				}
 				if (!isEngineProcess(fileName))	// not an engine process: kill data and return!
 				{
+//Log.i(TAG, "4 writeEngineToData(), !isEngineProcess(), engineUpdated: " + engineUpdated);
 					deleteFileFromData(fileName);
 					return false;
 				}
@@ -164,6 +121,20 @@ public class EngineFileManager
 		}
 		return engineUpdated;
 	}
+
+	public boolean dataFileExist(String file)
+	{
+		File f = new File(dataEnginesPath, file);
+		return f.exists();
+	}
+
+	public boolean deleteFileFromData(String file)
+	{
+		File f = new File(dataEnginesPath, file);
+		return  f.delete();
+	}
+
+	//	VALIDATE PROCESS		VALIDATE PROCESS		VALIDATE PROCESS		VALIDATE PROCESS
 	private boolean isEngineProcess(String file) 
 	{
 		boolean isProcess = false;
@@ -183,7 +154,8 @@ public class EngineFileManager
 		}
 		try
 		{
-			writeToProcess("isready" + "\n");
+//			writeToProcess("isready" + "\n");
+			writeToProcess("uci" + "\n");
 		}
 		catch (IOException e) {e.printStackTrace();}
 		String line = "";
@@ -196,7 +168,8 @@ public class EngineFileManager
 //				Log.i(TAG, "cnt, line: " + cnt + ", " + line);
 				if (line != null)
 				{
-					if (line.contains("ok"))
+//					if (line.contains("ok"))
+					if (!line.equals(""))
 					{
 						isProcess = true;
 						cnt = 100;
@@ -229,16 +202,7 @@ public class EngineFileManager
 		}
 		return line;
 	}
-	public boolean dataFileExist(String file)
-	{
-		File f = new File(dataEnginesPath, file);
-		return f.exists();
-	}
-	public boolean deleteFileFromData(String file)
-	{
-		File f = new File(dataEnginesPath, file);
-		return  f.delete();
-	}
+
 	//	HELPERS		HELPERS		HELPERS		HELPERS		HELPERS		HELPERS		HELPERS
 	class AlphabeticComparator implements Comparator<Object> 
 	{
@@ -252,7 +216,6 @@ public class EngineFileManager
 	
 	final String TAG = "EngineFileManager";
 	public String dataEnginesPath = "";
-	public String currentFilePath = "";
 	private BufferedReader reader = null;
 	private BufferedWriter writer = null;
 

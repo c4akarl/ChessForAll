@@ -10,7 +10,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,10 @@ public class BoardView extends View
     {
         super(context, attrs);
         this.context = context;
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int displayWidth = display.getWidth();
+        if (displayWidth / 100 > STROKE_SIZE)
+            STROKE_SIZE = displayWidth / 100;
     }
 
     public void setColor()
@@ -316,11 +322,8 @@ public class BoardView extends View
                     mPaint.setColor(Color.TRANSPARENT);
                     mPaint.setStyle(Paint.Style.FILL);
                     canvas.drawRect(mRect, mPaint);
-                    if (userPrefs.getBoolean("user_options_gui_posibleMoves", true))
-                    {
-                        mPaint.setColor(cv.getColor(cv.COLOR_FIELD_FROM_5));
-                        canvas.drawCircle(circleX, circleY, circleR, mPaint);
-                    }
+                    mPaint.setColor(cv.getColor(cv.COLOR_FIELD_FROM_5));
+                    canvas.drawCircle(circleX, circleY, circleR, mPaint);
                 }
                 if (lastMoveTo == boardPos)
                 {
@@ -328,6 +331,7 @@ public class BoardView extends View
                     mPaint.setStyle(Paint.Style.FILL);
                     canvas.drawRect(mRect, mPaint);
                     mRect.set(x*fieldSize +STROKE_SIZE_2, y*fieldSize +STROKE_SIZE_2, x*fieldSize + fieldSize -STROKE_SIZE_2, y*fieldSize + fieldSize -STROKE_SIZE_2);
+//                    mRect.set(x*fieldSize +STROKE_SIZE, y*fieldSize +STROKE_SIZE, x*fieldSize + fieldSize -STROKE_SIZE, y*fieldSize + fieldSize -STROKE_SIZE);
                     mPaint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
                     mPaint.setStrokeWidth(STROKE_SIZE);
                     mPaint.setStyle(Paint.Style.STROKE);
@@ -535,8 +539,8 @@ public class BoardView extends View
     int boardSize = 0;
     int fieldSize = 100;
     int textSize = 20;
-    final int STROKE_SIZE = 6;
-    final int STROKE_SIZE_2 = STROKE_SIZE / 2;
+    int STROKE_SIZE = 3;
+    int STROKE_SIZE_2 = (STROKE_SIZE / 3) * 2;
 
     private Paint mPaint;
     private Rect mRect;

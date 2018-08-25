@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".PgnFileManager" android:label="@string/app_pgnFileManager" android:windowSoftInputMode="adjustPan"> </activity>
+        <activity android:name=".FileManager" android:label="@string/app_pgnFileManager" android:windowSoftInputMode="adjustPan"> </activity>
         <activity android:name=".ChessGameData" android:label="@string/app_chessData" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
         <activity android:name=".ChessNotation" android:label="@string/app_chessNotation" > </activity>
         <activity android:name=".ChessMoveText" android:label="" > </activity>
