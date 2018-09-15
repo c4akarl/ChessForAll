@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "ccc.chess.gui.chessforall"
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 71
-        versionName "2.11"
+        versionCode 72
+        versionName "2.12"
     }
 
     buildTypes {

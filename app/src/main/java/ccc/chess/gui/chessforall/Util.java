@@ -11,6 +11,7 @@ public class Util
 {
     public void updateFullscreenStatus(Activity a, boolean bUseFullscreen)
     {
+//Log.i(TAG, "updateFullscreenStatus(), bUseFullscreen: " + bUseFullscreen);
         if(bUseFullscreen)  // from show status bar ---> show full screen !!!
         {
             a.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);

@@ -309,12 +309,13 @@ public class ChessPosition
 		return shortMoves;
     }
 
-	public CharSequence getMoveFromSAN(CharSequence fen, CharSequence sanMove)				
+		public CharSequence getMoveFromSAN(CharSequence fen, CharSequence sanMove)
     {	// SAN = PGN-move; return: LAN
-//		Log.i(TAG, sanMove + ", " + fen);
+//Log.i(TAG, sanMove + ", " + fen);
 		if (isChess960)
 			fen = chess960GetFEN(fen);
-    	try {cpPgnPosition = new Position(fen.toString(), true);} 
+//Log.i(TAG, "getMoveFromSAN(), isChess960: " + isChess960 + ", sanMove: " + sanMove);
+    	try {cpPgnPosition = new Position(fen.toString(), true);}
     	catch (IllegalArgumentException e) {e.printStackTrace(); return "";}
     	setMoveNumber(fen);
     	if (isChess960 & sanMove.toString().startsWith("O"))
@@ -331,22 +332,24 @@ public class ChessPosition
     				lanMove = bLongCastC4aLan.subSequence(0, 4).toString();
     			doChess960Castling(cpPgnPosition, lanMove);
    				chess960SetFenCastling(lanMove);
+//Log.i(TAG, "getMoveFromSAN(), isChess960: " + isChess960 + ", lanMove: " + lanMove);
     			return lanMove;	
     		}
     	}
     	
 //		start NEW
-    	
     	CharSequence lan = getNewMove(fen, sanMove);
     	if (!lan.equals(""))
-    		return lan;
+		{
+//Log.i(TAG, "NEW, sanMove: " + sanMove + ", lanMove: " + lanMove);
+			return lan;
+		}
     	else
     	{
     		try {cpPgnPosition = new Position(fen.toString(), true);} 
         	catch (IllegalArgumentException e) {e.printStackTrace(); return "";}
         	setMoveNumber(fen);
     	}
-    	
 //    	end NEW
     	
     	//	OLD
@@ -367,13 +370,16 @@ public class ChessPosition
 				catch (IllegalMoveException e) { e.printStackTrace(); return "";}
 				posSanMove = cpPgnPosition.getLastMove().getSAN();
 				lanMove = Move.getString(moves[i]);
-//				Log.i(TAG, "OLD, sanMove, lanMove, moves[i]: " + sanMove + ", " + lanMove + ", " + moves[i]);
+//Log.i(TAG, "OLD, sanMove, lanMove, moves[i]: " + sanMove + ", " + lanMove + ", " + moves[i]);
 				if (lanMove.startsWith("O"))
 					lanMove = getCastlingLAN(fen, lanMove);
 				lanMove = lanMove.replace("-", "");
 				lanMove = lanMove.replace("x", "");
+//				if (lanMove.startsWith("O"))
+//					lanMove = getCastlingLAN(fen, lanMove);
 				if (isChess960)
     				chess960SetFenCastling(lanMove);
+//Log.i(TAG, "OLD, sanMove: " + sanMove + ", lanMove: " + lanMove);
 				return lanMove;								// move lan (g1f3)
 			}
 			if (tmpSanMove.equals(sanMoves[i]))
@@ -389,8 +395,6 @@ public class ChessPosition
 					catch (IllegalMoveException e) { e.printStackTrace(); return "";}
 					posSanMove = cpPgnPosition.getLastMove().getSAN();
 					lanMove = Move.getString(moves[i]);
-//					if (lanMove.startsWith("O"))
-//						lanMove = getCastlingLAN(fen, lanMove);
 					lanMove = lanMove.replace("-", "");
 					lanMove = lanMove.replace("x", "");
 					if (isChess960)
@@ -401,6 +405,28 @@ public class ChessPosition
 		}
         return "";
     }
+
+
+
+	public String getLanMoveFromSanMove(CharSequence fen, String[] possibleSanMoves, CharSequence sanMove)
+	{
+//Log.i(TAG, "1 getLanMoveFromSanMove(), sanMove: " + sanMove + "\nfen: " + fen);
+		String lanMove = "";
+		if (possibleSanMoves != null)
+		{
+			for (int i = 0; i < possibleSanMoves.length; i++)
+			{
+				if (possibleSanMoves[i].equals(sanMove.toString()))
+					lanMove = getMoveFromSAN(fen, possibleSanMoves[i]).toString();
+			}
+		}
+		if (isChess960 & lanMove.equals("") & sanMove.toString().startsWith("O-"))
+		{
+			lanMove = getMoveFromSAN(fen, sanMove).toString();
+		}
+//Log.i(TAG, "2 getLanMoveFromSanMove(), sanMove: " + sanMove + ", lanMove: " + lanMove + ", posSanMove: " + posSanMove);
+		return lanMove;
+	}
 
 	public CharSequence getNewMove(CharSequence fen, CharSequence sanMove)				
     {	// NEW methode, get lan
@@ -462,7 +488,6 @@ public class ChessPosition
 	    		}
 	    		else
 	    		{
-//	    			try {cpPgnPosition = new Position(fen.toString());}
 	    			try {cpPgnPosition = new Position(fen.toString(), true);}
 	    	    	catch (IllegalArgumentException e) {e.printStackTrace(); i = shortMoves.size();}
 	    			setMoveNumber(fen);

@@ -1,7 +1,5 @@
 package ccc.chess.gui.chessforall;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 
 import ccc.chess.logic.c4aservice.ChessLogic;
@@ -35,7 +33,6 @@ public class GameControl
     }
 	
     final String TAG = "GameControl";
-    Context context;
 	ChessLogic cl;					// direct access to ChessLogic, Chess960, ChessHistory
 	ChessMove chessMove = new ChessMove();
     CharSequence oldGameResult = "";

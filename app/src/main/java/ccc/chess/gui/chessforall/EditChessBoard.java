@@ -37,7 +37,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
         userPrefs = getSharedPreferences("user", 0);
         runP = getSharedPreferences("run", 0);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
+		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
 
 		if (u.getAspectRatio(this) > 150)
 			setContentView(R.layout.editchessboard);

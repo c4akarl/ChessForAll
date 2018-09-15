@@ -46,7 +46,7 @@ public class OptionsPlay extends Activity
 
 	protected void start()
 	{
-		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", true));
+		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
 
 		setContentView(R.layout.optionsplay);
 		getPrefs();

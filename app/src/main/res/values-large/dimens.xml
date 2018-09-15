@@ -7,7 +7,7 @@
     <dimen name="tv_height">60dp</dimen>
     <dimen name="tv_width">160dp</dimen>
     <dimen name="title_text_size">22sp</dimen>
-    <dimen name="margin_1">30dp</dimen>
+    <dimen name="margin_1">20dp</dimen>
     <dimen name="margin_2">40dp</dimen>
     <dimen name="tv_color_size">40dp</dimen>
     <dimen name="tv_color_margin_1">10dp</dimen>

@@ -12,7 +12,7 @@
     <string name="app_playEngineSettings">Juego de computadora automático</string>
     <string name="comingSoon">próximamente</string>
 
-    <string name="pieces">KDTLS</string>
+    <string name="pieces">RDTAC</string>
     <string name="sendEmail">Enviar email</string>
 
     <string name="btn_Ok">  Aceptar  </string>
@@ -344,5 +344,14 @@
     <string name="fmInfoSelectEngine">Seleccione un motor y presione el botón OK. Una pulsación larga borra el archivo correspondiente.</string>
     <string name="cl_draw">dibujar</string>
     <string name="menu_colorsettings_violet">violeta</string>
+    <string name="pieceNames">Nombres de las piezas</string>
+    <string name="pieceNamesEnglish">Inglés</string>
+    <string name="pieceNamesLocalLanguage">Lenguaje local</string>
+    <string name="pieceNamesFigurineNotation">Figurilla</string>
+    <string name="piece_K">R</string>
+    <string name="piece_Q">D</string>
+    <string name="piece_R">T</string>
+    <string name="piece_B">A</string>
+    <string name="piece_N">C</string>
 
 </resources>

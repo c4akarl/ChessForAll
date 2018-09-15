@@ -24,7 +24,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 		userPrefs = getSharedPreferences("user", 0);
 		runPrefs = getSharedPreferences("run", 0);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
+		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
 		setContentView(R.layout.playenginesettings);
         fileManagerIntent = new Intent(this, FileManager.class);
         fileIO = new FileIO(this);

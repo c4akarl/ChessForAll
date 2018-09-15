@@ -344,5 +344,14 @@
     <string name="fmInfoSelectEngine">Select an engine and press the OK button. A long press deletes the corresponding file.</string>
     <string name="cl_draw">draw</string>
     <string name="menu_colorsettings_violet">Violet</string>
+    <string name="pieceNames">Piece Names</string>
+    <string name="pieceNamesEnglish">English</string>
+    <string name="pieceNamesLocalLanguage">Local language</string>
+    <string name="pieceNamesFigurineNotation">Figurin</string>
+    <string name="piece_K">K</string>
+    <string name="piece_Q">Q</string>
+    <string name="piece_R">R</string>
+    <string name="piece_B">B</string>
+    <string name="piece_N">N</string>
 
 </resources>

@@ -16,7 +16,7 @@ public class ChessNotation extends Activity
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u = new Util();
 		userP = getSharedPreferences("user", 0);
-		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", true));
+		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.notation);
         title = (TextView) findViewById(R.id.title);
         notationText = (TextView) findViewById(R.id.ntTv);
@@ -34,7 +34,8 @@ public class ChessNotation extends Activity
 		}
         title.setText(getIntent().getExtras().getString("white") + " - " + getIntent().getExtras().getString("black"));
  	}
-	public void myClickHandler(View view) 		
+
+	public void myClickHandler(View view)
     {	// ClickHandler	(ButtonEvents)
 		Intent returnIntent;
 		switch (view.getId()) 

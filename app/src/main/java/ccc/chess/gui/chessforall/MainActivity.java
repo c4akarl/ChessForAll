@@ -106,7 +106,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		getRunPrefs();	// run preferences
 		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		setWakeLock(false);
-		wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "c4a");
+		wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "c4a:locktag");
 		wakeLock.setReferenceCounted(false);
 		useWakeLock = !userPrefs.getBoolean("user_options_gui_disableScreenTimeout", false);
 		setWakeLock(useWakeLock);
@@ -194,7 +194,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		soundsMap = new HashMap<Integer, Integer>();
 		soundsMap.put(1, mSoundPool.load(this, R.raw.move_ok, 1));
 		soundsMap.put(2, mSoundPool.load(this, R.raw.move_wrong, 1));
-		gc.cl.history.setFigurineAlgebraicNotation(getString(R.string.pieces));
+		setPieceName(userPrefs.getInt("user_options_gui_PieceNameId", 0));
 		if (gc.initPrefs & userPrefs.getBoolean("user_options_gui_StatusBar", false))
 		{
 			gc.initPrefs = false;
@@ -652,8 +652,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
 //    	Log.i(TAG, "fileActionCode, displayActivity, gameLoad: " 	+ fileActionCode + ", " + displayActivity
 //    																+ ", " + gameLoad);
-		if ((fileActionCode == LOAD_GAME_REQUEST_CODE | fileActionCode == LOAD_GAME_PREVIOUS_CODE)
-				& displayActivity == 0)
+		if 	((fileActionCode == LOAD_GAME_REQUEST_CODE | fileActionCode == LOAD_GAME_PREVIOUS_CODE)
+				& displayActivity == 0
+			)
 		{
 			if (fmPrefs.getString("fm_extern_load_path", "").equals(""))
 			{
@@ -742,8 +743,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void startNotation(int textValue)
 	{
 		notationIntent.putExtra("textValue", textValue);
-		notationIntent.putExtra("moves", gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, false, true, true, false, false, true, 0));
-		notationIntent.putExtra("moves_text", gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, true, true, true, false, false, true, 2));
+        int pieceId = userPrefs.getInt("user_options_gui_PieceNameId", 0);
+		notationIntent.putExtra("moves", gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000,
+				false, true, false, false, true, 0, pieceId));
+		notationIntent.putExtra("moves_text", gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, true, true,
+				 false, false, true, 2, pieceId));
 		notationIntent.putExtra("pgn", gc.cl.history.createPgnFromHistory(1));
 		notationIntent.putExtra("white", gc.cl.history.getGameTagValue("White"));
 		gc.cl.history.getGameTagValue("FEN");
@@ -825,13 +829,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		if (id == PGN_ERROR_DIALOG)
 		{
 			String message = gc.errorMessage + "\n\n" + getString(R.string.sendEmail);
-			c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleDialog), message,
-					R.drawable.button_ok, 0, R.drawable.button_cancel);
-			c4aImageDialog.setOnCancelListener(new DialogInterface.OnCancelListener()
-			{
-				public void onCancel(DialogInterface dialog) { onCancelDialog(); }
-			});
-			return c4aImageDialog;
+			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog),
+					getString(R.string.btn_Ok), "", getString(R.string.btn_Cancel), message, 0, "");
+			return c4aDialog;
 		}
 		if (id == FILE_LOAD_PROGRESS_DIALOG)
 		{
@@ -1005,50 +1005,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			});
 			return timeSettingsDialog;
 		}
-		if (id == ENGINE_SEARCH_DIALOG)
-		{
-			setInfoMessage(getString(R.string.engineNoEnginesOnDevice), null, null, false);
-			c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleDialog), getString(R.string.engineSearchMessage),
-					R.drawable.button_ok, 0, R.drawable.button_cancel);
-			c4aImageDialog.setOnCancelListener(new DialogInterface.OnCancelListener()
-			{
-				public void onCancel(DialogInterface dialog) { onCancelDialog(); }
-			});
-			return c4aImageDialog;
-		}
-		if (id == ENGINE_SEARCH_NO_INTERNET_DIALOG)
-		{
-			c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleDialog), getString(R.string.engineSearchNoInternetMessage),
-					0, R.drawable.button_ok, 0);
-			c4aImageDialog.setOnCancelListener(new DialogInterface.OnCancelListener()
-			{
-				public void onCancel(DialogInterface dialog) { onCancelDialog(); }
-			});
-			return c4aImageDialog;
-		}
+
 		if (id == INFO_DIALOG)
 		{
 			String mes = runP.getString("infoMessage", "") + "\n\n";
 			mes = mes + "Model: " + runP.getString("infoModelNumber", "") + "\n";
 			mes = mes + "Android-Version: " + runP.getString("infoAndroidVersion", "") + "\n";
 			mes = mes + "DB-Version: " + runP.getString("infoDbVersion", "");
-			c4aImageDialog = new C4aImageDialog(this, this, runP.getString("infoTitle", ""), mes, 0, R.drawable.button_ok, 0);
-			c4aImageDialog.setOnCancelListener(new DialogInterface.OnCancelListener()
-			{
-				public void onCancel(DialogInterface dialog) { onCancelDialog(); }
-			});
-			return c4aImageDialog;
-		}
-
-		if (id == ENGINE_ERROR_DIALOG)
-		{
-			String mes = getString(R.string.engineProgressDialog) + "\n" + getString(R.string.engine_noRespond) + "\n" + engineErrorMessage;
-			c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleDialog), mes, 0, R.drawable.button_ok, 0);
-			c4aImageDialog.setOnCancelListener(new DialogInterface.OnCancelListener()
-			{
-				public void onCancel(DialogInterface dialog) { onCancelDialog(); }
-			});
-			return c4aImageDialog;
+			c4aDialog = new C4aDialog(this, this, runP.getString("infoTitle", ""),
+					"", getString(R.string.btn_Ok), "", mes, 0, "");
+			return c4aDialog;
 		}
 
 		if (id == PLAY_DIALOG)
@@ -1949,6 +1915,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	@Override
 	public void getCallbackValue(int btnValue)
 	{
+//Log.i(TAG, "getCallbackValue(), btnValue: " + btnValue);
 		if (activDialog == PGN_ERROR_DIALOG)
 		{
 			if (btnValue == 1)
@@ -1998,19 +1965,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						showDialog(PAUSE_DIALOG);
 					}
 				}
-			}
-		}
-		if (activDialog == ENGINE_ERROR_DIALOG)
-		{
-			if (btnValue == 2)
-			{
-				stopChessClock();
-				stopComputerThinking(true);
-				ec.chessEngineSearchingPonder = false;
-				ec.chessEnginePaused = true;
-				ec.chessEngineInit = true;
-				updateCurrentPosition("");
-				setInfoMessage(getEnginePausedMessage(), null, null, false);
 			}
 		}
 	}
@@ -2780,6 +2734,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					gc.startFen = gc.cl.history.getStartFen();
 					setRunMoveHistory();
 					setRunPrefs();
+                    setInfoMessage("", "", "", true);
 					if (ec.chessEnginePausedPrev)
 					{
 						ec.chessEnginePaused = true;
@@ -2824,6 +2779,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				setInfoMessage("", "", "", true);
 				break;
 			case NOTATION_REQUEST_CODE:
+				setInfoMessage("", "", "", true);
 				updateCurrentPosition("");
 				break;
 			case OPTIONS_COLOR_SETTINGS:
@@ -2837,6 +2793,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 					useWakeLock = !userPrefs.getBoolean("user_options_gui_disableScreenTimeout", false);
 					setWakeLock(useWakeLock);
+					setPieceName(userPrefs.getInt("user_options_gui_PieceNameId", 0));
+					setInfoMessage("", "", "", true);
 				}
 				u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
 				updateCurrentPosition("");
@@ -3281,7 +3239,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			else
 			{
 				gc.errorMessage = gc.cl.p_message;
-				gc.errorPGN = ">>>PGN-PARSE-DATA<<< \n" + gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, false, true, true, false, false, true, 2) + "\n\n"
+				gc.errorPGN = ">>>PGN-PARSE-DATA<<< \n" + gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, false, true,
+						false, false, true, 2, 0) + "\n\n"
 						+ ">>>PGN-INPUT-DATA<<< \n" + startPgn + "\n";
 				updateGui();
 				if (!gc.cl.p_stat.equals("4"))
@@ -3439,7 +3398,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 		}
 		analysisMessage = "";
-//		if (isNewGame | (!gc.cl.p_mate & !gc.cl.p_stalemate))	// !mate, steal mate?
 		if (isNewGame | (!gc.cl.p_mate & !gc.cl.p_stalemate & !gc.cl.p_auto_draw))	// !mate, steal mate, auto draw?
 		{
 			gc.isGameOver = false;
@@ -3611,7 +3569,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public boolean restartEngine()
 	{
 //Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
-//		if (ec.getEngine().initProcess())
 		if (ec.getEngine().initProcess(runP.getString("run_engineProcess", "")))
 		{
 			startNewGame(ec.getEngine().engineNumber);
@@ -3674,16 +3631,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //Log.i(TAG, "chessEngineBestMove(), fen, w/b, engine: " + fen + ",   moves: " + moves);
 
-//				if (!ec.getEngine().syncReady())
-//				{
-//// ANR 20180704: at ccc.chess.gui.chessforall.MainActivity.restartEngine (MainActivity.java:3132)
-//					if (!restartEngine())
-//					{
-//						return;
-//					}
-//				}
-
-// ANR, version 70 : at ccc.chess.gui.chessforall.ChessEngine.syncReady (ChessEngine.java:179)
 				boolean isError = false;
 				if (ec.getEngine().process != null)
 					isError = ec.getEngine().isError();
@@ -3976,7 +3923,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public boolean getIsEndPosition()
 	{
-//		return userPrefs.getBoolean("user_options_gui_LastPosition", false);
 		return userPrefs.getBoolean("user_options_gui_LastPosition", true);
 	}
 
@@ -4223,10 +4169,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 		if (updateMoves)
 		{
-			if (fullGameNotation)
-				msgMoves.setText(gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, false, true, true, false, false, true, 2));
-			else
-				msgMoves.setText(gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_60000, false, true, true, false, false, true, 2));
+			int pieceId = userPrefs.getInt("user_options_gui_PieceNameId", 0);
+			msgMoves.setText(gc.cl.history.createGameNotationFromHistory(gc.cl.history.MOVE_HISTORY_MAX_50000, false, true,
+					false, false, true, 2, pieceId));
 		}
 
 		// msgEngine
@@ -4271,7 +4216,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
         }
 		else
 		{
-			msgMoves.setText(getString(R.string.play_moveList) + " " + getString(R.string.disabled));
+			String msg = getString(R.string.play_moveList) + " " + getString(R.string.disabled) + "\n\n";
+			msg = msg + gc.cl.history.getGameData();
+			msgMoves.setText(msg);
 		}
 		gc.cl.p_message = "";
 		setPlayModeButton(userPrefs.getInt("user_play_playMod", 1), gc.cl.p_color, ec.chessEnginePaused, ec.chessEngineSearching, gc.isBoardTurn);
@@ -4649,7 +4596,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (newToken)
 					{
 						newToken = false;
-						if (Character.isLetter(moves.charAt(i)))
+						if (Character.isLetter(moves.charAt(i)) | isFigurinNotation(moves.charAt(i)))
 							cntMove++;
 						if (cntMove == moveIdx)
 						{
@@ -4678,7 +4625,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				if (newToken)
 				{
 					newToken = false;
-					if (Character.isLetter(moves.charAt(i)))
+					if (Character.isLetter(moves.charAt(i)) | isFigurinNotation(moves.charAt(i)))
 						moveIdx++;
 					if (i >= infoMoveStartX)
 						break;
@@ -4687,6 +4634,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 //Log.i(TAG, "getMoveIdxFromInfo, infoMoveStartX, moveIdx: " + infoMoveStartX + ", " + moveIdx);
 		return moveIdx;
+	}
+
+	protected boolean isFigurinNotation(char pieceLetter)
+	{
+		if (pieceLetter == gc.cl.history.HEX_K) return  true;
+		if (pieceLetter == gc.cl.history.HEX_Q) return  true;
+		if (pieceLetter == gc.cl.history.HEX_R) return  true;
+		if (pieceLetter == gc.cl.history.HEX_B) return  true;
+		if (pieceLetter == gc.cl.history.HEX_N) return  true;
+		return false;
 	}
 
 	protected CharSequence getInfoShort(CharSequence engineMes)
@@ -4915,13 +4872,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void stopThreads(boolean shutDown)
 	{	// stop handler, threads, asyncTasks
 //Log.i(TAG, "stopThreads(), shutDown: " + shutDown);
-//		if (ec.chessEngineSearchingPonder)
 		if (ec.chessEngineSearchingPonder & !shutDown)
 		{
 			setPauseEnginePlay(false);
-//			initPonder();
 		}
-// ANR: 21. Juli 2018 16:18 in der App-Version 69
 		else
 			stopTimeHandler(shutDown);
 		initPonder();
@@ -5518,9 +5472,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				CharSequence notation = gc.cl.getNotationFromInfoPv(fen, statPvMoves);
 				if (notation.equals(""))
 					return "";
+				notation = gc.cl.history.getAlgebraicNotation(notation, userPrefs.getInt("user_options_gui_PieceNameId", 0));
 				sbMoves.append(displayScore); sbMoves.append(") "); sbMoves.append(notation);
 //Log.i(TAG, "taskFen: " + taskFen);
 //Log.i(TAG, "statPvMoves: " + statPvMoves);
+//Log.i(TAG, "notation: "  + notation);
 //Log.i(TAG, "sbMoves: "  + sbMoves);
 				infoMessage.set(statPvIdx, sbMoves.toString());
 			}
@@ -5542,6 +5498,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			else
 				infoStat = getString(R.string.epPonder);
 			CharSequence notation = gc.cl.getNotationFromInfoPv(fen, move);
+			notation = gc.cl.history.getAlgebraicNotation(notation, userPrefs.getInt("user_options_gui_PieceNameId", 0));
 			int nodesK = nodes / 1000;
 			String moveInfo = "";
 			if (moveNumberCnt > 0)
@@ -6370,6 +6327,29 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		return false;
 	}
 
+	public void setPieceName(int pieceNameId)
+	{
+		switch (pieceNameId)
+		{
+			case 1:
+				gc.cl.history.setAlgebraicNotation
+						(
+						getString(R.string.piece_K),
+						getString(R.string.piece_Q),
+						getString(R.string.piece_R),
+						getString(R.string.piece_B),
+						getString(R.string.piece_N)
+						);
+				break;
+			case 2:
+				// figurine notation
+				break;
+			default:
+				gc.cl.history.setAlgebraicNotation("K", "Q", "R", "B", "N");
+				break;
+		}
+	}
+
 	public void pauseStopPlay(boolean isFromDialog)
 	{
 		boolean isSearching = ec.chessEngineSearching;
@@ -7045,8 +7025,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int NAG_DIALOG = 201;
 	final static int PROMOTION_DIALOG = 300;
 	final static int TIME_SETTINGS_DIALOG = 400;
-	final static int ENGINE_SEARCH_DIALOG = 500;
-	final static int ENGINE_SEARCH_NO_INTERNET_DIALOG = 501;
 	final static int QUERY_DIALOG = 600;
 	final static int GAME_ID_DIALOG = 601;
 	final static int MENU_BOARD_DIALOG = 701;
@@ -7059,9 +7037,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int MENU_CLIPBOARD_DIALOG = 731;
 	final static int MENU_COLOR_SETTINGS = 732;
 	final static int MENU_SHOW_LIST = 733;
-	final static int INFO_DIALOG = 909;
+	final static int INFO_DIALOG = 909;	// device info; not activated
 	final static int RATE_DIALOG = 910;
-	final static int ENGINE_ERROR_DIALOG = 990;
 	final static int C4A_NEW_DIALOG = 999;
 
 	//	GUI (R.layout.main)
@@ -7094,7 +7071,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	ImageView btn_7 = null;
 
 	//	Dialog
-	C4aImageDialog c4aImageDialog;
+	C4aDialog c4aDialog;
 	ProgressDialog progressDialog = null;
 	TimeSettingsDialog timeSettingsDialog;
 	int activDialog = 0;
@@ -7163,8 +7140,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	SpannableStringBuilder sb = new SpannableStringBuilder();
 	String queryControl = "w";
 	String internEngineName = "";
-
-	CharSequence engineErrorMessage = "";
 
 	Bitmap imageHuman = null;
 	Bitmap imageComputer = null;

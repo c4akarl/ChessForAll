@@ -24,7 +24,7 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 		userP = getSharedPreferences("user", 0);
 		runP = getSharedPreferences("run", 0);		//	run Preferences
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", true));
+		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.optionstimecontrol);
         resultCode = 101;
         tc = new TimeControl();

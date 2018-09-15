@@ -26,7 +26,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         u = new Util();
         userPrefs = getSharedPreferences("user", 0);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
+        u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.optionscolor);
 
         colorId = getIntent().getExtras().getInt("colorId");

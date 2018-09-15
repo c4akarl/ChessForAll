@@ -393,7 +393,7 @@ public class ChessEngine
                 statPvMoves = getMoves(statPv, infoPvMoveMax);
             }
         }
-//Log.i(TAG, "size, values?, score, moves: " + statPv.size() + ", " + infoHasPvValues + ", " + statPvScore + ", " + statPvMoves);
+//Log.i(TAG, "size, values?, score, moves: " + statPv.size() + ", " + infoHasPvValues + ", " + statPvScore + "\nstatPvMoves: " + statPvMoves);
     }
 
     public CharSequence getMoves(ArrayList<CharSequence> statPv, int infoPvMoveMax)

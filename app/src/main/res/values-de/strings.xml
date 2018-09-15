@@ -12,7 +12,7 @@
     <string name="app_playEngineSettings">Automatisches Computerspiel</string>
     <string name="comingSoon">Demnächst</string>
 
-    <string name="pieces">KQRBN</string>
+    <string name="pieces">KDTLS</string>
     <string name="sendEmail">E-Mail senden</string>
 
     <string name="btn_Ok">  OK  </string>
@@ -344,4 +344,13 @@
     <string name="fmInfoSelectEngine">Wähle eine Engine aus und drücke die OK-Taste. Durch langes Drücken wird die entsprechende Datei gelöscht.</string>
     <string name="cl_draw">Remis</string>
     <string name="menu_colorsettings_violet">Violett</string>
+    <string name="pieceNames">Figurenbezeichnungen</string>
+    <string name="pieceNamesEnglish">Englisch</string>
+    <string name="pieceNamesLocalLanguage">Landessprache</string>
+    <string name="pieceNamesFigurineNotation">Figurine Notation</string>
+    <string name="piece_K">K</string>
+    <string name="piece_Q">D</string>
+    <string name="piece_R">T</string>
+    <string name="piece_B">L</string>
+    <string name="piece_N">S</string>
 </resources>

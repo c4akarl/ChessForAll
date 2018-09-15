@@ -221,9 +221,16 @@ public class ChessHistory
     	idx--;
     	if (idx >= 0)
     	{
-    		if (control.equals("1"))
+    		boolean isRankVariant = true;
+    		if 	(		control.equals("1")
+					& 	chessMove.getVal(moveHistory.get(idx), 1).equals(rank)
+					& 	chessMove.getVal(moveHistory.get(idx), 2).equals(variant)
+					& 	chessMove.getVal(moveHistory.get(idx), 12).equals("1")
+				)
         		return moveHistory.get(idx);
-    		if (control.equals("9"))
+    		else
+				isRankVariant = false;
+    		if (control.equals("9") | !isRankVariant)
     		{
 	        	for (int i = idx; i >= 0; i--)
 		        {
@@ -618,8 +625,8 @@ public class ChessHistory
 	    }
         return sbData;
     }
-    public CharSequence createGameNotationFromHistory(int moveIdx, boolean isOutputMoveText, boolean isResult, boolean figurineAlgebraicNotaion, 
-    							boolean rankOnly, boolean lastSixMoves, boolean isSpaceAfterNumber, int nagControl)
+    public CharSequence createGameNotationFromHistory(int moveIdx, boolean isOutputMoveText, boolean isResult,
+    							boolean rankOnly, boolean lastSixMoves, boolean isSpaceAfterNumber, int nagControl, int pieceNameId)
     {	// nagControl: 0 = none, 1 = variable name(e.g. $11), 2 nag symbol (e.g.: =)
 //Log.i(TAG, "1a createGameNotationFromHistory(), isOutputMoveText: " + isOutputMoveText);
 //Log.i(TAG, "1a createGameNotationFromHistory(), moveIdx: " + moveIdx + ", isResult: " + isResult);
@@ -767,7 +774,7 @@ public class ChessHistory
 			            		sbNotation.append(". ");
 			            	else
 			            		sbNotation.append(".");
-			            	sbNotation.append(getFigurineAlgebraicNotation(cm.getPgn(), figurineAlgebraicNotaion));
+			            	sbNotation.append(getAlgebraicNotation(cm.getPgn(), pieceNameId));
 			            }
 			            else
 			            {
@@ -789,7 +796,7 @@ public class ChessHistory
 			            		}
 			            		isMoveText = false;
 			            	}
-			            	sbNotation.append(getFigurineAlgebraicNotation(cm.getPgn(), figurineAlgebraicNotaion));
+			            	sbNotation.append(getAlgebraicNotation(cm.getPgn(), pieceNameId));
 			            }
 			            isFirstMove = false;
 			            isNewVariation = false;
@@ -873,7 +880,8 @@ public class ChessHistory
         sbPgn.setLength(0);
         sbPgn.append(createGameDataFromHistory(0));
         sbPgn.append("\n");
-        sbPgn.append(createGameNotationFromHistory(moveHistory.size(), true, true, false, false, false, true, 1));
+        sbPgn.append(createGameNotationFromHistory(moveHistory.size(), true, true,
+				 false, false, true, 1, 0));
         sbPgn.append("\n");
         return sbPgn.toString();
     }
@@ -1040,29 +1048,30 @@ public class ChessHistory
 //    				Log.i(TAG, "txtSplit[i]: " + txtSplit[i]);
     				String[] txtTags = txtSplit[i].split("\b");
 //    				Log.i(TAG, "txtTags[0], tagName: " + txtTags[0] + ", " + tagName[0]);
-    				boolean dateOk = true;
+    				boolean tagOk = true;
     				if (txtTags[0].equals(tagName[0]))
     				{
     					// validate Date !!!
-    					if (txtTags[0].equals(GAME_DATE))
+    					if (txtTags[0].equals(GAME_DATE) & txtTags.length >= 2)
     					{
-    						for(int h = 0; h < tagState.length; h++)
-    						{
-    							if 	(		txtTags[0].charAt(h) == '.'
-    									|	txtTags[0].charAt(h) == '?'
-    									|	Character.isDigit(txtTags[0].charAt(h))
-    								)
-    							{
-    								
-    							}
-    							else
-    							{
-    								dateOk = false;
-    								break;
-    							}
-    						}
+    						if (txtTags[1].length() == 10)
+							{
+								if (txtTags[1].charAt(4) != '.' | txtTags[1].charAt(7) != '.')
+									tagOk = false;
+								if 	(		!Character.isDigit(txtTags[1].charAt(0))
+										|	!Character.isDigit(txtTags[1].charAt(1))
+										|	!Character.isDigit(txtTags[1].charAt(2))
+										|	!Character.isDigit(txtTags[1].charAt(3))
+										|	!Character.isDigit(txtTags[1].charAt(5))
+										|	!Character.isDigit(txtTags[1].charAt(6))
+										|	!Character.isDigit(txtTags[1].charAt(8))
+										|	!Character.isDigit(txtTags[1].charAt(9))
+										)
+									tagOk = false;
+							}
+
     					}
-    					if (dateOk)
+    					if (tagOk)
     						newTag = txtSplit[i] + "\n";
     					break;
     				}
@@ -1362,85 +1371,16 @@ public class ChessHistory
 //        Log.i(TAG, "isGameEnd, moveIsFirstInVariation, moveIsLastInVariation: " + isGameEnd + ", " + moveIsFirstInVariation + ", " + moveIsLastInVariation);
     }
     public void setChess960Id(int id) {chess960Id = id;}
-    public void setFigurineAlgebraicNotation(CharSequence requestList)
-    {
-    	if (requestList.length() == 5)
-    	{
-    		
-    		HEX_K = requestList.charAt(0);
-    		HEX_Q = requestList.charAt(1);
-    		HEX_R = requestList.charAt(2);
-    		HEX_B = requestList.charAt(3);
-    		HEX_N = requestList.charAt(4);
-//    		Log.i(TAG, "isDefined: >" + Character.isDefined(fan.charAt(0)) + "<");
-//    		Log.i(TAG, "FAN: >" + HEX_K + HEX_Q + HEX_R + HEX_B + HEX_N);
-    	}
-    }
-    public boolean isFenBasePosition(CharSequence fen)
-    {
-    	boolean isBase = true;
-    	if (fen.equals(""))
-    		isBase = false;
-    	char[] fen64 = getFen64(fen);
-    	if (fen64.length == 64)
-		{
-			for (int i = 0; i < fen64.length; i++)
-		    {
-				if (i < 8 | i > 55)
-				{
-				      if (fen64[i] == '-')
-				    	  return false;
-				}
-				if (i > 7 & i < 16)
-				{
-				      if (fen64[i] != 'p')
-				    	  return false;
-				}
-				if (i > 47 & i < 56)
-				{
-				      if (fen64[i] != 'P')
-				    	  return false;
-				}
-				if (i > 15 & i < 48)
-				{
-				      if (fen64[i] != '-')
-				    	  return false;
-				}
-		    }
-		}
-    	return isBase;
-    }
-    public char[] getFen64(CharSequence fen) 		
-    {	// changing fen position to 64 characters(return)
-//    	Log.i(TAG, "getFen64, fen: >" + fen);
-    	sbFenCheck.setLength(0);
-		for (int i = 0; i < fen.length(); i++)
-	    {
-            if (fen.charAt(i) == ' ')
-            	break;
-            else
-            {
-                if (fen.charAt(i) > '8' | fen.charAt(i) == '/')
-                {
-                	if (fen.charAt(i) != '/')
-                		sbFenCheck.append(fen.charAt(i));
-                }
-                else
-                {
-                    if (fen.charAt(i) == '1') {sbFenCheck.append("-");}
-                    if (fen.charAt(i) == '2') {sbFenCheck.append("--");}
-                    if (fen.charAt(i) == '3') {sbFenCheck.append("---");}
-                    if (fen.charAt(i) == '4') {sbFenCheck.append("----");}
-                    if (fen.charAt(i) == '5') {sbFenCheck.append("-----");}
-                    if (fen.charAt(i) == '6') {sbFenCheck.append("------");}
-                    if (fen.charAt(i) == '7') {sbFenCheck.append("-------");}
-                    if (fen.charAt(i) == '8') {sbFenCheck.append("--------");}
-                }
-            }
-	    }
-		return sbFenCheck.toString().toCharArray();
-    }
-    public void setResultMessage(CharSequence resultMsg) {resultMessage = resultMsg;}
+
+	public void setAlgebraicNotation(String k, String q, String r, String b, String n)
+	{
+		piece_k = k;
+		piece_q = q;
+		piece_r = r;
+		piece_b = b;
+		piece_n = n;
+	}
+
     // get methods		get methods		get methods		get methods		get methods
     public CharSequence getDateYYYYMMDD()
     {
@@ -1473,33 +1413,44 @@ public class ChessHistory
         	sbDate.append(day);
         return sbDate.toString();
     }
-    public CharSequence getFigurineAlgebraicNotation()
-    {
-    	CharSequence fan = "" + HEX_K + HEX_Q + HEX_R + HEX_B + HEX_N;
-    	return fan;
-    }
-    public CharSequence getFigurineAlgebraicNotation(CharSequence pgnMove, boolean figurineAlgebraicNotaion)
+
+    public CharSequence getAlgebraicNotation(CharSequence pgnMove, int pieceNameId)
     {
     	CharSequence move = "";
-    	if (figurineAlgebraicNotaion)
-    	{
-    		for (int i = 0; i < pgnMove.length(); i++)
-            {
-        		switch (pgnMove.charAt(i)) 
-        		{
-        			case 'K':	move = move.toString() + HEX_K; break;
-        			case 'Q':	move = move.toString() + HEX_Q; break;
-        			case 'R':	move = move.toString() + HEX_R; break;
-        			case 'B':	move = move.toString() + HEX_B; break;
-        			case 'N':	move = move.toString() + HEX_N; break;
-        			default:	move = move.toString() + pgnMove.charAt(i); break;
-        		}
-            }
-    	}
-    	else
-    		move = pgnMove;
-     	return move;
+		switch (pieceNameId)
+		{
+			case 1:		// locale language
+				for (int i = 0; i < pgnMove.length(); i++)
+				{
+					switch (pgnMove.charAt(i))
+					{
+						case 'K':	move = move.toString() + piece_k; break;
+						case 'Q':	move = move.toString() + piece_q; break;
+						case 'R':	move = move.toString() + piece_r; break;
+						case 'B':	move = move.toString() + piece_b; break;
+						case 'N':	move = move.toString() + piece_n; break;
+						default:	move = move.toString() + pgnMove.charAt(i); break;
+					}
+				}
+				return move;
+			case 2:		// figurine notation
+				for (int i = 0; i < pgnMove.length(); i++)
+				{
+					switch (pgnMove.charAt(i))
+					{
+						case 'K':	move = move.toString() + HEX_K; break;
+						case 'Q':	move = move.toString() + HEX_Q; break;
+						case 'R':	move = move.toString() + HEX_R; break;
+						case 'B':	move = move.toString() + HEX_B; break;
+						case 'N':	move = move.toString() + HEX_N; break;
+						default:	move = move.toString() + pgnMove.charAt(i); break;
+					}
+				}
+				return move;
+			default: return pgnMove;
+		}
     }
+
     public CharSequence getFileBase() {return fileBase;}
     public CharSequence getFilePath() {return filePath;}
     public CharSequence getFileName() {return fileName;}
@@ -1508,9 +1459,48 @@ public class ChessHistory
     	CharSequence startFen = getGameTagValue("FEN");
 		if (startFen.equals(""))
 			startFen = fenStandardPosition;
-//		Log.i(TAG, "startFen: " + startFen);
+		String castling = getValueFromFen(3, startFen).toString();
+		String[] splitFen = startFen.toString().split(" ");
+		if (castling.contains("QK"))
+		{
+			castling = castling.replace("QK", "KQ");
+			splitFen[2] = castling;
+			startFen = "";
+			for(int i = 0; i < splitFen.length; i++)
+			{
+				if (i == 0)
+					startFen = splitFen[i];
+				else
+					startFen = startFen + " " + splitFen[i];
+			}
+		}
+		if (castling.contains("qk"))
+		{
+			castling = castling.replace("qk", "kq");
+			splitFen[2] = castling;
+			startFen = "";
+			for(int i = 0; i < splitFen.length; i++)
+			{
+				if (i == 0)
+					startFen = splitFen[i];
+				else
+					startFen = startFen + " " + splitFen[i];
+			}
+		}
 		return startFen;
     }
+    public CharSequence getGameData()
+	{
+		String gameData = "";
+		gameData =  gameData + getGameTagValue("White") + " - " + getGameTagValue("Black" ) + "\n";
+		gameData =  gameData + getGameTagValue("Event") + "\n";
+		gameData =  gameData + getGameTagValue("Date") + "\n";
+		gameData =  gameData + getGameTagValue("Result") + "\n";
+		String fileName = "" + getFileName();
+		if (!fileName.equals(""))
+		    gameData =  gameData + ".../" + getFileName();
+		return gameData;
+	}
     public CharSequence getGameNotation() {return gameNotation;}
     public CharSequence getGameText() {return gameText;}
     public boolean getIsGameEnd() {return isGameEnd;}
@@ -1694,7 +1684,7 @@ public class ChessHistory
 
     public int getCountEvenPosition(CharSequence fen)
     {
-        int cntFen = 0;
+        int cntFen = 1;
         try 
 		{
         	ChessMove cm = new ChessMove();
@@ -1745,7 +1735,7 @@ public class ChessHistory
     	parseAddToMoveList(moveList.size());		// start variation: R0, V0 	(pMoveControl = 0)
 		for(int i = 0; i < pTokens.length; i++)
         {
-//			Log.i(TAG, "pTokens[i]: " + ">" + pTokens[i] + "<");
+//Log.i(TAG, "pTokens[i]: " + ">" + pTokens[i] + "<");
 			if (pTokens[i].contains("0-0"))
 				pTokens[i] = pTokens[i].replace("0", "O");
 			if (pTokens[i].contains("e.p."))
@@ -1753,9 +1743,10 @@ public class ChessHistory
 			parseToken(pTokens[i]);
 			if (pIsEnd & !pErrorMessage.toString().equals(""))
 			{
-				pErrorMessage = stringValues.get(23) + " [P7]\n" + pErrorMessage; // cl_notationError
+				pErrorMessage = stringValues.get(23) + " [H1]\n" + pErrorMessage; // cl_notationError
 				gameText = pErrorMessage;
-//				Log.i(TAG, "pErrorMessage, pIsEnd, pTokens.length: " + pErrorMessage + ", " + pIsEnd + ", " + pTokens.length);
+//Log.i(TAG, "pErrorMessage, pIsEnd, pTokens.length: " + pErrorMessage + ", " + pIsEnd + ", " + pTokens.length);
+//				Log.i(TAG, "pErrorMessage: " + pErrorMessage + ", pIsEnd: " + pIsEnd + ", pTokens[i]: " + pTokens[i]);
 				break;
 			}
         }
@@ -1764,18 +1755,19 @@ public class ChessHistory
 //			Log.i(TAG, "pCountVariationStart, pCountVariationEnd: " + pCountVariationStart + ", " + pCountVariationEnd);
 			if (pErrorMessage.toString().equals(""))
 			{
-				pErrorMessage = stringValues.get(23) + " [P8]\n" + stringValues.get(24);	// cl_notationError, cl_variationError
+				pErrorMessage = stringValues.get(23) + " [H2]\n" + stringValues.get(24);	// cl_notationError, cl_variationError
 				gameText = pErrorMessage;
 //				Log.i(TAG, "pErrorMessage(diff var): " + pErrorMessage);
 			}
 		}
+//			Log.i(TAG, "parseGameNotation(), pMoveR: " + pMoveR + ", pMoveV: " + pMoveV);
 		if (pMoveR == 0 & pMoveV == 0)
 			parseSetVariationEndToMoveList();		// end variation: R0, V0 	(pMoveControl = 9)
 		else
 		{
 			if (pErrorMessage.toString().equals(""))
 			{
-				pErrorMessage = stringValues.get(23) + " [P9]\n" + stringValues.get(24);
+				pErrorMessage = stringValues.get(23) + " [H3]\n" + stringValues.get(24);
 				gameText = pErrorMessage;
 //				Log.i(TAG, "pErrorMessage(end error): " + pErrorMessage);
 			}
@@ -2179,7 +2171,7 @@ public class ChessHistory
     	{
 	    	switch (checkMove.charAt(0)) // token, 1. character
 			{
-				case 'K': case 'Q': case 'R': case 'B': case 'N': case 'O':
+				case 'K': case 'Q': case 'R': case 'B': case 'N': case 'O': case 'P':
 				case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g': case 'h':
 					isMoveError = false;
 					break;
@@ -2205,13 +2197,15 @@ public class ChessHistory
 	    	if (!charOk)
 	    		isMoveError = true;
     	}
+		if (checkMove.toString().equals("--"))
+			isMoveError = false;
     	if (!isMoveError)
     	{
 			pMoveControl = 1;	// move
 			pMovePgn = checkMove;
 			parseAddToMoveList(moveList.size());	// start variation (pMoveControl = 1)
     	}
-//    	Log.i(TAG, "parseMove: " + checkMove + ", " + isMoveError);
+//    	Log.i(TAG, "parseMove: >" + checkMove + "< " + isMoveError);
     	return isMoveError;
     }
 
@@ -2440,11 +2434,16 @@ public class ChessHistory
     int gamePos = -1;
     char gameColor = 'l';
     public final CharSequence fenStandardPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    private static char HEX_K = ' ';
-	private static char HEX_Q = ' ';
-	private static char HEX_R = ' ';
-	private static char HEX_B = ' ';
-	private static char HEX_N = ' ';
+	public static char HEX_K = '\u2654';
+	public static char HEX_Q = '\u2655';
+	public static char HEX_R = '\u2656';
+	public static char HEX_B = '\u2657';
+	public static char HEX_N = '\u2658';
+	public String piece_k = "K";
+	public String piece_q = "Q";
+	public String piece_r = "R";
+	public String piece_b = "B";
+	public String piece_n = "N";
     Date newDate;
 
 }

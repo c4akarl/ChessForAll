@@ -16,7 +16,7 @@ public class ChessMoveText extends Activity
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u = new Util();
 		userP = getSharedPreferences("user", 0);
-		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", true));
+		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.movetext);
         moveText = (EditText) findViewById(R.id.mtEt);
         moveText.setText(getIntent().getExtras().getString("move_text"));

@@ -27,28 +27,52 @@
     android:layout_centerHorizontal="true"
 	android:singleLine="true"
 	android:layout_below="@id/dgMessage" />
-<Button android:id="@+id/dgBtn1"
-    android:layout_width="80dip"
-    android:layout_height="wrap_content"
-    android:layout_alignParentLeft="true"
-    android:layout_marginLeft="@dimen/margin_2"
-	android:layout_marginTop="@dimen/margin_2"
-	android:layout_marginBottom="@dimen/margin_2"
-    android:layout_below="@id/dgInputText" />
-<Button android:id="@+id/dgBtn2"
-    android:layout_width="80dip"
-    android:layout_height="wrap_content"
-	android:layout_marginTop="@dimen/margin_2"
-    android:layout_centerHorizontal="true"
-	android:layout_marginBottom="@dimen/margin_2"
-    android:layout_below="@id/dgInputText" />
-<Button android:id="@+id/dgBtn3"
-    android:layout_width="80dip"
-    android:layout_height="wrap_content"
-	android:layout_alignParentRight="true"
-	android:layout_marginTop="@dimen/margin_2"
-	android:layout_marginRight="@dimen/margin_2"
-	android:layout_marginBottom="@dimen/margin_2"
-	android:layout_below="@id/dgInputText" />
+
+	<LinearLayout
+		android:id="@+id/buttons"
+		android:layout_below="@id/dgInputText"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_2"
+		android:layout_marginBottom="@dimen/margin_2"
+		android:weightSum="3"
+		android:orientation="horizontal" >
+		<Button android:id="@+id/dgBtn1"
+				android:layout_weight="1"
+				android:layout_width="0dip"
+				android:layout_height="wrap_content" />
+		<Button android:id="@+id/dgBtn2"
+				android:layout_weight="1"
+				android:layout_width="0dip"
+				android:layout_height="wrap_content" />
+		<Button android:id="@+id/dgBtn3"
+				android:layout_weight="1"
+				android:layout_width="0dip"
+				android:layout_height="wrap_content" />
+	</LinearLayout>
+
+<!--<Button android:id="@+id/dgBtn1"-->
+    <!--android:layout_width="80dip"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_marginLeft="@dimen/margin_2"-->
+	<!--android:layout_marginTop="@dimen/margin_2"-->
+	<!--android:layout_marginBottom="@dimen/margin_2"-->
+    <!--android:layout_below="@id/dgInputText" />-->
+<!--<Button android:id="@+id/dgBtn2"-->
+    <!--android:layout_width="80dip"-->
+    <!--android:layout_height="wrap_content"-->
+	<!--android:layout_marginTop="@dimen/margin_2"-->
+    <!--android:layout_centerHorizontal="true"-->
+	<!--android:layout_marginBottom="@dimen/margin_2"-->
+    <!--android:layout_below="@id/dgInputText" />-->
+<!--<Button android:id="@+id/dgBtn3"-->
+    <!--android:layout_width="80dip"-->
+    <!--android:layout_height="wrap_content"-->
+	<!--android:layout_alignParentRight="true"-->
+	<!--android:layout_marginTop="@dimen/margin_2"-->
+	<!--android:layout_marginRight="@dimen/margin_2"-->
+	<!--android:layout_marginBottom="@dimen/margin_2"-->
+	<!--android:layout_below="@id/dgInputText" />-->
 
 </RelativeLayout>

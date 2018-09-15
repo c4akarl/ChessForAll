@@ -44,7 +44,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
         _gameStat = getIntent().getExtras().getCharSequence("gameStat");
         _gameTags = getIntent().getExtras().getCharSequence("gameTags");
 		userP = getSharedPreferences("user", 0);
-		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", true));
+		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.gamedata);
         String state = getString(R.string.menu_modes_edit);
         if (_gameStat.equals("2"))

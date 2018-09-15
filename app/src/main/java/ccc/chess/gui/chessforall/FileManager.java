@@ -112,7 +112,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
         if (getIntent().getExtras().getInt("displayActivity") == 1)
         {
-			u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
+			u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
 	        setContentView(R.layout.filemanager);
 	        relLayout = (RelativeLayout) findViewById(R.id.fmLayout);
 	        queryGameIdLayout = (RelativeLayout) findViewById(R.id.queryGameId);
@@ -793,18 +793,37 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
         if (id == DATABASE_LOCKED_DIALOG) 
         {
-            c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleFileDialog), getString(R.string.fmDatabaseLocked), 
-					0, R.drawable.button_ok, 0);
-			c4aImageDialog.setOnCancelListener(this);
-			return c4aImageDialog;
+//            c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleFileDialog), getString(R.string.fmDatabaseLocked),
+//					0, R.drawable.button_ok, 0);
+//			c4aImageDialog.setOnCancelListener(this);
+//			return c4aImageDialog;
+
+			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleFileDialog),
+					"", getString(R.string.btn_Ok), "", getString(R.string.fmDatabaseLocked), 0, "");
+			return c4aDialog;
         }
         if (id == COMING_SOON) 
         {
-            c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleFileDialog), getString(R.string.comingSoon), 
-					0, R.drawable.button_ok, 0);
-			c4aImageDialog.setOnCancelListener(this);
-			return c4aImageDialog;
+//            c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleFileDialog), getString(R.string.comingSoon),
+//					0, R.drawable.button_ok, 0);
+//			c4aImageDialog.setOnCancelListener(this);
+//			return c4aImageDialog;
+
+			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleFileDialog),
+					"", getString(R.string.btn_Ok), "", getString(R.string.comingSoon), 0, "");
+			return c4aDialog;
         }
+		if (id == FILE_LOAD_PROGRESS_DIALOG)
+		{
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setMessage(getString(R.string.fmProgressDialog));
+			progressDialog.setCancelable(true);
+			progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener()
+			{
+				public void onCancel(DialogInterface dialog) { }
+			});
+			return progressDialog;
+		}
         if (id == QUERY_PROGRESS_DIALOG) 
         {
 			progressDialog = new ProgressDialog(this);
@@ -1651,6 +1670,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			if (!path.equals(fm_extern_load_path) | !file.equals(fm_extern_load_file))
 				gameControl = 1;
 //Log.i(TAG, "loadExternFile(), gameControl: " + gameControl  + ", fm_extern_game_offset: " + fm_extern_game_offset);
+
         	fileData = fileIO.dataFromFile(path, file, fm_extern_last_game, gameControl, fm_extern_game_offset);
         	if (!fileData.equals(""))
 				finishAfterLoad(path, file);
@@ -1682,7 +1702,11 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		returnIntent.putExtra("fileName", file);
 		setResult(RESULT_OK, returnIntent);
 		if (getIntent().getExtras().getInt("displayActivity") == 1)
+		{
 			setPreferences(fileData);
+            removeDialog(FILE_LOAD_PROGRESS_DIALOG);
+            showDialog(FILE_LOAD_PROGRESS_DIALOG);
+		}
 		else
 			setSkipPreferences(1, fileData);
 		finish();
@@ -3691,7 +3715,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	private static final int MENU_EDIT_PGN = 24;
 	private static final int DELETE_GAME_DIALOG = 26;
 	private static final int ENGINE_INSTALL_DIALOG = 80;
-	private static final int COMING_SOON = 91;
+	private static final int COMING_SOON = 91;  // not activated
+	private static final int FILE_LOAD_PROGRESS_DIALOG = 99;
 
 	// database file state
 	private static final int STATE_DB_NO_PGN_ACTION = 200;
@@ -3843,7 +3868,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	EditText qoDateTo;
 
 	public ArrayAdapter<String> files;
-	C4aImageDialog c4aImageDialog;
+//	C4aImageDialog c4aImageDialog;
+	C4aDialog c4aDialog;
 	C4aDialog pathDialog;
 	C4aDialog fileNotExistsDialog;
 	C4aDialog fileExistsDialog;

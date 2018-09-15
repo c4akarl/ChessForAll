@@ -11,7 +11,7 @@
   <string name="app_editChessBoard">Редактирование доски</string>
   <string name="app_playEngineSettings">Автоматическая игра компьютера</string>
   <string name="comingSoon">Сделать ход</string>
-  <string name="pieces">KQRBN</string>
+  <string name="pieces">KфЛSK</string>
   <string name="sendEmail">Отправить сообщение</string>
   <string name="btn_Ok">  ДА  </string>
   <string name="btn_Yes">Да</string>
@@ -325,5 +325,14 @@
     <string name="fmInfoSelectEngine">Выберите двигатель и нажмите кнопку OK. Длительное нажатие удаляет соответствующий файл.</string>
     <string name="cl_draw">ничья</string>
     <string name="menu_colorsettings_violet">фиолетовый</string>
+    <string name="pieceNames">Названия фигур</string>
+  <string name="pieceNamesEnglish">английский</string>
+  <string name="pieceNamesLocalLanguage">Местный язык</string>
+  <string name="pieceNamesFigurineNotation">Фигурин</string>
+  <string name="piece_K">Kp</string>
+  <string name="piece_Q">Ф</string>
+  <string name="piece_R">Л</string>
+  <string name="piece_B">С</string>
+  <string name="piece_N">К</string>
 
 </resources>

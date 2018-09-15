@@ -12,7 +12,7 @@
     <string name="app_playEngineSettings">Lecture automatique de moteur</string>
     <string name="comingSoon">à venir</string>
 
-    <string name="pieces">KQRBN</string>
+    <string name="pieces">RDTFC</string>
     <string name="sendEmail">Envoyer un email</string>
 
     <string name="btn_Ok">  OK  </string>
@@ -345,5 +345,14 @@
     <string name="fmInfoSelectEngine">Sélectionnez un moteur et appuyez sur le bouton OK. Un appui long supprime le fichier correspondant.</string>
     <string name="cl_draw">dessiner</string>
     <string name="menu_colorsettings_violet">Violet</string>
+    <string name="pieceNames">Nom des pièces</string>
+    <string name="pieceNamesEnglish">Anglais</string>
+    <string name="pieceNamesLocalLanguage">Langage local</string>
+    <string name="pieceNamesFigurineNotation">Notation de la figurine</string>
+    <string name="piece_K">R</string>
+    <string name="piece_Q">D</string>
+    <string name="piece_R">T</string>
+    <string name="piece_B">F</string>
+    <string name="piece_N">C</string>
 
 </resources>

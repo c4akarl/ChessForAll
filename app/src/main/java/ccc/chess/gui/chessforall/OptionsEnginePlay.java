@@ -38,7 +38,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 
 	protected void start()
 	{
-		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", true));
+		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
 
 		setContentView(R.layout.optionsengineplay);
 
