@@ -20,7 +20,7 @@
     android:paddingRight="0dip"
     android:singleLine="true"
     android:gravity="center"
-    android:background="@drawable/bordergrey"
+    android:background="@drawable/rectangletransparent"
     android:text="@string/menu_colorsettings"
     android:textColor="#000000" />
 
@@ -36,276 +36,277 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/eName"
-        android:layout_width="200dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dip"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        style="@style/c4aET1" />
-    <ImageView
-        android:id="@+id/btnMenu"
-        android:src="@drawable/button_menu1"
-        android:onClick="myClickHandler"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/eName"
-        android:layout_toRightOf="@id/eName"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="15dp"/>
-    <View android:id="@+id/div1" style="@style/Divider" android:layout_below="@id/eName" />
+        <ImageView
+            android:id="@+id/btnMenu"
+            style="@style/c4aImgBtn2"
+            android:src="@drawable/button_menu2"
+            android:onClick="myClickHandler"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="@dimen/btn1_width"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"/>
+        <EditText
+            android:id="@+id/eName"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/btnMenu"
+            android:layout_marginLeft="0dip"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            style="@style/c4aET1" />
 
-    <TextView
-        android:id="@+id/tFields"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div1"
-        android:text="@string/colorFields"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="100dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iFields1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div1"
-        android:layout_toRightOf="@id/tFields"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iFields2"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div1"
-        android:layout_toRightOf="@id/iFields1"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div2" style="@style/Divider" android:layout_below="@id/iFields1" />
+        <View android:id="@+id/div1" style="@style/Divider" android:layout_below="@id/btnMenu" />
 
-    <TextView
-        android:id="@+id/tPieces"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div2"
-        android:text="@string/colorPieces"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iPieces1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div2"
-        android:layout_toRightOf="@id/tPieces"
-        android:layout_alignLeft="@+id/iFields1"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iPieces2"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div2"
-        android:layout_toRightOf="@id/iPieces1"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div3" style="@style/Divider" android:layout_below="@id/iPieces1" />
+        <TextView
+            android:id="@+id/tFields"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div1"
+            android:text="@string/colorFields"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="100dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iFields1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div1"
+            android:layout_toRightOf="@id/tFields"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iFields2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div1"
+            android:layout_toRightOf="@id/iFields1"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div2" style="@style/Divider" android:layout_below="@id/iFields1" />
 
-    <TextView
-        android:id="@+id/tFromTo"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div3"
-        android:text="@string/colorFromTo"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iFromTo1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div3"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tFromTo"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iFromTo2"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div3"
-        android:layout_toRightOf="@id/iFromTo1"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div4" style="@style/Divider" android:layout_below="@id/iFromTo1" />
+        <TextView
+            android:id="@+id/tPieces"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div2"
+            android:text="@string/colorPieces"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iPieces1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div2"
+            android:layout_toRightOf="@id/tPieces"
+            android:layout_alignLeft="@+id/iFields1"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iPieces2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div2"
+            android:layout_toRightOf="@id/iPieces1"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div3" style="@style/Divider" android:layout_below="@id/iPieces1" />
 
-    <TextView
-        android:id="@+id/tCoordinates"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div4"
-        android:text="@string/colorCoordinates"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iCoordinates1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div4"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tCoordinates"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div5" style="@style/Divider" android:background="@android:color/holo_green_light" android:layout_below="@id/iCoordinates1" />
+        <TextView
+            android:id="@+id/tFromTo"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div3"
+            android:text="@string/colorFromTo"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iFromTo1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div3"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tFromTo"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iFromTo2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div3"
+            android:layout_toRightOf="@id/iFromTo1"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div4" style="@style/Divider" android:layout_below="@id/iFromTo1" />
 
-    <TextView
-        android:id="@+id/tMoveList"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div5"
-        android:text="@string/colorMoveList"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iMoveList1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div5"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tMoveList"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iMoveList2"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div5"
-        android:layout_toRightOf="@id/iMoveList1"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iMoveList3"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div5"
-        android:layout_toRightOf="@id/iMoveList2"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iMoveList4"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div5"
-        android:layout_toRightOf="@id/iMoveList3"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div6" style="@style/Divider" android:layout_below="@id/iMoveList1" />
+        <TextView
+            android:id="@+id/tCoordinates"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div4"
+            android:text="@string/colorCoordinates"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iCoordinates1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div4"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tCoordinates"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div5" style="@style/Divider" android:background="@android:color/holo_green_light" android:layout_below="@id/iCoordinates1" />
 
-    <TextView
-        android:id="@+id/tEngineList"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div6"
-        android:text="@string/colorEngineList"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iEngineList1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div6"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tEngineList"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iEngineList2"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div6"
-        android:layout_toRightOf="@id/iEngineList1"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div7" style="@style/Divider" android:layout_below="@id/iEngineList1" />
+        <TextView
+            android:id="@+id/tMoveList"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div5"
+            android:text="@string/colorMoveList"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iMoveList1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div5"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tMoveList"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iMoveList2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div5"
+            android:layout_toRightOf="@id/iMoveList1"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iMoveList3"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div5"
+            android:layout_toRightOf="@id/iMoveList2"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iMoveList4"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div5"
+            android:layout_toRightOf="@id/iMoveList3"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div6" style="@style/Divider" android:layout_below="@id/iMoveList1" />
 
-    <TextView
-        android:id="@+id/tInfo"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div7"
-        android:text="@string/colorInfo"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iInfo1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div7"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tInfo"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iInfo2"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div7"
-        android:layout_toRightOf="@id/iInfo1"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div8" style="@style/Divider" android:layout_below="@id/iInfo1" />
+        <TextView
+            android:id="@+id/tEngineList"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div6"
+            android:text="@string/colorEngineList"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iEngineList1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div6"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tEngineList"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iEngineList2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div6"
+            android:layout_toRightOf="@id/iEngineList1"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div7" style="@style/Divider" android:layout_below="@id/iEngineList1" />
 
-    <TextView
-        android:id="@+id/tData"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div8"
-        android:text="@string/colorData"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iData1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div8"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tData"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iData2"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div8"
-        android:layout_toRightOf="@id/iData1"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div9" style="@style/Divider" android:layout_below="@id/iData1" />
+        <TextView
+            android:id="@+id/tInfo"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div7"
+            android:text="@string/colorInfo"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iInfo1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div7"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tInfo"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iInfo2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div7"
+            android:layout_toRightOf="@id/iInfo1"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div8" style="@style/Divider" android:layout_below="@id/iInfo1" />
 
-    <TextView
-        android:id="@+id/tTime"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div9"
-        android:text="@string/colorTime"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iTime1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div9"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tTime"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iTime2"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div9"
-        android:layout_toRightOf="@id/iTime1"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iTime3"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div9"
-        android:layout_toRightOf="@id/iTime2"
-        android:onClick="myClickHandler" />
-    <TextView
-        android:id="@+id/iTime4"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div9"
-        android:layout_toRightOf="@id/iTime3"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div10" style="@style/Divider" android:layout_below="@id/iTime1" />
+        <TextView
+            android:id="@+id/tData"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div8"
+            android:text="@string/colorData"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iData1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div8"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tData"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iData2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div8"
+            android:layout_toRightOf="@id/iData1"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div9" style="@style/Divider" android:layout_below="@id/iData1" />
 
-    <TextView
-        android:id="@+id/tHighlighting"
-        style="@style/c4aTV1"
-        android:layout_below="@id/div10"
-        android:text="@string/colorHighlighting"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="50dp"
-        android:layout_alignParentLeft="true" />
-    <TextView
-        android:id="@+id/iHighlighting1"
-        style="@style/c4aTVColor"
-        android:layout_below="@id/div10"
-        android:layout_alignLeft="@+id/iFields1"
-        android:layout_toRightOf="@id/tHighlighting"
-        android:onClick="myClickHandler" />
-    <View android:id="@+id/div11" style="@style/Divider" android:layout_below="@id/iHighlighting1" />
+        <TextView
+            android:id="@+id/tTime"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div9"
+            android:text="@string/colorTime"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iTime1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div9"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tTime"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iTime2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div9"
+            android:layout_toRightOf="@id/iTime1"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iTime3"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div9"
+            android:layout_toRightOf="@id/iTime2"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iTime4"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div9"
+            android:layout_toRightOf="@id/iTime3"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div10" style="@style/Divider" android:layout_below="@id/iTime1" />
+
+        <TextView
+            android:id="@+id/tHighlighting"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div10"
+            android:text="@string/colorHighlighting"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iHighlighting1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div10"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tHighlighting"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div11" style="@style/Divider" android:layout_below="@id/iHighlighting1" />
 
     </RelativeLayout>
     </ScrollView>
@@ -317,7 +318,7 @@
         android:onClick="myClickHandler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/borderpink"
+        android:background="@drawable/rectanglepink"
         android:layout_marginBottom="20dip"
         android:layout_marginLeft="20dp"
         android:layout_alignParentLeft="true"
@@ -330,7 +331,7 @@
         android:onClick="myClickHandler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bordergreen"
+        android:background="@drawable/rectanglegreen"
         android:layout_marginBottom="20dip"
         android:layout_marginRight="20dp"
         android:layout_alignParentRight="true"

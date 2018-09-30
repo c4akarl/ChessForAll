@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginLeft="2dp"
+     android:layout_marginRight="2dp"
+     android:layout_marginTop="2dp"
+     android:layout_marginBottom="2dp"
+     android:background="@android:color/black">
+
+    <LinearLayout
+        android:id="@+id/whiteCastle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/tvWhiteCastle"
+            style="@style/c4aTV2"
+            android:background="#00000000"
+            android:layout_width="@dimen/tv_width_2"
+            android:textColor="@color/text_white"
+            android:text="@string/daTxtLblWhite" />
+        <CheckBox
+            android:id="@+id/whiteKingCastle"
+            style="@style/c4aCB2"
+            android:layout_alignBottom="@+id/tvWhiteCastle"
+            android:text="O-O" />
+        <CheckBox
+            android:id="@+id/whiteQueenCastle"
+            style="@style/c4aCB2"
+            android:layout_alignBottom="@+id/tvWhiteCastle"
+            android:text="O-O-O" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/blackCastle"
+        android:layout_below="@id/whiteCastle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:orientation="horizontal" >
+        <TextView
+            style="@style/c4aTV2"
+            android:background="#00000000"
+            android:layout_width="@dimen/tv_width_2"
+            android:textColor="@color/text_white"
+            android:text="@string/daTxtLblBlack" />
+        <CheckBox
+            android:id="@+id/blackKingCastle"
+            style="@style/c4aCB2"
+            android:text="O-O" />
+        <CheckBox
+            android:id="@+id/blackQueenCastle"
+            style="@style/c4aCB2"
+            android:text="O-O-O" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/en_passant_text"
+        style="@style/c4aTV2"
+        android:layout_below="@id/blackCastle"
+        android:layout_alignLeft="@id/blackCastle"
+        android:layout_width="@dimen/tv_width_3"
+        android:background="#00000000"
+        android:textColor="@color/text_white"
+        android:text="@string/menu_edit_fen_ep" />
+    <ImageView
+        android:id="@+id/en_passant_left"
+        style="@style/c4aImgBtn2"
+        android:src="@drawable/arrow_left_grey"
+        android:layout_toRightOf="@id/en_passant_text"
+        android:layout_alignBottom="@+id/en_passant_text"
+        android:layout_marginLeft="@dimen/margin_1"
+        android:layout_marginRight="@dimen/margin_1"
+        android:layout_width="@dimen/btn_size_2"
+        android:layout_height="@dimen/btn_size_2"
+        android:background="#00000000" />
+    <TextView
+        android:id="@+id/en_passant_item"
+        style="@style/c4aTV2"
+        android:layout_toRightOf="@id/en_passant_left"
+        android:layout_alignBottom="@+id/en_passant_text"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:background="#00000000"
+        android:textColor="@color/text_white"
+        android:text="-" />
+    <ImageView
+        android:id="@+id/en_passant_right"
+        style="@style/c4aImgBtn2"
+        android:src="@drawable/arrow_right_white"
+        android:layout_toRightOf="@id/en_passant_item"
+        android:layout_alignBottom="@+id/en_passant_text"
+        android:layout_marginLeft="@dimen/margin_1"
+        android:layout_marginRight="@dimen/margin_1"
+        android:layout_width="@dimen/btn_size_2"
+        android:layout_height="@dimen/btn_size_2"
+        android:background="#00000000" />
+
+    <TextView
+        android:id="@+id/draw50_text"
+        style="@style/c4aTV2"
+        android:layout_below="@id/en_passant_text"
+        android:layout_alignLeft="@id/blackCastle"
+        android:layout_width="@dimen/tv_width_3"
+        android:background="#00000000"
+        android:textColor="@color/text_white"
+        android:text="@string/inputDialog_draw50" />
+    <ImageView
+        android:id="@+id/draw50_left"
+        style="@style/c4aImgBtn2"
+        android:src="@drawable/arrow_left_grey"
+        android:layout_toRightOf="@id/draw50_text"
+        android:layout_alignBottom="@+id/draw50_text"
+        android:layout_marginLeft="@dimen/margin_1"
+        android:layout_marginRight="@dimen/margin_1"
+        android:layout_width="@dimen/btn_size_2"
+        android:layout_height="@dimen/btn_size_2"
+        android:background="#00000000" />
+    <TextView
+        android:id="@+id/draw50_item"
+        style="@style/c4aTV2"
+        android:layout_toRightOf="@id/draw50_left"
+        android:layout_alignBottom="@+id/draw50_text"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:background="#00000000"
+        android:textColor="@color/text_white"
+        android:text="000" />
+    <ImageView
+        android:id="@+id/draw50_right"
+        android:src="@drawable/arrow_right_white"
+        style="@style/c4aImgBtn2"
+        android:layout_toRightOf="@id/draw50_item"
+        android:layout_alignBottom="@+id/draw50_text"
+        android:layout_marginLeft="@dimen/margin_1"
+        android:layout_marginRight="@dimen/margin_1"
+        android:layout_width="@dimen/btn_size_2"
+        android:layout_height="@dimen/btn_size_2"
+        android:background="#00000000" />
+
+    <TextView
+        android:id="@+id/move_counter_text"
+        style="@style/c4aTV2"
+        android:layout_below="@id/draw50_text"
+        android:layout_alignLeft="@id/blackCastle"
+        android:layout_width="@dimen/tv_width_3"
+        android:background="#00000000"
+        android:textColor="@color/text_white"
+        android:text="@string/inputDialog_moveCounter" />
+    <ImageView
+        android:id="@+id/move_counter_left"
+        style="@style/c4aImgBtn2"
+        android:src="@drawable/arrow_left_grey"
+        android:layout_toRightOf="@id/move_counter_text"
+        android:layout_alignBottom="@+id/move_counter_text"
+        android:layout_marginLeft="@dimen/margin_1"
+        android:layout_marginRight="@dimen/margin_1"
+        android:layout_width="@dimen/btn_size_2"
+        android:layout_height="@dimen/btn_size_2"
+        android:background="#00000000" />
+    <TextView
+        android:id="@+id/move_counter_item"
+        style="@style/c4aTV2"
+        android:layout_toRightOf="@id/move_counter_left"
+        android:layout_alignBottom="@+id/move_counter_text"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:background="#00000000"
+        android:textColor="@color/text_white"
+        android:text="001" />
+    <ImageView
+        android:id="@+id/move_counter_right"
+        style="@style/c4aImgBtn2"
+        android:src="@drawable/arrow_right_white"
+        android:layout_toRightOf="@id/move_counter_item"
+        android:layout_alignBottom="@+id/move_counter_text"
+        android:layout_marginLeft="@dimen/margin_1"
+        android:layout_marginRight="@dimen/margin_1"
+        android:layout_width="@dimen/btn_size_2"
+        android:layout_height="@dimen/btn_size_2"
+        android:background="#00000000" />
+
+    <LinearLayout
+        android:id="@+id/chess960"
+        android:layout_below="@id/move_counter_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_1"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/chess960_manual"
+            style="@style/c4aTV4"
+            android:background="@drawable/rectanglewhite"
+            android:text="@string/menu_edit_board_chess960_manual" />
+        <TextView
+            android:id="@+id/chess960_random"
+            style="@style/c4aTV4"
+            android:background="@drawable/rectanglewhite"
+            android:text="@string/menu_edit_board_chess960_random" />
+        <TextView
+            android:id="@+id/chess960_number"
+            style="@style/c4aTV4"
+            android:background="@drawable/rectanglewhite"
+            android:text="@string/menu_edit_board_chess960_number" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clipboard"
+        android:layout_below="@id/chess960"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/to_clipboard"
+            style="@style/c4aTV4"
+            android:background="@drawable/rectanglewhite"
+            android:text="@string/menu_info_clipboardCopyFen" />
+        <TextView
+            android:id="@+id/from_clipboard"
+            style="@style/c4aTV4"
+            android:background="@drawable/rectanglewhite"
+            android:text="@string/menu_info_clipboardPaste" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/position"
+        android:layout_below="@id/clipboard"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/standard"
+            style="@style/c4aTV4"
+            android:background="@drawable/rectanglewhite"
+            android:text="@string/menu_edit_board_standard" />
+        <TextView
+            android:id="@+id/current"
+            style="@style/c4aTV4"
+            android:background="@drawable/rectanglewhite"
+            android:text="@string/menu_edit_board_current" />
+        <TextView
+            android:id="@+id/clear"
+            style="@style/c4aTV4"
+            android:background="@drawable/rectanglewhite"
+            android:text="@string/menu_edit_board_clear" />
+    </LinearLayout>
+
+</RelativeLayout>

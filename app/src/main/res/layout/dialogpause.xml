@@ -18,19 +18,19 @@
             android:id="@+id/btn_timeWhite"
             style="@style/c4aTV4"
             android:layout_height="wrap_content"
-            android:background="@drawable/borderwhite"
+            android:background="@drawable/rectanglewhite"
             android:text="@string/menu_usersettings_time_white" />
         <TextView
             android:id="@+id/btn_timeBlack"
             style="@style/c4aTV4"
             android:layout_height="wrap_content"
-            android:background="@drawable/borderwhite"
+            android:background="@drawable/rectanglewhite"
             android:text="@string/menu_usersettings_time_black" />
         <TextView
             android:id="@+id/btn_timeControl"
             style="@style/c4aTV4"
             android:layout_height="wrap_content"
-            android:background="@drawable/borderwhite"
+            android:background="@drawable/rectanglewhite"
             android:text="@string/menu_usersettings_timeControl" />
     </LinearLayout>
 
@@ -46,14 +46,14 @@
             style="@style/c4aTV4"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/borderwhite"
+            android:background="@drawable/rectanglewhite"
             android:text="@string/menu_specialities_engine_autoplay" />
         <TextView
             android:id="@+id/btn_delay"
             style="@style/c4aTV4"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/borderwhite"
+            android:background="@drawable/rectanglewhite"
             android:text="@string/pause_delay" />
 
     </LinearLayout>
@@ -101,21 +101,21 @@
                     android:id="@+id/btn_newGame"
                     style="@style/c4aTV4"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/borderyellow"
+                    android:background="@drawable/rectangleyellow"
                     android:layout_gravity="center"
                     android:text="@string/play_newGame" />
                 <TextView
                     android:id="@+id/btn_setClock"
                     style="@style/c4aTV4"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/borderyellow"
+                    android:background="@drawable/rectangleyellow"
                     android:layout_gravity="center"
                     android:text="@string/play_set_clock" />
                 <TextView
                     android:id="@+id/btn_continue"
                     style="@style/c4aTV4"
                     android:layout_width="fill_parent"
-                    android:background="@drawable/borderyellow"
+                    android:background="@drawable/rectangleyellow"
                     android:layout_gravity="center"
                     android:text="@string/play_continue" />
             </LinearLayout>
@@ -136,12 +136,12 @@
                 <TextView
                     android:id="@+id/btn_pause_edit"
                     style="@style/c4aTV4"
-                    android:background="@drawable/borderyellow"
+                    android:background="@drawable/rectangleyellow"
                     android:text="@string/play_two_players" />
                 <TextView
                     android:id="@+id/btn_pause_analysis"
                     style="@style/c4aTV4"
-                    android:background="@drawable/borderyellow"
+                    android:background="@drawable/rectangleyellow"
                     android:text="@string/play_analysis" />
             </LinearLayout>
         </LinearLayout>
@@ -158,13 +158,13 @@
         <TextView
             android:id="@+id/btn_pause_menu"
             style="@style/c4aTV4"
-            android:background="@drawable/borderblue"
+            android:background="@drawable/rectangleblue"
             android:text="@string/menu_title" />
 
         <TextView
             android:id="@+id/btn_pause_ok"
             style="@style/c4aTV4"
-            android:background="@drawable/borderyellow"
+            android:background="@drawable/rectangleyellow"
             android:text="@string/btn_Ok" />
 
     </LinearLayout>

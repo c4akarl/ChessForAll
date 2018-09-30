@@ -23,8 +23,8 @@
   <string name="inputDialog_color">Выбор цвета:</string>
   <string name="inputDialog_castling">Значение кастинга</string>
   <string name="inputDialog_enPassant">Пропустить ход</string>
-  <string name="inputDialog_draw50">Ничья по правилу 50ти ходов</string>
-  <string name="inputDialog_moveCounter">Счетчик ходов:</string>
+  <string name="inputDialog_draw50">правилу 50ти ходов</string>
+  <string name="inputDialog_moveCounter">Счетчик ходов</string>
   <string name="cl_unknownPiece">Неверный ход</string>
   <string name="cl_wrongBasePosition">Неверная позиция</string>
   <string name="cl_resultWhite">1-0</string>
@@ -110,16 +110,16 @@
   <string name="menu_edit_board_clear">Очистить доску</string>
   <string name="menu_edit_board_current">Текущая позиция</string>
   <string name="menu_edit_board_standard">Стандарт</string>
-  <string name="menu_edit_board_chess960_manual">Chess960 правила</string>
-  <string name="menu_edit_board_chess960_random">Chess960 случайный</string>
-  <string name="menu_edit_board_chess960_number">Chess960 числа</string>
+  <string name="menu_edit_board_chess960_manual">Chess960 \nправила</string>
+  <string name="menu_edit_board_chess960_random">Chess960 \nслучайный</string>
+  <string name="menu_edit_board_chess960_number">Chess960 \nчисла</string>
   <string name="menu_info_turnBoard">Повернуть доску</string>
   <string name="menu_info_nag">NAG (+, -, =, ...)</string>
   <string name="menu_info_moveNotification">Запись хода</string>
   <string name="menu_info_moveNotation">PGN-нотация</string>
   <string name="menu_info_clipboardCopyPgn">Копирование партии в буфер обмена</string>
   <string name="menu_info_clipboardCopyFen">Копирование позиции в буфер обмена</string>
-  <string name="menu_info_clipboardPaste">Вставка из буфера обмена</string>
+  <string name="menu_info_clipboardPaste">Вставить из буфера обмена</string>
   <string name="menu_query">Запрос - поиск в партии</string>
   <string name="menu_query_gameId">Game-ID</string>
   <string name="menu_query_player">Игрок</string>

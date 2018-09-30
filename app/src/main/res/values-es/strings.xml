@@ -26,8 +26,8 @@
     <string name="inputDialog_color">Seleccionar color:</string>
     <string name="inputDialog_castling">Valor del enroque</string>
     <string name="inputDialog_enPassant">Valor de paso</string>
-    <string name="inputDialog_draw50">Regla de trazar 50 movimientos</string>
-    <string name="inputDialog_moveCounter">Contador de jugadas:</string>
+    <string name="inputDialog_draw50">Regla 50 movimientos</string>
+    <string name="inputDialog_moveCounter">Contador de jugadas</string>
     
     <string name="cl_unknownPiece">figura desconocida</string>
     <string name="cl_wrongBasePosition">posición incorrecta</string>
@@ -119,9 +119,9 @@
     <string name="menu_edit_board_clear">Limpiar tablero de ajedrez</string>
     <string name="menu_edit_board_current">posición actual</string>
     <string name="menu_edit_board_standard">Estándar</string>
-    <string name="menu_edit_board_chess960_manual">Chess960 manual</string>
-    <string name="menu_edit_board_chess960_random">Chess960 aleatorio</string>
-    <string name="menu_edit_board_chess960_number">Chess960 número</string>
+    <string name="menu_edit_board_chess960_manual">Chess960 \nmanual</string>
+    <string name="menu_edit_board_chess960_random">Chess960 \naleatorio</string>
+    <string name="menu_edit_board_chess960_number">Chess960 \nnúmero</string>
 
     <string name="menu_info_turnBoard">girar el tablero</string>
     <string name="menu_info_nag">NAG (+, -, =  . . .)</string>
@@ -129,7 +129,7 @@
     <string name="menu_info_moveNotation">PGN-Notación</string>
     <string name="menu_info_clipboardCopyPgn">copiar partida al portapapeles</string>
     <string name="menu_info_clipboardCopyFen">copiar posición al portapapeles</string>
-    <string name="menu_info_clipboardPaste">pegar desde el portapapeles</string>
+    <string name="menu_info_clipboardPaste">Pegar desde el portapapeles</string>
     
     <string name="menu_query">Consulta - buscar partidas</string>
     <string name="menu_query_gameId">Partida ID</string>

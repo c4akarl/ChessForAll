@@ -60,9 +60,13 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import ccc.chess.book.ChessParseError;
 import ccc.chess.book.Move;
@@ -272,7 +276,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				startEdit(false, false);
 		}
 		updateCurrentPosition("");
-		getDataFromIntent(getIntent());
+//Log.i(TAG, "startGame(), start getDataFromIntent(intent): ");
+		if (getIntent().getFlags() == Intent.FLAG_ACTIVITY_NEW_TASK)
+			getDataFromIntent(getIntent());
 
 // 	!!! DIALOG FOR NEW MESSAGE (do not delete)
 //		if (userPrefs.getInt("user", 0) == 0)
@@ -287,7 +293,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 
 	// Initialize the drawer part of the user interface.
-	final int MENU_EDIT  		= 1;
+	final int MENU_EDIT_BOARD   = 1;
 	final int MENU_PGN    		= 2;
 	final int MENU_ENGINE      	= 3;
 	final int MENU_SETTINGS    	= 4;
@@ -310,7 +316,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		rightDrawer = (ListView)findViewById(R.id.right_drawer);
 		final DrawerItem[] leftItems = new DrawerItem[]
 		{
-			new DrawerItem(MENU_EDIT, R.string.menu_modes_edit),
+			new DrawerItem(MENU_EDIT_BOARD, R.string.menu_edit_board),
 			new DrawerItem(MENU_PGN, R.string.fmLblFile),
 			new DrawerItem(MENU_ENGINE, R.string.menu_enginesettings),
 			new DrawerItem(MENU_SETTINGS, R.string.menu_usersettings),
@@ -388,9 +394,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		switch (itemId)
 		{
 			// leftDrawer
-			case MENU_EDIT:
-				removeDialog(MENU_EDIT_DIALOG);
-				showDialog(MENU_EDIT_DIALOG);
+			case MENU_EDIT_BOARD:
+                editChessBoardIntent.putExtra("currentFen", gc.fen);
+                editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
+                editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
+                SharedPreferences.Editor ed = runP.edit();
+                ed.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
+                ed.commit();
+                startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
 				break;
 			case MENU_PGN:
 				removeDialog(MENU_PGN_DIALOG);
@@ -548,13 +559,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
     protected void onNewIntent(Intent intent)
     {
         super.onNewIntent(intent);
+//Log.i(TAG, "onNewIntent(), start getDataFromIntent(intent): ");
         getDataFromIntent(intent);
     }
 
 	public boolean getDataFromIntent(Intent intent)
 	{
 		boolean isOk = false;
-//Log.i(TAG, "intent.getFlags(): " + intent.getFlags() + ", FLAG_ACTIVITY_NEW_TASK: " + Intent.FLAG_ACTIVITY_NEW_TASK);
 		// call from another Activity, passing the FEN(String)
 		if (intent.getType() != null)
 		{
@@ -565,6 +576,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					editChessBoardIntent.putExtra("currentFen", intent.getStringExtra("fenMes"));
 					editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
 					editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
+                    SharedPreferences.Editor ed = runP.edit();
+                    ed.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
+                    ed.commit();
 					startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
 					return true;
 				}
@@ -579,36 +593,66 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				return false;
 			}
 			String intentData = intent.getDataString();
+//Log.i(TAG, "getDataFromIntent(), intentData: " + intentData);
 			if (intent.getType().endsWith("x-chess-pgn") & intentData.endsWith(".pgn"))	//".pgn-db" canceled
 			{
 				fileIO = new FileIO(this);
-				String target = fmPrefs.getString("fm_extern_load_path", "");
+				String externLoadPath = fmPrefs.getString("fm_extern_load_path", "");
+				if (!fmPrefs.getString("fm_last_selected_folder", "").equals(""))
+					externLoadPath = fmPrefs.getString("fm_last_selected_folder", "");
 				File fUri = new File(intentData);
 				String fName = fUri.getName();
 				String fPath = fUri.getParent();
+				boolean isDownload = false;
+				if (fPath.contains("ownload") | fPath.contains("/Android"))
+					isDownload = true;
 				if (fPath.startsWith("file:"))
 					fPath = fPath.replace("file:", "");
 				if (!fPath.endsWith("/"))
 					fPath = fPath + "/";
-				if (fileIO.fileExists(fPath, fName))
+
+//Log.i(TAG, "getDataFromIntent(), fPath: " + fPath + ", fName: " + fName);
+				if (!isDownload & fileIO.fileExists(fPath, fName))
+				{
+					isOk = true;
+
+					File file = new File(fPath + fName);
+					java.util.Date lastModDate = new java.util.Date(file.lastModified());
+					SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+					long timeInMilliseconds = 0;
+					try
+					{
+						Date mDate = sdf.parse(lastModDate.toString());
+						timeInMilliseconds = mDate.getTime();
+//Log.i(TAG, "getDataFromIntent(), timeInMilliseconds: " + timeInMilliseconds);
+					}
+					catch (ParseException e) {e.printStackTrace();}
+					long currentTime = System.currentTimeMillis();
+//Log.i(TAG, "getDataFromIntent(), timeDiff: " + (currentTime - timeInMilliseconds));
+					if ((currentTime - timeInMilliseconds) > MAX_DOWNLOAD_DIFF)		// from sd-card
+					{
+						SharedPreferences.Editor ed = fmPrefs.edit();
+						ed.putString("fm_extern_load_path", fPath);
+						ed.putString("fm_extern_load_file", fName);
+						ed.commit();
+						startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
+						return isOk;
+					}
+				}
+				if (fileIO.copyFile(intentData, externLoadPath))							// download
 				{
 					isOk = true;
 					SharedPreferences.Editor ed = fmPrefs.edit();
-					ed.putString("fm_extern_load_path", fPath);
+					ed.putString("fm_extern_load_path", externLoadPath);
 					ed.putString("fm_extern_load_file", fName);
 					ed.commit();
 					startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
 				}
 				else
 				{
-					if (fileIO.copyFile(intentData, target))
-					{
-						isOk = true;
-						SharedPreferences.Editor ed = fmPrefs.edit();
-						ed.putString("fm_extern_load_file", fName);
-						ed.commit();
-						startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
-					}
+					String error = "\n\ndownload file:\n" + intentData + "\n\ncopy path:\n" + externLoadPath;
+					downloadErrorMessage = getString(R.string.menu_load_www) + "\n" + getString(R.string.fmPgnError) + error;
+					c4aShowDialog(DOWNLOAD_ERROR_DIALOG);
 				}
 			}
 		}
@@ -650,8 +694,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public void startFileManager(int fileActionCode, int displayActivity, int gameLoad)
 	{
-//    	Log.i(TAG, "fileActionCode, displayActivity, gameLoad: " 	+ fileActionCode + ", " + displayActivity
-//    																+ ", " + gameLoad);
+//Log.i(TAG, "fileActionCode,: "	+ fileActionCode + ", displayActivity: " + displayActivity + ", gameLoad: " + gameLoad);
 		if 	((fileActionCode == LOAD_GAME_REQUEST_CODE | fileActionCode == LOAD_GAME_PREVIOUS_CODE)
 				& displayActivity == 0
 			)
@@ -825,6 +868,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			AlertDialog alert = builder.create();
 			alert.setCancelable(true);
 			return alert;
+		}
+		if (id == DOWNLOAD_ERROR_DIALOG)
+		{
+			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog),
+					"", getString(R.string.btn_Ok), "", downloadErrorMessage, 0, "");
+			return c4aDialog;
 		}
 		if (id == PGN_ERROR_DIALOG)
 		{
@@ -1263,6 +1312,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							editChessBoardIntent.putExtra("currentFen", gc.fen);
 							editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
 							editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
+							SharedPreferences.Editor ed3 = runP.edit();
+							ed3.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
+							ed3.commit();
 							startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
 							break;
 						case MENU_CLIPBOARD:
@@ -1335,6 +1387,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							editChessBoardIntent.putExtra("currentFen", gc.fen);
 							editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
 							editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
+							SharedPreferences.Editor ed = runP.edit();
+							ed.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
+							ed.commit();
 							startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
 							break;
 						case MENU_EDIT_PGN:
@@ -1464,15 +1519,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (id == MENU_COLOR_SETTINGS)
 		{
-			final int MENU_COLOR_SETTINGS_STANDARD    	= 0;
-			final int MENU_COLOR_SETTINGS_BROWN 		= 1;
+			final int MENU_COLOR_SETTINGS_BROWN    		= 0;
+			final int MENU_COLOR_SETTINGS_VIOLET 		= 1;
 			final int MENU_COLOR_SETTINGS_GREY    		= 2;
 			final int MENU_COLOR_SETTINGS_BLUE   		= 3;
 			final int MENU_COLOR_SETTINGS_GREEN    		= 4;
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice);
 			List<Integer> actions = new ArrayList<Integer>();
-			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_STANDARD)); 		actions.add(MENU_COLOR_SETTINGS_STANDARD);
 			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_BROWN)); 			actions.add(MENU_COLOR_SETTINGS_BROWN);
+			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_VIOLET)); 		actions.add(MENU_COLOR_SETTINGS_VIOLET);
 			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_GREY)); 			actions.add(MENU_COLOR_SETTINGS_GREY);
 			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_BLUE)); 			actions.add(MENU_COLOR_SETTINGS_BLUE);
 			arrayAdapter.add(getColorName(MENU_COLOR_SETTINGS_GREEN)); 			actions.add(MENU_COLOR_SETTINGS_GREEN);
@@ -1488,7 +1543,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{
-					optionsColorIntent.putExtra("colorId", finalActions.get(item));
+					SharedPreferences.Editor ed = userPrefs.edit();
+					ed.putInt("colorId", finalActions.get(item));
+					ed.commit();
 					startActivityForResult(optionsColorIntent, OPTIONS_COLOR_SETTINGS);
 					removeDialog(MENU_COLOR_SETTINGS);
 				}
@@ -1752,6 +1809,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
 							break;
 						case MENU_SETTINGS_COLOR:
+//							optionsColorIntent.putExtra("colorId", finalActions.get(item));
+//							startActivityForResult(optionsColorIntent, OPTIONS_COLOR_SETTINGS);
 							removeDialog(MENU_COLOR_SETTINGS);
 							showDialog(MENU_COLOR_SETTINGS);
 							break;
@@ -1971,12 +2030,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public void setPlayModBackground(int playmod)
 	{
-        d_btn_white.setBackgroundResource(R.drawable.borderwhite);
-        d_btn_black.setBackgroundResource(R.drawable.borderwhite);
-        d_btn_engine.setBackgroundResource(R.drawable.borderwhite);
-        d_btn_player.setBackgroundResource(R.drawable.borderwhite);
-        d_btn_edit.setBackgroundResource(R.drawable.borderwhite);
-        d_btn_analysis.setBackgroundResource(R.drawable.borderwhite);
+        d_btn_white.setBackgroundResource(R.drawable.rectanglewhite);
+        d_btn_black.setBackgroundResource(R.drawable.rectanglewhite);
+        d_btn_engine.setBackgroundResource(R.drawable.rectanglewhite);
+        d_btn_player.setBackgroundResource(R.drawable.rectanglewhite);
+        d_btn_edit.setBackgroundResource(R.drawable.rectanglewhite);
+        d_btn_analysis.setBackgroundResource(R.drawable.rectanglewhite);
 		setTextViewColors(lblPlayerNameB, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
 		switch (playmod)
 		{
@@ -2017,16 +2076,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		dChessEnginePlayMod = pauseMod;
 		if (playMod == 4 | playMod == 6)
 			dChessEnginePlayMod = playMod;
-		d_btn_newGame.setBackgroundResource(R.drawable.borderwhite);
+		d_btn_newGame.setBackgroundResource(R.drawable.rectanglewhite);
 		d_btn_newGame.setText(getString(R.string.play_newGame) + getTimeValues(pauseMod, 1));
-		d_btn_setClock.setBackgroundResource(R.drawable.borderwhite);
+		d_btn_setClock.setBackgroundResource(R.drawable.rectanglewhite);
 		d_btn_setClock.setText(getString(R.string.play_set_clock) + getTimeValues(pauseMod, 2));
-		d_btn_continue.setBackgroundResource(R.drawable.borderwhite);
+		d_btn_continue.setBackgroundResource(R.drawable.rectanglewhite);
 		d_btn_continue.setText(getString(R.string.play_continue) + getTimeValues(pauseMod, 3));
-		d_btn_pause_edit.setBackgroundResource(R.drawable.borderwhite);
-		d_btn_pause_analysis.setBackgroundResource(R.drawable.borderwhite);
+		d_btn_pause_edit.setBackgroundResource(R.drawable.rectanglewhite);
+		d_btn_pause_analysis.setBackgroundResource(R.drawable.rectanglewhite);
 		d_play_mode_name.setTextColor(getResources().getColor(R.color.text_light));
-		d_btn_autom_play.setBackgroundResource(R.drawable.borderwhite);
+		d_btn_autom_play.setBackgroundResource(R.drawable.rectanglewhite);
 		setTextViewColors(lblPlayerNameB, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
 		d_btn_pause_ok.setBackgroundResource(R.drawable.dialoggreen);
 		if (dChessEnginePlayMod != 4 & dChessEnginePlayMod != 6)
@@ -2735,17 +2794,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					setRunMoveHistory();
 					setRunPrefs();
                     setInfoMessage("", "", "", true);
-					if (ec.chessEnginePausedPrev)
-					{
-						ec.chessEnginePaused = true;
-						gc.isGameLoaded = true;
-						setInfoMessage("", null, null, false);
-					}
-					else
-					{
-						ec.chessEnginePaused = false;
-						startPlay(isNewGame, true);
-					}
+					ec.chessEnginePaused = true;
+					gc.isGameLoaded = true;
+					setInfoMessage("", null, null, false);
 				}
 				break;
 			case LOAD_EXTERN_ENGINE_REQUEST_CODE:
@@ -2818,6 +2869,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			case EDIT_CHESSBOARD_REQUEST_CODE:
 				if (resultCode == RESULT_OK)
 				{
+                    gc.isBoardTurn = runP.getBoolean("run_game0_is_board_turn", false);
 					gc.isGameLoaded = false;
 					stopTimeHandler(false);
 					messageEngine 		= "";
@@ -4276,10 +4328,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 								if (userPrefs.getBoolean("user_options_enginePlay_Ponder", true) & !msgEngine.getText().toString().equals(""))
 									msgEngine.setVisibility(TextView.VISIBLE);
 								else
-								{
 									msgEngine.setVisibility(TextView.GONE);
-//									msgEngine.setVisibility(TextView.INVISIBLE);
-								}
 							}
 						}
 						else
@@ -6943,6 +6992,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final String MY_APPS = "https://play.google.com/store/apps/developer?id=Karl+Schreiner";
 	final long CLOCK_START = 0;
 	final long CLOCK_DELAY = 250;
+	final long MAX_DOWNLOAD_DIFF = 20000;
 
 	private static final int PERMISSIONS_REQUEST_CODE = 50;
 	Util u;
@@ -7019,6 +7069,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int PLAY_DIALOG = 100;
 	final static int PAUSE_DIALOG = 109;
 	final static int MOVE_NOTIFICATION_DIALOG = 110;
+	final static int DOWNLOAD_ERROR_DIALOG = 195;
 	final static int PGN_ERROR_DIALOG = 198;
 	final static int FILE_LOAD_PROGRESS_DIALOG = 199;
 	final static int VARIATION_DIALOG = 200;
@@ -7140,6 +7191,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	SpannableStringBuilder sb = new SpannableStringBuilder();
 	String queryControl = "w";
 	String internEngineName = "";
+	String downloadErrorMessage = "";
 
 	Bitmap imageHuman = null;
 	Bitmap imageComputer = null;

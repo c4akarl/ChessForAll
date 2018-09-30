@@ -35,7 +35,7 @@
 			android:layout_marginBottom="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergrey"
+			android:background="@drawable/rectangletransparent"
 			android:textColor="#000000" />
 		<TextView android:id="@+id/lblPlayerEloA"
 			style="@style/c4aTV50"
@@ -46,7 +46,7 @@
 			android:layout_marginBottom="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 		<TextView android:id="@+id/lblPlayerNameA"
 			style="@style/c4aTV3"
@@ -58,7 +58,7 @@
 			android:layout_marginBottom="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 
 		<TextView android:id="@+id/lblPlayerTimeB"
@@ -69,7 +69,7 @@
 			android:layout_marginRight="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergrey"
+			android:background="@drawable/rectangletransparent"
 			android:textColor="#000000" />
 		<TextView android:id="@+id/lblPlayerEloB"
 			style="@style/c4aTV50"
@@ -80,7 +80,7 @@
 			android:layout_marginRight="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 		<TextView android:id="@+id/lblPlayerNameB"
 			style="@style/c4aTV3"
@@ -91,7 +91,7 @@
 			android:layout_width="fill_parent"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 
 		<LinearLayout
@@ -169,7 +169,7 @@
 			android:clickable="true"
 			android:layout_marginTop="1dip"
 			android:singleLine="true"
-			android:background="@drawable/borderpink"
+			android:background="@drawable/rectanglepink"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/msgShort2"
@@ -183,7 +183,7 @@
 			android:singleLine="true"
 			android:includeFontPadding="true"
 			android:gravity="right"
-			android:background="@drawable/borderpink"
+			android:background="@drawable/rectanglepink"
 			android:textColor="#000000" />
 
 		<ScrollView android:id="@+id/scrlMsgEngine"
@@ -201,7 +201,7 @@
 				android:includeFontPadding="true"
 				android:paddingLeft="2dip"
 				android:paddingRight="2dip"
-				android:background="@drawable/bordergrey"
+				android:background="@drawable/rectangletransparent"
 				android:textColor="#000000" />
 		</ScrollView>
 
@@ -219,7 +219,7 @@
 				android:bufferType="spannable"
 				android:paddingLeft="2dip"
 				android:paddingRight="2dip"
-				android:background="@drawable/borderyellow"
+				android:background="@drawable/rectangleyellow"
 				android:textColor="#000000" />
 		</ScrollView>
 

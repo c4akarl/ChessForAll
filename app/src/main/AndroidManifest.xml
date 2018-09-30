@@ -12,7 +12,7 @@
 		
 		<activity android:name=".MainActivity"
 	        android:theme="@style/Theme.C4a"
-            android:launchMode="singleTop" >
+            android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -35,7 +35,7 @@
         <activity android:name=".OptionsPlay" android:label="@string/menu_modes" > </activity>
         <activity android:name=".OptionsEnginePlay" android:label="@string/app_optionsEnginePlay" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
         <activity android:name=".OptionsColor" android:label="@string/menu_colorsettings" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
-        <activity android:name=".EditChessBoard" android:label="@string/app_editChessBoard" > </activity>
+        <activity android:name=".EditChessBoard" android:label="@string/app_editChessBoard" android:configChanges="orientation|screenSize"> </activity>
         <activity android:name=".PlayEngineSettings" android:label="@string/app_playEngineSettings" > </activity>
 
     </application>

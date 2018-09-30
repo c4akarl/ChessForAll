@@ -36,7 +36,7 @@
         android:layout_width="fill_parent"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/bordergreen"
+        android:background="@drawable/rectanglegreen"
         android:text="@string/rate_title" />
 
     <TextView
@@ -45,7 +45,7 @@
         android:layout_below="@id/btn_rate"
         android:layout_width="fill_parent"
         android:layout_gravity="center"
-        android:background="@drawable/borderwhite"
+        android:background="@drawable/rectanglewhite"
         android:text="@string/rate_no" />
 
 </RelativeLayout>

@@ -36,7 +36,7 @@
 			android:layout_marginBottom="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergrey"
+			android:background="@drawable/rectangletransparent"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/lblPlayerEloA"
@@ -48,7 +48,7 @@
 			android:layout_marginBottom="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/lblPlayerNameA"
@@ -61,7 +61,7 @@
 			android:layout_marginBottom="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 
 		<TextView
@@ -73,7 +73,7 @@
 			android:layout_marginRight="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergrey"
+			android:background="@drawable/rectangletransparent"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/lblPlayerEloB"
@@ -85,7 +85,7 @@
 			android:layout_marginRight="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/lblPlayerNameB"
@@ -97,7 +97,7 @@
 			android:layout_width="fill_parent"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 
 		<TextView
@@ -111,7 +111,7 @@
 			android:layout_marginBottom="1dip"
 			android:paddingLeft="2dp"
 			android:singleLine="true"
-			android:background="@drawable/borderpink"
+			android:background="@drawable/rectanglepink"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/msgShort2"
@@ -126,7 +126,7 @@
 			android:singleLine="true"
 			android:includeFontPadding="true"
 			android:gravity="right"
-			android:background="@drawable/borderpink"
+			android:background="@drawable/rectanglepink"
 			android:textColor="#000000" />
 
 		<LinearLayout
@@ -213,7 +213,7 @@
 				android:layout_marginBottom="0dip"
 				android:paddingLeft="2dip"
 				android:paddingRight="2dip"
-				android:background="@drawable/bordergrey"
+				android:background="@drawable/rectangletransparent"
 				android:textColor="#000000" />
 		</ScrollView>
 
@@ -233,7 +233,7 @@
 				android:bufferType="spannable"
 				android:paddingLeft="2dip"
 				android:paddingRight="2dip"
-				android:background="@drawable/borderyellow"
+				android:background="@drawable/rectangleyellow"
 				android:textColor="#000000" />
 		</ScrollView>
 

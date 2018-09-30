@@ -26,8 +26,8 @@
     <string name="inputDialog_color">Wähle eine Farbe aus</string>
     <string name="inputDialog_castling">Rochade-Wert eingeben</string>
     <string name="inputDialog_enPassant">En-passant-Wert eingeben</string>
-    <string name="inputDialog_draw50">Remis 50-Züge-Regel</string>
-    <string name="inputDialog_moveCounter">Zugzähler:</string>
+    <string name="inputDialog_draw50">50-Züge Regel</string>
+    <string name="inputDialog_moveCounter">Zugzähler</string>
     
     <string name="cl_unknownPiece">Unbekannte Figur</string>
     <string name="cl_wrongBasePosition">Falsche Stellung</string>
@@ -73,7 +73,7 @@
     <string name="engine_timeout">Maschine gestoppt (Timeout)</string>
 
     <string name="menu_new_game">Neue Partie</string>
-    <string name="menu_edit_board">Brett editieren</string>
+    <string name="menu_edit_board">Stellung bearbeiten</string>
     <string name="menu_pgn">PGN-Datei</string>
     <string name="menu_pgn_load">Partie laden</string>
     <string name="menu_pgn_save">Partie speichern</string>
@@ -119,9 +119,9 @@
     <string name="menu_edit_board_clear">Brett leeren</string>
     <string name="menu_edit_board_current">Aktuelle Stellung</string>
     <string name="menu_edit_board_standard">Standard</string>
-    <string name="menu_edit_board_chess960_manual">Chess960 editieren</string>
-    <string name="menu_edit_board_chess960_random">Chess960 Zufall</string>
-    <string name="menu_edit_board_chess960_number">Chess960 Nummer</string>
+    <string name="menu_edit_board_chess960_manual">Chess960 \neditieren</string>
+    <string name="menu_edit_board_chess960_random">Chess960 \nZufall</string>
+    <string name="menu_edit_board_chess960_number">Chess960 \nNummer</string>
 
     <string name="menu_info_turnBoard">Brett drehen</string>
     <string name="menu_info_nag">NAG (+, -, =, ...)</string>
@@ -129,8 +129,7 @@
     <string name="menu_info_moveNotation">PGN-Notation</string>
     <string name="menu_info_clipboardCopyPgn">Partie in Zwischenablage</string>
     <string name="menu_info_clipboardCopyFen">Position in Zwischenablage</string>
-    <string name="menu_info_clipboardPaste">Partie von der Zwischenablage</string>
-        
+
     <string name="menu_query">Abfrage - Suche nach Partien</string>
     <string name="menu_query_gameId">Partie-ID</string>
     <string name="menu_query_player">Spieler</string>
@@ -282,7 +281,7 @@
     <string name="menu_edit_pgn_start">Datei-Anfang</string>
     <string name="menu_edit_pgn_end">Datei-Ende</string>
     <string name="delete_game">Partie löschen?</string>
-    <string name="btn_Cancel">Annullieren</string>
+    <string name="btn_Cancel">Abbrechen</string>
     <string name="game_saved">Partie gespeichert!</string>
     <string name="rebuild_pgn_file">PGN-Datei neu aufbauen:</string>
     <string name="fmInfoSelectFile">Wähle eine Datei (.pgn) aus um die Partienliste anzuzeigen. Durch langes Drücken wird die entsprechende Datei gelöscht. Drücke die Menü-Taste für weitere Optionen.</string>
@@ -353,4 +352,5 @@
     <string name="piece_R">T</string>
     <string name="piece_B">L</string>
     <string name="piece_N">S</string>
+    <string name="menu_info_clipboardPaste">Von der Zwischenablage einfügen</string>
 </resources>

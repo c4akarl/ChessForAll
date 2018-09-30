@@ -21,7 +21,7 @@
 		android:paddingRight="0dip"
 		android:singleLine="true"
 		android:gravity="center"
-		android:background="@drawable/bordergrey"
+		android:background="@drawable/rectangletransparent"
 		android:text="@string/app_playEngineSettings"
 		android:textColor="#000000" />
 
@@ -126,7 +126,7 @@
 <TextView
 	android:id="@+id/etPeMessage"
 	style="@style/c4aET1"
-	android:background="@drawable/borderpink"
+	android:background="@drawable/rectanglepink"
 	android:layout_above="@id/btnPeAutoSetFile"    
 	android:layout_width="fill_parent"
 	android:layout_toLeftOf="@id/btnPeAutoPlay"

@@ -427,13 +427,13 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 	{
 		if (visible)
 		{
-			et.setBackgroundResource(R.drawable.bordergreen);
+			et.setBackgroundResource(R.drawable.rectanglegreen);
 			int resId = et.getId(); resId -= 200;
 			tagError[resId] = 0;
 		}
 		else
 		{
-			et.setBackgroundResource(R.drawable.borderpink);
+			et.setBackgroundResource(R.drawable.rectanglepink);
 			int resId = et.getId(); resId -= 200;
 			tagError[resId] = 1;
 		}

@@ -43,8 +43,9 @@ public class EngineControl
 			chessEnginePaused = false;
 		}
     }
-	public void setPlayData(SharedPreferences userP, String engineWhite, String engineBlack)
-    {	// setting the PGN-Data 
+	public void setPlayData(SharedPreferences userP, String white, String black)
+    {	// setting the PGN-Data
+//Log.i(TAG, "setPlayData(), white: " + white + ", black: " + black);
 		chessEngineEvent = "Android " + android.os.Build.VERSION.RELEASE;
 		chessEngineSite = android.os.Build.MODEL;
 		chessEngineRound = "-";
@@ -74,8 +75,8 @@ public class EngineControl
 	        		chessEnginePlayerBlack = en_1.engineName;
 	        		break;
 	        	case 4:	
-	        		chessEnginePlayerWhite = engineWhite;
-	        		chessEnginePlayerBlack = engineBlack;
+	        		chessEnginePlayerWhite = white;
+	        		chessEnginePlayerBlack = black;
 	        		break;
 	        }
 		}

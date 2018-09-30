@@ -26,8 +26,8 @@
     <string name="inputDialog_color">Select color:</string>
     <string name="inputDialog_castling">Castling value</string>
     <string name="inputDialog_enPassant">En passant value</string>
-    <string name="inputDialog_draw50">Draw 50-move rule</string>
-    <string name="inputDialog_moveCounter">Move counter:</string>
+    <string name="inputDialog_draw50">Fifty-move rule</string>
+    <string name="inputDialog_moveCounter">Move counter</string>
     
     <string name="cl_unknownPiece">Unknown piece</string>
     <string name="cl_wrongBasePosition">Wrong position</string>
@@ -118,9 +118,9 @@
     <string name="menu_edit_board_clear">Clear board</string>
     <string name="menu_edit_board_current">Current position</string>
     <string name="menu_edit_board_standard">Standard</string>
-    <string name="menu_edit_board_chess960_manual">Chess960 manual</string>
-    <string name="menu_edit_board_chess960_random">Chess960 random</string>
-    <string name="menu_edit_board_chess960_number">Chess960 number</string>
+    <string name="menu_edit_board_chess960_manual">Chess960 \nmanual</string>
+    <string name="menu_edit_board_chess960_random">Chess960 \nrandom</string>
+    <string name="menu_edit_board_chess960_number">Chess960 \nnumber</string>
 
     <string name="menu_info_turnBoard">Turn board</string>
     <string name="menu_info_nag">NAG (+, -, =, ...)</string>
@@ -128,7 +128,7 @@
     <string name="menu_info_moveNotation">PGN-Notation</string>
     <string name="menu_info_clipboardCopyPgn">Copy game to clipboard</string>
     <string name="menu_info_clipboardCopyFen">Copy position to clipboard</string>
-    <string name="menu_info_clipboardPaste">Paste from clipboard</string>
+    <string name="menu_info_clipboardPaste">Paste from the clipboard</string>
     
     <string name="menu_query">Query - search for games</string>
     <string name="menu_query_gameId">Game-ID</string>

@@ -128,6 +128,26 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	        etPath = (EditText) findViewById(R.id.fmEtPath);
 			etPath.setText("");
             setTextViewColors(etPath, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+			etPath.addTextChangedListener(new TextWatcher()
+			{
+				@Override
+				public void onTextChanged(CharSequence s, int start, int before, int count) { }
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+				@Override
+				public void afterTextChanged(Editable s)
+				{
+					if (!etPath.getText().equals("") & (fileActionCode == 1 | fileActionCode == 2))
+					{
+						// fmPrefs ---> Main, download pgn !!!
+                        SharedPreferences.Editor ed = fmPrefs.edit();
+                        ed.putString("fm_last_selected_folder", etPath.getText().toString());
+                        ed.commit();
+					}
+				}
+			});
+
 	        etUrl  = (EditText) findViewById(R.id.fmEtUrl);
 	        etFile = (EditText) findViewById(R.id.fmEtFile);
 			if (fileActionCode == 2)
@@ -793,22 +813,12 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
         if (id == DATABASE_LOCKED_DIALOG) 
         {
-//            c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleFileDialog), getString(R.string.fmDatabaseLocked),
-//					0, R.drawable.button_ok, 0);
-//			c4aImageDialog.setOnCancelListener(this);
-//			return c4aImageDialog;
-
 			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleFileDialog),
 					"", getString(R.string.btn_Ok), "", getString(R.string.fmDatabaseLocked), 0, "");
 			return c4aDialog;
         }
         if (id == COMING_SOON) 
         {
-//            c4aImageDialog = new C4aImageDialog(this, this, getString(R.string.dgTitleFileDialog), getString(R.string.comingSoon),
-//					0, R.drawable.button_ok, 0);
-//			c4aImageDialog.setOnCancelListener(this);
-//			return c4aImageDialog;
-
 			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleFileDialog),
 					"", getString(R.string.btn_Ok), "", getString(R.string.comingSoon), 0, "");
 			return c4aDialog;
@@ -1070,45 +1080,45 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			int game_current = 0;
 			int game_max_items = 0;
 			try 	{game_current = Integer.parseInt(qCurrentId.getText().toString());}
-			catch 	(NumberFormatException e) {qCurrentId.setBackgroundResource(R.drawable.borderpink); isQueryInputError = true; return;}
+			catch 	(NumberFormatException e) {qCurrentId.setBackgroundResource(R.drawable.rectanglepink); isQueryInputError = true; return;}
 			try 	{game_max_items = Integer.parseInt(qMaxItems.getText().toString());}
-			catch 	(NumberFormatException e) {qMaxItems.setBackgroundResource(R.drawable.borderpink); isQueryInputError = true; return;}
+			catch 	(NumberFormatException e) {qMaxItems.setBackgroundResource(R.drawable.rectanglepink); isQueryInputError = true; return;}
 			if (game_current < 1 | game_current > game_count)
 			{
-				qCurrentId.setBackgroundResource(R.drawable.borderpink);
+				qCurrentId.setBackgroundResource(R.drawable.rectanglepink);
 				isQueryInputError = true;
 			}
 			else
-				qCurrentId.setBackgroundResource(R.drawable.bordergreen);
+				qCurrentId.setBackgroundResource(R.drawable.rectanglegreen);
 			if (game_max_items < 100 | (game_max_items > 4000))
 			{
-				qMaxItems.setBackgroundResource(R.drawable.borderpink);
+				qMaxItems.setBackgroundResource(R.drawable.rectanglepink);
 				isQueryInputError = true;
 			}
 			else
-				qMaxItems.setBackgroundResource(R.drawable.bordergreen);
+				qMaxItems.setBackgroundResource(R.drawable.rectanglegreen);
 		}
 		if (setQueryData == 1)
 		{	// query player
 			if (!qPlayer.getText().toString().equals(""))
-				qPlayer.setBackgroundResource(R.drawable.bordergreen);
+				qPlayer.setBackgroundResource(R.drawable.rectanglegreen);
 			else
 			{
-				qPlayer.setBackgroundResource(R.drawable.borderpink);
+				qPlayer.setBackgroundResource(R.drawable.rectanglepink);
 				isQueryInputError = true;
 			}
 			if (isDateOk(qDateFrom.getText().toString()))
-				qDateFrom.setBackgroundResource(R.drawable.bordergreen);
+				qDateFrom.setBackgroundResource(R.drawable.rectanglegreen);
 			else
 			{
-				qDateFrom.setBackgroundResource(R.drawable.borderpink);
+				qDateFrom.setBackgroundResource(R.drawable.rectanglepink);
 				isQueryInputError = true;
 			}
 			if (isDateOk(qDateTo.getText().toString()))
-				qDateTo.setBackgroundResource(R.drawable.bordergreen);
+				qDateTo.setBackgroundResource(R.drawable.rectanglegreen);
 			else
 			{
-				qDateTo.setBackgroundResource(R.drawable.borderpink);
+				qDateTo.setBackgroundResource(R.drawable.rectanglepink);
 				isQueryInputError = true;
 			}
 			if (!isQueryInputError)
@@ -1127,8 +1137,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					catch 	(NumberFormatException e) { }
 					if (tInt < fInt | fInt == 0 | tInt == 0)
 					{
-						qDateFrom.setBackgroundResource(R.drawable.borderpink);
-						qDateTo.setBackgroundResource(R.drawable.borderpink);
+						qDateFrom.setBackgroundResource(R.drawable.rectanglepink);
+						qDateTo.setBackgroundResource(R.drawable.rectanglepink);
 						isQueryInputError = true;
 					}
 				}
@@ -1394,18 +1404,21 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				boolean pgnFilesOk = pgnDb.initPgnFiles(path, file);
 				if (pgnFilesOk)
 				{
-					pgnDb.openDb(path, file, SQLiteDatabase.OPEN_READONLY);
-					long pgnOldLength = pgnDb.pgnLength;
-					fileIO.dataToFile(path, file, data, fileExists);
-					pgnDb.closeDb();
-					notificationId++;
-					startCreateDatabaseTask(path, file, Long.toString(pgnOldLength), "");
+
+//					pgnDb.openDb(path, file, SQLiteDatabase.OPEN_READONLY);
+					if (pgnDb.openDb(path, file, SQLiteDatabase.OPEN_READONLY))
+					{
+						long pgnOldLength = pgnDb.pgnLength;
+						fileIO.dataToFile(path, file, data, fileExists);
+						pgnDb.closeDb();
+						startCreateDatabaseTask(path, file, Long.toString(pgnOldLength), "");
+					}
+
 				}
 				else
 				{
 					fileIO.dataToFile(path, file, data, fileExists);
 					pgnDb.deleteDbFile();
-					notificationId++;
 					startCreateDatabaseTask(path, file, "0", "");
 				}
 			}
@@ -1670,7 +1683,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			if (!path.equals(fm_extern_load_path) | !file.equals(fm_extern_load_file))
 				gameControl = 1;
 //Log.i(TAG, "loadExternFile(), gameControl: " + gameControl  + ", fm_extern_game_offset: " + fm_extern_game_offset);
-
         	fileData = fileIO.dataFromFile(path, file, fm_extern_last_game, gameControl, fm_extern_game_offset);
         	if (!fileData.equals(""))
 				finishAfterLoad(path, file);
@@ -1690,6 +1702,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	
 	public void finishAfterLoad(String path, String file) 
 	{
+//Log.i(TAG, "finishAfterLoad()");
 		returnIntent = new Intent();
 		returnIntent.putExtra("pgnStat", fileIO.getPgnStat());
 		if (!userPrefs.getBoolean("user_options_gui_usePgnDatabase", true))
@@ -1704,8 +1717,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		if (getIntent().getExtras().getInt("displayActivity") == 1)
 		{
 			setPreferences(fileData);
-            removeDialog(FILE_LOAD_PROGRESS_DIALOG);
-            showDialog(FILE_LOAD_PROGRESS_DIALOG);
 		}
 		else
 			setSkipPreferences(1, fileData);
@@ -1778,7 +1789,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		returnIntent = new Intent();
 		String data = getIntent().getExtras().getString("pgnData");
 
-//20180501, at ccc.chess.gui.chessforall.FileIO.dataToFile: (FileIO.java:596)java.lang.NullPointerException:
 		if (data == null)
 			return;
 		if (data.equals(""))
@@ -1802,14 +1812,12 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					fileIO.dataToFile(etPath.getText().toString(), fileName, data, append);
 					pgnDb.closeDb();
 					createDb = false;
-					notificationId++;
 					startCreateDatabaseTask(etPath.getText().toString(), fileName, Long.toString(pgnOldLength), "");
 				}
 			}
 			if (createDb)
 			{
 				fileIO.dataToFile(etPath.getText().toString(), fileName, data, append);
-				notificationId++;
 				startCreateDatabaseTask(etPath.getText().toString(), fileName, "0", "");
 			}
 		}
@@ -2257,18 +2265,18 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
     	qDateDescCb.setChecked(fm_extern_db_key_player_date_desc);
     	qDateFrom.setText(fm_extern_db_key_player_date_from);
     	if (isDateOk(qDateFrom.getText().toString()))
-			qDateFrom.setBackgroundResource(R.drawable.bordergreen);
+			qDateFrom.setBackgroundResource(R.drawable.rectanglegreen);
 		else
 		{
-			qDateFrom.setBackgroundResource(R.drawable.borderpink);
+			qDateFrom.setBackgroundResource(R.drawable.rectanglepink);
 			isQueryInputError = true;
 		}
     	qDateTo.setText(fm_extern_db_key_player_date_to);
     	if (isDateOk(qDateTo.getText().toString()))
-    		qDateTo.setBackgroundResource(R.drawable.bordergreen);
+    		qDateTo.setBackgroundResource(R.drawable.rectanglegreen);
 		else
 		{
-			qDateTo.setBackgroundResource(R.drawable.borderpink);
+			qDateTo.setBackgroundResource(R.drawable.rectanglepink);
 			isQueryInputError = true;
 		}
     	try
@@ -2518,7 +2526,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 							}
 							pgnDb = new PgnDb();
 							pgnDb.initPgnFiles(pgnPath, pgnFile);
-							notificationId--;
+//							notificationId--;
 							handleDb(pgnPath, pgnFile, STATE_DB_NO_DBFILE, false);
 						}
 					}
@@ -2589,7 +2597,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			{
 				try	{db = SQLiteDatabase.openOrCreateDatabase(fPgnDb, null);}	// create database (file: .pgn-db)
 				catch (SQLiteDiskIOException e) {e.printStackTrace(); testMessage = "EX 99"; db.close(); return null;}
-//error 20180419: android.database.sqlite.SQLiteCantOpenDatabaseException:
 				catch (SQLiteCantOpenDatabaseException e) {e.printStackTrace(); testMessage = "EX 99"; db.close(); return null;}
 	    		executeSQLScript(db, "create.sql");								// create table: pgn
 	    		db.close();
@@ -2744,9 +2751,14 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	        mNotificationHelper.completed();
 	        if (getIntent().getExtras().getInt("displayActivity") == 1)
 	        {
-	        	pgnDb.openDb(pgnPath, pgnFile, SQLiteDatabase.OPEN_READONLY);
-		        setInfoValues("DB-Test - onPostExecute()", testMessage, pgnDb.getDbVersion());
-		        pgnDb.closeDb();
+// 13. Okt. 2018 23:27 in der App-Version 72 : java.lang.IllegalStateException:
+//	        	pgnDb.openDb(pgnPath, pgnFile, SQLiteDatabase.OPEN_READONLY);
+	        	if (pgnDb.openDb(pgnPath, pgnFile, SQLiteDatabase.OPEN_READONLY))
+				{
+					setInfoValues("DB-Test - onPostExecute()", testMessage, pgnDb.getDbVersion());
+					pgnDb.closeDb();
+				}
+
 		        if (pgnPath.equals(etPath.getText().toString()) & pgnFile.equals(etFile.getText().toString()))
 		        {
 		        	if (pgnDb.initPgnFiles(pgnPath, pgnFile))
@@ -3159,12 +3171,17 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			}
 
 			setQueryDataToTitle(fm_extern_db_key_id, gameId, pgnDb.getRowCount(PgnDb.TABLE_NAME), scroll_game_id, queryCount);
+
 			if (setInfo)
 			{
-				pgnDb.openDb(gamePath, gameFile, SQLiteDatabase.OPEN_READONLY);
-				setInfoValues("DB-Test - startQueryTask()", "cursor_cnt: " + queryCursor.getCount(), pgnDb.getDbVersion());
+//				pgnDb.openDb(gamePath, gameFile, SQLiteDatabase.OPEN_READONLY);
+				if (pgnDb.openDb(gamePath, gameFile, SQLiteDatabase.OPEN_READONLY))
+				{
+					setInfoValues("DB-Test - startQueryTask()", "cursor_cnt: " + queryCursor.getCount(), pgnDb.getDbVersion());
+					pgnDb.closeDb();
+				}
 			}
-			pgnDb.closeDb();
+
 			String[] columns = new String[]	{PgnDb.PGN_ID, PgnDb.PGN_WHITE, PgnDb.PGN_BLACK, PgnDb.PGN_EVENT, PgnDb.PGN_DATE, PgnDb.PGN_RESULT};
 			int[] to = new int[] {R.id.text1, R.id.text2, R.id.text3, R.id.text4, R.id.text5, R.id.text6};
 			pgnAdapter = new SimpleCursorAdapter(FileManager.this, R.layout.dbquery, queryCursor, columns, to, 0);
@@ -3357,7 +3374,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		boolean pgnDbNotExists = false;
 		if (!pgnDb.initPgnFiles(path, file))
 		{
-			notificationId++;
 			startCreateDatabaseTask(path, file, "0", "");
 			pgnDbNotExists = true;
 			fileData = "";
@@ -3417,7 +3433,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					if (!fileData.startsWith("[Event "))
 					{
 						pgnDb.deleteDbFile();
-						notificationId++;
 						startCreateDatabaseTask(path, file, "0", "");
 						pgnDbNotExists = true;
 						fileData = "";
@@ -3543,13 +3558,11 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			case STATE_DB_NO_DBFILE:
 				if (!pgnDb.initPgnFiles(path, file))
 				{
-					notificationId++;
 					startCreateDatabaseTask(path, file, "0", "");
 				}
 				break;
 			case STATE_DB_WRONG_VERSION: 
 				Toast.makeText(this, getString(R.string.fmDropCreateIndex), Toast.LENGTH_LONG).show();
-				notificationId++;
 				startCreateDatabaseTask(path, file, "0", "idx");
 				break;
 			case STATE_DB_UNCOMPLETED:
@@ -3564,7 +3577,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 							break;
 						case 2:	// games after last game(db), complite db
 							pgnDb.closeDb();
-							notificationId++;
 							startCreateDatabaseTask(path, file, Long.toString(pgnDb.pgnRafOffset), "dropidx");
 							break;
 						case 0:	// delete .pgn-db and start new create db(STATE_DB_NO_DBFILE)
@@ -3596,7 +3608,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		}
 		if (lvGames.isShown())
 			lvGames.setVisibility(ListView.INVISIBLE);
-		notificationId++;
+        setNotificationId();
 		editPgnTask = new EditPgnTask(FileManager.this, notificationId);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 			editPgnTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, path, file, gameData, actionId,
@@ -3614,6 +3626,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			showDialog(FILE_NO_WRITE_PERMISSIONS);
 			return;
 		}
+        setNotificationId();
 		createDatabaseTask = new CreateDatabaseTask(this, notificationId);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 			createDatabaseTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, path, file, pgnOffset, idxControl);
@@ -3642,7 +3655,17 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			queryTask.execute(path, file, Boolean.toString(setInfo), Boolean.toString(isNewFile));
 		return;
 	}
-	
+
+    public void setNotificationId()
+    {
+        notificationId = fmPrefs.getInt("fm_notificationId", 0);
+        notificationId++;
+        SharedPreferences.Editor ed = fmPrefs.edit();
+        ed.putInt("fm_notificationId", notificationId);
+        ed.commit();
+//Log.i(TAG, "startCreateDatabaseTask(), notificationId: " + notificationId);
+    }
+
 	public void setInfoValues(String title, String message, String dbVersion)
     {
 		if (runP.getBoolean("run_isActivate", false))
@@ -3773,7 +3796,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	private static final int SET_QUERY_DATA_ECO 	= 9;
 
 	int setQueryData = 0;
-		
 
 	int fm_extern_db_key_id = 0;			// 0 game, 1 player, 2 date, 3 event, 9 eco
 	int fm_extern_db_game_id = 0;			// game-ID(primary key) [current game]
@@ -3868,7 +3890,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	EditText qoDateTo;
 
 	public ArrayAdapter<String> files;
-//	C4aImageDialog c4aImageDialog;
 	C4aDialog c4aDialog;
 	C4aDialog pathDialog;
 	C4aDialog fileNotExistsDialog;

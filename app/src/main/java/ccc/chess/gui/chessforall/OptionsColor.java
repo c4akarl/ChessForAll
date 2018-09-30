@@ -29,7 +29,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.optionscolor);
 
-        colorId = getIntent().getExtras().getInt("colorId");
+        colorId = userPrefs.getInt("colorId", 0);
         title = (TextView) findViewById(R.id.title);
         eName = (EditText) findViewById(R.id.eName);
         eName.setHint(getColorHint(colorId));
@@ -152,7 +152,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             tv.setTextAppearance(this, R.style.c4aDialogTitle);
             tv.setGravity(Gravity.CENTER_HORIZONTAL);
             builder.setCustomTitle(tv );
-            builder.setSingleChoiceItems(arrayAdapter, userPrefs.getInt("colorId", 0), new DialogInterface.OnClickListener()
+            builder.setSingleChoiceItems(arrayAdapter, colorId, new DialogInterface.OnClickListener()
             {
                 public void onClick(DialogInterface dialog, int item)
                 {
@@ -174,7 +174,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         switch (colorId)
         {
             case 0:
-                colorName = getString(R.string.menu_colorsettings_standard);
+                colorName = getString(R.string.menu_colorsettings_brown);
                 if (!userPrefs.getString("colors_0", "").equals(""))
                 {
                     String[] split = userPrefs.getString("colors_0", "").split(" ");
@@ -183,7 +183,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
                 }
                 break;
             case 1:
-                colorName = getString(R.string.menu_colorsettings_brown);
+                colorName = getString(R.string.menu_colorsettings_violet);
                 if (!userPrefs.getString("colors_1", "").equals(""))
                 {
                     String[] split = userPrefs.getString("colors_1", "").split(" ");
@@ -266,9 +266,6 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             }
             colors = colors + cv.colors[i] + " ";
         }
-
-//karl: zum Kopieren der Farben von Logcat ---> ColorValues.COLORS_0...4
-//Log.i(TAG, "colors: " + colors);
 
         SharedPreferences.Editor ed = userPrefs.edit();
         ed.putInt("colorId", colorId);
@@ -380,8 +377,8 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
     {
         switch (colorId)
         {
-            case 0: return getString(R.string.menu_colorsettings_standard);
-            case 1: return getString(R.string.menu_colorsettings_brown);
+            case 0: return getString(R.string.menu_colorsettings_brown);
+            case 1: return getString(R.string.menu_colorsettings_violet);
             case 2: return getString(R.string.menu_colorsettings_grey);
             case 3: return getString(R.string.menu_colorsettings_blue);
             case 4: return getString(R.string.menu_colorsettings_green);

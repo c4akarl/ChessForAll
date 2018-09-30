@@ -20,7 +20,7 @@
 		android:paddingRight="0dip"
 		android:singleLine="true"
 		android:gravity="center"
-		android:background="@drawable/bordergrey"
+		android:background="@drawable/rectangletransparent"
 		android:text="@string/app_optionsEnginePlay"
 		android:textColor="#000000" />
 

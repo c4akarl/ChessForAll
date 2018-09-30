@@ -99,7 +99,7 @@
 			android:layout_marginRight="5dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergrey"
+			android:background="@drawable/rectangletransparent"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/lblPlayerEloA"
@@ -110,7 +110,7 @@
 			android:layout_marginRight="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/lblPlayerNameA"
@@ -124,7 +124,7 @@
 			android:gravity="center"
 			android:layout_toLeftOf="@id/lblPlayerEloA"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 		<view
 			class="ccc.chess.gui.chessforall.BoardView"
@@ -144,7 +144,7 @@
 			android:layout_marginRight="5dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergrey"
+			android:background="@drawable/rectangletransparent"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/lblPlayerEloB"
@@ -155,7 +155,7 @@
 			android:layout_marginRight="1dip"
 			android:gravity="center"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/lblPlayerNameB"
@@ -169,7 +169,7 @@
 			android:gravity="center"
 			android:layout_toLeftOf="@id/lblPlayerEloB"
 			android:singleLine="true"
-			android:background="@drawable/bordergreen"
+			android:background="@drawable/rectanglegreen"
 			android:textColor="#000000" />
 
 		<TextView
@@ -182,7 +182,7 @@
 			android:clickable="true"
 			android:layout_marginTop="1dip"
 			android:singleLine="true"
-			android:background="@drawable/borderpink"
+			android:background="@drawable/rectanglepink"
 			android:textColor="#000000" />
 		<TextView
 			android:id="@+id/msgShort2"
@@ -196,7 +196,7 @@
 			android:singleLine="true"
 			android:includeFontPadding="true"
 			android:gravity="right"
-			android:background="@drawable/borderpink"
+			android:background="@drawable/rectanglepink"
 			android:textColor="#000000" />
 
 		<ScrollView
@@ -216,7 +216,7 @@
 				android:includeFontPadding="true"
 				android:paddingLeft="2dip"
 				android:paddingRight="2dip"
-				android:background="@drawable/bordergrey"
+				android:background="@drawable/rectangletransparent"
 				android:textColor="#000000" />
 		</ScrollView>
 
@@ -237,7 +237,7 @@
 				android:bufferType="spannable"
 				android:paddingLeft="2dip"
 				android:paddingRight="2dip"
-				android:background="@drawable/borderyellow"
+				android:background="@drawable/rectangleyellow"
 				android:textColor="#000000" />
 		</ScrollView>
 

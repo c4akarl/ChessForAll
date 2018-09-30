@@ -1,97 +1,119 @@
 package ccc.chess.gui.chessforall;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.os.Handler;
+import android.text.ClipboardManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import ccc.chess.logic.c4aservice.Chess960;
 import ccc.chess.logic.c4aservice.ChessLogic;
-//import android.util.Log;
 
 public class EditChessBoard extends Activity implements Ic4aDialogCallback, DialogInterface.OnCancelListener, OnTouchListener
 {
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
+//Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         u = new Util();
         userPrefs = getSharedPreferences("user", 0);
+        initColors();
         runP = getSharedPreferences("run", 0);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
 
-		if (u.getAspectRatio(this) > 150)
-			setContentView(R.layout.editchessboard);
-		else
-			setContentView(R.layout.editchessboard150);
+		setGui();
 
-        setStringsValues();
-        cl = new ChessLogic(stringValues, "");
-        chess960 = new Chess960();
-        currentFen = getIntent().getExtras().getString("currentFen");
-        gridViewSize = getIntent().getExtras().getInt("gridViewSize");
-        newFen = initFen(currentFen);
-        setFenTo518(newFen);
-        fieldSize = getIntent().getExtras().getInt("fieldSize");
+	}
 
-        btnOk = (ImageView) findViewById(R.id.btnOk);
-        btnFen = (ImageView) findViewById(R.id.btnFen);
-        registerForContextMenu(btnFen);
-        btnFen.setOnTouchListener((OnTouchListener) this);
-        btnBoard = (ImageView) findViewById(R.id.btnBoard);
-        registerForContextMenu(btnBoard);
-        btnBoard.setOnTouchListener((OnTouchListener) this);
-        message = (TextView) findViewById(R.id.message);
-        fenMes = (TextView) findViewById(R.id.fenMes);
-        trash = (ImageView) findViewById(R.id.trash);
-        color = (ImageView) findViewById(R.id.color);
-        wKing = (ImageView) findViewById(R.id.wKing);
-        wQueen = (ImageView) findViewById(R.id.wQueen);
-        wRook = (ImageView) findViewById(R.id.wRook);
-        wBishop = (ImageView) findViewById(R.id.wBishop);
-        wKnight = (ImageView) findViewById(R.id.wKnight);
-        wPawn = (ImageView) findViewById(R.id.wPawn);
-        bKing = (ImageView) findViewById(R.id.bKing);
-        bQueen = (ImageView) findViewById(R.id.bQueen);
-        bRook = (ImageView) findViewById(R.id.bRook);
-        bBishop = (ImageView) findViewById(R.id.bBishop);
-        bKnight = (ImageView) findViewById(R.id.bKnight);
-        bPawn = (ImageView) findViewById(R.id.bPawn);
+	public void setGui()
+	{
+		setContentView(R.layout.editchessboard);
+
+		setStringsValues();
+		cl = new ChessLogic(stringValues, "");
+		chess960 = new Chess960();
+
+		if (isStartActivity)
+		{
+			currentFen = getIntent().getExtras().getString("currentFen");
+			gridViewSize = getIntent().getExtras().getInt("gridViewSize");
+			newFen = initFen(currentFen);
+			isStartActivity = false;
+		}
+//Log.i(TAG, "setGui(), currentFen: " + currentFen);
+//Log.i(TAG, "setGui(), newFen: " + newFen + ", chess960Id: " + chess960Id);
+		fieldSize = getIntent().getExtras().getInt("fieldSize");
+
+		btnCancel = (TextView) findViewById(R.id.btnCancel);
+		btnOk = (TextView) findViewById(R.id.btnOk);
+		title = (TextView) findViewById(R.id.title);
+		message = (TextView) findViewById(R.id.message);
+
+		wKing = (ImageView) findViewById(R.id.wKing);
+		wQueen = (ImageView) findViewById(R.id.wQueen);
+		wRook = (ImageView) findViewById(R.id.wRook);
+		wBishop = (ImageView) findViewById(R.id.wBishop);
+		wKnight = (ImageView) findViewById(R.id.wKnight);
+		wPawn = (ImageView) findViewById(R.id.wPawn);
+		trash = (ImageView) findViewById(R.id.trash);
+		turnBoard = (ImageView) findViewById(R.id.turnBoard);
+
+		bKing = (ImageView) findViewById(R.id.bKing);
+		bQueen = (ImageView) findViewById(R.id.bQueen);
+		bRook = (ImageView) findViewById(R.id.bRook);
+		bBishop = (ImageView) findViewById(R.id.bBishop);
+		bKnight = (ImageView) findViewById(R.id.bKnight);
+		bPawn = (ImageView) findViewById(R.id.bPawn);
+		color = (ImageView) findViewById(R.id.color);
+		options = (ImageView) findViewById(R.id.options);
+
 		boardView = (BoardView) findViewById(R.id.editBoardView);
 		boardView.setColor();
 		boardView.setOnTouchListener(this);
-		boardView.updateBoardView(newFen, false, null, null, null,
-				userPrefs.getBoolean("user_options_gui_Coordinates", false));
-        deleteBackgroundBorder();
-        piece = 'P'; 
-		wPawn.setBackgroundColor(getResources().getColor(R.color.last_move_to));
-        showChessBoard();
+		userPrefs.getBoolean("user_options_gui_Coordinates", false);
+		piece = 'P';
+		if (runP.getString("run_piece", "P").length() > 0)
+			piece = runP.getString("run_piece", "P").charAt(0);
+		setPieces(piece);
+		showChessBoard();
 	}
-	public boolean onTouch(View view, MotionEvent event)									
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
 	{
-		if (view.getId() == R.id.btnFen & event.getAction() == MotionEvent.ACTION_UP)
-			openContextMenu(btnFen);
-		if (view.getId() == R.id.btnBoard & event.getAction() == MotionEvent.ACTION_UP)
-			openContextMenu(btnBoard);
+		super.onConfigurationChanged(newConfig);
+//Log.i(TAG, "onConfigurationChanged()");
+		setGui();
+	}
+
+	public boolean onTouch(View view, MotionEvent event)
+	{
 		if (view.getId() == R.id.editBoardView)
 		{
 			int screenXY[] = new int[2];
@@ -130,103 +152,20 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
             showChessBoard();
     	}
 	}
-//	MENU		MENU		MENU		MENU		MENU		MENU		MENU
-	@Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-    {
-    	super.onCreateContextMenu(menu, v, menuInfo);
-    	if (v == btnFen)
-		{
-			MenuInflater inflater = getMenuInflater();
-		    inflater.inflate(R.menu.c4a_menu_edit_fen, menu);
-		}
-    	if (v == btnBoard)
-		{
-			MenuInflater inflater = getMenuInflater();
-		    inflater.inflate(R.menu.c4a_menu_edit_board, menu);
-		}
-    	showChessBoard();
-    }
-	@Override
-	public boolean onContextItemSelected(MenuItem item)
-    {
-		super.onContextItemSelected(item);
-		chess960Id = 518;
-		creatingChess960 = false;
-		chess960Status = 0;
-		showChessBoard();
-        switch(item.getItemId())
-        {
-	        case R.id.menu_edit_fen_color:
-	        	removeDialog(COLOR_DIALOG);
-	    		showDialog(COLOR_DIALOG);
-	        	break;
-	        case R.id.menu_edit_fen_castling:
-	        	removeDialog(CASTLING_DIALOG);
-	    		showDialog(CASTLING_DIALOG);
-	        	break;
-	        case R.id.menu_edit_fen_ep:
-	        	removeDialog(ENPASSANT_DIALOG);
-	    		showDialog(ENPASSANT_DIALOG);
-	        	break;
-	        case R.id.menu_edit_fen_draw50:
-	        	removeDialog(DRAW50_DIALOG);
-	    		showDialog(DRAW50_DIALOG);
-	        	break;
-	        case R.id.menu_edit_fen_movecounter:
-	        	removeDialog(MOVE_COUNTER_DIALOG);
-	    		showDialog(MOVE_COUNTER_DIALOG);
-	        	break;
-	        case R.id.menu_edit_board_clear:
-	        	newFen = clearFen;
-	        	deleteBackgroundBorder();
-	            piece = 'P'; 
-	        	break;
-	        case R.id.menu_edit_board_current:
-	        	newFen = currentFen;
-	        	deleteBackgroundBorder();
-	            piece = 'P'; 
-	        	break;
-	        case R.id.menu_edit_board_standard:
-	        	newFen = standardFen;
-	        	newBoardFen = newFen;
-	        	deleteBackgroundBorder();
-	            piece = 'P'; 
-	        	break;
-	        case R.id.menu_edit_board_chess960_manual:
-	        	initChess960();
-	        	break;
-	        case R.id.menu_edit_board_chess960_random:
-	        	Random r;
-	    		int ir = 518;
-	    		while (ir == 518)
-	    		{
-	    			r = new Random();
-	    	        ir = r.nextInt(960);
-	    		}
-	    		chess960Id = ir;
-	    		newFen = chess960.createChessPosition(ir);
-	    		newBoardFen = newFen;
-	        	break;
-	        case R.id.menu_edit_board_chess960_number:
-	        	removeDialog(CHESS960_ID_DIALOG);
-	    		showDialog(CHESS960_ID_DIALOG);
-	            break;
-        }
-        showChessBoard();
-        return true;
-    }
-	public void myClickHandler(View view) 		
+
+	public void myClickHandler(View view)
     {	// ClickHandler	(ButtonEvents)
-		if (view.getId() != R.id.color)
-			deleteBackgroundBorder();
-		switch (view.getId()) 
+		if (view.getId() != R.id.color & view.getId() != R.id.turnBoard & view.getId() != R.id.options)
+			setPieces(piece);
+		switch (view.getId())
 		{
+		case R.id.btnCancel:
+			finish();
+			break;
 		case R.id.btnOk:
 			finishActivity();
 			break;
 		case R.id.trash:
-			trash.setImageDrawable(getResources().getDrawable(R.drawable.trash_selected));
 			if (creatingChess960)
 	        	initChess960();
 			else
@@ -237,21 +176,40 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			break;
 		case R.id.color:
 			newFen = changeColor(newFen);
-			showChessBoard();
 			break;
-		case R.id.wKing: 	piece = 'K'; wKing.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.wQueen: 	piece = 'Q'; wQueen.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.wRook: 	piece = 'R'; wRook.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.wBishop:	piece = 'B'; wBishop.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.wKnight:	piece = 'N'; wKnight.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.wPawn:	piece = 'P'; wPawn.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.bKing:	piece = 'k'; bKing.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.bQueen:	piece = 'q'; bQueen.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.bRook:	piece = 'r'; bRook.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.bBishop:	piece = 'b'; bBishop.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.bKnight:	piece = 'n'; bKnight.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
-		case R.id.bPawn:	piece = 'p'; bPawn.setBackgroundColor(getResources().getColor(R.color.last_move_to)); break;
+		case R.id.turnBoard:
+			SharedPreferences.Editor ed = runP.edit();
+			if (runP.getBoolean("run_game0_is_board_turn", false))
+				ed.putBoolean("run_game0_is_board_turn", false);
+			else
+				ed.putBoolean("run_game0_is_board_turn", true);
+            ed.commit();
+			break;
+		case R.id.options:
+			removeDialog(OPTIONS_DIALOG);
+			showDialog(OPTIONS_DIALOG);
+			break;
+		case R.id.wKing: 	piece = 'K'; break;
+		case R.id.wQueen: 	piece = 'Q'; break;
+		case R.id.wRook: 	piece = 'R'; break;
+		case R.id.wBishop:	piece = 'B'; break;
+		case R.id.wKnight:	piece = 'N'; break;
+		case R.id.wPawn:	piece = 'P'; break;
+		case R.id.bKing:	piece = 'k'; break;
+		case R.id.bQueen:	piece = 'q'; break;
+		case R.id.bRook:	piece = 'r'; break;
+		case R.id.bBishop:	piece = 'b'; break;
+		case R.id.bKnight:	piece = 'n'; break;
+		case R.id.bPawn:	piece = 'p'; break;
 		}
+		if (!creatingChess960)
+		{
+			SharedPreferences.Editor ed = runP.edit();
+			ed.putString("run_piece", Character.toString(piece));
+			ed.commit();
+		}
+
+		showChessBoard();
 	}
 
 	public void finishActivity()
@@ -262,21 +220,202 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		setResult(RESULT_OK, returnIntent);
 		finish();
     }
-	public Dialog onCreateDialog(int id)
+	@SuppressLint("ClickableViewAccessibility")
+    public Dialog onCreateDialog(int id)
 	{
-		CharSequence castling = "";
-		CharSequence ep = "";
-		CharSequence draw50 = "";
-		CharSequence moveCounter = "";
-		CharSequence tmp[] = ((String) newFen).split(" ");
-		if (tmp.length == 6)
-		{
-			castling = tmp[2];
-			ep = tmp[3];
-			draw50 = tmp[4];
-			moveCounter = tmp[5];
-		}
 		activDialog = id;
+		if (id == OPTIONS_DIALOG)
+		{
+			Dialog dialog = new Dialog(this);
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			dialog.setContentView(R.layout.dialog_edit_board_options);
+
+			MyViewListener myViewListener = new MyViewListener();
+//Log.i(TAG, "onCreateDialog(), newFen: " + newFen + ", chess960Id: " + chess960Id);
+			getCastleValuesFromFen(newFen);
+			getValuesFromFen(newFen);
+
+			d_whiteKingCastle = dialog.findViewById(R.id.whiteKingCastle);
+			d_whiteKingCastle.setChecked(isWhiteKingCastle);
+			d_whiteKingCastle.setOnClickListener(myViewListener);
+			d_whiteQueenCastle = dialog.findViewById(R.id.whiteQueenCastle);
+			d_whiteQueenCastle.setChecked(isWhiteQueenCastle);
+			d_whiteQueenCastle.setOnClickListener(myViewListener);
+			d_blackKingCastle = dialog.findViewById(R.id.blackKingCastle);
+			d_blackKingCastle.setChecked(isBlackKingCastle);
+			d_blackKingCastle.setOnClickListener(myViewListener);
+			d_blackQueenCastle = dialog.findViewById(R.id.blackQueenCastle);
+			d_blackQueenCastle.setChecked(isBlackQueenCastle);
+			d_blackQueenCastle.setOnClickListener(myViewListener);
+			d_en_passant_item = dialog.findViewById(R.id.en_passant_item);
+			d_en_passant_item.setText(en_passant);
+			d_en_passant_left = dialog.findViewById(R.id.en_passant_left);
+            d_en_passant_left.setOnTouchListener(new OnTouchListener()
+            {
+                @Override
+                public boolean onTouch(View v, MotionEvent event)
+                {
+                    switch(event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            pressedUp = true;
+                            pressedLeft = true;
+                            isUpdated = false;
+                            handlerEnPassant.removeCallbacks(mUpdateEnPassant);
+                            handlerEnPassant.postDelayed(mUpdateEnPassant, HANDLER_DELAY_START);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            pressedUp = false;
+                            if (!isUpdated)
+                                setEnPassant(pressedLeft);
+                            break;
+                    }
+                    return true;
+                }
+            });
+            d_en_passant_right = dialog.findViewById(R.id.en_passant_right);
+            d_en_passant_right.setOnTouchListener(new OnTouchListener()
+            {
+                @Override
+                public boolean onTouch(View v, MotionEvent event)
+                {
+                    switch(event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            pressedUp = true;
+                            pressedLeft = false;
+                            isUpdated = false;
+                            handlerEnPassant.removeCallbacks(mUpdateEnPassant);
+                            handlerEnPassant.postDelayed(mUpdateEnPassant, HANDLER_DELAY_START);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            pressedUp = false;
+                            if (!isUpdated)
+                                setEnPassant(pressedLeft);
+                            break;
+                    }
+                    return true;
+                }
+            });
+			d_draw50_item = dialog.findViewById(R.id.draw50_item);
+			d_draw50_item.setText("" + draw50);
+            d_draw50_left = dialog.findViewById(R.id.draw50_left);
+            d_draw50_left.setOnTouchListener(new OnTouchListener()
+            {
+                @Override
+                public boolean onTouch(View v, MotionEvent event)
+                {
+                    switch(event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            pressedUp = true;
+                            pressedLeft = true;
+                            isUpdated = false;
+                            handlerDraw50.removeCallbacks(mUpdateDraw50);
+                            handlerDraw50.postDelayed(mUpdateDraw50, HANDLER_DELAY_START);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            pressedUp = false;
+                            if (!isUpdated)
+                                setDraw50(pressedLeft);
+                            break;
+                    }
+                    return true;
+                }
+            });
+            d_draw50_right = dialog.findViewById(R.id.draw50_right);
+            d_draw50_right.setOnTouchListener(new OnTouchListener()
+            {
+                @Override
+                public boolean onTouch(View v, MotionEvent event)
+                {
+                    switch(event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            pressedUp = true;
+                            pressedLeft = false;
+                            isUpdated = false;
+                            handlerDraw50.removeCallbacks(mUpdateDraw50);
+                            handlerDraw50.postDelayed(mUpdateDraw50, HANDLER_DELAY_START);
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            pressedUp = false;
+                            if (!isUpdated)
+                                setDraw50(pressedLeft);
+                            break;
+                    }
+                    return true;
+                }
+            });
+			d_move_counter_item = dialog.findViewById(R.id.move_counter_item);
+			d_move_counter_item.setText("" + move_counter);
+            d_move_counter_left = dialog.findViewById(R.id.move_counter_left);
+			d_move_counter_left.setOnTouchListener(new OnTouchListener()
+			{
+				@Override
+				public boolean onTouch(View v, MotionEvent event)
+				{
+					switch(event.getAction()) {
+						case MotionEvent.ACTION_DOWN:
+							pressedUp = true;
+							pressedLeft = true;
+							isUpdated = false;
+							handlerMoveCounter.removeCallbacks(mUpdateMoveCounter);
+							handlerMoveCounter.postDelayed(mUpdateMoveCounter, HANDLER_DELAY_START);
+							break;
+						case MotionEvent.ACTION_UP:
+							pressedUp = false;
+							if (!isUpdated)
+								setMoveCounter(pressedLeft);
+							break;
+					}
+					return true;
+				}
+			});
+            d_move_counter_right = dialog.findViewById(R.id.move_counter_right);
+			d_move_counter_right.setOnTouchListener(new OnTouchListener()
+			{
+				@Override
+				public boolean onTouch(View v, MotionEvent event)
+                {
+					switch(event.getAction()) {
+						case MotionEvent.ACTION_DOWN:
+							pressedUp = true;
+							pressedLeft = false;
+							isUpdated = false;
+							handlerMoveCounter.removeCallbacks(mUpdateMoveCounter);
+							handlerMoveCounter.postDelayed(mUpdateMoveCounter, HANDLER_DELAY_START);
+							break;
+						case MotionEvent.ACTION_UP:
+							pressedUp = false;
+							if (!isUpdated)
+								setMoveCounter(pressedLeft);
+							break;
+					}
+					return true;
+				}
+			});
+            d_chess960_manual = dialog.findViewById(R.id.chess960_manual);
+            d_chess960_manual.setOnClickListener(myViewListener);
+            d_chess960_random = dialog.findViewById(R.id.chess960_random);
+            d_chess960_random.setOnClickListener(myViewListener);
+            d_chess960_number = dialog.findViewById(R.id.chess960_number);
+            d_chess960_number.setOnClickListener(myViewListener);
+			d_to_clipboard = dialog.findViewById(R.id.to_clipboard);
+			d_to_clipboard.setOnClickListener(myViewListener);
+			d_from_clipboard = dialog.findViewById(R.id.from_clipboard);
+			d_from_clipboard.setOnClickListener(myViewListener);
+			d_standard = dialog.findViewById(R.id.standard);
+			d_standard.setOnClickListener(myViewListener);
+			d_current = dialog.findViewById(R.id.current);
+			d_current.setOnClickListener(myViewListener);
+			d_clear = dialog.findViewById(R.id.clear);
+			d_clear.setOnClickListener(myViewListener);
+
+			setEnPassantImages();
+			setDraw50Images();
+			setMoveCounterImages();
+
+			return dialog;
+
+		}
+
 		if (id == CHESS960_ID_DIALOG)  
         {
 			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog), 
@@ -284,42 +423,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			c4aDialog.setOnCancelListener(this);
             return c4aDialog;
         }
-		if (id == COLOR_DIALOG)  
-        {
-			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog), 
-					getString(R.string.daTxtLblWhite), "", getString(R.string.daTxtLblBlack), 
-					getString(R.string.inputDialog_color), 0, "");
-			c4aDialog.setOnCancelListener(this);
-            return c4aDialog;
-        }
-		if (id == CASTLING_DIALOG)  
-        {
-			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog), 
-				"", getString(R.string.btn_Ok), "", getString(R.string.inputDialog_castling), 1, (String) castling);
-			c4aDialog.setOnCancelListener(this);
-            return c4aDialog;
-        }
-		if (id == ENPASSANT_DIALOG)  
-        {
-			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog), 
-				"", getString(R.string.btn_Ok), "", getString(R.string.inputDialog_enPassant), 1, (String) ep);
-			c4aDialog.setOnCancelListener(this);
-            return c4aDialog;
-        }
-		if (id == DRAW50_DIALOG)  
-        {
-			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog), 
-				"", getString(R.string.btn_Ok), "", getString(R.string.inputDialog_draw50), 2, (String) draw50);
-			c4aDialog.setOnCancelListener(this);
-            return c4aDialog;
-        }
-		if (id == MOVE_COUNTER_DIALOG)  
-        {
-			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog), 
-				"", getString(R.string.btn_Ok), "", getString(R.string.inputDialog_moveCounter), 2, (String) moveCounter);
-			c4aDialog.setOnCancelListener(this);
-            return c4aDialog;
-        }
+
 		if (id == PROGRESS_DIALOG)
         {
 			progressDialog = new ProgressDialog(this);
@@ -350,72 +454,8 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
     			showChessBoard();
     		}
  		}
-		if (activDialog == COLOR_DIALOG)
-		{
-    		if (btnValue == 1 | btnValue == 3)
-    		{
-    			CharSequence bw = "w";
-    			if (btnValue == 3)
-    				bw = "b";
-    			CharSequence tmp[] = ((String) newFen).split(" ");
-    			if (tmp.length == 6)
-    				newFen = tmp[0] + " " + bw + " "  + tmp[2] + " "  + tmp[3] + " "  + tmp[4] + " "  + tmp[5];
-    			showChessBoard();
-    		}
- 		}
-		if (activDialog == CASTLING_DIALOG)
-		{
-    		if (btnValue == 2)
-    		{
-    			CharSequence castling = c4aDialog.getNumber();
-    	    	if (castling.equals(""))
-    	    		castling = "-";
-    	    	CharSequence tmp[] = ((String) newFen).split(" ");
-    			if (tmp.length == 6)
-    				newFen = tmp[0] + " " + tmp[1] + " "  + castling + " "  + tmp[3] + " "  + tmp[4] + " "  + tmp[5];
-    			showChessBoard();
-    		}
- 		}
-		if (activDialog == ENPASSANT_DIALOG)
-		{
-    		if (btnValue == 2)
-    		{
-    			CharSequence ep = c4aDialog.getNumber();
-    	    	if (ep.equals(""))
-    	    		ep = "-";
-    	    	CharSequence tmp[] = ((String) newFen).split(" ");
-    			if (tmp.length == 6)
-    				newFen = tmp[0] + " " + tmp[1] + " "  + tmp[2] + " "  + ep + " "  + tmp[4] + " "  + tmp[5];
-    			showChessBoard();
-    		}
- 		}
-		if (activDialog == DRAW50_DIALOG)
-		{
-    		if (btnValue == 2)
-    		{
-    			int id = 0;
-    	    	try		{id = Integer.parseInt(c4aDialog.getNumber());}
-    	    	catch 	(NumberFormatException e) {id = 0;}
-    	    	CharSequence tmp[] = ((String) newFen).split(" ");
-    			if (tmp.length == 6)
-    				newFen = tmp[0] + " " + tmp[1] + " "  + tmp[2] + " "  + tmp[3] + " "  + id + " "  + tmp[5];
-    			showChessBoard();
-    		}
- 		}
-		if (activDialog == MOVE_COUNTER_DIALOG)
-		{
-    		if (btnValue == 2)
-    		{
-    			int id = 0;
-    	    	try		{id = Integer.parseInt(c4aDialog.getNumber());}
-    	    	catch 	(NumberFormatException e) {id = 1;}
-    	    	CharSequence tmp[] = ((String) newFen).split(" ");
-    			if (tmp.length == 6)
-    				newFen = tmp[0] + " " + tmp[1] + " "  + tmp[2] + " "  + tmp[3] + " "  + tmp[4] + " "  + id;
-    			showChessBoard();
-    		}
- 		}
 	}
+
 	@Override
 	public void onCancel(DialogInterface dialog) {	}
 	public void initChess960() 		
@@ -500,49 +540,26 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
     {
 		if (chess960Status == 0)
 		{
-			if (chess960Id == 518)
-			{
-				if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) 
-		        		!= Configuration.SCREENLAYOUT_SIZE_SMALL)
-					btnFen.setVisibility(ImageView.VISIBLE);
-				trash.setVisibility(ImageView.VISIBLE);
-				color.setVisibility(ImageView.VISIBLE);
-				wKing.setVisibility(ImageView.VISIBLE);
-	        	wQueen.setVisibility(ImageView.VISIBLE);
-	        	wRook.setVisibility(ImageView.VISIBLE);
-	        	wBishop.setVisibility(ImageView.VISIBLE);
-	        	wKnight.setVisibility(ImageView.VISIBLE);
-	        	wPawn.setVisibility(ImageView.VISIBLE);
-	        	bKing.setVisibility(ImageView.VISIBLE);
-	        	bQueen.setVisibility(ImageView.VISIBLE);
-	        	bRook.setVisibility(ImageView.VISIBLE);
-	        	bBishop.setVisibility(ImageView.VISIBLE);
-	        	bKnight.setVisibility(ImageView.VISIBLE);
-	        	bPawn.setVisibility(ImageView.VISIBLE);
-			}
-			else
-			{
-				btnFen.setVisibility(ImageView.INVISIBLE);
-				trash.setVisibility(ImageView.INVISIBLE);
-				color.setVisibility(ImageView.INVISIBLE);
-				wKing.setVisibility(ImageView.INVISIBLE);
-	        	wQueen.setVisibility(ImageView.INVISIBLE);
-	        	wRook.setVisibility(ImageView.INVISIBLE);
-	        	wBishop.setVisibility(ImageView.INVISIBLE);
-	        	wKnight.setVisibility(ImageView.INVISIBLE);
-	        	wPawn.setVisibility(ImageView.INVISIBLE);
-	        	bKing.setVisibility(ImageView.INVISIBLE);
-	        	bQueen.setVisibility(ImageView.INVISIBLE);
-	        	bRook.setVisibility(ImageView.INVISIBLE);
-	        	bBishop.setVisibility(ImageView.INVISIBLE);
-	        	bKnight.setVisibility(ImageView.INVISIBLE);
-	        	bPawn.setVisibility(ImageView.INVISIBLE);
-			}	
+			wKing.setVisibility(ImageView.VISIBLE);
+			wQueen.setVisibility(ImageView.VISIBLE);
+			wRook.setVisibility(ImageView.VISIBLE);
+			wBishop.setVisibility(ImageView.VISIBLE);
+			wKnight.setVisibility(ImageView.VISIBLE);
+			wPawn.setVisibility(ImageView.VISIBLE);
+
+			bKing.setVisibility(ImageView.VISIBLE);
+			bQueen.setVisibility(ImageView.VISIBLE);
+			bRook.setVisibility(ImageView.VISIBLE);
+			bBishop.setVisibility(ImageView.VISIBLE);
+			bKnight.setVisibility(ImageView.VISIBLE);
+			bPawn.setVisibility(ImageView.VISIBLE);
+			piece = 'P';
+			if (runP.getString("run_piece", "P").length() > 0)
+				piece = runP.getString("run_piece", "P").charAt(0);
+			setPieces(piece);
 		}
 		else
 		{
-			btnFen.setVisibility(ImageView.INVISIBLE);
-			color.setVisibility(ImageView.INVISIBLE);
 			wKing.setVisibility(ImageView.INVISIBLE);
 			wRook.setVisibility(ImageView.INVISIBLE);
 			wPawn.setVisibility(ImageView.INVISIBLE);
@@ -579,24 +596,181 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		}
     }
 
-	public void deleteBackgroundBorder() 		
-    {
-		wKing.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		wQueen.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		wRook.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		wBishop.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		wKnight.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		wPawn.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		bKing.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		bQueen.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		bRook.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		bBishop.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		bKnight.setBackgroundColor(getResources().getColor(R.color.field_color_black));
-		bPawn.setBackgroundColor(getResources().getColor(R.color.field_color_black));
+	public void setPieces(char pieceSelected)
+	{
+		turnBoard.setBackgroundResource(R.drawable.turn_board);
+		turnBoard.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
+		color.setBackgroundResource(R.drawable.turn_board);
+		color.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
+		options.setBackgroundResource(R.drawable.setting);
+		options.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
 
-		trash.setImageDrawable(getResources().getDrawable(R.drawable.trash));
-    }
-	public void setFen(CharSequence fen) 		
+		setImageView();
+
+		switch (pieceSelected)
+		{
+			case 'K': wKing = setBorderToImageView(wKing);  	break;
+			case 'Q': wQueen = setBorderToImageView(wQueen);  	break;
+			case 'R': wRook = setBorderToImageView(wRook);  	break;
+			case 'B': wBishop = setBorderToImageView(wBishop);  break;
+			case 'N': wKnight = setBorderToImageView(wKnight);  break;
+			case 'P': wPawn = setBorderToImageView(wPawn);  	break;
+			case 'k': bKing = setBorderToImageView(bKing);  	break;
+			case 'q': bQueen = setBorderToImageView(bQueen);  	break;
+			case 'r': bRook = setBorderToImageView(bRook);  	break;
+			case 'b': bBishop = setBorderToImageView(bBishop);  break;
+			case 'n': bKnight = setBorderToImageView(bKnight);  break;
+			case 'p': bPawn = setBorderToImageView(bPawn);  	break;
+			case ' ': trash = setBorderToImageView(trash);  	break;
+		}
+
+	}
+
+	public void setImageView()
+	{
+		Canvas canvas;
+		if (wKingBmap == null)
+		{
+			wKingBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_wk).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(wKingBmap);
+		}
+		wKing.setImageBitmap(wKingBmap);
+		wKing.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
+
+		if (wQueenBmap == null)
+		{
+			wQueenBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_wq).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(wQueenBmap);
+		}
+		wQueen.setImageBitmap(wQueenBmap);
+		wQueen.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
+
+		if (wRookBmap == null)
+		{
+			wRookBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_wr).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(wRookBmap);
+		}
+		wRook.setImageBitmap(wRookBmap);
+		wRook.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
+
+		if (wBishopBmap == null)
+		{
+			wBishopBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_wb).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(wBishopBmap);
+		}
+		wBishop.setImageBitmap(wBishopBmap);
+		wBishop.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
+
+		if (wKnightBmap == null)
+		{
+			wKnightBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_wn).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(wKnightBmap);
+		}
+		wKnight.setImageBitmap(wKnightBmap);
+		wKnight.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
+
+		if (wPawnBmap == null)
+		{
+			wPawnBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_wp).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(wPawnBmap);
+		}
+		wPawn.setImageBitmap(wPawnBmap);
+		wPawn.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
+
+		if (bKingBmap == null)
+		{
+			bKingBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_bk).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(bKingBmap);
+		}
+		bKing.setImageBitmap(bKingBmap);
+		bKing.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
+
+		if (bQueenBmap == null)
+		{
+			bQueenBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_bq).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(bQueenBmap);
+		}
+		bQueen.setImageBitmap(bQueenBmap);
+		bQueen.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
+
+		if (bRookBmap == null)
+		{
+			bRookBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_br).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(bRookBmap);
+		}
+		bRook.setImageBitmap(bRookBmap);
+		bRook.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
+
+		if (bBishopBmap == null)
+		{
+			bBishopBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_bb).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(bBishopBmap);
+		}
+		bBishop.setImageBitmap(bBishopBmap);
+		bBishop.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
+
+		if (bKnightBmap == null)
+		{
+			bKnightBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_bn).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(bKnightBmap);
+		}
+		bKnight.setImageBitmap(bKnightBmap);
+		bKnight.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
+
+		if (bPawnBmap == null)
+		{
+			bPawnBmap = BitmapFactory.decodeResource(getResources(), R.drawable._1_bp).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(bPawnBmap);
+		}
+		bPawn.setImageBitmap(bPawnBmap);
+		bPawn.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
+
+		if (trashBmap == null)
+		{
+			trashBmap = BitmapFactory.decodeResource(getResources(), R.drawable.trash).copy(Bitmap.Config.ARGB_8888, true);
+			canvas = new Canvas();
+			canvas.setBitmap(trashBmap);
+		}
+		trash.setImageBitmap(trashBmap);
+		trash.setBackgroundColor(cv.getColor(cv.COLOR_FIELD_LIGHT_1));
+	}
+
+	public ImageView setBorderToImageView(ImageView imageView)
+	{
+		if (imageView == null)
+			return imageView;
+		imageView.setDrawingCacheEnabled(true);
+		imageView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+				View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+		imageView.layout(0, 0, imageView.getMeasuredWidth(), imageView.getMeasuredHeight());
+		Bitmap bmap = imageView.getDrawingCache();
+		if (bmap == null)
+			return imageView;
+		int stroke = Math.min(bmap.getWidth(), bmap.getHeight()) / 6;
+		Canvas canvas = new Canvas(bmap);
+		final Paint paint = new Paint();
+		final Rect rect = new Rect(0, 0, bmap.getWidth(), bmap.getHeight());
+		paint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
+		paint.setStyle(Paint.Style.STROKE);
+		paint.setStrokeWidth(stroke);
+		canvas.drawRect(rect, paint);
+		imageView.setImageBitmap(bmap);
+		return imageView;
+	}
+
+	public void setFen(CharSequence fen)
     {
 		CharSequence tmp[] = ((String) fen).split(" ");
 		if (tmp.length == 6)
@@ -604,69 +778,29 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			fenColor = tmp[1];
 			fenCastling = tmp[2];
 			fenEnPassant = tmp[3];
-			draw50 = tmp[4];
-			moveCounter = tmp[5];
+			fenDraw50 = tmp[4];
+			fenMoveCounter = tmp[5];
 		}
 		CharSequence mes = "";
 		if (fenColor.equals("w"))
 			message.setText(getString(R.string.editWhiteMoves));
 		else
 			message.setText(getString(R.string.editBlackMoves));
-		fenMes.setText("FEN: "+ fenColor + " " + fenCastling + " " + fenEnPassant + " " + draw50 + " " + moveCounter);
 
     }
-	public void setFenTo518(CharSequence fen) 		
-    {
-//Log.i(TAG, "fenMes: " + fenMes);
-		chess960Id = 518;
-		boolean castling_Q = false;
-		boolean castling_K = false;
-		boolean castling_q = false;
-		boolean castling_k = false;
-		CharSequence newCastling = "";
-		char[] fen64 = getFen64(fen);
-		if (fen64[4] == 'k')
-		{
-			if (fen64[0] == 'r')
-				castling_q = true;
-			if (fen64[7] == 'r')
-				castling_k = true;
-		}
-		if (fen64[60] == 'K')
-		{
-			if (fen64[56] == 'R')
-				castling_Q = true;
-			if (fen64[63] == 'R')
-				castling_K = true;
-		}
-		CharSequence tmp[] = ((String) fen).split(" ");
-		for (int i = 0; i < tmp[2].length(); i++)
-	    {
-			if (tmp[2].charAt(i) == 'K' & castling_K)
-				newCastling = newCastling.toString() + tmp[2].charAt(i);
-			if (tmp[2].charAt(i) == 'Q' & castling_Q)
-				newCastling = newCastling.toString() + tmp[2].charAt(i);
-			if (tmp[2].charAt(i) == 'k' & castling_k)
-				newCastling = newCastling.toString() + tmp[2].charAt(i);
-			if (tmp[2].charAt(i) == 'q' & castling_q)
-				newCastling = newCastling.toString() + tmp[2].charAt(i);
-	    }
-		if (newCastling.equals(""))
-			newCastling = "-";
-		if (tmp.length == 6)
-			newFen = tmp[0] + " " + tmp[1] + " " + newCastling + " " + tmp[3] + " " + tmp[4] + " 1";
-    }
-	public CharSequence initFen(CharSequence fen) 		
+
+	public CharSequence initFen(CharSequence fen)
     {	// FEN: initialize move counter
 		CharSequence nFen = "";
 		CharSequence tmp[] = ((String) fen).split(" ");
 		if (tmp.length == 6)
-			nFen = tmp[0] + " " + tmp[1] + " " + tmp[2] + " " + tmp[3] + " " + tmp[4] + " 1";
+			nFen = tmp[0] + " " + tmp[1] + " " + tmp[2] + " " + tmp[3] + " " + tmp[4] + " " + tmp[5];
 		//err java.lang.ArrayIndexOutOfBoundsException: 6. Mai 10:32 in der App-Version 67
 		else
 			nFen = start960Fen;
 		return nFen;
     }
+
 	public CharSequence changeColor(CharSequence fen) 		
     {
 		CharSequence tmp[] = ((String) fen).split(" ");
@@ -680,11 +814,17 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		else
 			return fen;
     }
+
 	public CharSequence setPieceToFen(CharSequence fen, int pos, char p) 		
     {
 //Log.i(TAG, "oldfen: " + fenMes + " >>> " + pos + ", " + p);
 		CharSequence nFen = "";
 		char[] fen64 = getFen64(fen);
+		if (runP.getBoolean("run_game0_is_board_turn", false))
+		{
+//Log.i(TAG, "setPieceToFen(), p: "+ p + ", pos: " + pos + ", turnPos: " + turnPos);
+			pos = 63 - pos;
+		}
 		if (fen64.length == 64 & pos < 64)
 		{
 			fen64[pos] = p;
@@ -701,25 +841,6 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		}
 		else
 			return fen;
-    }
-	public CharSequence copyPieceFromFen(CharSequence fen, int fromPos, int toPos) 		
-    {
-//Log.i(TAG, "oldFen: " + fenMes + " >>> " + fromPos + ", " + toPos);
-		CharSequence nFen = "";
-		char[] fen64 = getFen64(fen);
-		char copyPiece = fen64[fromPos];
-		fen64[fromPos] = '-';
-		fen64[toPos] = copyPiece;
-		CharSequence s = getFenFromChar(fen64);
-		CharSequence tmp[] = ((String) fen).split(" ");
-		if (tmp.length == 6)
-			nFen = s + " " + tmp[1] + " " + tmp[2] + " " + tmp[3] + " " + tmp[4] + " " + tmp[5];
-		if (copyPiece == 'P' | copyPiece == 'p')
-		{
-			if (toPos < 8 | toPos > 55)
-				nFen = newFen;
-		}
-		return nFen;
     }
 
 	public char[] getFen64(CharSequence fen)
@@ -788,6 +909,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			nFen = nFen.toString() + emptyCnt;
 		return nFen;
     }
+
 	public boolean checkKing(CharSequence fen) 		
     {	// check FEN: 1 white king, 1 black king, w/b king position >= 3 pieces
 		int cntPieces = 0;
@@ -832,11 +954,13 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			rowDif = rowKb -rowKw;
 		if ((posDif == 1 & rowDif == 0) | rowDif == 1 & (posDif == 7 | posDif == 8 | posDif == 9))
 			posOk = false;
+//Log.i(TAG, "checkKing(), cntPieces: " + cntPieces + ", cntKw: " + cntKw + ", cntKb: " + cntKb + ", posOk: " + posOk);
 		if (cntPieces > 2 & cntKw == 1 & cntKb == 1 & posOk)
 			return true;
 		else
 			return false;
     }
+
 	public boolean checkFen(CharSequence fen) 		
     {
 		if (fen.toString().contains("?"))
@@ -864,7 +988,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	  		}
 	  		else
 	  		{
-    	  		if (!cl.p_message.equals(""))
+				if (!cl.p_message.equals(""))
     	  			messageChessLogic = cl.p_message;
     	  		else
     	  			messageChessLogic = getString(R.string.editError);
@@ -872,6 +996,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	  		return false;
 	  	}
     }
+
 	public void showPosibleMoves()
     {	// graphic on chess board -  possible moves 
 		CharSequence[] fieldList = {"", "", "", "", "", "", "", ""};
@@ -900,6 +1025,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		    }
 		}
     }
+
 	public void showChessBoard() 		
     {
 //Log.i(TAG, "showChessBoard, selectedPosition, piece: " + selectedPosition + ", " + piece);
@@ -920,7 +1046,6 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			if (newFen.equals(""))
 				newFen = currentFen;
 		}
-		fenMes.setText("");
 		if (chess960Id == 518)
 			setFen(newFen);
 		else
@@ -947,9 +1072,11 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 //Log.i(TAG, "newFen: " + newFen);
 		if (creatingChess960)
 			showPosibleMoves();
-		boardView.updateBoardView(newFen, false, null, null, null,
-				userPrefs.getBoolean("user_options_gui_Coordinates", false));
+//Log.i(TAG, "showChessBoard(), board_turn: " + runP.getBoolean("run_game0_is_board_turn", false));
+		boardView.updateBoardView(newFen, runP.getBoolean("run_game0_is_board_turn", false), null, null, null,
+				true);
     }
+
 	public void setStringsValues()
 	{
     	stringValues.clear();
@@ -987,6 +1114,398 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
     	stringValues.add(31, getString(R.string.nag_6));
 	}
 
+    public void initColors()
+    {
+        cv = new ColorValues();
+        int colorId = userPrefs.getInt("colorId", 0);
+        switch (colorId)
+        {
+            case 0:
+                cv.setColors(colorId, userPrefs.getString("colors_0", ""));
+                break;
+            case 1:
+                cv.setColors(colorId, userPrefs.getString("colors_1", ""));
+                break;
+            case 2:
+                cv.setColors(colorId, userPrefs.getString("colors_2", ""));
+                break;
+            case 3:
+                cv.setColors(colorId, userPrefs.getString("colors_3", ""));
+                break;
+            case 4:
+                cv.setColors(colorId, userPrefs.getString("colors_4", ""));
+                break;
+        }
+    }
+
+	public void setToClipboard(CharSequence text)
+	{
+		Toast.makeText(this, getString(R.string.menu_info_clipboardCopyPgn), Toast.LENGTH_SHORT).show();
+		ClipboardManager cm = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+		cm.setText(text);
+	}
+
+	public CharSequence getFenFromClipboard()
+	{
+		CharSequence fen = "";
+		CharSequence pgnData = "";
+		try
+		{
+			Toast.makeText(this, getString(R.string.menu_info_clipboardPaste), Toast.LENGTH_SHORT).show();
+			ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+			pgnData = (String) cm.getText();
+		}
+		catch (ClassCastException e)
+		{
+			return "";
+		}
+		if (pgnData == null)
+			return "";
+		CharSequence[] pgnSplit = pgnData.toString().split(" ");
+		if (pgnSplit.length > 0)
+		{
+			if (pgnSplit[0].toString().contains("/"))
+			{
+				if (pgnSplit.length == 6)
+				{
+					pgnSplit[4] = "0";
+					pgnSplit[5] = "1";
+					fen = pgnSplit[0] + " " + pgnSplit[1] + " " + pgnSplit[2] + " " + pgnSplit[3] + " " + pgnSplit[4] + " " + pgnSplit[5];
+					return fen;
+				}
+				else
+					return "";
+			}
+		}
+		return "";
+	}
+
+	public void getCastleValuesFromFen(CharSequence fen)
+	{
+		if (!fen.toString().equals(""))
+		{
+			CharSequence tmp[] = ((String) fen).split(" ");
+			if (tmp.length == 6)
+			{
+				isWhiteKingCastle = false;
+				isWhiteQueenCastle = false;
+				isBlackKingCastle = false;
+				isBlackQueenCastle = false;
+				if (tmp[2].length() >= 0)
+				{
+					for (int i = 0; i < tmp[2].length(); i++)
+					{
+						if (tmp[2].toString().charAt(i) == 'K')	isWhiteKingCastle = true;
+						if (tmp[2].toString().charAt(i) == 'Q')	isWhiteQueenCastle = true;
+						if (tmp[2].toString().charAt(i) == 'k')	isBlackKingCastle = true;
+						if (tmp[2].toString().charAt(i) == 'q')	isBlackQueenCastle = true;
+					}
+				}
+			}
+		}
+	}
+
+	public void getValuesFromFen(CharSequence fen)
+	{
+		if (!fen.toString().equals(""))
+		{
+			String tmp[] = ((String) fen).split(" ");
+			if (tmp.length == 6)
+			{
+				en_passant = "-";
+				if (tmp[3].length() == 2)
+				{
+					for (int i = 0; i < EN_PASSANT_VALUES.length(); i++)
+					{
+						if (tmp[3].charAt(0) == EN_PASSANT_VALUES.charAt(i))
+							en_passant = "" + tmp[3].charAt(0);
+					}
+				}
+				try 	{ draw50 = Integer.parseInt(tmp[4]); }
+				catch 	(NumberFormatException exception) { draw50 = DRAW50_MIN; }
+				try 	{ move_counter = Integer.parseInt(tmp[5]); }
+				catch 	(NumberFormatException exception) { move_counter = MOVE_COUNTER_MIN; }
+//Log.i(TAG, "getValuesFromFen(), fen: " + fen);
+//Log.i(TAG, "getValuesFromFen(), en_passant: " + en_passant + ", draw50: " + draw50 + ", move_counter: " + move_counter);
+			}
+		}
+	}
+
+	public void setCastleValuesToFen()
+	{
+		if (!newFen.toString().equals(""))
+		{
+			CharSequence tmp[] = ((String) newFen).split(" ");
+			if (tmp.length == 6)
+			{
+				CharSequence newCastle = "";
+				if (isWhiteKingCastle) newCastle = newCastle + "K";
+				if (isWhiteQueenCastle) newCastle = newCastle + "Q";
+				if (isBlackKingCastle) newCastle = newCastle + "k";
+				if (isBlackQueenCastle) newCastle = newCastle + "q";
+				if (newCastle.toString().equals(""))
+					newCastle = "-";
+				newFen = tmp[0] + " " + tmp[1] + " " + newCastle + " " + tmp[3] + " " + tmp[4] + " " + tmp[5];
+			}
+		}
+	}
+
+	public void setEnPassant(boolean isLeft)
+	{
+		int epIdx = 0;
+		for (int i = 0; i < EN_PASSANT_VALUES.length(); i++)
+		{
+			if (EN_PASSANT_VALUES.charAt(i) == en_passant.charAt(0))
+				epIdx = i;
+		}
+		if (isLeft)
+		{
+			if (epIdx > 0)
+				epIdx--;
+		}
+		else
+		{
+			if (epIdx <8)
+				epIdx++;
+		}
+		en_passant = "" + EN_PASSANT_VALUES.charAt(epIdx);
+		if (!newFen.toString().equals(""))
+		{
+			CharSequence tmp[] = ((String) newFen).split(" ");
+			if (tmp.length == 6)
+			{
+				String newEp = en_passant + "6";
+				if (tmp[1].equals("b"))
+					newEp = en_passant + "3";
+				newFen = tmp[0] + " " + tmp[1] + " " + tmp[2] + " " + newEp + " " + tmp[4] + " " + tmp[5];
+			}
+		}
+		d_en_passant_item.setText(en_passant);
+		setEnPassantImages();
+	}
+
+	public void setEnPassantImages()
+	{
+		d_en_passant_left.setImageResource(R.drawable.arrow_left_white);
+		d_en_passant_right.setImageResource(R.drawable.arrow_right_white);
+		if (EN_PASSANT_VALUES.charAt(0) == en_passant.charAt(0))
+		{
+			d_en_passant_left.setImageResource(R.drawable.arrow_left_grey);
+			pressedUp = false;
+		}
+		if (EN_PASSANT_VALUES.charAt(8) == en_passant.charAt(0))
+		{
+			d_en_passant_right.setImageResource(R.drawable.arrow_right_grey);
+			pressedUp = false;
+		}
+	}
+
+	public void setDraw50(boolean isLeft)
+	{
+		if (isLeft)
+		{
+			if (draw50 > DRAW50_MIN)
+				draw50--;
+		}
+		else
+		{
+			if (draw50 < DRAW50_MAX)
+				draw50++;
+		}
+		if (!newFen.toString().equals(""))
+		{
+			CharSequence tmp[] = ((String) newFen).split(" ");
+			if (tmp.length == 6)
+			{
+				newFen = tmp[0] + " " + tmp[1] + " " + tmp[2] + " " + tmp[3] + " " + draw50 + " " + tmp[5];
+			}
+		}
+		d_draw50_item.setText("" + draw50);
+		setDraw50Images();
+	}
+
+	public void setDraw50Images()
+	{
+		d_draw50_left.setImageResource(R.drawable.arrow_left_white);
+		d_draw50_right.setImageResource(R.drawable.arrow_right_white);
+		if (draw50 <= DRAW50_MIN)
+		{
+			d_draw50_left.setImageResource(R.drawable.arrow_left_grey);
+			pressedUp = false;
+		}
+		if (draw50 >= DRAW50_MAX)
+		{
+			d_draw50_right.setImageResource(R.drawable.arrow_right_grey);
+			pressedUp = false;
+		}
+	}
+
+	public void setMoveCounter(boolean isLeft)
+	{
+//Log.i(TAG, "setMoveCounter(), isLeft: " + isLeft + ", move_counter: " + move_counter);
+		if (isLeft)
+		{
+			if (move_counter > MOVE_COUNTER_MIN)
+				move_counter--;
+		}
+		else
+		{
+			if (move_counter < MOVE_COUNTER_MAX)
+				move_counter++;
+		}
+		if (!newFen.toString().equals(""))
+		{
+			CharSequence tmp[] = ((String) newFen).split(" ");
+			if (tmp.length == 6)
+			{
+				newFen = tmp[0] + " " + tmp[1] + " " + tmp[2] + " " + tmp[3] + " " + tmp[4] + " " + move_counter;
+			}
+		}
+		d_move_counter_item.setText("" + move_counter);
+		setMoveCounterImages();
+	}
+
+	public void setMoveCounterImages()
+	{
+		d_move_counter_left.setImageResource(R.drawable.arrow_left_white);
+		d_move_counter_right.setImageResource(R.drawable.arrow_right_white);
+		if (move_counter <= MOVE_COUNTER_MIN)
+		{
+			d_move_counter_left.setImageResource(R.drawable.arrow_left_grey);
+			pressedUp = false;
+		}
+		if (move_counter >= MOVE_COUNTER_MAX)
+		{
+			d_move_counter_right.setImageResource(R.drawable.arrow_right_grey);
+			pressedUp = false;
+		}
+	}
+
+    public class MyViewListener implements View.OnClickListener
+    {
+        public void onClick(View v)
+        {
+			chess960Id = 518;
+            switch (v.getId())
+            {
+                case R.id.whiteKingCastle:
+					isWhiteKingCastle = ((CheckBox)v).isChecked();
+					setCastleValuesToFen();
+                    break;
+                case R.id.whiteQueenCastle:
+					isWhiteQueenCastle = ((CheckBox)v).isChecked();
+					setCastleValuesToFen();
+                    break;
+                case R.id.blackKingCastle:
+					isBlackKingCastle = ((CheckBox)v).isChecked();
+					setCastleValuesToFen();
+                    break;
+                case R.id.blackQueenCastle:
+					isBlackQueenCastle = ((CheckBox)v).isChecked();
+					setCastleValuesToFen();
+                    break;
+                case R.id.chess960_manual:
+					if (runP.getBoolean("run_game0_is_board_turn", false))
+					{
+						SharedPreferences.Editor ed = runP.edit();
+						ed.putBoolean("run_game0_is_board_turn", false);
+						ed.commit();
+					}
+					initChess960();
+					removeDialog(OPTIONS_DIALOG);
+                    break;
+                case R.id.chess960_random:
+					Random r;
+					int ir = 518;
+					while (ir == 518)
+					{
+						r = new Random();
+						ir = r.nextInt(960);
+					}
+					chess960Id = ir;
+					newFen = chess960.createChessPosition(ir);
+					newBoardFen = newFen;
+					removeDialog(OPTIONS_DIALOG);
+                    break;
+                case R.id.chess960_number:
+					removeDialog(CHESS960_ID_DIALOG);
+					showDialog(CHESS960_ID_DIALOG);
+					removeDialog(OPTIONS_DIALOG);
+                    break;
+                case R.id.to_clipboard:
+					if (checkFen(newFen))
+						setToClipboard(newFen);
+					removeDialog(OPTIONS_DIALOG);
+                    break;
+                case R.id.from_clipboard:
+					CharSequence fenC = getFenFromClipboard();
+					if (!fenC.toString().equals(""))
+						newFen = fenC;
+					removeDialog(OPTIONS_DIALOG);
+                    break;
+                case R.id.standard:
+					newFen = standardFen;
+					newBoardFen = newFen;
+					removeDialog(OPTIONS_DIALOG);
+					break;
+                case R.id.current:
+					newFen = currentFen;
+					removeDialog(OPTIONS_DIALOG);
+					break;
+                case R.id.clear:
+					newFen = clearFen;
+					removeDialog(OPTIONS_DIALOG);
+                    break;
+            }
+            if (v.getId() != R.id.chess960_manual)
+			{
+				creatingChess960 = false;
+				chess960Status = 0;
+			}
+			showChessBoard();
+        }
+    }
+
+    public Runnable mUpdateEnPassant = new Runnable()
+    {
+        public void run()
+        {
+            if (pressedUp)
+            {
+                setEnPassant(pressedLeft);
+                isUpdated = true;
+                handlerEnPassant.postDelayed(mUpdateEnPassant, HANDLER_DELAY_NEXT);
+            }
+        }
+    };
+
+    public Runnable mUpdateDraw50 = new Runnable()
+    {
+        public void run()
+        {
+            if (pressedUp)
+            {
+                setDraw50(pressedLeft);
+                isUpdated = true;
+                handlerDraw50.postDelayed(mUpdateDraw50, HANDLER_DELAY_NEXT);
+            }
+        }
+    };
+
+	public Runnable mUpdateMoveCounter = new Runnable()
+	{
+		public void run()
+		{
+			if (pressedUp)
+			{
+				setMoveCounter(pressedLeft);
+				isUpdated = true;
+				handlerMoveCounter.postDelayed(mUpdateMoveCounter, HANDLER_DELAY_NEXT);
+			}
+		}
+	};
+
+
 	final String TAG = "EditChessBoard";
 	Util u;
 	SharedPreferences userPrefs;
@@ -995,15 +1514,12 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	ProgressDialog progressDialog = null;
 	ChessLogic cl;				// direct access to ChessLogic, Chess960, ChessHistory
 	Chess960 chess960;
+    ColorValues cv;
 
     CharSequence messageChessLogic = "";
     public ArrayList<CharSequence> stringValues = new ArrayList<CharSequence>();
-	final static int CHESS960_ID_DIALOG = 1;
-	final static int COLOR_DIALOG = 11;
-	final static int CASTLING_DIALOG = 12;
-	final static int ENPASSANT_DIALOG = 13;
-	final static int DRAW50_DIALOG = 14;
-	final static int MOVE_COUNTER_DIALOG = 15;
+	final static int OPTIONS_DIALOG = 1;
+	final static int CHESS960_ID_DIALOG = 2;
 	final static int PROGRESS_DIALOG = 22;
 	int activDialog = 0;
 	CharSequence currentFen = "";
@@ -1013,6 +1529,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	int gridViewSize = 0;
 
 	CharSequence start960Fen = "8/pppppppp/8/8/8/8/PPPPPPPP/8 w - - 0 1";
+	boolean isStartActivity = true;
 	boolean creatingChess960 = false;
 	boolean positionOk = true;
 	int chess960Status = 0;
@@ -1025,33 +1542,98 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	CharSequence newFen = "";
 	int chess960Id = 518;
 	int fieldSize = 38;
-	char piece = ' ';
+	char piece = 'P';
 	int selectedPosition = -1;
 	CharSequence fenColor = "w";
 	CharSequence fenCastling = "-";
 	CharSequence fenEnPassant = "-";
-	CharSequence draw50 = "0";
-	CharSequence moveCounter = "1";
+	CharSequence fenDraw50 = "0";
+	CharSequence fenMoveCounter = "1";
 	Intent returnIntent = new Intent();
 	BoardView boardView;
-	ImageView trash;
-	ImageView color;
+
 	ImageView wKing;
 	ImageView wQueen;
 	ImageView wRook;
 	ImageView wBishop;
 	ImageView wKnight;
 	ImageView wPawn;
+
 	ImageView bKing;
 	ImageView bQueen;
 	ImageView bRook;
 	ImageView bBishop;
 	ImageView bKnight;
 	ImageView bPawn;
+
+    ImageView trash;
+    ImageView turnBoard;
+	ImageView color;
+	ImageView options;
+
+	TextView title;
 	TextView message;
-	TextView fenMes;
-	ImageView btnOk = null;
-	ImageView btnFen = null;
-	ImageView btnBoard = null;
+    TextView btnCancel = null;
+    TextView btnOk = null;
+
+    Bitmap  wKingBmap;
+    Bitmap  wQueenBmap;
+    Bitmap  wRookBmap;
+    Bitmap  wBishopBmap;
+    Bitmap  wKnightBmap;
+    Bitmap  wPawnBmap;
+    Bitmap  bKingBmap;
+    Bitmap  bQueenBmap;
+    Bitmap  bRookBmap;
+    Bitmap  bBishopBmap;
+    Bitmap  bKnightBmap;
+    Bitmap  bPawnBmap;
+    Bitmap  trashBmap;
+
+    // OPTIONS_DIALOG values
+	CheckBox d_whiteKingCastle;
+	CheckBox d_whiteQueenCastle;
+	CheckBox d_blackKingCastle;
+	CheckBox d_blackQueenCastle;
+	TextView d_en_passant_item;
+    ImageView d_en_passant_left;
+    ImageView d_en_passant_right;
+	TextView d_draw50_item;
+    ImageView d_draw50_left;
+    ImageView d_draw50_right;
+	TextView d_move_counter_item;
+    ImageView d_move_counter_left;
+    ImageView d_move_counter_right;
+	TextView d_chess960_manual;
+	TextView d_chess960_random;
+	TextView d_chess960_number;
+	TextView d_to_clipboard;
+	TextView d_from_clipboard;
+	TextView d_standard;
+	TextView d_current;
+	TextView d_clear;
+
+    boolean isWhiteKingCastle = false;
+    boolean isWhiteQueenCastle = false;
+    boolean isBlackKingCastle = false;
+    boolean isBlackQueenCastle = false;
+
+    final String EN_PASSANT_VALUES = "-abcdefgh";
+    final int DRAW50_MIN = 0;
+    final int DRAW50_MAX = 999;
+	final int MOVE_COUNTER_MIN = 1;
+	final int MOVE_COUNTER_MAX = 999;
+    String en_passant = "-";
+    int draw50 = DRAW50_MIN;
+    int move_counter = MOVE_COUNTER_MIN;
+
+    boolean pressedUp = false;
+    boolean pressedLeft = false;
+    boolean isUpdated = false;
+	final long HANDLER_DELAY_START = 100;
+	final long HANDLER_DELAY_NEXT = 20;
+	public Handler handlerEnPassant = new Handler();
+	public Handler handlerDraw50 = new Handler();
+	public Handler handlerMoveCounter = new Handler();
 
 }

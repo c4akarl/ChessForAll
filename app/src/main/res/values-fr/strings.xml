@@ -26,8 +26,8 @@
     <string name="inputDialog_color">Choix de la couleur:</string>
     <string name="inputDialog_castling">Valeur du roque</string>
     <string name="inputDialog_enPassant">Valeur de la prise en passant</string>
-    <string name="inputDialog_draw50">Nulle,règle des 50 coups</string>
-    <string name="inputDialog_moveCounter">contre coup:</string>
+    <string name="inputDialog_draw50">règle des 50 coups</string>
+    <string name="inputDialog_moveCounter">contre coup</string>
     
     <string name="cl_unknownPiece">pièce inconnue</string>
     <string name="cl_wrongBasePosition">mauvaise position de base</string>
@@ -119,9 +119,9 @@
     <string name="menu_edit_board_clear">Vider l\'echiquier</string>
     <string name="menu_edit_board_current">Position actuelle</string>
     <string name="menu_edit_board_standard">Standard</string>
-    <string name="menu_edit_board_chess960_manual">Chess960 manuelle</string>
-    <string name="menu_edit_board_chess960_random">Chess960 aléatoire</string>
-    <string name="menu_edit_board_chess960_number">Chess960 nombre</string>
+    <string name="menu_edit_board_chess960_manual">Chess960 \nmanuelle</string>
+    <string name="menu_edit_board_chess960_random">Chess960 \naléatoire</string>
+    <string name="menu_edit_board_chess960_number">Chess960 \nnombre</string>
 
     <string name="menu_info_turnBoard">tournez échiquier</string>
     <string name="menu_info_nag">NAG (+, -, =  . . .)</string>
@@ -129,7 +129,7 @@
     <string name="menu_info_moveNotation">PGN-Notation</string>
     <string name="menu_info_clipboardCopyPgn">game copy à la planchette</string>
     <string name="menu_info_clipboardCopyFen">copiez la position</string>
-    <string name="menu_info_clipboardPaste">collez la planchette</string>
+    <string name="menu_info_clipboardPaste">Coller la planchette</string>
     
     <string name="menu_query">Requête - Recherche de partie</string>
     <string name="menu_query_gameId">ID de la partie</string>

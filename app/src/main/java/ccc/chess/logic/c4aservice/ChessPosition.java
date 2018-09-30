@@ -10,7 +10,7 @@ import chesspresso.position.Position;
 public class ChessPosition 
 {
 	public ChessPosition(int chess960Id)
-    {	// constructor
+    {
 		cpPosition = new Position();
 		chess960SetValues(chess960Id);
     }
@@ -689,10 +689,7 @@ public class ChessPosition
 	
 	public boolean isLegal()		
 	{ 
-		if (moveList.size() > 0)
-			return true;
-		else
-			return false;
+		return true;
 	}
 
 	public boolean canMove()		{ return cpPosition.canMove(); }

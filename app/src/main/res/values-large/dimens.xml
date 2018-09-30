@@ -6,6 +6,8 @@
     <dimen name="tv2_text_size">24sp</dimen>
     <dimen name="tv_height">60dp</dimen>
     <dimen name="tv_width">160dp</dimen>
+    <dimen name="tv_width_2">240dp</dimen>
+    <dimen name="tv_width_3">300dp</dimen>
     <dimen name="title_text_size">22sp</dimen>
     <dimen name="margin_1">20dp</dimen>
     <dimen name="margin_2">40dp</dimen>
@@ -14,4 +16,6 @@
     <dimen name="tv_color_margin_2">40dp</dimen>
     <dimen name="btn1_width">100dp</dimen>
     <dimen name="btn_size">92dp</dimen>
+    <dimen name="btn_size_2">44dp</dimen>
+    <dimen name="btn_size_3">66dp</dimen>
 </resources>

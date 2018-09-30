@@ -1,5 +1,7 @@
 package ccc.chess.logic.c4aservice;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import chesspresso.move.Move;
@@ -42,7 +44,7 @@ public class ChessLogic
         CharSequence message = "";
         pos = new ChessPosition(history.chess960Id);
         pos.setPosition(chess960.getFen());
-//        Log.i(TAG, "isLegal, canMove, isMate isStaleMate: " + pos.isLegal() + ", " + pos.canMove() + ", " + pos.isMate() + ", " + pos.isStaleMate() );
+//Log.i(TAG, "isLegal, canMove, isMate, isStaleMate: " + pos.isLegal() + ", " + pos.canMove() + ", " + pos.isMate() + ", " + pos.isStaleMate() );
         if (pos.isLegal() & pos.canMove() & !pos.isMate()  & !pos.isStaleMate())
         {
         	stat = "1";														// processing OK
@@ -59,7 +61,8 @@ public class ChessLogic
         	{
 	        	stat = "2";													
 	        	message = stringValues.get(2);		// cl_wrongBasePosition
-        	}
+Log.i(TAG, "newPosition(), message: " + message);
+			}
         	history.setIsGameEnd(true);                             		// ERROR: set game end
             history.moveIsFirstInVariation = true;
             history.moveIsLastInVariation = true;
@@ -360,6 +363,7 @@ public class ChessLogic
         	{
 	        	stat = "2";													
 	        	message = stringValues.get(2);								// cl_wrongBasePosition
+//Log.i(TAG, "newPositionFromFen(), message: " + message);
         	}
         	history.setIsGameEnd(true);                             		// ERROR: set game end
             history.moveIsFirstInVariation = true;
@@ -718,6 +722,11 @@ public class ChessLogic
 						CharSequence sanM = getSanMoveFromPx(possibleSanMoves, chessMove.getPgn(), "P");
 						chessMove.setPgn(sanM);
 					}
+					if (chessMove.getPgn().toString().endsWith("+"))
+					{
+						CharSequence sanM = getSanMoveIsMate(possibleSanMoves, chessMove.getPgn());
+						chessMove.setPgn(sanM);
+					}
 					if (chessMove.getPgn().length() >= 4)
 					{
 						if 	(		Character.isLowerCase(chessMove.getPgn().charAt(0))
@@ -750,10 +759,17 @@ public class ChessLogic
 
 					if (chessMove.getPgn().length() == 4 & !chessMove.getPgn().toString().contains("x"))
 					{
-						CharSequence correctlyLanMove = getCorrectlyLanMove(possibleSanMoves, chessMove.getPgn());
+						CharSequence correctlyLanMove = getCorrectlyLanMove4(possibleSanMoves, chessMove.getPgn());
 //Log.i(TAG, "correctlyLanMove: " + chessMove.getPgn() + ", correctlyLanMove: " + correctlyLanMove);
 						chessMove.setPgn(correctlyLanMove);
 					}
+
+                    if (chessMove.getPgn().length() > 4)
+                    {
+                        CharSequence correctlyLanMove = getCorrectlyLanMove5(possibleSanMoves, chessMove.getPgn());
+//Log.i(TAG, "correctlyLanMove: " + chessMove.getPgn() + ", correctlyLanMove: " + correctlyLanMove);
+                        chessMove.setPgn(correctlyLanMove);
+                    }
 
 	    			// chessMove set baseFen, baseIsCheck, even variation(rank, variant)
 	    			if (		chessMove.getRank().equals(cmPrev.getRank()) 
@@ -780,7 +796,9 @@ public class ChessLogic
 	    			}
 
 					move = pos.getLanMoveFromSanMove(cmPrev.getFen(), possibleSanMoves, chessMove.getPgn());
+
 //Log.i(TAG, "lanMove: " + move + ", sanMove: " + chessMove.getPgn() + ", pos.posSanMove: " + pos.posSanMove);
+
 	                chessMove.setFields(move);
 
 					if (move.length() >= 4)
@@ -888,6 +906,20 @@ public class ChessLogic
 		return possibleMoves;
 	}
 
+	private CharSequence getSanMoveIsMate(String[] possibleMoves, CharSequence move)
+	{
+		String moveX = move.toString().replace("+", "#");
+		if (possibleMoves != null)
+		{
+			for (int i = 0; i < possibleMoves.length; i++)
+			{
+				if 	(possibleMoves[i].equals(moveX)					)
+					return possibleMoves[i];
+			}
+		}
+		return move;
+	}
+
 	private CharSequence getSanMoveFromPx(String[] possibleMoves, CharSequence move, String replace)
 	{
 		String moveX = move.toString();
@@ -922,7 +954,7 @@ public class ChessLogic
 		return move;
 	}
 
-	private CharSequence getCorrectlyLanMove(String[] possibleMoves, CharSequence move)
+	private CharSequence getCorrectlyLanMove4(String[] possibleMoves, CharSequence move)
 	{
 		if (move.length() != 4)
 			return move;
@@ -939,6 +971,38 @@ public class ChessLogic
 		}
 		return move;
 	}
+
+    // e.g.: Nb8d7 ---> Nbd7
+    private CharSequence getCorrectlyLanMove5(String[] possibleMoves, CharSequence move)
+    {
+        if (!Character.isUpperCase(move.charAt(0)) | move.charAt(0) == 'O')
+            return move;
+        String sanToField = "";
+        char sanFromChar1 = ' ';
+        char sanFromChar2 = ' ';
+        if (move.length() > 4)
+        {
+            sanToField = move.toString().substring(move.length() - 2);
+            if (move.toString().endsWith("+"))
+                sanToField = move.toString().substring(move.length() - 3);
+            sanFromChar1 = move.toString().charAt(1);
+            if (Character.isDigit(move.toString().charAt(2)))
+                sanFromChar2 = move.toString().charAt(2);
+        }
+        for (int i = 0; i < possibleMoves.length; i++)
+        {
+            if 	(move.length() > possibleMoves[i].length())
+            {
+                if 	(       possibleMoves[i].endsWith(sanToField)
+                        & 	possibleMoves[i].charAt(0) == move.toString().charAt(0)
+                        &   (possibleMoves[i].charAt(1) == sanFromChar1 | possibleMoves[i].charAt(1) == sanFromChar2)
+                    )
+                        return possibleMoves[i];
+            }
+        }
+
+        return move;
+    }
 
     public void setPossileMoves(CharSequence fastMoves)	
     {

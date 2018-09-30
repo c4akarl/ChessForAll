@@ -145,7 +145,7 @@
         style="@style/c4aTV4"
         android:layout_below="@id/btn_play_b"
         android:layout_width="@dimen/tv_width"
-        android:background="@drawable/borderblue"
+        android:background="@drawable/rectangleblue"
         android:layout_alignParentLeft="true"
         android:text="@string/menu_title" />
     <TextView

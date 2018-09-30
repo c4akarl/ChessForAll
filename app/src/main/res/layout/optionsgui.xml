@@ -20,7 +20,7 @@
 	android:paddingRight="0dip"
 	android:singleLine="true"
 	android:gravity="center"
-	android:background="@drawable/bordergrey"
+	android:background="@drawable/rectangletransparent"
 	android:text="@string/app_optionsGUI"
 	android:textColor="#000000" />
 
@@ -64,7 +64,7 @@
 			android:layout_marginLeft="@dimen/margin_1"
 			android:paddingLeft="2dp"
 			android:paddingRight="2dp"
-			android:background="@drawable/borderyellow"
+			android:background="@drawable/rectangleyellow"
 			android:text="@string/pieceNames" />
 		<CheckBox android:id="@+id/cbGuStatusBar"
 			android:layout_below="@id/tvGuPieceName"
