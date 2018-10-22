@@ -26,7 +26,14 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".FileManager" android:label="@string/app_pgnFileManager" android:windowSoftInputMode="adjustPan"> </activity>
+        <activity
+            android:name=".FileManager"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:label="@string/app_pgnFileManager"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
         <activity android:name=".ChessGameData" android:label="@string/app_chessData" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
         <activity android:name=".ChessNotation" android:label="@string/app_chessNotation" > </activity>
         <activity android:name=".ChessMoveText" android:label="" > </activity>
@@ -37,6 +44,8 @@
         <activity android:name=".OptionsColor" android:label="@string/menu_colorsettings" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
         <activity android:name=".EditChessBoard" android:label="@string/app_editChessBoard" android:configChanges="orientation|screenSize"> </activity>
         <activity android:name=".PlayEngineSettings" android:label="@string/app_playEngineSettings" > </activity>
+
+        <receiver android:name=".NotificationReceiver" />
 
     </application>
 

@@ -17,6 +17,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.database.sqlite.SQLiteDiskIOException;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteStatement;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -61,6 +62,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class FileManager extends Activity implements Ic4aDialogCallback, DialogInterface.OnCancelListener, TextWatcher
 {
@@ -69,12 +71,19 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 //		Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+//		dbTest = DB_CREATE;
+		dbTest = DB_CREATE_TRANSACTION;
+//		dbTest = DB_CREATE_SQL_STM;
+//		dbTest = DB_CREATE_SQL_STM_TRANSACTION;
+
 		u = new Util();
         setQueryData = 99;	// query none
         runP = getSharedPreferences("run", 0);
         userPrefs = getSharedPreferences("user", 0);
         fmPrefs = getSharedPreferences("fm", 0);
 		ce = new ChessEngine(this, 9);
+
 	}
 
 	@Override
@@ -1651,6 +1660,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			scroll_game_id = 1;
 			fm_extern_db_key_id = 0;
 			db_state = getDbFileState(fileName, fm_location);
+//Log.i(TAG, "showPositionInFileList(), db_state: " + db_state);
 			handleDb(etPath.getText().toString(), fileName, db_state, true);
 			if (fileActionCode == 1)
 			{
@@ -2384,7 +2394,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			save_action_id = action;
 //Log.i(TAG, "pgnPath: " + pgnPath + ", pgnFile: " + pgnFile + ", pgnData:\n" + pgnData);
 //Log.i(TAG, "action: " + action + ", replaceStart: " + replaceStart + ", replaceEnd: " + replaceEnd + ", moveStart: " + moveStart);
-			mNotificationHelper.createNotification(getString(R.string.rebuild_pgn_file) + " " + pgnFile);
+			mNotificationHelper.createNotification(getString(R.string.rebuild_pgn_file) + " " + pgnFile,
+                    FileManager.PGN_ACTION_UPDATE, pgnPath + pgnFile);
 
 			RandomAccessFile pgnRaf;
 			try {pgnRaf = new RandomAccessFile(pgnPath + pgnFile, "r");}
@@ -2575,9 +2586,10 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				if (params[3].equals("dropidx"))
 					dropIdx = true;
 			}
-//Log.i(TAG, "CreateDatabaseTask(), pgnPath: " + pgnPath + ", pgnFile: " + pgnFile);
+//Log.i(TAG, "pgnFile: " + pgnPath + pgnFile);
 //Log.i(TAG, "CreateDatabaseTask(), pgnOffset: " + pgnOffset + ", dropCreateIdx: " + dropCreateIdx + ", dropIdx: " + dropIdx);
-			fPgn = new File(pgnPath + pgnFile);
+            startCreateDatabase = System.currentTimeMillis();
+            fPgn = new File(pgnPath + pgnFile);
 			if (fPgn.exists())
 				pgnFileExists = true;
 			else
@@ -2591,13 +2603,15 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				return null;
 
 			pgnDbFile = pgnFile.replace(".pgn", ".pgn-db");
-			mNotificationHelper.createNotification(getString(R.string.fmCreatingPgnDatabase) + " " + pgnDbFile);
+			mNotificationHelper.createNotification(getString(R.string.fmCreatingPgnDatabase) + " " + pgnDbFile,
+                    FileManager.PGN_ACTION_CREATE_DB, pgnPath + pgnFile);
+
 			fPgnDb = new File(pgnPath + pgnDbFile);
 			if (pgnOffset == 0 & !dropCreateIdx)
 			{
 				try	{db = SQLiteDatabase.openOrCreateDatabase(fPgnDb, null);}	// create database (file: .pgn-db)
-				catch (SQLiteDiskIOException e) {e.printStackTrace(); testMessage = "EX 99"; db.close(); return null;}
-				catch (SQLiteCantOpenDatabaseException e) {e.printStackTrace(); testMessage = "EX 99"; db.close(); return null;}
+				catch (SQLiteDiskIOException e) {e.printStackTrace(); runMessage = "EX 99"; db.close(); return null;}
+				catch (SQLiteCantOpenDatabaseException e) {e.printStackTrace(); runMessage = "EX 99"; db.close(); return null;}
 	    		executeSQLScript(db, "create.sql");								// create table: pgn
 	    		db.close();
 			}
@@ -2617,7 +2631,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					executeSQLScript(db, "create_idx.sql");		// create indexes ON pgn
 					db.setVersion(pgnDb.DB_VERSION);
 					db.close();
-					testMessage = "dropCreateIdx - 0";
+					runMessage = "dropCreateIdx - 0";
 					return null;
 				}
 				pgnRaf = new RandomAccessFile(pgnPath + pgnFile, "r");
@@ -2627,14 +2641,21 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 //Log.i(TAG, "rafParsed: " + rafParsed + ", rafLength: " + rafLength + ", GameId: " + GameId);
 				publishProgress(getPercentageComplete(), rafParsed, rafLength, GameId);
 			} 
-			catch (FileNotFoundException e) {e.printStackTrace(); testMessage = "EX 1"; db.close(); return null;}	// error file not exist
-			catch (IOException e) {e.printStackTrace(); testMessage = "EX 2"; db.close(); return null;}	
-			try 
+			catch (FileNotFoundException e) {e.printStackTrace(); runMessage = "EX 1"; db.close(); return null;}	// error file not exist
+			catch (IOException e) {e.printStackTrace(); runMessage = "EX 2"; db.close(); return null;}
+
+			if (dbTest == DB_CREATE_TRANSACTION | dbTest == DB_CREATE_SQL_STM_TRANSACTION)
+				db.beginTransaction();
+
+			try
 			{
 				initGameValues();
 				pgnRaf.seek(pgnOffset);
 				rafLinePointer = pgnRaf.getFilePointer();
 				line = pgnRaf.readLine();
+
+                SQLiteStatement sqlInsert = getSqlInsert();
+
 				while (line != null)
 				{
 //					Log.i(TAG, "line: " + line);
@@ -2642,20 +2663,46 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					{
 						hasGames = true;
 						if (isFirstGame)
+						{
 							isFirstGame = false;
+							GameId++;
+						}
 						else
 						{
 							gameLength = (int) (rafLinePointer - rafGamePointer);
 							setGameOffsets(rafGamePointer, gameLength, startMoveSection);
-							if (!insertValuesToDb())
-							{	// SQLException
+							if (!pgnDb.existsDbFile(pgnPath, pgnDbFile))
+							{
 								pgnRaf.close();
+//								db.setTransactionSuccessful();
+//								db.endTransaction();
 								db.close();
-								pgnDb.deleteDbFile();
-								testMessage = "insertValuesToDb() - 1";
+								runMessage = "db not exists";
 								return null;
 							}
-							if (GameId % 25 == 0)
+
+							boolean isInsertOk;
+							if (dbTest < 10)
+                                isInsertOk = insertValuesToDb();
+							else
+                                isInsertOk = insertValuesToDb(sqlInsert);
+//							if (!insertValuesToDb())
+							if (!isInsertOk)
+							{	// SQLException
+//                                Log.i(TAG, "1 !insertValuesToDb()");
+								pgnRaf.close();
+
+								db.setTransactionSuccessful();
+								db.endTransaction();
+
+								db.close();
+								pgnDb.deleteDbFile();
+								runMessage = "insertValuesToDb() - 1";
+								return null;
+							}
+//							if (GameId % 25 == 0)
+//								publishProgress(getPercentageComplete(), rafParsed, rafLength, GameId);
+							if (GameId % 100 == 0)
 								publishProgress(getPercentageComplete(), rafParsed, rafLength, GameId);
 							initGameValues();
 						}
@@ -2680,22 +2727,39 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				{
 					gameLength = (int) (pgnRaf.length() - rafGamePointer);
 					setGameOffsets(rafGamePointer, gameLength, startMoveSection);
-					if (!insertValuesToDb())
+
+                    boolean isInsertOk;
+                    if (dbTest < 10)
+                        isInsertOk = insertValuesToDb();
+                    else
+                        isInsertOk = insertValuesToDb(sqlInsert);
+
+//					if (!insertValuesToDb())
+					if (!isInsertOk)
 					{	// SQLException
+//                        Log.i(TAG, "2 !insertValuesToDb()");
 						pgnRaf.close();
+
+						db.setTransactionSuccessful();
+						db.endTransaction();
+
 						db.close();
 						pgnDb.deleteDbFile();
-						testMessage = "insertValuesToDb() - 2";
+						runMessage = "insertValuesToDb() - 2";
 						return null;
 					}
 					publishProgress(getPercentageComplete(), rafParsed, rafLength, GameId);
 				}
 				pgnRaf.close();
-			} 
-			catch (IOException e) {e.printStackTrace(); db.close(); testMessage = "EX 3"; return null;}
-			catch (SQLiteDiskIOException e) {e.printStackTrace(); db.close(); testMessage = "EX 4"; return null;}
-			catch (SQLiteDatabaseCorruptException e) {e.printStackTrace(); db.close(); testMessage = "EX 5"; return null;}
-			
+			}
+
+			catch (IOException e) {e.printStackTrace(); runMessage = "EX 3"; return null;}
+			catch (SQLiteDiskIOException e) {e.printStackTrace(); runMessage = "EX 4"; return null;}
+			catch (SQLiteDatabaseCorruptException e) {e.printStackTrace(); runMessage = "EX 5"; return null;}
+			catch (RuntimeException e) {e.printStackTrace(); runMessage = "EX 6"; return null;}
+
+			stopTransaction();
+
 			if (pgnOffset == 0 | dropIdx)
 			{
 				publishProgress(999L, rafParsed, rafLength, GameId);
@@ -2706,9 +2770,11 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			File fPgnDbJournal = new File(pgnPath + pgnDbFileJournal);
 			if (fPgnDbJournal.exists())
 				fPgnDbJournal.delete();
+
 			db.close();
-			testMessage = "OK!";
+			runMessage = "OK!";
 			return null;
+
 		}
 
 		@Override  
@@ -2727,7 +2793,27 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		@Override  
 	    protected void onPostExecute(Void l) 
 		{
-			if (pgnOffset == 0 & fPgn.length() == 0)	// no data, no create db!
+
+//			Log.i(TAG, "onPostExecute(), runMessage: " + runMessage);
+
+			if (!runMessage.equals("OK!"))
+			{
+//				Log.i(TAG, "onPostExecute(), runMessage: " + runMessage);
+				mNotificationHelper.completed();
+				return;
+			}
+
+		    long diffTime = System.currentTimeMillis() - startCreateDatabase;
+            String runningTime = String.format("%02d:%02d:%02d",
+                    TimeUnit.MILLISECONDS.toHours(diffTime),
+                    TimeUnit.MILLISECONDS.toMinutes(diffTime) -
+                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffTime)), // The change is in this line
+                    TimeUnit.MILLISECONDS.toSeconds(diffTime) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(diffTime)));
+
+			Log.i(TAG, "runningTime: " + runningTime + ", games: " + (GameId -1));
+
+            if (pgnOffset == 0 & fPgn.length() == 0)	// no data, no create db!
 			{
 				try
 				{
@@ -2755,7 +2841,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 //	        	pgnDb.openDb(pgnPath, pgnFile, SQLiteDatabase.OPEN_READONLY);
 	        	if (pgnDb.openDb(pgnPath, pgnFile, SQLiteDatabase.OPEN_READONLY))
 				{
-					setInfoValues("DB-Test - onPostExecute()", testMessage, pgnDb.getDbVersion());
+					setInfoValues("DB-Test - onPostExecute()", runMessage, pgnDb.getDbVersion());
 					pgnDb.closeDb();
 				}
 
@@ -2764,6 +2850,11 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		        	if (pgnDb.initPgnFiles(pgnPath, pgnFile))
 		        	{
 //Log.i(TAG, "onPostExecute(), fileActionCode: " + fileActionCode + ", fm_extern_db_key_id: " + fm_extern_db_key_id);
+
+//Log.i(TAG, "onPostExecute(), pgnDb.initPgnFiles(), pgnFile: " + pgnPath + pgnFile);
+//                        if (true)
+//                            return;
+
 		        		fm_extern_db_key_id = 0;
 						save_path = gamePath;
 						save_file = gameFile;
@@ -2905,7 +2996,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		public boolean insertValuesToDb()
 	    {
 //Log.i(TAG, "insertValuesToDb()");
-			Long pgnId = 0L;
+//			Long pgnId = 0L;
+			Long pgnId;
 			rafParsed = rafParsed +GameLength;
 			ContentValues cv = new ContentValues();
 			cv.put("GameFileOffset", GameFileOffset);
@@ -2941,6 +3033,75 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			return true;
 	    }
 
+        public SQLiteStatement getSqlInsert()
+        {
+            String sql = "INSERT INTO " + TABLE_NAME + "("
+                    + "GameFileOffset,GameLength,GameMovesOffset,Event,Site,"
+                    + "Date,Round,White,Black,Result,"
+                    + "SetUp,FEN,WhiteTitle,BlackTitle,WhiteElo,"
+                    + "BlackElo,ECO,Opening,Variation,WhiteTeam,"
+                    + "BlackTeam,WhiteFideId,BlackFideId,EventDate,EventType"
+                    +") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+//			SQLiteStatement stmt = db.compileStatement(sql);
+            return db.compileStatement(sql);
+        }
+
+        public boolean insertValuesToDb(SQLiteStatement stmt)
+        {
+            rafParsed = rafParsed +GameLength;
+//            Long pgnId = 0L;
+            try
+            {
+//                SQLiteStatement stmt = db.compileStatement(sqlInsert);
+
+                stmt.bindLong(1, GameFileOffset);
+                stmt.bindLong(2, GameLength);
+                stmt.bindLong(3, GameMovesOffset);
+                stmt.bindString(4, Event);
+                stmt.bindString(5, Site);
+                stmt.bindString(6, Date);
+                stmt.bindString(7, Round);
+                stmt.bindString(8, White);
+                stmt.bindString(9, Black);
+                stmt.bindString(10, Result);
+                stmt.bindString(11, SetUp);
+                stmt.bindString(12, FEN);
+                stmt.bindString(13, WhiteTitle);
+                stmt.bindString(14, BlackTitle);
+                stmt.bindString(15, WhiteElo);
+                stmt.bindString(16, BlackElo);
+                stmt.bindString(17, ECO);
+                stmt.bindString(18, Opening);
+                stmt.bindString(19, Variation);
+                stmt.bindString(20, WhiteTeam);
+                stmt.bindString(21, BlackTeam);
+                stmt.bindString(22, WhiteFideId);
+                stmt.bindString(23, BlackFideId);
+                stmt.bindString(24, EventDate);
+                stmt.bindString(25, EventType);
+
+//                pgnId = stmt.executeInsert();
+                stmt.execute();
+//                if (pgnId >= 0)
+//                    GameId = pgnId +1;
+//                stmt.clearBindings();
+                GameId++;
+
+            }
+            catch (Exception  e) 	{e.printStackTrace(); GameId = 0; return false;}
+
+            return true;
+        }
+
+		public void stopTransaction()
+		{
+			if (db.inTransaction())
+			{
+				db.setTransactionSuccessful();
+				db.endTransaction();
+			}
+		}
+
 		public Long getPercentageComplete()
 	    {
 			long percentage = 0;
@@ -2952,7 +3113,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			}
 			catch (ArithmeticException e) {return percentage;}
 	    }
-		
+
 		final String TAG = "CreateDatabaseTask";
 		Context context;
 		SQLiteDatabase db = null;	//	database instance from file .pgn-db
@@ -3100,7 +3261,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					removeDialog(QUERY_PROGRESS_DIALOG);
 		    		showDialog(QUERY_PROGRESS_DIALOG);
 				}
-	    		catch (BadTokenException e) { Log.i(TAG, "2 QueryTask.onPreExecute(), BadTokenException"); }
+//	    		catch (BadTokenException e) { Log.i(TAG, "2 QueryTask.onPreExecute(), BadTokenException"); }
+	    		catch (BadTokenException e) { }
 			}
 		}
 
@@ -3221,6 +3383,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					if (queryCursor.moveToPosition(position))
 					{
 					   	int gameId = queryCursor.getInt(queryCursor.getColumnIndex("_id"));
+//Log.i(TAG, "lvGames.onItemLongClick(), lvPosition: " + position + ", gameId: " + gameId);
 						if (fileActionCode == 2)
 						{
 							if (pgnDb.openDb(gamePath, gameFile, SQLiteDatabase.OPEN_READONLY))
@@ -3484,7 +3647,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			return STATE_DB_DISABLED;
 		String path = etPath.getText().toString() + fileName;
 		String dbPath = path.replace(".pgn", ".pgn-db");
-		String dbJournalPath = path.replace(".pgn", ".pgn-dbjournal");
+		String dbJournalPath = path.replace(".pgn", ".pgn-db-journal");
 		File fPgn = new File(path); 
 		File fPgnDb = new File(dbPath);
 		File fPgnDbJournal = new File(dbJournalPath);
@@ -3499,7 +3662,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			else
 			{
 
-				if ((ct -lmPgnDb) <= 3000 | fPgnDbJournal.exists())
+//				if ((ct -lmPgnDb) <= 3000 | fPgnDbJournal.exists())
+				if (fPgnDbJournal.exists())
 					return STATE_DB_LOCKED;
 				else
 				{
@@ -3512,6 +3676,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 						switch (state) 
 						{
 							case 1:		return STATE_DB_OK;
+							case 5:		return STATE_DB_IN_TRANSACTION;
+							case 6:		return STATE_DB_NO_ROWS;
 							case 8:		return STATE_DB_WRONG_VERSION;
 							default:	return STATE_DB_UNCOMPLETED;
 						}
@@ -3552,6 +3718,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				}
 				break;
 			case STATE_DB_LOCKED: 
+			case STATE_DB_IN_TRANSACTION:
 				removeDialog(DATABASE_LOCKED_DIALOG);
 				showDialog(DATABASE_LOCKED_DIALOG);
 				break;
@@ -3561,7 +3728,14 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					startCreateDatabaseTask(path, file, "0", "");
 				}
 				break;
-			case STATE_DB_WRONG_VERSION: 
+			case STATE_DB_NO_ROWS:
+				if (pgnDb.initPgnFiles(path, file))
+				{
+					pgnDb.deleteDbFile();
+					handleDb(path, file, STATE_DB_NO_DBFILE, false);
+				}
+				break;
+			case STATE_DB_WRONG_VERSION:
 				Toast.makeText(this, getString(R.string.fmDropCreateIndex), Toast.LENGTH_LONG).show();
 				startCreateDatabaseTask(path, file, "0", "idx");
 				break;
@@ -3719,6 +3893,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 
 	final String TAG = "FileManager";
+    public static final String PGN_ACTION_CREATE_DB = "pgn-create-db";
+    public static final String PGN_ACTION_UPDATE = "pgn-update";
 	// Dialogs
 	private static final int PATH_NOT_EXISTS_DIALOG = 1;
 	private static final int FILE_NOT_EXISTS_DIALOG = 2;
@@ -3747,6 +3923,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	private static final int STATE_DB_NO_DBFILE = 202;
 	private static final int STATE_DB_LOCKED = 203;
 	private static final int STATE_DB_UNCOMPLETED = 204;
+	private static final int STATE_DB_IN_TRANSACTION = 205;
+	private static final int STATE_DB_NO_ROWS = 206;
 	private static final int STATE_DB_WRONG_VERSION = 208;
 	private static final int STATE_DB_DISABLED = 209;
 
@@ -3760,6 +3938,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	EditPgnTask editPgnTask = null;
 	CreateDatabaseTask createDatabaseTask = null;
 	QueryTask queryTask = null;
+    long startCreateDatabase;
 	int notificationId = 0;
 	SimpleCursorAdapter pgnAdapter = null;
 	int fileActionCode;	// 1=pgn load, 2=pgn save, 5=pgn save(automatic play), 91=opening book, 92=engine
@@ -3926,6 +4105,10 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	public long pgnLength = 0;
 
 //		DB-TEST			DB-TEST			DB-TEST			DB-TEST
-	String testMessage = "";
-
+	String runMessage = "";
+	int dbTest;		// 0 = no transaction  1 = +transaction
+    final int DB_CREATE = 0;
+    final int DB_CREATE_TRANSACTION = 1;
+    final int DB_CREATE_SQL_STM = 10;
+    final int DB_CREATE_SQL_STM_TRANSACTION = 11;
 }

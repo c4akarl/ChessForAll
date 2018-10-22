@@ -3,6 +3,7 @@ package ccc.chess.gui.chessforall;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteException;
 
 import java.io.File;
@@ -76,6 +77,15 @@ public class PgnDb
 		if (fPgnDb.exists() & pgnDbFile.endsWith(".pgn-db"))
 			fPgnDb.delete();
     }
+
+	public boolean existsDbFile(String pgnPath, String pgnDbFile)
+	{
+		File fPgnDb = new File(pgnPath + pgnDbFile);
+		if (fPgnDb.exists() & pgnDbFile.endsWith(".pgn-db"))
+			return true;
+		else
+			return false;
+	}
 
 	public boolean openDb(String path, String file, int flags)
     {
@@ -318,7 +328,15 @@ public class PgnDb
 
 	public int getStateFromLastGame()
     {
+
+        if (db.inTransaction() | db.isDbLockedByCurrentThread() | db.isDbLockedByOtherThreads())
+        {
+//            Log.i(TAG, "getStateFromLastGame(), db.inTransaction()");
+            return 5;
+        }
+
 		int gameCnt = getRowCount(TABLE_NAME);
+//Log.i(TAG, "getStateFromLastGame(), gameCnt: " + gameCnt);
 		pgnRafOffset = 0;
 		if (gameCnt > 0)
 		{
@@ -370,7 +388,7 @@ public class PgnDb
 			}
 		}
 		else
-			return 1;
+			return 6;
     }
 
 	public int getRowCount(String tableName)
@@ -388,6 +406,7 @@ public class PgnDb
 			}
 		}
 		catch (IllegalStateException e) 	{e.printStackTrace(); return 0;}
+		catch (SQLiteDatabaseLockedException e) 				{e.printStackTrace(); return 0;}
 		catch (SQLException e) 				{e.printStackTrace(); return 0;}
 //err>>>: at ccc.chess.gui.chessforall.PgnDb.getRowCount (PgnDb.java:382)
 		catch (NullPointerException e) 				{e.printStackTrace(); return 0;}

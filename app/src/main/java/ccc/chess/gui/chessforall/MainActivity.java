@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -276,9 +277,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				startEdit(false, false);
 		}
 		updateCurrentPosition("");
-//Log.i(TAG, "startGame(), start getDataFromIntent(intent): ");
-		if (getIntent().getFlags() == Intent.FLAG_ACTIVITY_NEW_TASK)
-			getDataFromIntent(getIntent());
+//		if (getIntent().getFlags() == Intent.FLAG_ACTIVITY_NEW_TASK)
+//			getDataFromIntent(getIntent());
+		getDataFromIntent(getIntent());
 
 // 	!!! DIALOG FOR NEW MESSAGE (do not delete)
 //		if (userPrefs.getInt("user", 0) == 0)
@@ -565,6 +566,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public boolean getDataFromIntent(Intent intent)
 	{
+//Log.i(TAG, "getDataFromIntent()");
 		boolean isOk = false;
 		// call from another Activity, passing the FEN(String)
 		if (intent.getType() != null)
@@ -584,6 +586,31 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 			}
 		}
+
+		if (intent.getType() != null)
+		{
+			if (intent.getType().equals(FileManager.PGN_ACTION_CREATE_DB))
+			{
+			    int id = intent.getIntExtra("notificationId", 1);
+				String pgnFileName = intent.getStringExtra("pgnFileName");
+Log.i(TAG, "getDataFromIntent(), intentType: " + intent.getType() + ", id: " + id + ", pgnFileName: " + pgnFileName);
+
+//				File f = new File(pgnFileName + "-db-journal");
+//				if (f.exists())
+//					f.delete();
+
+				String ns = Context.NOTIFICATION_SERVICE;
+				NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
+				nMgr.cancel(id);
+
+				return true;
+			}
+			if (intent.getType().equals(FileManager.PGN_ACTION_UPDATE))
+			{
+
+			}
+		}
+
 		// call from another Activity, passing the PGN(File)
 		if (intent.getData() != null)
 		{
@@ -7091,6 +7118,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int INFO_DIALOG = 909;	// device info; not activated
 	final static int RATE_DIALOG = 910;
 	final static int C4A_NEW_DIALOG = 999;
+
+	final static int FLAG_ACTIVITY_PGN_UPDATE = 268468224;
 
 	//	GUI (R.layout.main)
 	private DrawerLayout drawerLayout;

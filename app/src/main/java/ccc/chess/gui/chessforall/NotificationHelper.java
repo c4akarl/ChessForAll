@@ -10,35 +10,59 @@ import android.support.v4.app.NotificationCompat;
 public class NotificationHelper 
 {
     private Context mContext;
-    public int notivicationId = 1;
+    public int notificationId = 1;
     private Notification mNotification;
     private NotificationManager mNotificationManager;
     private NotificationCompat.Builder builder;
     private PendingIntent mContentIntent;
+    private PendingIntent pendingIntentContinue;
+    private PendingIntent pendingIntentCancel;
     private CharSequence mContentTitle;
-    public NotificationHelper(Context context, int notivicationId)
+    public NotificationHelper(Context context, int notificationId)
     {
         mContext = context;
-        this.notivicationId = notivicationId;
+        this.notificationId = notificationId;
     }
-    public void createNotification(String title)
+    public void createNotification(String title, String actionTyp, String pgnFileName)
     {
+//        Log.i(TAG, "createNotification(), notificationId: " + notificationId + ", pgnFileName: " + pgnFileName);
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         int icon = R.drawable.stat_db_add;
         CharSequence tickerText = mContext.getString(R.string.app_pgnFileManager);
         long when = System.currentTimeMillis();
         mContentTitle = title;
         CharSequence contentText = "0%";
+
         Intent notificationIntent = new Intent();
-        mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, 0);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContentIntent = PendingIntent.getActivity(mContext, notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intentCancel = new Intent(mContext, NotificationReceiver.class);
+        intentCancel.setAction(ACTION_CANCEL);
+        intentCancel.putExtra("notificationId", notificationId);
+        intentCancel.putExtra("pgnFileName", pgnFileName);
+        pendingIntentCancel = PendingIntent.getBroadcast(mContext, notificationId, intentCancel, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intentContinue = new Intent(mContext, NotificationReceiver.class);
+        intentContinue.setAction(ACTION_CONTINUE);
+        intentContinue.putExtra("notificationId", notificationId);
+        intentContinue.putExtra("pgnFileName", pgnFileName);
+        pendingIntentContinue = PendingIntent.getBroadcast(mContext, notificationId, intentContinue, PendingIntent.FLAG_UPDATE_CURRENT);
+
         builder = new NotificationCompat.Builder(mContext);
         mNotification = builder.setContentIntent(mContentIntent)
                 .setSmallIcon(icon).setTicker(tickerText).setWhen(when)
-                .setAutoCancel(true).setContentTitle(mContentTitle)
-                .setContentText(contentText).build();
+                .setAutoCancel(true)
+                .setContentTitle(mContentTitle)
+                .setContentText(contentText)
+                .addAction(R.drawable.ic_action_cancel, mContext.getString(R.string.btn_Cancel), pendingIntentCancel)
+                .addAction(R.drawable.ic_action_continue, mContext.getString(R.string.btn_Continue), pendingIntentContinue)
+                .setPriority(Notification.PRIORITY_MAX)
+                .build();
         mNotification.flags = Notification.FLAG_ONGOING_EVENT;
-        mNotificationManager.notify(notivicationId, mNotification);
+        mNotificationManager.notify(notificationId, mNotification);
     }
+
     public void progressUpdate(Long fParsedPercentage, Long fParsed, Long fLength, Long fGames) 
     {
     	char km = 'K';
@@ -77,13 +101,14 @@ public class NotificationHelper
         builder.setContentText(contentText);
         mNotification = builder.getNotification();
         mNotification.flags = Notification.FLAG_ONGOING_EVENT;
-        mNotificationManager.notify(notivicationId, mNotification);
+        mNotificationManager.notify(notificationId, mNotification);
     }
     public void completed()    
     {
-        mNotificationManager.cancel(notivicationId);
+        mNotificationManager.cancel(notificationId);
     }
     
     final String TAG = "NotificationHelper";
-
+    public static final String ACTION_CONTINUE = "ccc.chess.gui.chessforall.CONTINUE";
+    public static final String ACTION_CANCEL = "ccc.chess.gui.chessforall.CANCEL";
 }
