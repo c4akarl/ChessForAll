@@ -5,6 +5,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteReadOnlyDatabaseException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -150,7 +151,11 @@ public class PgnDb
 //Log.i(TAG, "gameId, fromRow, toRow, scrollGameId: " + gameId + ", " + fromRow + ", " + toRow + ", " + scrollGameId);
 				query = PGN_QUERY + "WHERE _id >= " + fromRow + " AND _id <= " + toRow;
 			}
-			pgnC = db.rawQuery(query +qOrder, null);
+
+// android.database.sqlite.SQLiteReadOnlyDatabaseException App-Version 73
+            try { pgnC = db.rawQuery(query + qOrder, null); }
+            catch (SQLiteReadOnlyDatabaseException e) {e.printStackTrace(); return null;}
+
 			if (pgnC != null)
 				pgnC.moveToFirst();
 			return pgnC;

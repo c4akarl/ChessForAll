@@ -119,10 +119,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
 		aspectRatio = u.getAspectRatio(this);
-		if (aspectRatio > 150)
-			setContentView(R.layout.main);
-		else
-			setContentView(R.layout.main150);
+
+// java.lang.RuntimeException: App-Version 73 : setContentView(R.layout.main);
+		try
+        {
+            if (aspectRatio > 150)
+                setContentView(R.layout.main);
+            else
+                setContentView(R.layout.main150);
+        }
+        catch (RuntimeException e) {e.printStackTrace(); finish(); return;}
 
 		if (userPrefs.getInt("user", 0) == 0)
 			gc.initPrefs = true;
@@ -277,8 +283,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				startEdit(false, false);
 		}
 		updateCurrentPosition("");
-//		if (getIntent().getFlags() == Intent.FLAG_ACTIVITY_NEW_TASK)
-//			getDataFromIntent(getIntent());
 		getDataFromIntent(getIntent());
 
 // 	!!! DIALOG FOR NEW MESSAGE (do not delete)
@@ -566,7 +570,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public boolean getDataFromIntent(Intent intent)
 	{
-//Log.i(TAG, "getDataFromIntent()");
+//Log.i(TAG, "getDataFromIntent(), intentType: " + intent.getType());
 		boolean isOk = false;
 		// call from another Activity, passing the FEN(String)
 		if (intent.getType() != null)
@@ -592,22 +596,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			if (intent.getType().equals(FileManager.PGN_ACTION_CREATE_DB))
 			{
 			    int id = intent.getIntExtra("notificationId", 1);
-				String pgnFileName = intent.getStringExtra("pgnFileName");
-Log.i(TAG, "getDataFromIntent(), intentType: " + intent.getType() + ", id: " + id + ", pgnFileName: " + pgnFileName);
 
-//				File f = new File(pgnFileName + "-db-journal");
-//				if (f.exists())
-//					f.delete();
+//				String pgnFileName = intent.getStringExtra("pgnFileName");
+//Log.i(TAG, "getDataFromIntent(), intentType: " + intent.getType() + ", id: " + id + ", pgnFileName: " + pgnFileName);
 
 				String ns = Context.NOTIFICATION_SERVICE;
 				NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(ns);
 				nMgr.cancel(id);
 
 				return true;
-			}
-			if (intent.getType().equals(FileManager.PGN_ACTION_UPDATE))
-			{
-
 			}
 		}
 
@@ -1836,8 +1833,6 @@ Log.i(TAG, "getDataFromIntent(), intentType: " + intent.getType() + ", id: " + i
 							startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
 							break;
 						case MENU_SETTINGS_COLOR:
-//							optionsColorIntent.putExtra("colorId", finalActions.get(item));
-//							startActivityForResult(optionsColorIntent, OPTIONS_COLOR_SETTINGS);
 							removeDialog(MENU_COLOR_SETTINGS);
 							showDialog(MENU_COLOR_SETTINGS);
 							break;

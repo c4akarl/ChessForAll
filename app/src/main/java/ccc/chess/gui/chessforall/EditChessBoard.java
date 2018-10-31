@@ -825,7 +825,10 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 //Log.i(TAG, "setPieceToFen(), p: "+ p + ", pos: " + pos + ", turnPos: " + turnPos);
 			pos = 63 - pos;
 		}
-		if (fen64.length == 64 & pos < 64)
+
+// java.lang.ArrayIndexOutOfBoundsException: App-Version 73
+//		if (fen64.length == 64 & pos < 64)
+		if (fen64.length == 64 & pos >= 0 & pos < 64)
 		{
 			fen64[pos] = p;
 			CharSequence s = getFenFromChar(fen64);

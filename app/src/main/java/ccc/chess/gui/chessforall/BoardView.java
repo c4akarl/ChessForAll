@@ -458,19 +458,23 @@ public class BoardView extends View
                 }
                 if (possibleMovesTo != null)
                 {
-                    if (possibleMovesTo.get(0).length() >= 4)
+// java.lang.IndexOutOfBoundsException
+                    if (possibleMovesTo.size() > 0)
                     {
-                        int selectedFieldPos = getPosition(possibleMovesTo.get(0).subSequence(2, 4), isBoardTurn);
-                        if (selectedFieldPos == boardPos)
+                        if (possibleMovesTo.get(0).length() >= 4)
                         {
-                            mPaint.setColor(Color.TRANSPARENT);
-                            mPaint.setStyle(Paint.Style.FILL);
-                            canvas.drawRect(mRect, mPaint);
-                            mRect.set(x * fieldSize + STROKE_SIZE_2, y * fieldSize +STROKE_SIZE_2, x * fieldSize +fieldSize -STROKE_SIZE_2, y * fieldSize + fieldSize -STROKE_SIZE_2);
-                            mPaint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
-                            mPaint.setStrokeWidth(STROKE_SIZE);
-                            mPaint.setStyle(Paint.Style.STROKE);
-                            canvas.drawRect(mRect, mPaint);
+                            int selectedFieldPos = getPosition(possibleMovesTo.get(0).subSequence(2, 4), isBoardTurn);
+                            if (selectedFieldPos == boardPos)
+                            {
+                                mPaint.setColor(Color.TRANSPARENT);
+                                mPaint.setStyle(Paint.Style.FILL);
+                                canvas.drawRect(mRect, mPaint);
+                                mRect.set(x * fieldSize + STROKE_SIZE_2, y * fieldSize + STROKE_SIZE_2, x * fieldSize + fieldSize - STROKE_SIZE_2, y * fieldSize + fieldSize - STROKE_SIZE_2);
+                                mPaint.setColor(cv.getColor(cv.COLOR_FIELD_TO_6));
+                                mPaint.setStrokeWidth(STROKE_SIZE);
+                                mPaint.setStyle(Paint.Style.STROKE);
+                                canvas.drawRect(mRect, mPaint);
+                            }
                         }
                     }
                 }
