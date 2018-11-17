@@ -383,18 +383,23 @@ public class ChessHistory
 						}
 		    			if (!isNewBranche)
 	    				{
-// java.lang.IndexOutOfBoundsException:  App-Version 73
-							if (moveHistory.size() >= i +1)
+// java.lang.IndexOutOfBoundsException:  App-Version 73 | 20. Nov. 09:49 in der App-Version 74
+//							if (moveHistory.size() >= i +1)
+							if (moveHistory.size() -1 >= i +1)
 							{
-								if (chessMove.getVal(moveHistory.get(i + 1), 12).equals("0"))
+								try
 								{
-									if (!isFirstVariaton)
+									if (chessMove.getVal(moveHistory.get(i + 1), 12).equals("0"))
 									{
-										isFirstVariaton = true;
-										hasVariations = true;
-										varRank = chessMove.getVal(moveHistory.get(i + 1), 1);
+										if (!isFirstVariaton)
+										{
+											isFirstVariaton = true;
+											hasVariations = true;
+											varRank = chessMove.getVal(moveHistory.get(i + 1), 1);
+										}
 									}
 								}
+								catch (IndexOutOfBoundsException e) {e.printStackTrace();}
 							}
 	    				}
 	    			}

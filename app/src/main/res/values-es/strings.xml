@@ -353,5 +353,6 @@
     <string name="piece_R">T</string>
     <string name="piece_B">A</string>
     <string name="piece_N">C</string>
+    <string name="fmInfoNewFile">¡Archivo nuevo!\nPresiona el botón OK para guardar el juego.</string>
 
 </resources>

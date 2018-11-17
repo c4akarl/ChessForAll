@@ -334,5 +334,6 @@
   <string name="piece_R">Л</string>
   <string name="piece_B">С</string>
   <string name="piece_N">К</string>
+    <string name="fmInfoNewFile">Новый файл!\nНажмите кнопку Да для сохранения игры.</string>
 
 </resources>

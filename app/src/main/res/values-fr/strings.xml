@@ -354,5 +354,6 @@
     <string name="piece_R">T</string>
     <string name="piece_B">F</string>
     <string name="piece_N">C</string>
+    <string name="fmInfoNewFile">Nouveau fichier!\nAppuyer sur OK pour sauvegarder la partie.</string>
 
 </resources>

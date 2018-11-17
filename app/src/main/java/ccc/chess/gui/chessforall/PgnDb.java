@@ -154,7 +154,8 @@ public class PgnDb
 
 // android.database.sqlite.SQLiteReadOnlyDatabaseException App-Version 73
             try { pgnC = db.rawQuery(query + qOrder, null); }
-            catch (SQLiteReadOnlyDatabaseException e) {e.printStackTrace(); return null;}
+            catch (SQLiteReadOnlyDatabaseException e) 	{e.printStackTrace(); return null;}
+			catch (IllegalStateException e) 			{e.printStackTrace(); return null;}
 
 			if (pgnC != null)
 				pgnC.moveToFirst();

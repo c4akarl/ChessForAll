@@ -353,4 +353,5 @@
     <string name="piece_B">L</string>
     <string name="piece_N">S</string>
     <string name="menu_info_clipboardPaste">Von der Zwischenablage einfügen</string>
+    <string name="fmInfoNewFile">Neue Datei!\nDrücken die OK-Taste um das Spiel zu speichern.</string>
 </resources>

@@ -105,7 +105,10 @@ public class NotificationHelper
     }
     public void completed()    
     {
-        mNotificationManager.cancel(notificationId);
+        // E-Mail Adam Reitzner, 20181201 : NullPointerException
+//        mNotificationManager.cancel(notificationId);
+        if (mNotificationManager != null)
+            mNotificationManager.cancel(notificationId);
     }
     
     final String TAG = "NotificationHelper";

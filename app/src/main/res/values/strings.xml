@@ -353,5 +353,6 @@
     <string name="piece_R">R</string>
     <string name="piece_B">B</string>
     <string name="piece_N">N</string>
+    <string name="fmInfoNewFile">New file! Press the OK button to save the game.</string>
 
 </resources>
