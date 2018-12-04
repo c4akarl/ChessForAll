@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -617,6 +618,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				return false;
 			}
 			String intentData = intent.getDataString();
+			intentData = fileIO.getExternalStorageFromContent(intentData); // ? content://
 //Log.i(TAG, "getDataFromIntent(), intentData: " + intentData);
 			if (intent.getType().endsWith("x-chess-pgn") & intentData.endsWith(".pgn"))	//".pgn-db" canceled
 			{
@@ -624,17 +626,28 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				String externLoadPath = fmPrefs.getString("fm_extern_load_path", "");
 				if (!fmPrefs.getString("fm_last_selected_folder", "").equals(""))
 					externLoadPath = fmPrefs.getString("fm_last_selected_folder", "");
+				if (externLoadPath.equals(""))
+				{
+					String basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileIO.BASE_PATH;
+					File f = new File(basePath);
+					if (f.isDirectory())
+						externLoadPath = basePath;
+					else
+					{
+						if (fileIO.createDir(basePath))
+							externLoadPath = basePath;
+					}
+				}
 				File fUri = new File(intentData);
 				String fName = fUri.getName();
 				String fPath = fUri.getParent();
 				boolean isDownload = false;
-				if (fPath.contains("ownload") | fPath.contains("/Android"))
+				if (fPath.contains("ownload") | fPath.contains("/Android") | fPath.contains("ontent"))
 					isDownload = true;
 				if (fPath.startsWith("file:"))
 					fPath = fPath.replace("file:", "");
 				if (!fPath.endsWith("/"))
 					fPath = fPath + "/";
-
 //Log.i(TAG, "getDataFromIntent(), fPath: " + fPath + ", fName: " + fName);
 				if (!isDownload & fileIO.fileExists(fPath, fName))
 				{
@@ -663,6 +676,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						return isOk;
 					}
 				}
+
 				if (fileIO.copyFile(intentData, externLoadPath))							// download
 				{
 					isOk = true;
@@ -3051,6 +3065,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	}
     public void getRunPrefs()
 	{
+	    if (runP.getBoolean("run_set_stockfish_10", true))
+        {
+            SharedPreferences.Editor ed = runP.edit();
+            ed.putBoolean("run_set_stockfish_10", false);
+            ed.putString("run_engineProcess", "");
+            ed.commit();
+        }
     	gridViewSize = runP.getInt("run_gridViewSize", 464);
         gc.pgnStat = runP.getString("run_pgnStat", "-");
         gc.startPgn = runP.getString("run_game0_pgn", "");
@@ -3557,6 +3578,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		boolean	isReady = false;
 //Log.i(TAG, "1 startEnginePlay(), ec.getEngine().process: " + ec.getEngine().process);
 		if (ec.getEngine().process != null)
+//ANR: keyDispatchingTimedOut, 13. Dez. 01:02 in der App-Version 75
 			isReady = ec.getEngine().syncReady();
 //Log.i(TAG, "startEnginePlay(), isReady : " + isReady);
 		if (!isReady)
@@ -5551,11 +5573,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //Log.i(TAG, "sbMoves: "  + sbMoves);
 				infoMessage.set(statPvIdx, sbMoves.toString());
 			}
-			for (int i = 0; i < infoPv.size(); i++)
+//java.lang.IndexOutOfBoundsException: 10. Dez. 04:51 in der App-Version 75
+//			for (int i = 0; i < infoPv.size(); i++)
+			for (int i = 0; i < infoMessage.size(); i++)
 			{
 				if (!infoMessage.get(i).toString().equals(""))
 				{
-					sbInfo.append(infoMessage.get(i)); sbInfo.append("\n");
+					sbInfo.append(infoMessage.get(i));
+					sbInfo.append("\n");
 				}
 			}
 			return sbInfo.toString();

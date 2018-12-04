@@ -28,6 +28,7 @@
 		android:textColor="#000000" />
 	<TextView
 		android:id="@+id/lblPlayerEloA"
+		android:layout_width="70dp"
 		style="@style/c4aTV50"
 		android:clickable="true"
 		android:layout_alignTop="@id/lblPlayerTimeA"
@@ -74,6 +75,7 @@
 	<TextView
 		android:id="@+id/lblPlayerEloB"
 		style="@style/c4aTV50"
+		android:layout_width="70dp"
 		android:clickable="true"
 		android:layout_alignTop="@id/lblPlayerTimeB"
 		android:layout_toLeftOf="@id/lblPlayerTimeB"

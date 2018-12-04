@@ -785,6 +785,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		if (id == ENGINE_INSTALL_DIALOG)
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+//java.lang.NullPointerException:  6. Dez. 08:20 in der App-Version 75
+			if (etFile == null)
+				return null;
 			builder.setTitle(getString(R.string.menu_enginesettings_install) + ": " + etFile.getText());
 			builder.setMessage(ce.mesInitProcess);
 			builder.setPositiveButton(getString(R.string.btn_Ok), null);

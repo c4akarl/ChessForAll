@@ -65,7 +65,7 @@ public class FileIO
 					String path = listExternalDirs[i].getAbsolutePath();
 //Log.i(TAG, "1 getExternalDirs(), path:         " + i + " " + path);
 //Log.i(TAG, "1 getExternalDirs(), storageState: " + i + " " + storageState);
-					int indexMountRoot = path.indexOf("/Android/data/");
+					int indexMountRoot = path.indexOf(ANDROID_DATA);
 					if (indexMountRoot >= 0 && indexMountRoot <= path.length())
 					{
 						//Get the root path for the external directory
@@ -184,9 +184,15 @@ public class FileIO
 
 	public boolean copyFile(String srcFile, String targetPath)
 	{
+//		Log.i(TAG, "copyFile(), srcFile: " + srcFile + "\ntargetPath: " + targetPath);
 		boolean copyOk = false;
 		if (srcFile.startsWith("file:"))
 			srcFile = srcFile.replace("file:", "");
+//        if (srcFile.startsWith("content:") & srcFile.contains(ANDROID_DATA))
+//        {
+//            int x = srcFile.indexOf(ANDROID_DATA);
+//			srcFile = Environment.getExternalStorageDirectory().getAbsolutePath() + srcFile.substring(x, srcFile.length());
+//        }
 		File fFrom = new File(srcFile);
 		File fDir = new File(targetPath);
 		File fTo = new File(targetPath, fFrom.getName());
@@ -212,6 +218,35 @@ public class FileIO
 			}
 		}
 		return copyOk; 
+	}
+
+	public String getExternalStorageFromContent(String content)
+	{
+//Log.i(TAG, "getExternalStorageFromContent(), content: " + content);
+		if (content.startsWith(CONTENT))
+		{
+			if (content.contains(ANDROID_DATA))
+			{
+				int x = content.indexOf(ANDROID_DATA);
+				String srcFile = Environment.getExternalStorageDirectory().getAbsolutePath() + content.substring(x, content.length());
+				File file = new File(srcFile);
+				if (file.exists())
+					return srcFile;
+			}
+			else
+			{
+				if (content.contains(EXTERNAL + "/"))
+				{
+					int x = content.indexOf(EXTERNAL);
+					String srcFile = content.substring(x, content.length());
+					srcFile = srcFile.replace(EXTERNAL, Environment.getExternalStorageDirectory().getAbsolutePath());
+					File file = new File(srcFile);
+					if (file.exists())
+						return srcFile;
+				}
+			}
+		}
+		return content;
 	}
 
 	public String[] getFileArrayFromPath(String path, boolean allDirectory, String extension)
@@ -609,6 +644,10 @@ public class FileIO
     }
 
 	final String TAG = "FileIO";
+	final String CONTENT = "content:";
+	final String EXTERNAL = "/external";
+	final String ANDROID_DATA = "/Android/data";
+	public final String BASE_PATH = "c4a/pgn/";
 	final String SEP = "/";
 	Context context;
 	boolean isPgnFile = false;

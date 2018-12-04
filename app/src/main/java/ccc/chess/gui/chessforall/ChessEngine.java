@@ -227,6 +227,7 @@ public class ChessEngine
 
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
+//ANR: keyDispatchingTimedOut, 13. Dez. 01:02 in der App-Version 75
             CharSequence s = readLineFromProcess(1000);
             if (s.equals("ERROR"))
                 return false;
@@ -596,9 +597,14 @@ public class ChessEngine
 
     private void setChessEngineName(String uciIdName)
     {
-        engineName = uciIdName.substring(8, uciIdName.length());
-        if (uciIdName.startsWith("White(1): id name "))
-            engineName = uciIdName.substring(18, uciIdName.length());
+        if (!STOCKFISH_DEFAULT_NAME.equals(""))
+            engineName = STOCKFISH_DEFAULT_NAME;
+        else
+        {
+            engineName = uciIdName.substring(8, uciIdName.length());
+            if (uciIdName.startsWith("White(1): id name "))
+                engineName = uciIdName.substring(18, uciIdName.length());
+        }
     }
 
     void setUciEloValues(String message)
@@ -836,8 +842,11 @@ public class ChessEngine
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
 
     final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
-    final String ASSET_STOCKFISH_ARM_64 = "Stockfish-9-arm64v8";
-    final String ASSET_STOCKFISH_ARM_7 = "Stockfish-9-armv7";
+    final String ASSET_STOCKFISH_ARM_64 = "stockfish-10-arm64v8";
+    final String ASSET_STOCKFISH_ARM_7 = "stockfish-10-armv7";
+
+//    final String STOCKFISH_DEFAULT_NAME = "Stockfish 10";
+    final String STOCKFISH_DEFAULT_NAME = "";
 
     boolean isLogOn;			// LogFile on/off(SharedPreferences)
 
