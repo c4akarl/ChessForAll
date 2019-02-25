@@ -41,6 +41,7 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
         cbGuUsePgnDatabase = (CheckBox) findViewById(R.id.cbGuUsePgnDatabase);
         cbGuEnableSounds = (CheckBox) findViewById(R.id.cbGuEnableSounds);
         cbGuCoordinates = (CheckBox) findViewById(R.id.cbGuCoordinates);
+		cbGuBlindMode = (CheckBox) findViewById(R.id.cbGuBlindMode);
 		tvGuPieceName = (TextView) findViewById(R.id.tvGuPieceName);
         getPrefs();
 		tvGuPieceName.setText(getString(R.string.pieceNames) + ": " + getPieceNames(pieceNameId));
@@ -148,6 +149,7 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
        	ed.putBoolean("user_options_gui_usePgnDatabase", cbGuUsePgnDatabase.isChecked());
        	ed.putBoolean("user_options_gui_enableSounds", cbGuEnableSounds.isChecked());
        	ed.putBoolean("user_options_gui_Coordinates", cbGuCoordinates.isChecked());
+       	ed.putBoolean("user_options_gui_BlindMode", cbGuBlindMode.isChecked());
        	ed.putInt("user_options_gui_PieceNameId", pieceNameId);
         ed.commit();
 	}
@@ -163,6 +165,7 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 		cbGuUsePgnDatabase.setChecked(userPrefs.getBoolean("user_options_gui_usePgnDatabase", true));
 		cbGuEnableSounds.setChecked(userPrefs.getBoolean("user_options_gui_enableSounds", true));
 		cbGuCoordinates.setChecked(userPrefs.getBoolean("user_options_gui_Coordinates", false));
+		cbGuBlindMode.setChecked(userPrefs.getBoolean("user_options_gui_BlindMode", false));
 		pieceNameId = userPrefs.getInt("user_options_gui_PieceNameId", pieceNameId);
 	}
 
@@ -180,6 +183,7 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 	CheckBox cbGuUsePgnDatabase;
 	CheckBox cbGuEnableSounds;
 	CheckBox cbGuCoordinates;
+	CheckBox cbGuBlindMode;
 	TextView tvGuPieceName;
 
 	int pieceNameId = 0;

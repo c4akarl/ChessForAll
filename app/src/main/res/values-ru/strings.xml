@@ -335,5 +335,9 @@
   <string name="piece_B">С</string>
   <string name="piece_N">К</string>
     <string name="fmInfoNewFile">Новый файл!\nНажмите кнопку Да для сохранения игры.</string>
+    <string name="guBlindMode">Игра вслепую</string>
+    <string name="play_blindMode">Игра вслепую</string>
+  <string name="play_pgnDb">PGN-DB</string>
+    <string name="play_boardNavi">Совет навигации</string>
 
 </resources>

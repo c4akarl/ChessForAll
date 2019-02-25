@@ -45,6 +45,11 @@ public class ChessEngine
         engineProcess = "";
         if (processName.equals(""))
             processName = assetsEngineProcessName;
+
+        //karl, NEW SOCKFISH UPDATE !
+        if (!processName.equals(assetsEngineProcessName) & processName.startsWith("stockfish-") & assetsEngineProcessName.startsWith("stockfish-"))
+            processName = assetsEngineProcessName;
+
         if (!efm.dataFileExist(processName))
         {
             if (isLogOn)
@@ -115,6 +120,9 @@ public class ChessEngine
 
         if (isLogOn)
             Log.i(TAG, "getInternalStockFishProcessName(), cpu abi: " + cpuAbi);
+
+        String osArch = System.getProperty("os.arch");
+        Log.i(TAG, "getInternalStockFishProcessName(), osArch: " + osArch + ", cpuAbi: " + cpuAbi);
 
         if (cpuAbi.startsWith("x86"))
             return ASSET_STOCKFISH_CPU_X86;
@@ -842,8 +850,10 @@ public class ChessEngine
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
 
     final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
-    final String ASSET_STOCKFISH_ARM_64 = "stockfish-10-arm64v8";
-    final String ASSET_STOCKFISH_ARM_7 = "stockfish-10-armv7";
+//    final String ASSET_STOCKFISH_ARM_64 = "stockfish-10-arm64v8";
+//    final String ASSET_STOCKFISH_ARM_7 = "stockfish-10-armv7";
+    final String ASSET_STOCKFISH_ARM_64 = "stockfish-11-arm64v8";
+    final String ASSET_STOCKFISH_ARM_7 = "stockfish-11-armv7a";
 
 //    final String STOCKFISH_DEFAULT_NAME = "Stockfish 10";
     final String STOCKFISH_DEFAULT_NAME = "";

@@ -80,7 +80,7 @@ public class BoardView extends View
     }
 
     public void updateBoardView(CharSequence fen, boolean boardTurn, ArrayList<CharSequence> possibleMoves,
-                                ArrayList<CharSequence> possibleMovesTo, CharSequence lastMove, boolean coordinates)
+                                ArrayList<CharSequence> possibleMovesTo, CharSequence lastMove, boolean coordinates, boolean blindMode)
     {
         posFen = "";
         isBoardTurn = boardTurn;
@@ -88,6 +88,7 @@ public class BoardView extends View
         this.possibleMovesTo = possibleMovesTo;
         this.lastMove = lastMove;
         isCoordinates = coordinates;
+        isBlindMode = blindMode;
         for (int i = 0; i < fen.length(); i++)
         {
             if (fen.charAt(i) == ' ')
@@ -302,20 +303,47 @@ public class BoardView extends View
                     mPaint.setColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
                 canvas.drawRect(mRect, mPaint);
 //Log.d(TAG, "fenMes, boardPos: " + boardPos + ", Char: " + posFen.charAt(boardPos));
-                switch (charFen[boardPos])
+                if (!isBlindMode)
                 {
-                    case 'K': canvas.drawBitmap(whiteK, null, mRect, null); break;
-                    case 'Q': canvas.drawBitmap(whiteQ, null, mRect, null); break;
-                    case 'R': canvas.drawBitmap(whiteR, null, mRect, null); break;
-                    case 'B': canvas.drawBitmap(whiteB, null, mRect, null); break;
-                    case 'N': canvas.drawBitmap(whiteN, null, mRect, null); break;
-                    case 'P': canvas.drawBitmap(whiteP, null, mRect, null); break;
-                    case 'k': canvas.drawBitmap(blackK, null, mRect, null); break;
-                    case 'q': canvas.drawBitmap(blackQ, null, mRect, null); break;
-                    case 'r': canvas.drawBitmap(blackR, null, mRect, null); break;
-                    case 'b': canvas.drawBitmap(blackB, null, mRect, null); break;
-                    case 'n': canvas.drawBitmap(blackN, null, mRect, null); break;
-                    case 'p': canvas.drawBitmap(blackP, null, mRect, null); break;
+                    switch (charFen[boardPos])
+                    {
+                        case 'K':
+                            canvas.drawBitmap(whiteK, null, mRect, null);
+                            break;
+                        case 'Q':
+                            canvas.drawBitmap(whiteQ, null, mRect, null);
+                            break;
+                        case 'R':
+                            canvas.drawBitmap(whiteR, null, mRect, null);
+                            break;
+                        case 'B':
+                            canvas.drawBitmap(whiteB, null, mRect, null);
+                            break;
+                        case 'N':
+                            canvas.drawBitmap(whiteN, null, mRect, null);
+                            break;
+                        case 'P':
+                            canvas.drawBitmap(whiteP, null, mRect, null);
+                            break;
+                        case 'k':
+                            canvas.drawBitmap(blackK, null, mRect, null);
+                            break;
+                        case 'q':
+                            canvas.drawBitmap(blackQ, null, mRect, null);
+                            break;
+                        case 'r':
+                            canvas.drawBitmap(blackR, null, mRect, null);
+                            break;
+                        case 'b':
+                            canvas.drawBitmap(blackB, null, mRect, null);
+                            break;
+                        case 'n':
+                            canvas.drawBitmap(blackN, null, mRect, null);
+                            break;
+                        case 'p':
+                            canvas.drawBitmap(blackP, null, mRect, null);
+                            break;
+                    }
                 }
 
                 if (lastMoveFrom == boardPos)
@@ -327,7 +355,8 @@ public class BoardView extends View
                     canvas.drawCircle(circleX, circleY, circleR, mPaint);
                 }
 
-                if (possibleMoves != null)
+//                if (possibleMoves != null)
+                if (possibleMoves != null & !isBlindMode)
                 {
                     if (possibleMoves.size() > 0)
                     {
@@ -351,7 +380,8 @@ public class BoardView extends View
                         }
                     }
                 }
-                if (possibleMovesTo != null)
+//                if (possibleMovesTo != null)
+                if (possibleMovesTo != null & !isBlindMode)
                 {
                     if (possibleMovesTo.size() >= 2)
                     {
@@ -572,6 +602,7 @@ public class BoardView extends View
     ArrayList<CharSequence> possibleMovesTo;
     CharSequence lastMove;
     boolean isCoordinates;
+    boolean isBlindMode = false;
 
     private char[] charFen = new char[64];
 }

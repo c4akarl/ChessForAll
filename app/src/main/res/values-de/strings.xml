@@ -354,4 +354,8 @@
     <string name="piece_N">S</string>
     <string name="menu_info_clipboardPaste">Von der Zwischenablage einfügen</string>
     <string name="fmInfoNewFile">Neue Datei!\nDrücken die OK-Taste um das Spiel zu speichern.</string>
+    <string name="guBlindMode">Blindspiel-Modus</string>
+    <string name="play_boardNavi">Brett-Navigation</string>
+    <string name="play_blindMode">Blindspiel-Modus</string>
+    <string name="play_pgnDb">PGN-DB</string>
 </resources>

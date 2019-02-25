@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ChessForAll.iml" filepath="$PROJECT_DIR$/ChessForAll.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ChessForAll.iml" filepath="$PROJECT_DIR$/ChessForAll.iml" group="ChessForAll" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="ChessForAll/app" />
     </modules>
   </component>
 </project>

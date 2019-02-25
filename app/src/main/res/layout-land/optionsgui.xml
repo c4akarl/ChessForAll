@@ -48,6 +48,7 @@
 					style="@style/c4aTV4"
 					android:layout_below="@id/cbGuCoordinates"
 					android:layout_width="wrap_content"
+					android:onClick="myClickHandler"
 					android:layout_marginTop="@dimen/margin_1"
 					android:layout_marginLeft="@dimen/margin_1"
 					android:paddingLeft="2dp"
@@ -93,6 +94,10 @@
 					style="@style/c4aCB1"
 					android:layout_below="@id/cbGuEnableSounds"
 					android:text="@string/guDisplayCoordinates" />
+				<CheckBox android:id="@+id/cbGuBlindMode"
+					style="@style/c4aCB1"
+					android:layout_below="@id/cbGuCoordinates"
+					android:text="@string/guBlindMode" />
 			</LinearLayout>
 		</ScrollView>
 	</RelativeLayout>

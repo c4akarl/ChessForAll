@@ -183,7 +183,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
         boardView.setColor();
 		boardView.setOnTouchListener(this);
 		boardView.updateBoardView(gc.fen, gc.isBoardTurn, null, null,
-				null, false);
+				null, false, userPrefs.getBoolean("user_options_gui_BlindMode", false));
 
 		initDrawers();
 
@@ -1141,6 +1141,18 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_cb_coordinates = dialog.findViewById(R.id.cb_coordinates);
 			d_cb_coordinates.setChecked(userPrefs.getBoolean("user_options_gui_Coordinates", false));
 			d_cb_coordinates.setOnClickListener(myViewListener);
+
+			d_cb_boardNavi = dialog.findViewById(R.id.cb_boardNavi);
+			d_cb_boardNavi.setChecked(userPrefs.getBoolean("user_options_gui_gameNavigationBoard", false));
+			d_cb_boardNavi.setOnClickListener(myViewListener);
+
+			d_cb_blindMode = dialog.findViewById(R.id.cb_blindMode);
+			d_cb_blindMode.setChecked(userPrefs.getBoolean("user_options_gui_BlindMode", false));
+			d_cb_blindMode.setOnClickListener(myViewListener);
+
+			d_cb_pgnDb = dialog.findViewById(R.id.cb_pgnDb);
+			d_cb_pgnDb.setChecked(userPrefs.getBoolean("user_options_gui_usePgnDatabase", true));
+			d_cb_pgnDb.setOnClickListener(myViewListener);
 
 			d_cb_engineAutostart = dialog.findViewById(R.id.cb_engineAutostart);
 			d_cb_engineAutostart.setChecked(userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true));
@@ -4054,7 +4066,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					fen = pgnSplit[0] + " " + pgnSplit[1] + " " + pgnSplit[2] + " " + pgnSplit[3] + " " + pgnSplit[4] + " " + pgnSplit[5];
 				}
 				else
+				{
 					fen = pgnData;
+					if (pgnSplit.length == 1)
+						fen = fen + " w - - 0 1";
+				}
 			}
 		}
 		if (fen.equals(""))
@@ -4066,6 +4082,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			gc.cl.newPositionFromFen(fen);
 			gc.startFen = fen;
+
+//			Log.i(TAG, "getFromClipboard(), gc.startFen: " + gc.startFen);
+
 		}
 		if (!gc.cl.p_stat.equals("1"))
 			return;
@@ -6706,7 +6725,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 //Log.i(TAG, "3 updateGui(), lastMove: " + lastMove);
             boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, possibleMoves, possibleMovesTo,
-					lastMove, userPrefs.getBoolean("user_options_gui_Coordinates", false));
+					lastMove, userPrefs.getBoolean("user_options_gui_Coordinates", false),
+                    userPrefs.getBoolean("user_options_gui_BlindMode", false));
 		}
 		if (ec.chessEnginePlayMod != 6)
 		{
@@ -6863,6 +6883,24 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					break;
 				case R.id.cb_coordinates:
 					ed.putBoolean("user_options_gui_Coordinates", ((CheckBox)v).isChecked());
+					ed.commit();
+					updateGui();
+					break;
+
+				case R.id.cb_blindMode:
+					ed.putBoolean("user_options_gui_BlindMode", ((CheckBox)v).isChecked());
+					ed.commit();
+					updateGui();
+					break;
+
+				case R.id.cb_pgnDb:
+					ed.putBoolean("user_options_gui_usePgnDatabase", ((CheckBox)v).isChecked());
+					ed.commit();
+					updateGui();
+					break;
+
+				case R.id.cb_boardNavi:
+					ed.putBoolean("user_options_gui_gameNavigationBoard", ((CheckBox)v).isChecked());
 					ed.commit();
 					updateGui();
 					break;
@@ -7264,6 +7302,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	CheckBox d_cb_audio;
 	CheckBox d_cb_posibleMoves;
 	CheckBox d_cb_coordinates;
+	CheckBox d_cb_boardNavi;
+	CheckBox d_cb_blindMode;
+	CheckBox d_cb_pgnDb;
 	CheckBox d_cb_engineAutostart;
 	CheckBox d_cb_openingBook;
 	CheckBox d_cb_openingBookHints;

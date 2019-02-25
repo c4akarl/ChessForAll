@@ -60,6 +60,28 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal" >
         <CheckBox
+            android:id="@+id/cb_boardNavi"
+            style="@style/c4aCB2"
+            android:text="@string/play_boardNavi" />
+        <CheckBox
+            android:id="@+id/cb_blindMode"
+            style="@style/c4aCB2"
+            android:text="@string/play_blindMode" />
+        <CheckBox
+            android:id="@+id/cb_pgnDb"
+            style="@style/c4aCB2"
+            android:text="@string/play_pgnDb" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cb_d"
+        android:layout_below="@id/cb_c"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal" >
+        <CheckBox
             android:id="@+id/cb_engineAutostart"
             style="@style/c4aCB2"
             android:text="@string/play_engineAutostart" />
@@ -74,8 +96,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/cb_d"
-        android:layout_below="@id/cb_c"
+        android:id="@+id/cb_e"
+        android:layout_below="@id/cb_d"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
@@ -97,7 +119,7 @@
 
     <LinearLayout
         android:id="@+id/btn_play_a"
-        android:layout_below="@id/cb_d"
+        android:layout_below="@id/cb_e"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >

@@ -1077,7 +1077,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			showPosibleMoves();
 //Log.i(TAG, "showChessBoard(), board_turn: " + runP.getBoolean("run_game0_is_board_turn", false));
 		boardView.updateBoardView(newFen, runP.getBoolean("run_game0_is_board_turn", false), null, null, null,
-				true);
+				true, userPrefs.getBoolean("user_options_gui_BlindMode", false));
     }
 
 	public void setStringsValues()

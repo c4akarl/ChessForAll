@@ -354,5 +354,9 @@
     <string name="piece_B">B</string>
     <string name="piece_N">N</string>
     <string name="fmInfoNewFile">New file! Press the OK button to save the game.</string>
+    <string name="guBlindMode">Blindfold mode</string>
+    <string name="play_boardNavi">Board navigation</string>
+    <string name="play_blindMode">Blind mode</string>
+    <string name="play_pgnDb">PGN-DB</string>
 
 </resources>

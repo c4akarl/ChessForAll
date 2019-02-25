@@ -355,5 +355,9 @@
     <string name="piece_B">F</string>
     <string name="piece_N">C</string>
     <string name="fmInfoNewFile">Nouveau fichier!\nAppuyer sur OK pour sauvegarder la partie.</string>
+    <string name="guBlindMode">Mode à l\'aveugle</string>
+    <string name="play_blindMode">Mode à l\'aveugle</string>
+    <string name="play_pgnDb">PGN-DB</string>
+    <string name="play_boardNavi">Carte de navigation</string>
 
 </resources>
