@@ -46,9 +46,9 @@
             style="@style/c4aCB2"
             android:text="@string/play_posibleMoves" />
         <CheckBox
-            android:id="@+id/cb_coordinates"
+            android:id="@+id/cb_quickMove"
             style="@style/c4aCB2"
-            android:text="@string/play_coordinates" />
+            android:text="@string/play_quickMove" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,9 +60,9 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal" >
         <CheckBox
-            android:id="@+id/cb_boardNavi"
+            android:id="@+id/cb_coordinates"
             style="@style/c4aCB2"
-            android:text="@string/play_boardNavi" />
+            android:text="@string/play_coordinates" />
         <CheckBox
             android:id="@+id/cb_blindMode"
             style="@style/c4aCB2"
@@ -166,15 +166,23 @@
         android:id="@+id/btn_menu"
         style="@style/c4aTV4"
         android:layout_below="@id/btn_play_b"
-        android:layout_width="@dimen/tv_width"
+        android:layout_width="@dimen/btn_size"
         android:background="@drawable/rectangleblue"
         android:layout_alignParentLeft="true"
         android:text="@string/menu_title" />
     <TextView
+        android:id="@+id/btn_960"
+        style="@style/c4aTV4"
+        android:layout_below="@id/btn_play_b"
+        android:layout_toRightOf="@id/btn_menu"
+        android:layout_width="@dimen/btn_size"
+        android:background="@drawable/rectangleblue"
+        android:text="@string/chess960" />
+    <TextView
         android:id="@+id/btn_ok"
         style="@style/c4aTV4"
         android:layout_below="@id/btn_play_b"
-        android:layout_width="@dimen/tv_width"
+        android:layout_width="@dimen/btn_size"
         android:background="@drawable/dialoggreen"
         android:layout_alignParentRight="true"
         android:text="@string/pause_start" />

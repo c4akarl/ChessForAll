@@ -339,5 +339,6 @@
     <string name="play_blindMode">Игра вслепую</string>
   <string name="play_pgnDb">PGN-DB</string>
     <string name="play_boardNavi">Совет навигации</string>
+	<string name="play_quickMove">Быстрый ход</string>
 
 </resources>

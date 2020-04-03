@@ -358,5 +358,6 @@
     <string name="play_blindMode">Modo a la ciega</string>
     <string name="play_pgnDb">PGN-DB</string>
     <string name="play_boardNavi">Navegación Junta</string>
+	<string name="play_quickMove">Movimiento rápido</string>
 
 </resources>

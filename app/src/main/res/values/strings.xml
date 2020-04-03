@@ -358,5 +358,7 @@
     <string name="play_boardNavi">Board navigation</string>
     <string name="play_blindMode">Blind mode</string>
     <string name="play_pgnDb">PGN-DB</string>
+	<string name="chess960" translatable="false">Chess960</string>
+    <string name="play_quickMove">quick move</string>
 
 </resources>

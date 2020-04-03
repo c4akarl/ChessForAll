@@ -1138,13 +1138,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_cb_posibleMoves.setChecked(userPrefs.getBoolean("user_options_gui_posibleMoves", true));
 			d_cb_posibleMoves.setOnClickListener(myViewListener);
 
+			d_cb_boardNavi = dialog.findViewById(R.id.cb_quickMove);
+			d_cb_boardNavi.setChecked(userPrefs.getBoolean("user_options_gui_quickMove", true));
+			d_cb_boardNavi.setOnClickListener(myViewListener);
+
 			d_cb_coordinates = dialog.findViewById(R.id.cb_coordinates);
 			d_cb_coordinates.setChecked(userPrefs.getBoolean("user_options_gui_Coordinates", false));
 			d_cb_coordinates.setOnClickListener(myViewListener);
-
-			d_cb_boardNavi = dialog.findViewById(R.id.cb_boardNavi);
-			d_cb_boardNavi.setChecked(userPrefs.getBoolean("user_options_gui_gameNavigationBoard", false));
-			d_cb_boardNavi.setOnClickListener(myViewListener);
 
 			d_cb_blindMode = dialog.findViewById(R.id.cb_blindMode);
 			d_cb_blindMode.setChecked(userPrefs.getBoolean("user_options_gui_BlindMode", false));
@@ -6899,8 +6899,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					updateGui();
 					break;
 
-				case R.id.cb_boardNavi:
-					ed.putBoolean("user_options_gui_gameNavigationBoard", ((CheckBox)v).isChecked());
+				case R.id.cb_quickMove:
+					ed.putBoolean("user_options_gui_quickMove", ((CheckBox)v).isChecked());
 					ed.commit();
 					updateGui();
 					break;
