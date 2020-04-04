@@ -17,6 +17,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.ClipboardManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -49,6 +50,12 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 
 		setGui();
 
+		if (startOptions) {
+			startOptions = false;
+			removeDialog(OPTIONS_DIALOG);
+			showDialog(OPTIONS_DIALOG);
+		}
+
 	}
 
 	public void setGui()
@@ -63,6 +70,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		{
 			currentFen = getIntent().getExtras().getString("currentFen");
 			gridViewSize = getIntent().getExtras().getInt("gridViewSize");
+			startOptions = getIntent().getExtras().getBoolean("startOptions");
 			newFen = initFen(currentFen);
 			isStartActivity = false;
 		}
@@ -155,6 +163,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 
 	public void myClickHandler(View view)
     {	// ClickHandler	(ButtonEvents)
+
+		Log.i(TAG, "A myClickHandler(), view.getId(): " + view.getId());
+
 		if (view.getId() != R.id.color & view.getId() != R.id.turnBoard & view.getId() != R.id.options)
 			setPieces(piece);
 		switch (view.getId())
@@ -163,6 +174,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			finish();
 			break;
 		case R.id.btnOk:
+
+			Log.i(TAG, "B myClickHandler(), view.getId(): " + view.getId());
+
 			finishActivity();
 			break;
 		case R.id.trash:
@@ -214,7 +228,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 
 	public void finishActivity()
     {
-//Log.i(TAG, "finishActivity(), newFen, chess960Id: " + newFen + ", " + chess960Id);
+
+Log.i(TAG, "finishActivity(), newFen, chess960Id: " + newFen + ", " + chess960Id);
+
 		returnIntent.putExtra("newFen", newFen);
 		returnIntent.putExtra("chess960Id", Integer.toString(chess960Id));
 		setResult(RESULT_OK, returnIntent);
@@ -1077,7 +1093,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			showPosibleMoves();
 //Log.i(TAG, "showChessBoard(), board_turn: " + runP.getBoolean("run_game0_is_board_turn", false));
 		boardView.updateBoardView(newFen, runP.getBoolean("run_game0_is_board_turn", false), null, null, null,
-				true, userPrefs.getBoolean("user_options_gui_BlindMode", false));
+				null, true, userPrefs.getBoolean("user_options_gui_BlindMode", false));
     }
 
 	public void setStringsValues()
@@ -1620,6 +1636,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
     boolean isWhiteQueenCastle = false;
     boolean isBlackKingCastle = false;
     boolean isBlackQueenCastle = false;
+    boolean startOptions = false;
 
     final String EN_PASSANT_VALUES = "-abcdefgh";
     final int DRAW50_MIN = 0;

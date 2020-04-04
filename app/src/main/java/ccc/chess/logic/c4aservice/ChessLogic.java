@@ -61,7 +61,7 @@ public class ChessLogic
         	{
 	        	stat = "2";													
 	        	message = stringValues.get(2);		// cl_wrongBasePosition
-Log.i(TAG, "newPosition(), message: " + message);
+//Log.i(TAG, "newPosition(), message: " + message);
 			}
         	history.setIsGameEnd(true);                             		// ERROR: set game end
             history.moveIsFirstInVariation = true;
@@ -79,9 +79,13 @@ Log.i(TAG, "newPosition(), message: " + message);
         setPositionValues(stat, message);
     }
 
-    public void newPositionFromMove(CharSequence fen, CharSequence mv)					// new position	(new move)
+    public void newPositionFromMove(CharSequence fen, CharSequence mv, Boolean addToHistory)					// new position	(new move)
     {
+
+    	//karl mv --> startMove, if fastMove ends with mv : stat = 7 && switch in MainActivity !!!
+
 //Log.i(TAG, "newPositionFromMove(), mv: " + mv + ",   fen: " + fen);
+
 //err>>>: at ccc.chess.logic.c4aservice.ChessLogic.newPositionFromMove (ChessLogic.java:119)
 		if (mv.length() < 2)
 			return;
@@ -153,7 +157,9 @@ Log.i(TAG, "newPosition(), message: " + message);
     			}
     		}
 		}
+
 //    	Log.i(TAG, "mv chess960: " + mv);
+
     	if (mv.length() == 2)			
 		{	// fast move
     		fastMove = pos.getFastMove(mv);
@@ -208,7 +214,9 @@ Log.i(TAG, "newPosition(), message: " + message);
 //    	Log.i(TAG, "mv, validMove: " + mv + ", " + validMove);
     	if (pos.isPromotion)
     		fastMove = mv;
-     	if (mv.length() >= 4 & !pos.isPromotion)			
+
+//     	if (mv.length() >= 4 & !pos.isPromotion)
+     	if (mv.length() >= 4 & !pos.isPromotion & addToHistory)
 		{
     		if (validMove)
     		{
@@ -298,6 +306,13 @@ Log.i(TAG, "newPosition(), message: " + message);
 	        	message = stringValues.get(13);
     		}
 		}
+
+		if (mv.length() >= 4 & !pos.isPromotion & !addToHistory & validMove)
+		{
+			quickMove = fastMove;
+			stat = "2";
+		}
+
     	if (pos.isPromotion)
 			stat = "5";
     	if (gameOver)                    					                       	// GameOver!
@@ -472,7 +487,9 @@ Log.i(TAG, "newPosition(), message: " + message);
 
     public void deleteMovesFromMoveHistory(boolean deleteMoveIdx)			// delete all moves from moveIdx to variation end in History
     {
-//    	Log.i(TAG, "history.getMoveIdx(): " + history.getMoveIdx());
+
+    	Log.i(TAG, "history.getMoveIdx(): " + history.getMoveIdx());
+
     	if (history.getMoveIdx() > 0)                                  	// moves in History?
         {
     		if (deleteMoveIdx)
@@ -1139,7 +1156,9 @@ Log.i(TAG, "newPosition(), message: " + message);
     public ChessHistory history;
     ArrayList<CharSequence> stringValues;	// res/strings
     public CharSequence moveHistoryPrefs;
-    
+	public CharSequence quickMove = "";
+	public Boolean isMv1 = false;
+
     ChessMove chessMove;
     public Chess960 chess960;
     // position values

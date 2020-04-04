@@ -121,7 +121,9 @@ public class ChessHistory
     @SuppressWarnings("unchecked")
 	public void deleteMovesFromHistory(int fromIdx)
     {
-//    	Log.i(TAG, "fromIdx: " + fromIdx);
+
+//    	Log.i(TAG, "deleteMovesFromHistory(), fromIdx: " + fromIdx);
+
     	CharSequence initRank = "";
     	CharSequence initVariant = "";
     	boolean movesDeleted = false;
@@ -187,6 +189,12 @@ public class ChessHistory
     	    			}
     	    		}
     	        }
+
+//				Log.i(TAG, "deleteMovesFromHistory(), fromIdx: " + newMoveIdx + ", deleteFullVariation: " + deleteFullVariation);
+
+	    		if (deleteFullVariation)
+					newMoveIdx--;
+
      			setMoveIdx(newMoveIdx);
 	    		setGameTag("Result", "*");
 	    	}
@@ -197,7 +205,8 @@ public class ChessHistory
     {
     	if (moveHistory.size() != 0)
     	{
-	    	Log.i(TAG, "MoveHistory(Idx, Control, Rank, Variant, Fields, Pgn, Fen):\n");
+//	    	Log.i(TAG, "MoveHistory(Idx, Control, Rank, Variant, Fields, Pgn, Fen):\n");
+
 	    	for (int i = 0; i < moveHistory.size(); i++)
 	        {
 	    		Log.i(TAG, 	i + " "
@@ -210,10 +219,12 @@ public class ChessHistory
 //	    		Log.i(TAG, 	"   >>> baseFen: "
 //	    				+	chessMove.getVal(moveHistory.get(i), 10));
 	        }
-	    	Log.i(TAG, "moveIdx: " + getMoveIdx());
+
+//	    	Log.i(TAG, "moveIdx: " + getMoveIdx());
 //	    	Log.i(TAG, "moveIdx   , baseFEN: " + getMoveIdx() + ", " + chessMove.getVal(moveHistory.get(getMoveIdx()), 10));
     	}
     }
+
     public CharSequence getPreviousValueFromMoveHistory(int idx, CharSequence rank, CharSequence variant, CharSequence control)
     {
     	CharSequence previousValue = "";
@@ -1113,7 +1124,9 @@ public class ChessHistory
     {
     	if (mvIdx >= moveHistory.size())
     		mvIdx = moveHistory.size() -1;
+
 //    	Log.i(TAG, "moveHistory.size(), mvIdx: " +moveHistory.size() + ", " + mvIdx);
+
     	moveIdx = mvIdx;
     }
     public void setMoveRank(CharSequence mRank) {moveRank = mRank;}

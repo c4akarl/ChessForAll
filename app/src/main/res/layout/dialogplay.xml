@@ -166,7 +166,7 @@
         android:id="@+id/btn_menu"
         style="@style/c4aTV4"
         android:layout_below="@id/btn_play_b"
-        android:layout_width="@dimen/btn_size"
+        android:layout_width="@dimen/btn_size_50"
         android:background="@drawable/rectangleblue"
         android:layout_alignParentLeft="true"
         android:text="@string/menu_title" />
@@ -175,14 +175,14 @@
         style="@style/c4aTV4"
         android:layout_below="@id/btn_play_b"
         android:layout_toRightOf="@id/btn_menu"
-        android:layout_width="@dimen/btn_size"
+        android:layout_width="@dimen/btn_size_50"
         android:background="@drawable/rectangleblue"
         android:text="@string/chess960" />
     <TextView
         android:id="@+id/btn_ok"
         style="@style/c4aTV4"
         android:layout_below="@id/btn_play_b"
-        android:layout_width="@dimen/btn_size"
+        android:layout_width="@dimen/btn_size_50"
         android:background="@drawable/dialoggreen"
         android:layout_alignParentRight="true"
         android:text="@string/pause_start" />

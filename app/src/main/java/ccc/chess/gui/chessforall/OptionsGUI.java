@@ -37,6 +37,8 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 		cbGuFlipBoard = (CheckBox) findViewById(R.id.cbGuFlipBoard);
         cbGuLastPosition = (CheckBox) findViewById(R.id.cbGuLastPosition);
         cbGuDisableScreenTimeout = (CheckBox) findViewById(R.id.cbGuDisableScreenTimeout);
+        cbGuPosibleMoves = (CheckBox) findViewById(R.id.cbGuPosibleMoves);
+        cbGuQuickMove = (CheckBox) findViewById(R.id.cbGuQuickMove);
 		cbGuGameNavigationBoard = (CheckBox) findViewById(R.id.cbGuGameNavigationBoard);
         cbGuUsePgnDatabase = (CheckBox) findViewById(R.id.cbGuUsePgnDatabase);
         cbGuEnableSounds = (CheckBox) findViewById(R.id.cbGuEnableSounds);
@@ -145,6 +147,8 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
         ed.putBoolean("user_options_gui_FlipBoard", cbGuFlipBoard.isChecked());
         ed.putBoolean("user_options_gui_LastPosition", cbGuLastPosition.isChecked());
         ed.putBoolean("user_options_gui_disableScreenTimeout", cbGuDisableScreenTimeout.isChecked());
+        ed.putBoolean("user_options_gui_posibleMoves", cbGuPosibleMoves.isChecked());
+        ed.putBoolean("user_options_gui_quickMove", cbGuQuickMove.isChecked());
         ed.putBoolean("user_options_gui_gameNavigationBoard", cbGuGameNavigationBoard.isChecked());
        	ed.putBoolean("user_options_gui_usePgnDatabase", cbGuUsePgnDatabase.isChecked());
        	ed.putBoolean("user_options_gui_enableSounds", cbGuEnableSounds.isChecked());
@@ -161,6 +165,8 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 		cbGuFlipBoard.setChecked(userPrefs.getBoolean("user_options_gui_FlipBoard", false));
 		cbGuLastPosition.setChecked(userPrefs.getBoolean("user_options_gui_LastPosition", false));
 		cbGuDisableScreenTimeout.setChecked(userPrefs.getBoolean("user_options_gui_disableScreenTimeout", false));
+		cbGuPosibleMoves.setChecked(userPrefs.getBoolean("user_options_gui_posibleMoves", true));
+		cbGuQuickMove.setChecked(userPrefs.getBoolean("user_options_gui_quickMove", true));
 		cbGuGameNavigationBoard.setChecked(userPrefs.getBoolean("user_options_gui_gameNavigationBoard", false));
 		cbGuUsePgnDatabase.setChecked(userPrefs.getBoolean("user_options_gui_usePgnDatabase", true));
 		cbGuEnableSounds.setChecked(userPrefs.getBoolean("user_options_gui_enableSounds", true));
@@ -179,6 +185,8 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 	CheckBox cbGuFlipBoard;
 	CheckBox cbGuLastPosition;
 	CheckBox cbGuDisableScreenTimeout;
+	CheckBox cbGuPosibleMoves;
+	CheckBox cbGuQuickMove;
 	CheckBox cbGuGameNavigationBoard;
 	CheckBox cbGuUsePgnDatabase;
 	CheckBox cbGuEnableSounds;

@@ -75,9 +75,19 @@
 					style="@style/c4aCB1"
 					android:layout_below="@id/cbGuLastPosition"
 					android:text="@string/guDisableScreenTimeout" />
-				<CheckBox android:id="@+id/cbGuGameNavigationBoard"
+
+				<CheckBox android:id="@+id/cbGuPosibleMoves"
 					style="@style/c4aCB1"
 					android:layout_below="@id/cbGuDisableScreenTimeout"
+					android:text="@string/play_posibleMoves" />
+				<CheckBox android:id="@+id/cbGuQuickMove"
+					style="@style/c4aCB1"
+					android:layout_below="@id/cbGuPosibleMoves"
+					android:text="@string/play_quickMove" />
+
+				<CheckBox android:id="@+id/cbGuGameNavigationBoard"
+					style="@style/c4aCB1"
+					android:layout_below="@id/cbGuQuickMove"
 					android:text="@string/guGameNavigationBoard" />
 				<CheckBox
 					android:id="@+id/cbGuUsePgnDatabase"

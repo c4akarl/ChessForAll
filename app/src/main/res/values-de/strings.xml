@@ -202,7 +202,7 @@
     <string name="play_lastPosition">Letzte Stellung</string>
     <string name="play_screenTimeout">Bildschirm-Timeout</string>
     <string name="play_audio">Toneffekte</string>
-    <string name="play_posibleMoves">Zugmöglich keiten</string>
+    <string name="play_posibleMoves">Zugmöglichkeiten</string>
     <string name="play_coordinates">Koordinaten</string>
     <string name="play_engineAutostart">Engine Autostart</string>
     <string name="play_openingBook">Eröffnungs-buch</string>

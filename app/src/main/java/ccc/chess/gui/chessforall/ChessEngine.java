@@ -122,7 +122,8 @@ public class ChessEngine
             Log.i(TAG, "getInternalStockFishProcessName(), cpu abi: " + cpuAbi);
 
         String osArch = System.getProperty("os.arch");
-        Log.i(TAG, "getInternalStockFishProcessName(), osArch: " + osArch + ", cpuAbi: " + cpuAbi);
+
+//        Log.i(TAG, "getInternalStockFishProcessName(), osArch: " + osArch + ", cpuAbi: " + cpuAbi);
 
         if (cpuAbi.startsWith("x86"))
             return ASSET_STOCKFISH_CPU_X86;

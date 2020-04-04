@@ -183,7 +183,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
         boardView.setColor();
 		boardView.setOnTouchListener(this);
 		boardView.updateBoardView(gc.fen, gc.isBoardTurn, null, null,
-				null, false, userPrefs.getBoolean("user_options_gui_BlindMode", false));
+				null,null, false, userPrefs.getBoolean("user_options_gui_BlindMode", false));
 
 		initDrawers();
 
@@ -401,13 +401,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			// leftDrawer
 			case MENU_EDIT_BOARD:
-                editChessBoardIntent.putExtra("currentFen", gc.fen);
-                editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
-                editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
-                SharedPreferences.Editor ed = runP.edit();
-                ed.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
-                ed.commit();
-                startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
+				startEditBoard(gc.fen, false);
 				break;
 			case MENU_PGN:
 				removeDialog(MENU_PGN_DIALOG);
@@ -580,13 +574,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			{
 				if (intent.getStringExtra("fenMes") != null & !intent.getStringExtra("fenMes").equals(""))
 				{
-					editChessBoardIntent.putExtra("currentFen", intent.getStringExtra("fenMes"));
-					editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
-					editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
-                    SharedPreferences.Editor ed = runP.edit();
-                    ed.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
-                    ed.commit();
-					startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
+					startEditBoard(intent.getStringExtra("fenMes"), false);
 					return true;
 				}
 			}
@@ -695,6 +683,17 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 		}
 		return isOk;
+	}
+
+	public void startEditBoard(CharSequence fen, Boolean startOptions) {
+		editChessBoardIntent.putExtra("currentFen", fen);
+		editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
+		editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
+		editChessBoardIntent.putExtra("startOptions", startOptions);
+		SharedPreferences.Editor ed3 = runP.edit();
+		ed3.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
+		ed3.commit();
+		startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
 	}
 
 	@Override
@@ -859,7 +858,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			case 4:     {gc.promotionMove = gc.promotionMove + "N"; break;}
 			default:    {gc.promotionMove = gc.promotionMove + "Q"; break;}
 		}
-		gc.cl.newPositionFromMove(gc.fen, gc.promotionMove);
+		gc.cl.newPositionFromMove(gc.fen, gc.promotionMove, true);
 		gc.promotionMove = "";
 		if (gc.cl.p_stat.equals("1"))
 		{
@@ -1106,6 +1105,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (id == PLAY_DIALOG)
 		{
+
             if (ec.chessEnginePaused)
 			    isPaused = true;
             else
@@ -1138,9 +1138,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_cb_posibleMoves.setChecked(userPrefs.getBoolean("user_options_gui_posibleMoves", true));
 			d_cb_posibleMoves.setOnClickListener(myViewListener);
 
-			d_cb_boardNavi = dialog.findViewById(R.id.cb_quickMove);
-			d_cb_boardNavi.setChecked(userPrefs.getBoolean("user_options_gui_quickMove", true));
-			d_cb_boardNavi.setOnClickListener(myViewListener);
+			d_cb_quickMove = dialog.findViewById(R.id.cb_quickMove);
+			d_cb_quickMove.setChecked(userPrefs.getBoolean("user_options_gui_quickMove", true));
+			d_cb_quickMove.setOnClickListener(myViewListener);
 
 			d_cb_coordinates = dialog.findViewById(R.id.cb_coordinates);
 			d_cb_coordinates.setChecked(userPrefs.getBoolean("user_options_gui_Coordinates", false));
@@ -1196,6 +1196,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 			d_btn_menu = dialog.findViewById(R.id.btn_menu);
 			d_btn_menu.setOnClickListener(myViewListener);
+			d_btn_960 = dialog.findViewById(R.id.btn_960);
+			d_btn_960.setOnClickListener(myViewListener);
 			d_cb_newGame = dialog.findViewById(R.id.cb_newGame);
 			d_cb_newGame.setOnClickListener(myViewListener);
 			d_btn_ok = dialog.findViewById(R.id.btn_ok);
@@ -1359,13 +1361,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					switch (finalActions.get(item))
 					{
 						case MENU_EDIT_BOARD:
-							editChessBoardIntent.putExtra("currentFen", gc.fen);
-							editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
-							editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
-							SharedPreferences.Editor ed3 = runP.edit();
-							ed3.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
-							ed3.commit();
-							startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
+							startEditBoard(gc.fen, false);
 							break;
 						case MENU_CLIPBOARD:
 							removeDialog(MENU_CLIPBOARD_DIALOG);
@@ -1434,13 +1430,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					switch (finalActions.get(item))
 					{
 						case MENU_EDIT_BOARD:
-							editChessBoardIntent.putExtra("currentFen", gc.fen);
-							editChessBoardIntent.putExtra("gridViewSize", gridViewSize);
-							editChessBoardIntent.putExtra("fieldSize", getChessFieldSize());
-							SharedPreferences.Editor ed = runP.edit();
-							ed.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
-							ed.commit();
-							startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
+							startEditBoard(gc.fen, false);
 							break;
 						case MENU_EDIT_PGN:
 							startGameData();
@@ -2709,7 +2699,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
+
+//Log.i(TAG, "onActivityResult, requestCode: " + requestCode + ", " + "resultCode: " + resultCode);
 //Log.i(TAG, "onActivityResult, user_play_playMod: " + requestCode + ", " + userPrefs.getInt("user_play_playMod", 1));
+//Log.i(TAG, "onActivityResult, data: " + data);
+
 		updateCurrentPosition("");
 		SharedPreferences.Editor ed = userPrefs.edit();
 		boolean isNewGame = false;
@@ -2915,6 +2909,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 				break;
 			case EDIT_CHESSBOARD_REQUEST_CODE:
+
+//				Log.i(TAG, "onActivityResult, EDIT_CHESSBOARD_REQUEST_CODE");
+
 				if (resultCode == RESULT_OK)
 				{
                     gc.isBoardTurn = runP.getBoolean("run_game0_is_board_turn", false);
@@ -4832,7 +4829,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					{
 						if (chessEngineSearchTask.currentBestMove != "")
 						{
-							gc.cl.newPositionFromMove(gc.fen, chessEngineSearchTask.currentBestMove);
+							gc.cl.newPositionFromMove(gc.fen, chessEngineSearchTask.currentBestMove, true);
 							gc.promotionMove = "";
 							if (gc.cl.p_stat.equals("1"))
 							{
@@ -5882,7 +5879,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			if (bestMove.charAt(4) == 'b') bestMove = ((String) bestMove).substring(0, 4) + 'B';
 			if (bestMove.charAt(4) == 'n') bestMove = ((String) bestMove).substring(0, 4) + 'N';
 		}
-		gc.cl.newPositionFromMove(taskFen, bestMove);
+		gc.cl.newPositionFromMove(taskFen, bestMove, true);
 		if (gc.cl.p_stat.equals("1"))
 		{
 			if (ec.chessEnginePlayMod <= 3 & userPrefs.getBoolean("user_options_gui_FlipBoard", false))
@@ -6169,14 +6166,65 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			try
 			{
 				field = boardView.getChessField(position, gc.isBoardTurn);
+
+//				Log.i(TAG, "moveAction(), gc.cl.quickMove: " + gc.cl.quickMove);
+
 				if (!gc.move.equals(field))
-					gc.move = gc.move.toString() + field;
+				{
+					if (gc.cl.quickMove.length() == 4
+							& gc.cl.quickMove.toString().endsWith(gc.move.toString())
+							& gc.cl.quickMove.toString().startsWith(field.toString())
+					)
+						gc.move = gc.cl.quickMove;
+					else
+						gc.move = gc.move.toString() + field;
+					gc.cl.quickMove = "";
+				}
 				if (gc.move.length() >= 4)
 				{
 					if (gc.move.subSequence (0, 2).equals(gc.move.subSequence (2, 4)))
 						gc.move = gc.move.subSequence (2, gc.move.length());
 				}
-				gc.cl.newPositionFromMove(gc.fen, gc.move);
+
+//				Log.i(TAG, "A moveAction(), gc.move: " + gc.move + ", gc.cl.quickMove: " + gc.cl.quickMove + ", gc.cl.p_stat: " + gc.cl.p_stat);
+
+				//karl no quick move
+				if 	(!userPrefs.getBoolean("user_options_gui_quickMove", true) && gc.move.length() == 2 && !gc.cl.isMv1)
+				{
+
+//					Log.i(TAG, "B moveAction(), user_options_gui_quickMove");
+
+					gc.cl.isMv1 = true;
+					gc.cl.p_possibleMoveList.clear();
+					gc.cl.p_possibleMoveToList.clear();
+					gc.cl.newPositionFromMove(gc.fen, gc.move, false);
+
+//					Log.i(TAG, "A moveAction(), user_options_gui_quickMove");
+//					Log.i(TAG, "A moveAction(), gc.fen: " + gc.fen);
+//					Log.i(TAG, "A moveAction(), field: " + field + ", gc.move: " + gc.move);
+//					Log.i(TAG, "A gc.cl.p_possibleMoveList: " + gc.cl.p_possibleMoveList.size());
+//					Log.i(TAG, "A gc.cl.p_possibleMoveToList: " + gc.cl.p_possibleMoveToList.size());
+//					Log.i(TAG, "A gc.cl.p_hasPossibleMovesTo: " + gc.cl.p_hasPossibleMovesTo + ", gc.cl.p_stat: " + gc.cl.p_stat);
+
+					if (	gc.cl.p_possibleMoveList.size() == 0
+							&& gc.cl.p_possibleMoveToList.size() == 0
+							&& !gc.cl.p_stat.equals("9"))
+					{
+						boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, gc.cl.p_possibleMoveList, gc.cl.p_possibleMoveToList,
+								gc.cl.quickMove, gc.move, userPrefs.getBoolean("user_options_gui_Coordinates", false),
+								userPrefs.getBoolean("user_options_gui_BlindMode", false));
+						gc.cl.p_possibleMoveList.clear();
+						gc.cl.p_possibleMoveToList.clear();
+						return;
+					}
+				}
+				else
+					gc.cl.isMv1 = false;
+
+//				Log.i(TAG, "C moveAction(), gc.move: " + gc.move + ", gc.cl.quickMove: " + gc.cl.quickMove + ", gc.cl.p_stat: " + gc.cl.p_stat);
+
+				gc.cl.newPositionFromMove(gc.fen, gc.move, true);
+
 				if (gc.cl.p_stat.equals("5"))						// Promotion Dialog
 				{
 					updateTime(gc.cl.p_color);
@@ -6198,6 +6246,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							return;
 						}
 					}
+
 					if (gc.cl.p_auto_draw)
 					{
 						if (!ec.chessEnginePaused)
@@ -6624,7 +6673,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 
 		setPlayerData();
+
 //Log.i(TAG, "2 updateGui(), gc.cl.p_fen: " + gc.cl.p_fen + ", gc.isBoardTurn: " + gc.isBoardTurn);
+
 		if (!gc.cl.p_fen.equals(""))
 		{
 			gc.fen = gc.cl.p_fen;
@@ -6697,10 +6748,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (!gc.cl.p_fen.equals(""))
 		{
+
 //Log.i(TAG, "4 updateGui()");
 //Log.i(TAG, "gc.cl.p_move, possibleMoves: " + gc.cl.p_move + ", " + gc.cl.p_hasPossibleMoves);
 //Log.i(TAG, "gc.cl.p_move1, gc.cl.p_move2: " + gc.cl.p_move1 + ", " + gc.cl.p_move2);
 //Log.i(TAG, "gc.cl.p_moveShow1, gc.cl.p_moveShow2: " + gc.cl.p_moveShow1 + ", " + gc.cl.p_moveShow2);
+
 			ArrayList<CharSequence> possibleMoves = null;
 			ArrayList<CharSequence> possibleMovesTo = null;
 			CharSequence lastMove = null;
@@ -6723,10 +6776,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						lastMove = gc.cl.p_moveShow1.toString() + gc.cl.p_moveShow2;
 				}
 			}
+
+//Log.i(TAG, "possibleMoves: " + possibleMoves + ", possibleMovesTo: " + possibleMovesTo + ", lastMove: " + lastMove + ", gc.move: " + gc.move);
+//Log.i(TAG, "possibleMovesTo: " + possibleMovesTo + ", possibleMovesTo.size(): " + possibleMovesTo.size());
+
 //Log.i(TAG, "3 updateGui(), lastMove: " + lastMove);
-            boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, possibleMoves, possibleMovesTo,
-					lastMove, userPrefs.getBoolean("user_options_gui_Coordinates", false),
-                    userPrefs.getBoolean("user_options_gui_BlindMode", false));
+			boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, possibleMoves, possibleMovesTo,
+					lastMove, null, userPrefs.getBoolean("user_options_gui_Coordinates", false),
+					userPrefs.getBoolean("user_options_gui_BlindMode", false));
 		}
 		if (ec.chessEnginePlayMod != 6)
 		{
@@ -6817,6 +6874,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					drawerLayout.openDrawer(Gravity.LEFT);
 					break;
 
+				case R.id.btn_960:
+					removeDialog(PLAY_DIALOG);
+					startEditBoard(gc.fen, true);
+					break;
+
                 case R.id.btn_white:
 					if (!isPaused)
 						setPauseEnginePlay(false);
@@ -6881,26 +6943,24 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					ed.commit();
 					updateGui();
 					break;
+				case R.id.cb_quickMove:
+					ed.putBoolean("user_options_gui_quickMove", ((CheckBox)v).isChecked());
+					ed.commit();
+					updateGui();
+					break;
+
 				case R.id.cb_coordinates:
 					ed.putBoolean("user_options_gui_Coordinates", ((CheckBox)v).isChecked());
 					ed.commit();
 					updateGui();
 					break;
-
 				case R.id.cb_blindMode:
 					ed.putBoolean("user_options_gui_BlindMode", ((CheckBox)v).isChecked());
 					ed.commit();
 					updateGui();
 					break;
-
 				case R.id.cb_pgnDb:
 					ed.putBoolean("user_options_gui_usePgnDatabase", ((CheckBox)v).isChecked());
-					ed.commit();
-					updateGui();
-					break;
-
-				case R.id.cb_quickMove:
-					ed.putBoolean("user_options_gui_quickMove", ((CheckBox)v).isChecked());
 					ed.commit();
 					updateGui();
 					break;
@@ -7301,8 +7361,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	CheckBox d_cb_screenTimeout;
 	CheckBox d_cb_audio;
 	CheckBox d_cb_posibleMoves;
+	CheckBox d_cb_quickMove;
 	CheckBox d_cb_coordinates;
-	CheckBox d_cb_boardNavi;
+//	CheckBox d_cb_boardNavi;
 	CheckBox d_cb_blindMode;
 	CheckBox d_cb_pgnDb;
 	CheckBox d_cb_engineAutostart;
@@ -7320,6 +7381,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	TextView d_btn_analysis;
 
 	TextView d_btn_menu;
+	TextView d_btn_960;
 	CheckBox d_cb_newGame;
 	TextView d_btn_ok;
 
