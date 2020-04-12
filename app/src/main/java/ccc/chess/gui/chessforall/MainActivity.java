@@ -28,8 +28,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.text.ClipboardManager;
 import android.text.InputType;
 import android.text.Layout;
@@ -70,12 +68,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.core.app.ActivityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import ccc.chess.book.ChessParseError;
 import ccc.chess.book.Move;
 import ccc.chess.book.Pair;
 import ccc.chess.book.TextIO;
 import ccc.chess.logic.c4aservice.Chess960;
 import ccc.chess.logic.c4aservice.ChessPosition;
+
+//xxx
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.widget.DrawerLayout;
 
 public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouchListener
 {

@@ -21,7 +21,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
@@ -39,6 +38,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +61,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+//import android.support.v4.widget.SimpleCursorAdapter;
 
 public class FileManager extends Activity implements Ic4aDialogCallback, DialogInterface.OnCancelListener, TextWatcher
 {
@@ -766,7 +768,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 		if (id == DELETE_GAME_DIALOG)
 		{
-			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(getString(R.string.delete_game));
 			builder.setMessage("#" + gameDbId + "\n" + gamePlayerWhite + "\n" + gamePlayerBlack);
 			builder.setPositiveButton(getString(R.string.btn_Ok), new DialogInterface.OnClickListener()
@@ -784,7 +787,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 		if (id == ENGINE_INSTALL_DIALOG)
 		{
-			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //java.lang.NullPointerException:  6. Dez. 08:20 in der App-Version 75
 			if (etFile == null)
 				return null;
