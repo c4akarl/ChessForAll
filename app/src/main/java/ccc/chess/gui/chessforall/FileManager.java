@@ -768,7 +768,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 		if (id == DELETE_GAME_DIALOG)
 		{
-//			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(getString(R.string.delete_game));
 			builder.setMessage("#" + gameDbId + "\n" + gamePlayerWhite + "\n" + gamePlayerBlack);
@@ -787,9 +786,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 		if (id == ENGINE_INSTALL_DIALOG)
 		{
-//			AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//java.lang.NullPointerException:  6. Dez. 08:20 in der App-Version 75
 			if (etFile == null)
 				return null;
 			builder.setTitle(getString(R.string.menu_enginesettings_install) + ": " + etFile.getText());
@@ -2875,8 +2872,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	        mNotificationHelper.completed();
 	        if (getIntent().getExtras().getInt("displayActivity") == 1)
 	        {
-// 13. Okt. 2018 23:27 in der App-Version 72 : java.lang.IllegalStateException:
-//	        	pgnDb.openDb(pgnPath, pgnFile, SQLiteDatabase.OPEN_READONLY);
 	        	if (pgnDb.openDb(pgnPath, pgnFile, SQLiteDatabase.OPEN_READONLY))
 				{
 					setInfoValues("DB-Test - onPostExecute()", runMessage, pgnDb.getDbVersion());
@@ -3325,7 +3320,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				rowCnt = pgnDb.getRowCount(PgnDb.TABLE_NAME);
 				pgnDb.closeDb();
 			}
-//			setQueryDataToTitle(fm_extern_db_key_id, gameId, pgnDb.getRowCount(PgnDb.TABLE_NAME), scroll_game_id, queryCount);
 			setQueryDataToTitle(fm_extern_db_key_id, gameId, rowCnt, scroll_game_id, queryCount);
 
 			if (setInfo)
@@ -3655,7 +3649,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			else
 			{
 
-//				if ((ct -lmPgnDb) <= 3000 | fPgnDbJournal.exists())
 				if (fPgnDbJournal.exists())
 					return STATE_DB_LOCKED;
 				else

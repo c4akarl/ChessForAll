@@ -121,7 +121,7 @@ public class ChessEngine
         if (isLogOn)
             Log.i(TAG, "getInternalStockFishProcessName(), cpu abi: " + cpuAbi);
 
-        String osArch = System.getProperty("os.arch");
+//        String osArch = System.getProperty("os.arch");
 
 //        Log.i(TAG, "getInternalStockFishProcessName(), osArch: " + osArch + ", cpuAbi: " + cpuAbi);
 
@@ -193,16 +193,16 @@ public class ChessEngine
         long checkTime = startTime;
         stopBestMove = "";
         stopPonderMove = "";
-        int cntSpace = 0;
+//        int cntSpace = 0;
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
             CharSequence s = readLineFromProcess(1000);
             if (s.equals("ERROR"))
                 return false;
-            if (s.equals(""))   // null
-                cntSpace++;
-            else
-                cntSpace = 0;
+//            if (s.equals(""))   // null
+//                cntSpace++;
+//            else
+//                cntSpace = 0;
             if (s.toString().startsWith("bestmove"))
             {
                 String[] txtSplit = s.toString().split(" ");

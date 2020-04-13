@@ -77,10 +77,6 @@ import ccc.chess.book.TextIO;
 import ccc.chess.logic.c4aservice.Chess960;
 import ccc.chess.logic.c4aservice.ChessPosition;
 
-//xxx
-//import android.support.v4.app.ActivityCompat;
-//import android.support.v4.widget.DrawerLayout;
-
 public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouchListener
 {
     @Override
@@ -125,7 +121,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
 		aspectRatio = u.getAspectRatio(this);
 
-// java.lang.RuntimeException: App-Version 73 : setContentView(R.layout.main);
 		try
         {
             if (aspectRatio > 150)
@@ -208,7 +203,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
 		mSoundPool = new SoundPool(2, AudioManager.STREAM_RING, 100);
 		soundsMap = new HashMap<Integer, Integer>();
-		soundsMap.put(1, mSoundPool.load(this, R.raw.move_ok, 1));
+//		soundsMap.put(1, mSoundPool.load(this, R.raw.move_ok, 1));
+		soundsMap.put(1, mSoundPool.load(this, R.raw.move_sound, 1));
 		soundsMap.put(2, mSoundPool.load(this, R.raw.move_wrong, 1));
 		setPieceName(userPrefs.getInt("user_options_gui_PieceNameId", 0));
 		if (gc.initPrefs & userPrefs.getBoolean("user_options_gui_StatusBar", false))
@@ -590,7 +586,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			{
 			    int id = intent.getIntExtra("notificationId", 1);
 
-//				String pgnFileName = intent.getStringExtra("pgnFileName");
 //Log.i(TAG, "getDataFromIntent(), intentType: " + intent.getType() + ", id: " + id + ", pgnFileName: " + pgnFileName);
 
 				String ns = Context.NOTIFICATION_SERVICE;
@@ -3591,7 +3586,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		boolean	isReady = false;
 //Log.i(TAG, "1 startEnginePlay(), ec.getEngine().process: " + ec.getEngine().process);
 		if (ec.getEngine().process != null)
-//ANR: keyDispatchingTimedOut, 13. Dez. 01:02 in der App-Version 75
 			isReady = ec.getEngine().syncReady();
 //Log.i(TAG, "startEnginePlay(), isReady : " + isReady);
 		if (!isReady)
@@ -5593,8 +5587,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //Log.i(TAG, "sbMoves: "  + sbMoves);
 				infoMessage.set(statPvIdx, sbMoves.toString());
 			}
-//java.lang.IndexOutOfBoundsException: 10. Dez. 04:51 in der App-Version 75
-//			for (int i = 0; i < infoPv.size(); i++)
 			for (int i = 0; i < infoMessage.size(); i++)
 			{
 				if (!infoMessage.get(i).toString().equals(""))
@@ -7367,7 +7359,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	CheckBox d_cb_posibleMoves;
 	CheckBox d_cb_quickMove;
 	CheckBox d_cb_coordinates;
-//	CheckBox d_cb_boardNavi;
 	CheckBox d_cb_blindMode;
 	CheckBox d_cb_pgnDb;
 	CheckBox d_cb_engineAutostart;
