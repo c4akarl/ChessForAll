@@ -82,7 +82,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-//Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
