@@ -67,6 +67,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -1196,6 +1197,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_btn_menu.setOnClickListener(myViewListener);
 			d_btn_960 = dialog.findViewById(R.id.btn_960);
 			d_btn_960.setOnClickListener(myViewListener);
+			d_btn_960.setOnLongClickListener(myViewListener);
 			d_cb_newGame = dialog.findViewById(R.id.cb_newGame);
 			d_cb_newGame.setOnClickListener(myViewListener);
 			d_btn_ok = dialog.findViewById(R.id.btn_ok);
@@ -3481,7 +3483,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public void startPlay(boolean isNewGame, boolean setClock)
 	{
-//Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
+
+Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
+
 		ec.chessEngineSearching = false;
 		ec.chessEnginePaused = false;
 		gc.cl.pos = new ChessPosition(gc.cl.history.chess960Id);
@@ -6797,8 +6801,41 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
         }
 	}
 
-	public class MyViewListener implements View.OnClickListener
+	public class MyViewListener implements View.OnClickListener, View.OnLongClickListener
 	{
+		// chess960, random position
+		public boolean onLongClick(View v)
+		{
+			if (!ec.chessEnginePaused)
+				pauseStopPlay(false);
+			Random r;
+			int ir = 518;
+			while (ir == 518)
+			{
+				r = new Random();
+				ir = r.nextInt(960);
+			}
+			CharSequence chess960Id = Integer.toString(ir);
+			gc.cl.newPosition(chess960Id, "", "", "", "", "", "", "");
+			if (gc.cl.p_stat.equals("1"))
+			{
+				gc.isGameOver = false;
+				gc.isGameUpdated = true;
+				gc.fen = gc.cl.p_fen;
+				if (gc.cl.p_chess960ID == 518)
+					gc.isChess960 = false;
+				else
+					gc.isChess960 = true;
+				SharedPreferences.Editor ed = userPrefs.edit();
+				ed.putInt("user_game_chess960Id", gc.cl.p_chess960ID);
+				ed.commit();
+				setInfoMessage("", "", "", false);
+				updateGui();
+				startPlay(true, true);
+			}
+			removeDialog(PLAY_DIALOG);
+			return true;
+		}
 		public void onClick(View v)
 		{
 			SharedPreferences.Editor ed = userPrefs.edit();
@@ -6870,6 +6907,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					break;
 
 				case R.id.btn_960:
+
 					removeDialog(PLAY_DIALOG);
 					startEditBoard(gc.fen, true);
 					break;
