@@ -46,7 +46,7 @@ public class ChessEngine
         if (processName.equals(""))
             processName = assetsEngineProcessName;
 
-        //karl, NEW SOCKFISH UPDATE !
+        //karl, NEW STOCKFISH UPDATE !
         if (!processName.equals(assetsEngineProcessName) & processName.startsWith("stockfish-") & assetsEngineProcessName.startsWith("stockfish-"))
             processName = assetsEngineProcessName;
 
@@ -501,7 +501,6 @@ public class ChessEngine
         try {Thread.sleep(100);}
         catch (InterruptedException e) {}
     }
-
 
     public boolean  startNewProcess(boolean fromFile)
     {
