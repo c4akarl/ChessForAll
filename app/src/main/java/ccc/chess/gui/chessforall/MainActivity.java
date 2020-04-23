@@ -57,12 +57,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kalab.chess.enginesupport.ChessEngine;
+import com.kalab.chess.enginesupport.ChessEngineResolver;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -880,6 +884,86 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			updateGui();
 		}
 	}
+
+	private Dialog selectEngineDialog(final boolean abortOnCancel) {
+		final ArrayList<String> items = new ArrayList<>();
+		final ArrayList<String> ids = new ArrayList<>();
+		//karl --> default engines
+//		ids.add("stockfish"); items.add(getString(R.string.stockfish_engine));
+//		ids.add("cuckoochess"); items.add(getString(R.string.cuckoochess_engine));
+
+		if (storageAvailable()) {
+			final String sep = File.separator;
+			final String base = Environment.getExternalStorageDirectory() + sep + engineDir + sep;
+			{
+				ChessEngineResolver resolver = new ChessEngineResolver(this);
+				List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
+				ArrayList<android.util.Pair<String,String>> oexEngines = new ArrayList<>();
+				for (ChessEngine engine : engines) {
+					if ((engine.getName() != null) && (engine.getFileName() != null) &&
+							(engine.getPackageName() != null)) {
+						oexEngines.add(new android.util.Pair<>(EngineUtil.openExchangeFileName(engine),
+								engine.getName()));
+					}
+				}
+				Collections.sort(oexEngines, (lhs, rhs) -> lhs.second.compareTo(rhs.second));
+				for (android.util.Pair<String,String> eng : oexEngines) {
+					ids.add(base + EngineUtil.openExchangeDir + sep + eng.first);
+					items.add(eng.second);
+				}
+			}
+
+			String[] fileNames = FileUtil.findFilesInDirectory(engineDir,
+					fname -> !reservedEngineName(fname));
+			for (String file : fileNames) {
+				ids.add(base + file);
+				items.add(file);
+			}
+		}
+
+		String currEngine = ctrl.getEngine();
+		int defaultItem = 0;
+		final int nEngines = items.size();
+		for (int i = 0; i < nEngines; i++) {
+			if (ids.get(i).equals(currEngine)) {
+				defaultItem = i;
+				break;
+			}
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.select_chess_engine);
+		builder.setSingleChoiceItems(items.toArray(new String[0]), defaultItem,
+				(dialog, item) -> {
+					if ((item < 0) || (item >= nEngines))
+						return;
+					Editor editor = settings.edit();
+					String engine = ids.get(item);
+					editor.putString("engine", engine);
+					editor.apply();
+					dialog.dismiss();
+					int strength = settings.getInt("strength", 1000);
+					setEngineOptions(false);
+					setEngineStrength(engine, strength);
+				});
+		builder.setOnCancelListener(dialog -> {
+			if (!abortOnCancel)
+				reShowDialog(MANAGE_ENGINES_DIALOG);
+		});
+		return builder.create();
+	}
+
+	//karl --> TAG
+	private boolean storageAvailable() {
+		return storagePermission == PermissionState.GRANTED;
+	}
+	private enum PermissionState {
+		UNKNOWN,
+		REQUESTED,
+		GRANTED,
+		DENIED
+	}
+	private PermissionState storagePermission = PermissionState.UNKNOWN;
+	private static String engineDir = "c4a/uci";
 
 	@Override
     protected Dialog onCreateDialog(int id)
