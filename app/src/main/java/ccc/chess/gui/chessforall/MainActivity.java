@@ -885,6 +885,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 	}
 
+	private static boolean reservedEngineName(String name) {
+		//karl defalt engines ???
+		return "cuckoochess".equals(name) ||
+				"stockfish".equals(name) ||
+				name.endsWith(".ini");
+	}
+
 	private Dialog selectEngineDialog(final boolean abortOnCancel) {
 		final ArrayList<String> items = new ArrayList<>();
 		final ArrayList<String> ids = new ArrayList<>();
@@ -913,7 +920,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 			}
 
-			String[] fileNames = FileUtil.findFilesInDirectory(engineDir,
+			String[] fileNames = FileIO.findFilesInDirectory(engineDir,
 					fname -> !reservedEngineName(fname));
 			for (String file : fileNames) {
 				ids.add(base + file);
@@ -921,7 +928,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 		}
 
-		String currEngine = ctrl.getEngine();
+//		String currEngine = ctrl.getEngine();
+		String currEngine = ec.en_1.engineName;
+
 		int defaultItem = 0;
 		final int nEngines = items.size();
 		for (int i = 0; i < nEngines; i++) {
@@ -931,23 +940,28 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.select_chess_engine);
+		builder.setTitle(R.string.menu_enginesettings_select);
 		builder.setSingleChoiceItems(items.toArray(new String[0]), defaultItem,
 				(dialog, item) -> {
 					if ((item < 0) || (item >= nEngines))
 						return;
-					Editor editor = settings.edit();
-					String engine = ids.get(item);
-					editor.putString("engine", engine);
-					editor.apply();
-					dialog.dismiss();
-					int strength = settings.getInt("strength", 1000);
-					setEngineOptions(false);
-					setEngineStrength(engine, strength);
+//					SharedPreferences.Editor editor = settings.edit();
+//					String engine = ids.get(item);
+//					editor.putString("engine", engine);
+//					editor.apply();
+//					dialog.dismiss();
+//					int strength = settings.getInt("strength", 1000);
+//					setEngineOptions(false);
+//					setEngineStrength(engine, strength);
+
+					//karl item --> engine name; start engine ???
+					Log.i(TAG, "selectEngineDialog(), engine name: " + item);
+
 				});
 		builder.setOnCancelListener(dialog -> {
-			if (!abortOnCancel)
-				reShowDialog(MANAGE_ENGINES_DIALOG);
+//			if (!abortOnCancel)
+//				reShowDialog(MANAGE_ENGINES_DIALOG);
+			//karl non ?
 		});
 		return builder.create();
 	}

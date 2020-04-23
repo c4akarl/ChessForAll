@@ -643,6 +643,29 @@ public class FileIO
 		catch (NullPointerException e)		{e.printStackTrace();}
     }
 
+	public interface FileNameFilter {
+		boolean accept(String filename);
+	}
+
+	public static String[] findFilesInDirectory(String dirName, final FileNameFilter filter) {
+		File extDir = Environment.getExternalStorageDirectory();
+		String sep = File.separator;
+		File dir = new File(extDir.getAbsolutePath() + sep + dirName);
+		File[] files = dir.listFiles(pathname -> {
+			if (!pathname.isFile())
+				return false;
+			return (filter == null) || filter.accept(pathname.getAbsolutePath());
+		});
+		if (files == null)
+			files = new File[0];
+		final int numFiles = files.length;
+		String[] fileNames = new String[numFiles];
+		for (int i = 0; i < files.length; i++)
+			fileNames[i] = files[i].getName();
+		Arrays.sort(fileNames, String.CASE_INSENSITIVE_ORDER);
+		return fileNames;
+	}
+
 	final String TAG = "FileIO";
 	final String CONTENT = "content:";
 	final String EXTERNAL = "/external";
