@@ -29,9 +29,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class EngineUtil {
-    static {
-        System.loadLibrary("nativeutil");
-    }
+
+    //karl ???
+//    static {
+//        System.loadLibrary("nativeutil");
+//    }
 
     /** Return file name of the internal stockfish executable. */
     public static String internalStockFishName() {

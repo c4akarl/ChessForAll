@@ -711,6 +711,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					{
 						if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
 							Log.i(TAG, permissions[i] + " denied");
+						if (permissions[i] == Manifest.permission.WRITE_EXTERNAL_STORAGE && grantResults[i] == PackageManager.PERMISSION_GRANTED)
+							storagePermission = PermissionState.GRANTED;
 					}
 				}
 				return;
@@ -892,12 +894,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				name.endsWith(".ini");
 	}
 
-	private Dialog selectEngineDialog(final boolean abortOnCancel) {
+	private Dialog selectEngineFromOexDialog() {
 		final ArrayList<String> items = new ArrayList<>();
 		final ArrayList<String> ids = new ArrayList<>();
 		//karl --> default engines
 //		ids.add("stockfish"); items.add(getString(R.string.stockfish_engine));
 //		ids.add("cuckoochess"); items.add(getString(R.string.cuckoochess_engine));
+
+		Log.i(TAG, "selectEngineDialog(), storageAvailable: " + storageAvailable());
 
 		if (storageAvailable()) {
 			final String sep = File.separator;
@@ -934,50 +938,67 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		int defaultItem = 0;
 		final int nEngines = items.size();
 		for (int i = 0; i < nEngines; i++) {
+
+			Log.i(TAG, "selectEngineDialog(), items.get(i): " + items.get(i) + ", ids.get(i): " + ids.get(i));
+
 			if (ids.get(i).equals(currEngine)) {
 				defaultItem = i;
 				break;
 			}
 		}
+
+		//karl wie MENU_COLOR_SETTINGS
+
+		Log.i(TAG, "selectEngineDialog(), currEngine: " + currEngine + ", nEngines: " + nEngines);
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.menu_enginesettings_select);
-		builder.setSingleChoiceItems(items.toArray(new String[0]), defaultItem,
-				(dialog, item) -> {
-					if ((item < 0) || (item >= nEngines))
-						return;
-//					SharedPreferences.Editor editor = settings.edit();
-//					String engine = ids.get(item);
-//					editor.putString("engine", engine);
-//					editor.apply();
+
+
+//		builder.setSingleChoiceItems(items.toArray(new String[0]), defaultItem,
+//				(dialog, item) -> {
+//					if ((item < 0) || (item >= nEngines))
+//						return;
+////					SharedPreferences.Editor editor = settings.edit();
+////					String engine = ids.get(item);
+////					editor.putString("engine", engine);
+////					editor.apply();
 //					dialog.dismiss();
-//					int strength = settings.getInt("strength", 1000);
-//					setEngineOptions(false);
-//					setEngineStrength(engine, strength);
+////					int strength = settings.getInt("strength", 1000);
+////					setEngineOptions(false);
+////					setEngineStrength(engine, strength);
+//
+//					//karl item --> engine name; start engine ???
+//					Log.i(TAG, "selectEngineDialog(), engine name: " + item);
+//
+//		});
 
-					//karl item --> engine name; start engine ???
-					Log.i(TAG, "selectEngineDialog(), engine name: " + item);
+		builder.setSingleChoiceItems(items.toArray(new String[0]), defaultItem, new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int item)
+			{
+				dialog.dismiss();
 
-				});
-		builder.setOnCancelListener(dialog -> {
+				Log.i(TAG, "selectEngineDialog(), engine name: " + item);
+
+			}
+		});
+
+//		builder.setOnCancelListener(dialog -> {
 //			if (!abortOnCancel)
 //				reShowDialog(MANAGE_ENGINES_DIALOG);
 			//karl non ?
-		});
+//		});
+		builder.setCancelable(true);
 		return builder.create();
 	}
 
 	//karl --> TAG
 	private boolean storageAvailable() {
-		return storagePermission == PermissionState.GRANTED;
+//		return storagePermission == PermissionState.GRANTED;
+		return true;
 	}
-	private enum PermissionState {
-		UNKNOWN,
-		REQUESTED,
-		GRANTED,
-		DENIED
-	}
-	private PermissionState storagePermission = PermissionState.UNKNOWN;
-	private static String engineDir = "c4a/uci";
+
 
 	@Override
     protected Dialog onCreateDialog(int id)
@@ -1730,7 +1751,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						case MENU_ENGINE_SELECT:
 							stopThreads(true);
 							internEngineName = "";
-							startFileManager(LOAD_INTERN_ENGINE_REQUEST_CODE, 1, 0);
+							if (engineFromOex)
+								selectEngineFromOexDialog();
+							else
+								startFileManager(LOAD_INTERN_ENGINE_REQUEST_CODE, 1, 0);
+
 							break;
 						case MENU_ENGINE_AUTOPLAY:
 							startActivityForResult(playEngineIntent, OPTIONS_ENGINE_AUTO_PLAY_REQUEST_CODE);
@@ -3582,7 +3607,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void startPlay(boolean isNewGame, boolean setClock)
 	{
 
-Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
+//Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 
 		ec.chessEngineSearching = false;
 		ec.chessEnginePaused = false;
@@ -7271,6 +7296,15 @@ Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 	final long MAX_DOWNLOAD_DIFF = 20000;
 
 	private static final int PERMISSIONS_REQUEST_CODE = 50;
+	private enum PermissionState {
+		UNKNOWN,
+		REQUESTED,
+		GRANTED,
+		DENIED
+	}
+	private PermissionState storagePermission = PermissionState.UNKNOWN;
+	private static String engineDir = "c4a/uci";
+
 	Util u;
 
 	public SharedPreferences moveHistoryP;
@@ -7546,4 +7580,7 @@ Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 	boolean isSearching = false;
 	boolean isStopAutoPlay = false;
 	int dContinueId = 3; 	// 1 new game, 2 continue, set clock, 3 continue
+
+	boolean engineFromOex = true;
+
 }
