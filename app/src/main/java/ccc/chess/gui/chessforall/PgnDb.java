@@ -104,7 +104,8 @@ public class PgnDb
 	public void closeDb()
     {
 		try		{db.close();}
-		catch 	(SQLiteException e) {e.printStackTrace();}	// database close error
+		catch 	(SQLiteException e) 		{e.printStackTrace();}	// database close error
+		catch  	(NullPointerException e)	{e.printStackTrace();}	// 23. Apr. 2020 14:32 in der App-Version 80
     }
 
 	public Cursor queryPgn(int gameId, int maxCursorRow, boolean isDesc)

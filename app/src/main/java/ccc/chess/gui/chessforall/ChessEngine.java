@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
+import com.kalab.chess.enginesupport.ChessEngineResolver;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ChessEngine
@@ -34,7 +37,9 @@ public class ChessEngine
 
     public boolean initProcess(String processName)
     {
-//Log.i(TAG, "initProcess(), processName: " + processName);
+
+//Log.i(TAG, "initProcess(), processName: " + processName + ", assetsEngineProcessName: " + assetsEngineProcessName);
+
         if (process != null)
             destroyProcess();
         process = null;
@@ -43,27 +48,55 @@ public class ChessEngine
 
         boolean isInitOk = false;
         engineProcess = "";
-        if (processName.equals(""))
-            processName = assetsEngineProcessName;
 
-        //karl, NEW STOCKFISH UPDATE !
-        if (!processName.equals(assetsEngineProcessName) & processName.startsWith("stockfish-") & assetsEngineProcessName.startsWith("stockfish-"))
-            processName = assetsEngineProcessName;
+        // engine oex
+        if (!processName.equals(assetsEngineProcessName))
+        {
+            ChessEngineResolver resolver = new ChessEngineResolver(context);
+            List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
+            for (com.kalab.chess.enginesupport.ChessEngine engine : engines)
+            {
+                if (engine.getName().equals(processName))
+                {
+                    engineProcess = processName;
+                    if (startNewProcess(false))
+                        isInitOk = true;
+                    else
+                        engineProcess = "";
+                }
+            }
+        }
 
-        if (!efm.dataFileExist(processName))
+        // engine intern
+        if (!isInitOk)
         {
-            if (isLogOn)
-                Log.i(TAG, "initProcess(), install dataProcess: " + efm.dataEnginesPath + processName);
-            writeDefaultEngineToData();
+
+            if (processName.equals(""))
+                processName = assetsEngineProcessName;
+
+            //karl, NEW STOCKFISH UPDATE !
+            if (!processName.equals(assetsEngineProcessName) & processName.startsWith("stockfish-") & assetsEngineProcessName.startsWith("stockfish-"))
+                processName = assetsEngineProcessName;
+
+            if (!efm.dataFileExist(processName))
+            {
+                if (isLogOn)
+                    Log.i(TAG, "initProcess(), install dataProcess: " + efm.dataEnginesPath + processName);
+                writeDefaultEngineToData();
+            }
+            if (efm.dataFileExist(processName))
+            {
+                engineProcess = processName;
+                isInitOk = startNewProcess(false);
+            } else
+            {
+				if (isLogOn)
+                 Log.i(TAG, "initProcess(), install error, dataProcess: " + efm.dataEnginesPath + processName);
+            }
         }
-        if (efm.dataFileExist(processName))
-        {
-            engineProcess = processName;
-            isInitOk = startNewProcess(false);
-        }
-        else
-            Log.i(TAG, "initProcess(), install error, dataProcess: " + efm.dataEnginesPath + processName);
+
         return isInitOk;
+
     }
 
     public boolean initProcessFromFile(String filePath, String fileName)
@@ -275,7 +308,8 @@ public class ChessEngine
             }
             if (!errorStream.equals(""))
             {
-                Log.i(TAG, "chess engine process, stream error: \n" + errorStream);
+				if (isLogOn)
+                	Log.i(TAG, "chess engine process, stream error: \n" + errorStream);
                 return true;
             }
         }
@@ -724,7 +758,22 @@ public class ChessEngine
     // NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS
     private final boolean startProcess(String fileName)
     {
-        processBuilder = new ProcessBuilder(efm.dataEnginesPath + fileName);
+        Boolean isOexEngine = false;
+        ChessEngineResolver resolver = new ChessEngineResolver(context);
+        List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
+        for (com.kalab.chess.enginesupport.ChessEngine engine : engines) {
+            if (engine.getName().equals(engineProcess))
+            {
+
+//                Log.i(TAG, "startProcess(), enginePath: " + engine.getEnginePath());
+
+                processBuilder = new ProcessBuilder(engine.getEnginePath());
+                isOexEngine = true;
+                break;
+            }
+        }
+        if (!isOexEngine)
+            processBuilder = new ProcessBuilder(efm.dataEnginesPath + fileName);
         try
         {
             process = processBuilder.start();
@@ -850,12 +899,9 @@ public class ChessEngine
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
 
     final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
-//    final String ASSET_STOCKFISH_ARM_64 = "stockfish-10-arm64v8";
-//    final String ASSET_STOCKFISH_ARM_7 = "stockfish-10-armv7";
     final String ASSET_STOCKFISH_ARM_64 = "stockfish-11-arm64v8";
     final String ASSET_STOCKFISH_ARM_7 = "stockfish-11-armv7a";
 
-//    final String STOCKFISH_DEFAULT_NAME = "Stockfish 10";
     final String STOCKFISH_DEFAULT_NAME = "";
 
     boolean isLogOn;			// LogFile on/off(SharedPreferences)

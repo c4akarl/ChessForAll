@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 
+import com.kalab.chess.enginesupport.ChessEngine;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -664,6 +666,30 @@ public class FileIO
 			fileNames[i] = files[i].getName();
 		Arrays.sort(fileNames, String.CASE_INSENSITIVE_ORDER);
 		return fileNames;
+	}
+
+	public static String openExchangeFileName(ChessEngine engine) {
+		String ret = "";
+		if (engine.getPackageName() != null)
+			ret += sanitizeString(engine.getPackageName());
+		ret += "-";
+		if (engine.getFileName() != null)
+			ret += sanitizeString(engine.getFileName());
+		return ret;
+	}
+
+	private static String sanitizeString(String s) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			if (((ch >= 'A') && (ch <= 'Z')) ||
+					((ch >= 'a') && (ch <= 'z')) ||
+					((ch >= '0') && (ch <= '9')))
+				sb.append(ch);
+			else
+				sb.append('_');
+		}
+		return sb.toString();
 	}
 
 	final String TAG = "FileIO";

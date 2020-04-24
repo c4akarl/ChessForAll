@@ -62,8 +62,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-//import android.support.v4.widget.SimpleCursorAdapter;
-
 public class FileManager extends Activity implements Ic4aDialogCallback, DialogInterface.OnCancelListener, TextWatcher
 {
 	public void onCreate(Bundle savedInstanceState)
@@ -2626,7 +2624,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	    }
 
 	 	@Override
-		protected Void doInBackground(String... params) 
+		protected Void doInBackground(String... params)
 		{
 			pgnPath = params[0];
 			pgnFile = params[1];
@@ -2700,6 +2698,10 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			} 
 			catch (FileNotFoundException e) {e.printStackTrace(); runMessage = "EX 1"; db.close(); return null;}	// error file not exist
 			catch (IOException e) {e.printStackTrace(); runMessage = "EX 2"; db.close(); return null;}
+
+			// 23. Apr. 2020 19:28 in der App-Version 80
+			if (db == null)
+				return null;
 
 			db.beginTransaction();
 
