@@ -78,7 +78,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		fieldSize = getIntent().getExtras().getInt("fieldSize");
 
 		btnCancel = (TextView) findViewById(R.id.btnCancel);
-		btnOk = (TextView) findViewById(R.id.btnOk);
+		btnOk = (TextView) findViewById(R.id.edBtnOk);
 		title = (TextView) findViewById(R.id.title);
 		message = (TextView) findViewById(R.id.message);
 
@@ -174,11 +174,15 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		case R.id.btnCancel:
 			finish();
 			break;
-		case R.id.btnOk:
+		case R.id.edBtnOk:
 
 //			Log.i(TAG, "B myClickHandler(), view.getId(): " + view.getId());
 
-			finishActivity();
+//			finishActivity();
+			returnIntent.putExtra("newFen", newFen);
+			returnIntent.putExtra("chess960Id", Integer.toString(chess960Id));
+			setResult(RESULT_OK, returnIntent);
+			finish();
 			break;
 		case R.id.trash:
 			if (creatingChess960)
@@ -227,16 +231,18 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		showChessBoard();
 	}
 
-	public void finishActivity()
-    {
+//	public void finishActivity()
+//    {
+//
+////Log.i(TAG, "finishActivity(), newFen, chess960Id: " + newFen + ", " + chess960Id);
+//
+//		returnIntent.putExtra("newFen", newFen);
+//		returnIntent.putExtra("chess960Id", Integer.toString(chess960Id));
+//		setResult(RESULT_OK, returnIntent);
+//		finish();
+//
+//    }
 
-//Log.i(TAG, "finishActivity(), newFen, chess960Id: " + newFen + ", " + chess960Id);
-
-		returnIntent.putExtra("newFen", newFen);
-		returnIntent.putExtra("chess960Id", Integer.toString(chess960Id));
-		setResult(RESULT_OK, returnIntent);
-		finish();
-    }
 	@SuppressLint("ClickableViewAccessibility")
     public Dialog onCreateDialog(int id)
 	{

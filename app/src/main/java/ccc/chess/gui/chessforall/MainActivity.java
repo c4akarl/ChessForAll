@@ -533,7 +533,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
     @Override
     protected void onResume()
     {
+		super.onResume();
+
 //Log.i(TAG, "onResume(): " + ec.chessEnginePaused + ", isAppStart: " + isAppStart + ", gc.isAutoPlay: " + gc.isAutoPlay);
+
 		if (isAppStart)
 			startGame();
 
@@ -546,7 +549,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	    	if (progressDialog.isShowing())
 	    		dismissDialog(FILE_LOAD_PROGRESS_DIALOG);
     	}
-        super.onResume();
+
     }
 
 	@Override
@@ -1195,7 +1198,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_cb_engineThinking.setOnClickListener(myViewListener);
 
 			d_cb_ponder = dialog.findViewById(R.id.cb_ponder);
-			d_cb_ponder.setChecked(userPrefs.getBoolean("user_options_enginePlay_Ponder", true));
+			d_cb_ponder.setChecked(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
 			d_cb_ponder.setOnClickListener(myViewListener);
 
 			d_cb_moveList = dialog.findViewById(R.id.cb_moveList);
@@ -3018,7 +3021,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				break;
 			case EDIT_CHESSBOARD_REQUEST_CODE:
 
-//				Log.i(TAG, "onActivityResult, EDIT_CHESSBOARD_REQUEST_CODE");
+//				Log.i(TAG, "onActivityResult, EDIT_CHESSBOARD_REQUEST_CODE" + ", resultCode: " + resultCode);
 
 				if (resultCode == RESULT_OK)
 				{
@@ -3844,7 +3847,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ec.getEngine().setUciStrength(userPrefs.getInt("user_options_enginePlay_strength", 100));
 				ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 0));
 				ec.getEngine().setUciHash(16);
-				ec.getEngine().setUciPonder(userPrefs.getBoolean("user_options_enginePlay_Ponder", true));
+				ec.getEngine().setUciPonder(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
 				ec.getEngine().setStartFen(gc.startFen);
 				ec.getEngine().newGame();
 				break;
@@ -3926,7 +3929,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			if (!ec.chessEnginePaused)
 			{
-				if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", true)
+				if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
 						&	ec.getEngine().isUciPonder
 						& 	ec.chessEngineSearchingPonder & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 					)
@@ -4528,7 +4531,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							else
 							{
 								imageBackground = imageYellow;
-								if (userPrefs.getBoolean("user_options_enginePlay_Ponder", true) & !msgEngine.getText().toString().equals(""))
+								if (userPrefs.getBoolean("user_options_enginePlay_Ponder", false) & !msgEngine.getText().toString().equals(""))
 									msgEngine.setVisibility(TextView.VISIBLE);
 								else
 									msgEngine.setVisibility(TextView.GONE);
@@ -5412,7 +5415,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							currentBestMove = ec.getEngine().stopBestMove;
 							currentPonderMove = ec.getEngine().stopPonderMove;
 						}
-						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", true)
+						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
 								&	ec.getEngine().isUciPonder
 								& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
@@ -5449,7 +5452,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 
 				// user move action: stop ponder search and start new search (ec.ponderUserFen)
-				if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", true)
+				if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
 						&	ec.getEngine().isUciPonder
 						& 	ec.chessEngineSearchingPonder & !ec.ponderUserFen.equals("")
 					)
@@ -5907,7 +5910,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						}
 
 //Log.i(TAG, "enginePlay(), newFen: " + newFen + "\nresult: " + result + ", ponderMove: " + currentPonderMove);
-						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", true)
+						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
 								&	ec.getEngine().isUciPonder
 								& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
@@ -7185,7 +7188,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				case R.id.cb_ponder:
 					ed.putBoolean("user_options_enginePlay_Ponder", ((CheckBox)v).isChecked());
 					ed.commit();
-					if (userPrefs.getBoolean("user_options_enginePlay_Ponder", true))
+					if (userPrefs.getBoolean("user_options_enginePlay_Ponder", false))
 					{
 						Toast.makeText(MainActivity.this, getString(R.string.epPonder) + " " + getString(R.string.enabled), Toast.LENGTH_SHORT).show();
 					}

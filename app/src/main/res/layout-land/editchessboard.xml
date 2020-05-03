@@ -166,7 +166,7 @@
 		android:textColor="#000000" />
 
 	<TextView
-		android:id="@+id/btnOk"
+		android:id="@+id/edBtnOk"
 		style="@style/c4aTV4"
 		android:layout_width="fill_parent"
 		android:layout_toRightOf="@id/blackPieces"
@@ -184,7 +184,7 @@
 		style="@style/c4aTV4"
 		android:layout_width="fill_parent"
 		android:layout_toRightOf="@id/blackPieces"
-		android:layout_above="@id/btnOk"
+		android:layout_above="@id/edBtnOk"
 		android:layout_alignParentRight="true"
 		android:background="@drawable/rectangleyellow"
 		android:onClick="myClickHandler"

@@ -201,7 +201,7 @@
 			android:onClick="myClickHandler"
 			android:text="@string/btn_Cancel" />
 		<TextView
-			android:id="@+id/btnOk"
+			android:id="@+id/edBtnOk"
 			style="@style/c4aTV4"
 			android:layout_weight="1"
 			android:background="@drawable/rectangleyellow"
