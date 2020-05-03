@@ -102,7 +102,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
         ec = new EngineControl(this);				//>011 engine controller
         ec.setBookOptions();
 		tc = new TimeControl();
+
 		getPermissions();
+
 		chess960 = new Chess960();	// needed for "create your own chess position"
 		fileIO = new FileIO(this);
 
@@ -714,15 +716,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					{
 						if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
 							Log.i(TAG, permissions[i] + " denied");
-						if (permissions[i] == Manifest.permission.WRITE_EXTERNAL_STORAGE && grantResults[i] == PackageManager.PERMISSION_GRANTED)
+						if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[i] == PackageManager.PERMISSION_GRANTED)
 							storagePermission = PermissionState.GRANTED;
-						if (permissions[i] == Manifest.permission.INTERNET && grantResults[i] == PackageManager.PERMISSION_GRANTED)
+						if (permissions[i].equals(Manifest.permission.INTERNET) && grantResults[i] == PackageManager.PERMISSION_GRANTED)
 							internetPermission = PermissionState.GRANTED;
-						if (permissions[i] == Manifest.permission.WAKE_LOCK && grantResults[i] == PackageManager.PERMISSION_GRANTED)
+						if (permissions[i].equals(Manifest.permission.WAKE_LOCK) && grantResults[i] == PackageManager.PERMISSION_GRANTED)
 							wakeLockPermission = PermissionState.GRANTED;
 					}
 				}
-				return;
 		}
 	}
 
@@ -902,7 +903,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	}
 
 
-	//karl --> TAG
 	private boolean storageAvailable() {
 		return storagePermission == PermissionState.GRANTED;
 //		return true;
@@ -2029,27 +2029,25 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			final ArrayList<String> items = new ArrayList<>();
 			items.add(ec.en_1.assetsEngineProcessName);
 
-//			Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, storageAvailable: " + storageAvailable());
+//			Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, storagePermission: " + storagePermission);
 
 			if (storageAvailable()) {
-				{
-					ChessEngineResolver resolver = new ChessEngineResolver(this);
-					List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
-					ArrayList<android.util.Pair<String,String>> oexEngines = new ArrayList<>();
-					for (ChessEngine engine : engines) {
-						if ((engine.getName() != null) && (engine.getFileName() != null) &&
-								(engine.getPackageName() != null)) {
-							oexEngines.add(new android.util.Pair<>(FileIO.openExchangeFileName(engine),
-									engine.getName()));
+				ChessEngineResolver resolver = new ChessEngineResolver(this);
+				List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
+				ArrayList<android.util.Pair<String,String>> oexEngines = new ArrayList<>();
+				for (ChessEngine engine : engines) {
+					if ((engine.getName() != null) && (engine.getFileName() != null) &&
+							(engine.getPackageName() != null)) {
+						oexEngines.add(new android.util.Pair<>(FileIO.openExchangeFileName(engine),
+								engine.getName()));
 
 //Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX,  engine.getEnginePath(): " + engine.getEnginePath());
 
-						}
 					}
-					Collections.sort(oexEngines, (lhs, rhs) -> lhs.second.compareTo(rhs.second));
-					for (android.util.Pair<String,String> eng : oexEngines) {
-						items.add(eng.second);
-					}
+				}
+				Collections.sort(oexEngines, (lhs, rhs) -> lhs.second.compareTo(rhs.second));
+				for (android.util.Pair<String,String> eng : oexEngines) {
+					items.add(eng.second);
 				}
 
 				String[] fileNames = FileIO.findFilesInDirectory(engineDir,
@@ -2057,6 +2055,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				for (String file : fileNames) {
 					items.add(file);
 				}
+			}
+			else {
+
+//				Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, storageAvailable: false");
+
 			}
 
 			String currEngine = runP.getString("run_engineProcess", "");
@@ -3125,7 +3128,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				storagePermission = PermissionState.GRANTED;
 			} else {
 				storagePermission = PermissionState.REQUESTED;
-				ActivityCompat.requestPermissions(this, new String[]{extStorage}, 0);
+				ActivityCompat.requestPermissions(this, new String[]{extStorage}, PERMISSIONS_REQUEST_CODE);
 			}
 		}
 		if (internetPermission == PermissionState.UNKNOWN) {
@@ -3135,7 +3138,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				internetPermission = PermissionState.GRANTED;
 			} else {
 				internetPermission = PermissionState.REQUESTED;
-				ActivityCompat.requestPermissions(this, new String[]{extStorage}, 0);
+				ActivityCompat.requestPermissions(this, new String[]{extStorage}, PERMISSIONS_REQUEST_CODE);
 			}
 		}
 		if (wakeLockPermission == PermissionState.UNKNOWN) {
@@ -3145,7 +3148,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				wakeLockPermission = PermissionState.GRANTED;
 			} else {
 				wakeLockPermission = PermissionState.REQUESTED;
-				ActivityCompat.requestPermissions(this, new String[]{extStorage}, 0);
+				ActivityCompat.requestPermissions(this, new String[]{extStorage}, PERMISSIONS_REQUEST_CODE);
 			}
 		}
 
