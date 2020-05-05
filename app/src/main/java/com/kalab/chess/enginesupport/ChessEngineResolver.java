@@ -43,7 +43,8 @@ public class ChessEngineResolver {
 	private static final String ENGINE_PROVIDER_LICENSE_MARKER = "intent.chess.provider.ACTIVATION";
 	private static final String TAG = ChessEngineResolver.class.getSimpleName();
 	private Context context;
-	private String target;
+//	private String target;
+	public String target;
 	/** map of package -> activity for license checks */
 	private Map<String, String> licenseCheckActivities = new HashMap<>();
 

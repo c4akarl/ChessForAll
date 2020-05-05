@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -2028,11 +2029,17 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			final ArrayList<String> items = new ArrayList<>();
 			items.add(ec.en_1.assetsEngineProcessName);
+			//iii enginelist --> items
+			XmlResourceParser parser = getResources().getXml(R.xml.enginelist);
+
 
 //			Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, storagePermission: " + storagePermission);
 
 			if (storageAvailable()) {
 				ChessEngineResolver resolver = new ChessEngineResolver(this);
+
+				Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, resolver.target: " + resolver.target);
+
 				List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
 				ArrayList<android.util.Pair<String,String>> oexEngines = new ArrayList<>();
 				for (ChessEngine engine : engines) {
@@ -2041,7 +2048,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						oexEngines.add(new android.util.Pair<>(FileIO.openExchangeFileName(engine),
 								engine.getName()));
 
-//Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX,  engine.getEnginePath(): " + engine.getEnginePath());
+Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX,  engine.getEnginePath(): " + engine.getEnginePath());
 
 					}
 				}
@@ -2093,6 +2100,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						edR.commit();
 
 						boolean engineIsReady = restartEngine();
+
+						//iii
+						// 1 engineIsReady = restartEngine(items.get(item));
+						// 2 if (engineIsReady) --> edR.putString("run_engineProcess", items.get(item)); else ?
 
 //						Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, engine: " + items.get(item) + ", engineIsReady: " + engineIsReady);
 
@@ -3822,7 +3833,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public boolean restartEngine()
 	{
-//Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
+
+Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
+Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_engineProcess", ""));
+
 		if (ec.getEngine().initProcess(runP.getString("run_engineProcess", "")))
 		{
 			startNewGame(ec.getEngine().engineNumber);
