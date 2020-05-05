@@ -2292,28 +2292,29 @@ public class ChessHistory
 	    return txt;
     }
 
-    public CharSequence getRkrFromFen(CharSequence fen)
-    {
-//    	Log.i(TAG, "getRkrFromFen, fen: " + fen);
-    	CharSequence txtRkr = "";
-	    final CharSequence field[] = {"a", "b", "c", "d", "e", "f", "g", "h"};
-	    if (!fen.equals(""))
-	    {
-		    for (int i = 0; i < 8; i++)
-		    {
-		        if (fen.charAt(i) == 'r')
-		        {
-		        	if (txtRkr == "")
-		        		txtRkr = "" + field[i];
-		        	else
-		        		txtRkr = txtRkr.toString() + field[i];
-		        }
-		        if (fen.charAt(i) == 'k')
-		        	txtRkr = txtRkr.toString() + field[i];
-		    }
-	    }
-	    return txtRkr;
-    }
+//    public CharSequence getRkrFromFen(CharSequence fen)
+//    {
+////    	Log.i(TAG, "getRkrFromFen, fen: " + fen);
+//    	CharSequence txtRkr = "";
+//	    final CharSequence field[] = {"a", "b", "c", "d", "e", "f", "g", "h"};
+//	    if (!fen.equals(""))
+//	    {
+//		    for (int i = 0; i < 8; i++)
+//		    {
+//		        if (fen.charAt(i) == 'r')
+//		        {
+////		        	if (txtRkr == "")
+//		        	if (txtRkr.equals(""))
+//		        		txtRkr = "" + field[i];
+//		        	else
+//		        		txtRkr = txtRkr.toString() + field[i];
+//		        }
+//		        if (fen.charAt(i) == 'k')
+//		        	txtRkr = txtRkr.toString() + field[i];
+//		    }
+//	    }
+//	    return txtRkr;
+//    }
 
     public int getChess960Id() {return chess960Id;}
 

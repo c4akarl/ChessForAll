@@ -430,33 +430,33 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				case 5: 														// engine autoPlay
 					getPathFile();											
 					break;
-				case 81: 														// load engine from SD card
-//Log.i(TAG, "myClickHandler(), fileActionCode: 81, engine path/file: " + etPath.getText().toString() + "/" + etFile.getText().toString());
-					String path = etPath.getText().toString();
-					String file = etFile.getText().toString();
-					if (!path.equals("") & !file.equals(""))
-					{
-						if (ce.initProcessFromFile(path, file))
-						{
-							ed.putString("fm_extern_engine_path", etPath.getText().toString());
-							ed.putString("fm_extern_engine_file", etFile.getText().toString());
-							ed.commit();
-						}
-						removeDialog(ENGINE_INSTALL_DIALOG);
-						showDialog(ENGINE_INSTALL_DIALOG);
-					}
-					break;
-				case 82: 														// load engine from //data
-//Log.i(TAG, "myClickHandler(), fileActionCode: 82, engine path/file: " + etPath.getText().toString() + "/" + etFile.getText().toString());
-					ed.putString("fm_intern_engine_path", etPath.getText().toString());
-					ed.putString("fm_intern_engine_file", etFile.getText().toString());
-					ed.commit();
-					returnIntent = new Intent();
-					returnIntent.putExtra("filePath", etPath.getText().toString());
-					returnIntent.putExtra("fileName", etFile.getText().toString());
-					setResult(RESULT_OK, returnIntent);
-					finish();
-					break;
+//				case 81: 														// load engine from SD card
+////Log.i(TAG, "myClickHandler(), fileActionCode: 81, engine path/file: " + etPath.getText().toString() + "/" + etFile.getText().toString());
+//					String path = etPath.getText().toString();
+//					String file = etFile.getText().toString();
+//					if (!path.equals("") & !file.equals(""))
+//					{
+//						if (ce.initProcessFromFile(path, file))
+//						{
+//							ed.putString("fm_extern_engine_path", etPath.getText().toString());
+//							ed.putString("fm_extern_engine_file", etFile.getText().toString());
+//							ed.commit();
+//						}
+//						removeDialog(ENGINE_INSTALL_DIALOG);
+//						showDialog(ENGINE_INSTALL_DIALOG);
+//					}
+//					break;
+//				case 82: 														// load engine from //data
+////Log.i(TAG, "myClickHandler(), fileActionCode: 82, engine path/file: " + etPath.getText().toString() + "/" + etFile.getText().toString());
+//					ed.putString("fm_intern_engine_path", etPath.getText().toString());
+//					ed.putString("fm_intern_engine_file", etFile.getText().toString());
+//					ed.commit();
+//					returnIntent = new Intent();
+//					returnIntent.putExtra("filePath", etPath.getText().toString());
+//					returnIntent.putExtra("fileName", etFile.getText().toString());
+//					setResult(RESULT_OK, returnIntent);
+//					finish();
+//					break;
 				case 91:														// load opening book
 					if (!etFile.getText().toString().endsWith(BIN_EXTENSION))
 						etFile.setText("");
@@ -601,9 +601,10 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			fileIO.fileDelete(etPath.getText().toString(), fileName);
 			isEditFileChanged = false;
 			etFile.setText("");
-			if (fileActionCode == 82) // load engines from app data after delete a file
-				showFileListFromData("");
-			else
+
+//			if (fileActionCode == 82) // load engines from app data after delete a file
+//				showFileListFromData("");
+//			else
 				showFileList(etPath.getText().toString());
 			fileName = "";
 			fmBtnAction.setVisibility(ImageView.INVISIBLE);
@@ -1328,23 +1329,23 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					}
 				}
 				break;
-			case 2:		// Intern
-				isEditFileChanged = false;
-				fmBtnAction.setVisibility(ImageView.VISIBLE);
-				btnDirBack.setVisibility(ImageView.INVISIBLE);
-				btnMenu.setVisibility(ImageView.INVISIBLE);
-				fmBtnGames.setVisibility(ImageView.INVISIBLE);
-				String setFileName = fmPrefs.getString("fm_intern_engine_file", ce.assetsEngineProcessName);
-				if (!getIntent().getExtras().getString("fileName").equals(""))
-					setFileName = getIntent().getExtras().getString("fileName");
-				if (fileActionCode == 82) // load engine from //data
-				{
-					etPath.setText(fmPrefs.getString("fm_intern_engine_path", ce.efm.dataEnginesPath));
-					etPath.setSelection(etPath.getText().length());
-					etFile.setText(setFileName);
-				}
-				showFileListFromData(setFileName);
-				break;
+//			case 2:		// Intern
+//				isEditFileChanged = false;
+//				fmBtnAction.setVisibility(ImageView.VISIBLE);
+//				btnDirBack.setVisibility(ImageView.INVISIBLE);
+//				btnMenu.setVisibility(ImageView.INVISIBLE);
+//				fmBtnGames.setVisibility(ImageView.INVISIBLE);
+//				String setFileName = fmPrefs.getString("fm_intern_engine_file", ce.assetsEngineProcessName);
+//				if (!getIntent().getExtras().getString("fileName").equals(""))
+//					setFileName = getIntent().getExtras().getString("fileName");
+//				if (fileActionCode == 82) // load engine from //data
+//				{
+//					etPath.setText(fmPrefs.getString("fm_intern_engine_path", ce.efm.dataEnginesPath));
+//					etPath.setSelection(etPath.getText().length());
+//					etFile.setText(setFileName);
+//				}
+//				showFileListFromData(setFileName);
+//				break;
 			case 3:		// WWW
 				etUrl.setVisibility(ListView.VISIBLE);
 				etPath.setVisibility(ListView.INVISIBLE);
@@ -1584,84 +1585,84 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		}
 	}
 
-	public void showFileListFromData(String setFileName)
-	{
-		fmBtnAction.setVisibility(ImageView.VISIBLE);
-		String[] fileA = ce.efm.getFileArrayFromData(ce.efm.dataEnginesPath);
-		if (fileA != null)
-		{
-			files = new ArrayAdapter<String>(this, R.layout.c4alistitem, fileA);
-			lvFiles.setAdapter(files);
-			lvFiles.setTextFilterEnabled(true);
-			lvFiles.setVisibility(ListView.VISIBLE);
-			lvFiles.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-			int scrollId = -1;
-			for (int i = 0; i < fileA.length; i++)
-			{
-				if (fileA[i].equals(setFileName))
-				{
-					scrollId = i;
-					break;
-				}
-			}
-			if (fileA.length > 0 & scrollId == -1)
-			{
-				scrollId = 0;
-				isEditFileChanged = false;
-				etFile.setText(fileA[0]);
-				SharedPreferences.Editor ed = fmPrefs.edit();
-				ed.putString("fm_intern_engine_file", etFile.getText().toString());
-				ed.commit();
-			}
-			if (scrollId >= 0)
-			{
-				lvFiles.setItemChecked(scrollId, true);
-				lvFiles.setSelection(scrollId);
-				int h1 = lvFiles.getHeight();
-				int h2 = 100;
-				lvFiles.setSelectionFromTop(scrollId, h1 / 2 - h2 / 2);
-			}
-
-			lvFiles.setOnItemClickListener(new OnItemClickListener()
-			{
-				@Override
-				public void onItemClick(AdapterView<?> listView, View view, int position, long id)
-				{
-					String itemName = files.getItem(position);
-//Log.i(TAG, "showFileList(), onItemClick(), itemName: " + itemName);
-					showPositionInFileList(position, itemName);
-					etPath.setSelection(etPath.getText().length());
-				}
-			});
-
-			lvFiles.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-			{
-				@Override
-				public boolean onItemLongClick(AdapterView<?> parent, View view,  int position, long id)
-				{
-					String itemName = files.getItem(position);
-					if (fileIO.fileExists(etPath.getText().toString(), itemName))
-					{
-						isEditFileChanged = false;
-						etFile.setText(itemName);
-						fileName = itemName;
-						removeDialog(DELETE_FILE_DIALOG);
-						showDialog(DELETE_FILE_DIALOG);
-					}
-					return true;
-				}
-			});
-			setFmInfo(getString(R.string.fmInfoSelectEngine));
-		}
-		else
-		{
-			etPath.setText("");
-			isEditFileChanged = false;
-			etFile.setText("");
-			removeDialog(PATH_NOT_EXISTS_DIALOG);
-			showDialog(PATH_NOT_EXISTS_DIALOG);
-		}
-	}
+//	public void showFileListFromData(String setFileName)
+//	{
+//		fmBtnAction.setVisibility(ImageView.VISIBLE);
+//		String[] fileA = ce.efm.getFileArrayFromData(ce.efm.dataEnginesPath);
+//		if (fileA != null)
+//		{
+//			files = new ArrayAdapter<String>(this, R.layout.c4alistitem, fileA);
+//			lvFiles.setAdapter(files);
+//			lvFiles.setTextFilterEnabled(true);
+//			lvFiles.setVisibility(ListView.VISIBLE);
+//			lvFiles.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//			int scrollId = -1;
+//			for (int i = 0; i < fileA.length; i++)
+//			{
+//				if (fileA[i].equals(setFileName))
+//				{
+//					scrollId = i;
+//					break;
+//				}
+//			}
+//			if (fileA.length > 0 & scrollId == -1)
+//			{
+//				scrollId = 0;
+//				isEditFileChanged = false;
+//				etFile.setText(fileA[0]);
+//				SharedPreferences.Editor ed = fmPrefs.edit();
+//				ed.putString("fm_intern_engine_file", etFile.getText().toString());
+//				ed.commit();
+//			}
+//			if (scrollId >= 0)
+//			{
+//				lvFiles.setItemChecked(scrollId, true);
+//				lvFiles.setSelection(scrollId);
+//				int h1 = lvFiles.getHeight();
+//				int h2 = 100;
+//				lvFiles.setSelectionFromTop(scrollId, h1 / 2 - h2 / 2);
+//			}
+//
+//			lvFiles.setOnItemClickListener(new OnItemClickListener()
+//			{
+//				@Override
+//				public void onItemClick(AdapterView<?> listView, View view, int position, long id)
+//				{
+//					String itemName = files.getItem(position);
+////Log.i(TAG, "showFileList(), onItemClick(), itemName: " + itemName);
+//					showPositionInFileList(position, itemName);
+//					etPath.setSelection(etPath.getText().length());
+//				}
+//			});
+//
+//			lvFiles.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+//			{
+//				@Override
+//				public boolean onItemLongClick(AdapterView<?> parent, View view,  int position, long id)
+//				{
+//					String itemName = files.getItem(position);
+//					if (fileIO.fileExists(etPath.getText().toString(), itemName))
+//					{
+//						isEditFileChanged = false;
+//						etFile.setText(itemName);
+//						fileName = itemName;
+//						removeDialog(DELETE_FILE_DIALOG);
+//						showDialog(DELETE_FILE_DIALOG);
+//					}
+//					return true;
+//				}
+//			});
+//			setFmInfo(getString(R.string.fmInfoSelectEngine));
+//		}
+//		else
+//		{
+//			etPath.setText("");
+//			isEditFileChanged = false;
+//			etFile.setText("");
+//			removeDialog(PATH_NOT_EXISTS_DIALOG);
+//			showDialog(PATH_NOT_EXISTS_DIALOG);
+//		}
+//	}
 
 	public void showPositionInFileList(int position, String fileName)
 	{

@@ -60,6 +60,8 @@ import android.widget.Toast;
 import com.kalab.chess.enginesupport.ChessEngine;
 import com.kalab.chess.enginesupport.ChessEngineResolver;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -906,7 +908,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	private boolean storageAvailable() {
 		return storagePermission == PermissionState.GRANTED;
-//		return true;
 	}
 
 
@@ -2027,18 +2028,36 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (id == MENU_SELECT_ENGINE_FROM_OEX)
 		{
+
+//			String natDir = getApplicationInfo().nativeLibraryDir;
+
 			final ArrayList<String> items = new ArrayList<>();
-			items.add(ec.en_1.assetsEngineProcessName);
-			//iii enginelist --> items
+//			items.add(ec.en_1.assetsEngineProcessName);
 			XmlResourceParser parser = getResources().getXml(R.xml.enginelist);
+			try {
+				int eventType = parser.getEventType();
+				while (eventType != XmlResourceParser.END_DOCUMENT) {
+					try {
+						if (eventType == XmlResourceParser.START_TAG) {
+							if (parser.getName().equalsIgnoreCase("engine"))
+								items.add(parser.getAttributeValue(null, "name"));
+						}
+						eventType = parser.next();
+					} catch (IOException e) {
+						Log.e(TAG, e.getLocalizedMessage(), e);
+					}
+				}
+			} catch (XmlPullParserException e) {
+				Log.e(TAG, e.getLocalizedMessage(), e);
+//				items.add(ec.en_1.assetsEngineProcessName);
+			}
 
-
-//			Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, storagePermission: " + storagePermission);
+//			Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, natDir: " + natDir);
 
 			if (storageAvailable()) {
 				ChessEngineResolver resolver = new ChessEngineResolver(this);
 
-				Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, resolver.target: " + resolver.target);
+//				Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, resolver.target: " + resolver.target);
 
 				List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
 				ArrayList<android.util.Pair<String,String>> oexEngines = new ArrayList<>();
@@ -2964,33 +2983,33 @@ Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX,  engine.getEnginePath(): " + engine.get
 					setInfoMessage("", null, null, false);
 				}
 				break;
-			case LOAD_EXTERN_ENGINE_REQUEST_CODE:
-				if (resultCode == LOAD_INTERN_ENGINE_REQUEST_CODE)
-				{
-					internEngineName = data.getStringExtra("fileName");
-					startFileManager(LOAD_INTERN_ENGINE_REQUEST_CODE, 1, 0);
-				}
-				break;
-			case LOAD_INTERN_ENGINE_REQUEST_CODE:
-				if (resultCode == RESULT_OK)
-				{
-					String newEngine = data.getStringExtra("fileName");
-					if (!newEngine.equals("") & !data.getStringExtra("fileName").equals(ec.getEngine().engineProcess))
-					{
-
-//Log.i(TAG, "onActivityResult(), current engineProcess: " + ec.getEngine().engineProcess + ", new engineProcess: " + data.getStringExtra("fileName"));
-
-						Toast.makeText(this, getString(R.string.engine_new) + " " + newEngine, Toast.LENGTH_SHORT).show();
-						SharedPreferences.Editor edR = runP.edit();
-						edR.putString("run_engineProcess", newEngine);
-						edR.commit();
-
-						boolean engineIsReady = restartEngine();
-						if (engineIsReady & !ec.chessEnginePausedPrev)
-							startPlay(false, false);
-					}
-				}
-				break;
+//			case LOAD_EXTERN_ENGINE_REQUEST_CODE:
+//				if (resultCode == LOAD_INTERN_ENGINE_REQUEST_CODE)
+//				{
+//					internEngineName = data.getStringExtra("fileName");
+//					startFileManager(LOAD_INTERN_ENGINE_REQUEST_CODE, 1, 0);
+//				}
+//				break;
+//			case LOAD_INTERN_ENGINE_REQUEST_CODE:
+//				if (resultCode == RESULT_OK)
+//				{
+//					String newEngine = data.getStringExtra("fileName");
+//					if (!newEngine.equals("") & !data.getStringExtra("fileName").equals(ec.getEngine().engineProcess))
+//					{
+//
+////Log.i(TAG, "onActivityResult(), current engineProcess: " + ec.getEngine().engineProcess + ", new engineProcess: " + data.getStringExtra("fileName"));
+//
+//						Toast.makeText(this, getString(R.string.engine_new) + " " + newEngine, Toast.LENGTH_SHORT).show();
+//						SharedPreferences.Editor edR = runP.edit();
+//						edR.putString("run_engineProcess", newEngine);
+//						edR.commit();
+//
+//						boolean engineIsReady = restartEngine();
+//						if (engineIsReady & !ec.chessEnginePausedPrev)
+//							startPlay(false, false);
+//					}
+//				}
+//				break;
 			case GAME_DATA_REQUEST_CODE:
 				if (resultCode == RESULT_OK)
 					gc.cl.history.setNewGameTags(data.getCharSequenceExtra("gameTags").toString());
@@ -3834,8 +3853,8 @@ Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX,  engine.getEnginePath(): " + engine.get
 	public boolean restartEngine()
 	{
 
-Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
-Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_engineProcess", ""));
+//Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
+//Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_engineProcess", ""));
 
 		if (ec.getEngine().initProcess(runP.getString("run_engineProcess", "")))
 		{
@@ -5938,7 +5957,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 						}
 						else
 							initPonder();
-						if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+//						if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+						if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2 | ec.chessEnginePlayMod == 3)
 							playSound(1, 0);
 						engineControlTime = System.currentTimeMillis();
 						handlerChessClock.removeCallbacks(mUpdateChessClock);
@@ -6418,6 +6438,7 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 					}
 					if (gc.cl.p_stat.equals("1"))
 					{
+						playSound(1, 0);
 						if (userPrefs.getBoolean("user_options_gui_FlipBoard", false))
 							startTurnBoard();
 						gc.isGameUpdated = false;
