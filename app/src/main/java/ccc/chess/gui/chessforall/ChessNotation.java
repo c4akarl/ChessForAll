@@ -1,5 +1,6 @@
 package ccc.chess.gui.chessforall;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,8 +9,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class ChessNotation extends Activity
 {
+	@SuppressLint("SetTextI18n")
 	public void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
@@ -18,9 +22,9 @@ public class ChessNotation extends Activity
 		userP = getSharedPreferences("user", 0);
 		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.notation);
-        title = (TextView) findViewById(R.id.title);
-        notationText = (TextView) findViewById(R.id.ntTv);
-        switch (getIntent().getExtras().getInt("textValue"))
+        title = findViewById(R.id.title);
+        notationText = findViewById(R.id.ntTv);
+        switch (Objects.requireNonNull(getIntent().getExtras()).getInt("textValue"))
 		{
 		case 1:
 			notationText.setText(getIntent().getExtras().getString("moves"));
@@ -46,18 +50,18 @@ public class ChessNotation extends Activity
 			finish();
 			break;
 		case R.id.ntBtnMove:
-			notationText.setText(getIntent().getExtras().getString("moves"));
+			notationText.setText(Objects.requireNonNull(getIntent().getExtras()).getString("moves"));
 			break;
 		case R.id.ntBtnMoveText:
-			notationText.setText(getIntent().getExtras().getString("moves_text"));
+			notationText.setText(Objects.requireNonNull(getIntent().getExtras()).getString("moves_text"));
 			break;
 		case R.id.ntBtnPgn:
-			notationText.setText(getIntent().getExtras().getString("pgn"));
+			notationText.setText(Objects.requireNonNull(getIntent().getExtras()).getString("pgn"));
 			break;
 		}
 	}
 
-	final String TAG = "ChessNotation";
+//	final String TAG = "ChessNotation";
 	Util u;
 	SharedPreferences userP;
 	TextView title = null;

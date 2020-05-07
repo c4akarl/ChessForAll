@@ -206,6 +206,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		optionsEnginePlayIntent = new Intent(this, OptionsEnginePlay.class);
 		optionsColorIntent = new Intent(this, OptionsColor.class);
 		editChessBoardIntent = new Intent(this, EditChessBoard.class);
+
 	}
 
 	public void startGame()
@@ -703,7 +704,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		editChessBoardIntent.putExtra("startOptions", startOptions);
 		SharedPreferences.Editor ed3 = runP.edit();
 		ed3.putBoolean("run_game0_is_board_turn", gc.isBoardTurn);
-		ed3.commit();
+//		ed3.commit();
+		ed3.apply();
 		startActivityForResult(editChessBoardIntent, EDIT_CHESSBOARD_REQUEST_CODE);
 	}
 
@@ -3455,7 +3457,7 @@ Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX,  engine.getEnginePath(): " + engine.get
 
 	public void stopAllEngines(boolean isAppEnd)
 	{	//>381 shutdownEngine() and releaseEngineService()
-		ec.setEngineNumber(1);
+		ec.setEngineNumber();
 		if (ec.getEngine() != null)
 			stopComputerThinking(true);
 		if (!isAppEnd)
@@ -7434,7 +7436,7 @@ Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX,  engine.getEnginePath(): " + engine.get
 	final static int OPTIONS_PLAY_REQUEST_CODE = 19;
 	final static int OPTIONS_ENGINE_PLAY_REQUEST_CODE = 21;
 	final static int OPTIONS_COLOR_SETTINGS = 22;
-	final static int EDIT_CHESSBOARD_REQUEST_CODE = 17;
+	final static int EDIT_CHESSBOARD_REQUEST_CODE = 44;
 	final static int CHESS960_POSITION_REQUEST_CODE = 20;
 	final static int ENGINE_SETTING_REQUEST_CODE = 41;
 	final static int RATE_REQUEST_CODE = 42;

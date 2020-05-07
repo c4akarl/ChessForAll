@@ -77,30 +77,30 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 //Log.i(TAG, "setGui(), newFen: " + newFen + ", chess960Id: " + chess960Id);
 		fieldSize = getIntent().getExtras().getInt("fieldSize");
 
-		btnCancel = (TextView) findViewById(R.id.btnCancel);
-		btnOk = (TextView) findViewById(R.id.edBtnOk);
-		title = (TextView) findViewById(R.id.title);
-		message = (TextView) findViewById(R.id.message);
+		btnCancel = findViewById(R.id.btnCancel);
+		btnOk = 	findViewById(R.id.edBtnOk);
+		title = 	findViewById(R.id.title);
+		message = 	findViewById(R.id.message);
 
-		wKing = (ImageView) findViewById(R.id.wKing);
-		wQueen = (ImageView) findViewById(R.id.wQueen);
-		wRook = (ImageView) findViewById(R.id.wRook);
-		wBishop = (ImageView) findViewById(R.id.wBishop);
-		wKnight = (ImageView) findViewById(R.id.wKnight);
-		wPawn = (ImageView) findViewById(R.id.wPawn);
-		trash = (ImageView) findViewById(R.id.trash);
-		turnBoard = (ImageView) findViewById(R.id.turnBoard);
+		wKing = 	findViewById(R.id.wKing);
+		wQueen =  	findViewById(R.id.wQueen);
+		wRook =  	findViewById(R.id.wRook);
+		wBishop = 	findViewById(R.id.wBishop);
+		wKnight = 	findViewById(R.id.wKnight);
+		wPawn = 	findViewById(R.id.wPawn);
+		trash = 	findViewById(R.id.trash);
+		turnBoard = findViewById(R.id.turnBoard);
 
-		bKing = (ImageView) findViewById(R.id.bKing);
-		bQueen = (ImageView) findViewById(R.id.bQueen);
-		bRook = (ImageView) findViewById(R.id.bRook);
-		bBishop = (ImageView) findViewById(R.id.bBishop);
-		bKnight = (ImageView) findViewById(R.id.bKnight);
-		bPawn = (ImageView) findViewById(R.id.bPawn);
-		color = (ImageView) findViewById(R.id.color);
-		options = (ImageView) findViewById(R.id.options);
+		bKing = 	findViewById(R.id.bKing);
+		bQueen = 	findViewById(R.id.bQueen);
+		bRook = 	findViewById(R.id.bRook);
+		bBishop = 	findViewById(R.id.bBishop);
+		bKnight = 	findViewById(R.id.bKnight);
+		bPawn = 	findViewById(R.id.bPawn);
+		color = 	findViewById(R.id.color);
+		options = 	findViewById(R.id.options);
 
-		boardView = (BoardView) findViewById(R.id.editBoardView);
+	boardView = 	findViewById(R.id.editBoardView);
 		boardView.setColor();
 		boardView.setOnTouchListener(this);
 		userPrefs.getBoolean("user_options_gui_Coordinates", false);
@@ -179,6 +179,8 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 //			Log.i(TAG, "B myClickHandler(), view.getId(): " + view.getId());
 
 //			finishActivity();
+			Intent returnIntent;
+			returnIntent = new Intent();
 			returnIntent.putExtra("newFen", newFen);
 			returnIntent.putExtra("chess960Id", Integer.toString(chess960Id));
 			setResult(RESULT_OK, returnIntent);
@@ -1575,7 +1577,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	CharSequence fenEnPassant = "-";
 	CharSequence fenDraw50 = "0";
 	CharSequence fenMoveCounter = "1";
-	Intent returnIntent = new Intent();
+//	Intent returnIntent = new Intent();
 	BoardView boardView;
 
 	ImageView wKing;

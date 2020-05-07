@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 
+import java.util.Objects;
+
 public class ChessMoveText extends Activity
 {
 	public void onCreate(Bundle savedInstanceState)
@@ -18,28 +20,28 @@ public class ChessMoveText extends Activity
 		userP = getSharedPreferences("user", 0);
 		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.movetext);
-        moveText = (EditText) findViewById(R.id.mtEt);
-        moveText.setText(getIntent().getExtras().getString("move_text"));
+        moveText = findViewById(R.id.mtEt);
+//        moveText.setText(getIntent().getExtras().getString("move_text"));
+        moveText.setText(Objects.requireNonNull(getIntent().getExtras()).getString("move_text"));
         moveText.requestFocus();
  	}
 	public void myClickHandler(View view) 		// ClickHandler 					(ButtonEvents)
     {
-		switch (view.getId()) 
+//		switch (view.getId())
+		if (view.getId() == R.id.mtBtnOk)
 		{
-		case R.id.mtBtnOk:
 			String text = moveText.getText().toString();
 			if (text.contains("\n"))
 				text = text.replace("\n", " ");
 			if (text.endsWith(" "))
-				text = text.replaceAll("\\s+$", "");;
+				text = text.replaceAll("\\s+$", "");
 			returnIntent.putExtra("text", text);
 			setResult(RESULT_OK, returnIntent);
 			finish();
-			break;
 		}
 	}
 
-	final String TAG = "ChessMoveText";
+//	final String TAG = "ChessMoveText";
 	Util u;
 	SharedPreferences userP;
 	Intent returnIntent = new Intent();

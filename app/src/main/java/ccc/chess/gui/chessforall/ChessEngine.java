@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class ChessEngine
 {
-    private ChessEngine(Context con, int eNumber)
+    ChessEngine(Context con, int eNumber)
     {
         this.context = con;
         engineNumber = eNumber;

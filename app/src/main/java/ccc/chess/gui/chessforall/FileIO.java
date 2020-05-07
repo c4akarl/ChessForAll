@@ -23,26 +23,24 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-public class FileIO
+class FileIO
 {
 
-	public FileIO(Context context)
+	FileIO(Context context)
 	{
 		this.context = context;
 	}
 
-	public String getExternalDirectory(int var)
+	String getExternalDirectory(int var)
 	{
 		return Environment.getExternalStorageDirectory().getAbsolutePath() + SEP;
 	}
 
-	public String[] getExternalDirs()
+	String[] getExternalDirs()
 	{
 		String[] dirs = null;
 		String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
 //err>>>: at ccc.chess.gui.chessforall.FileIO.getExternalDirs (FileIO.java:45)
-		if (externalStorage == null)
-			externalStorage = "";
 
 		// Android API < 19 (Build.VERSION_CODES.KITKAT)
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
@@ -578,14 +576,14 @@ public class FileIO
 		return pgnData;
     }
 
-	public void printData(int gameControl, String lastGame, String newGame, String pgnStat, long gameOffset, long newGameOffset)
+	private void printData(int gameControl, String lastGame, String newGame, String pgnStat, long gameOffset, long newGameOffset)
 	{	// TEST ONLY !!!
 //		Log.i(TAG, "gameControl, pgnStat, gameOffset, newGameOffset: " + gameControl + ", " + pgnStat + ", " + gameOffset + ", " + newGameOffset);
 //		Log.i(TAG, "last game: \n" + lastGame + "\n\n");
 //		Log.i(TAG, "new game: \n" + newGame);
 	}
 
-	public String getDataFromInputStream(InputStream is) 
+	String getDataFromInputStream(InputStream is)
     {	// for www(pgn)
 		String txt = "";
 		if (is != null)
@@ -593,7 +591,7 @@ public class FileIO
 			try
 			{ 
 				BufferedReader buf = new BufferedReader(new InputStreamReader(is), 50000);
-				String readString = new String();
+				String readString;
 				while((readString = buf.readLine())!= null)
 				{
 //Log.i(TAG, readString);
@@ -692,17 +690,17 @@ public class FileIO
 		return sb.toString();
 	}
 
-	final String TAG = "FileIO";
-	final String CONTENT = "content:";
-	final String EXTERNAL = "/external";
-	final String ANDROID_DATA = "/Android/data";
-	public final String BASE_PATH = "c4a/pgn/";
+//	final String TAG = "FileIO";
+	private final String CONTENT = "content:";
+	private final String EXTERNAL = "/external";
+	private final String ANDROID_DATA = "/Android/data";
+	final String BASE_PATH = "c4a/pgn/";
 	final String SEP = "/";
-	Context context;
-	boolean isPgnFile = false;
-	boolean lastGameNotFound = false;
-	boolean isGameEnd = false;
-	int gameCount = 0;
+	private Context context;
+	private boolean isPgnFile = false;
+	private boolean lastGameNotFound = false;
+	private boolean isGameEnd = false;
+	private int gameCount = 0;
 	String pgnStat = "-";
 	long gameOffset = 0;
 

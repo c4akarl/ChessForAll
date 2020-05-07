@@ -9,28 +9,30 @@ import android.widget.ImageButton;
 
 public class ChessPromotion extends Dialog implements OnClickListener 
 {
-	Context context;
+	private Context context;
 	public interface MyDialogListener 
 	{ 
         void onOkClick(int promValue);
-	} 
-	final String TAG = "ChessPromotion";
-	ImageButton btnQ = null;
-	ImageButton btnR = null;
-	ImageButton btnB = null;
-	ImageButton btnN = null;
+	}
+
+//	final String TAG = "ChessPromotion";
+	private ImageButton btnQ;
+	private ImageButton btnR;
+	private ImageButton btnB;
+	private ImageButton btnN;
 	private MyDialogListener promListener;
-    public ChessPromotion(Context context, MyDialogListener listener, CharSequence color)
+
+    ChessPromotion(Context context, MyDialogListener listener, CharSequence color)
     {
     	super(context);
     	promListener = listener;
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     	setContentView(R.layout.promotion);
     	this.context = context;
-    	btnQ = (ImageButton) findViewById(R.id.promQ);
-    	btnR = (ImageButton) findViewById(R.id.promR);
-    	btnB = (ImageButton) findViewById(R.id.promB);
-    	btnN = (ImageButton) findViewById(R.id.promN);
+    	btnQ = findViewById(R.id.promQ);
+    	btnR = findViewById(R.id.promR);
+    	btnB = findViewById(R.id.promB);
+    	btnN = findViewById(R.id.promN);
     	setImages(color);
     	btnQ.setOnClickListener(this);
     	btnR.setOnClickListener(this);
@@ -50,7 +52,7 @@ public class ChessPromotion extends Dialog implements OnClickListener
     	promListener.onOkClick(promValue);
     	dismiss();
     }
-    public void setImages(CharSequence color)
+    private void setImages(CharSequence color)
     {
 		if (color.equals("w"))
 		{

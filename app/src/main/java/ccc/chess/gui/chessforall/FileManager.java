@@ -1288,17 +1288,17 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					else
 						etFile.setText("");
 				}
-				if (fileActionCode == 81) // load engine from sd
-				{
-					if (!fmPrefs.getString("fm_extern_engine_path", "").equals(""))
-					{
-						fmBtnAction.setVisibility(ImageView.VISIBLE);
-						btnMenu.setVisibility(ImageView.INVISIBLE);
-						fmBtnGames.setVisibility(ImageView.INVISIBLE);
-						etPath.setText(fmPrefs.getString("fm_extern_engine_path", ""));
-						etFile.setText(fmPrefs.getString("fm_extern_engine_file", ""));
-					}
-				}
+//				if (fileActionCode == 81) // load engine from sd
+//				{
+//					if (!fmPrefs.getString("fm_extern_engine_path", "").equals(""))
+//					{
+//						fmBtnAction.setVisibility(ImageView.VISIBLE);
+//						btnMenu.setVisibility(ImageView.INVISIBLE);
+//						fmBtnGames.setVisibility(ImageView.INVISIBLE);
+//						etPath.setText(fmPrefs.getString("fm_extern_engine_path", ""));
+//						etFile.setText(fmPrefs.getString("fm_extern_engine_file", ""));
+//					}
+//				}
 				if (fm_file_extension.endsWith(".bin"))
 				{
 					if (!fmPrefs.getString("fm_extern_book_path", "").equals(""))
@@ -2893,7 +2893,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 						if (fileActionCode == 2)
 						{
 							setPreferences("");
-							if (pgnPath == save_path & pgnFile == save_file)
+//							if (pgnPath == save_path & pgnFile == save_file)
+							if (pgnPath.equals(save_path) & pgnFile.equals(save_file))
 								save_is_done = true;
 							if (save_action_id == 6)
 								Toast.makeText(context, getString(R.string.game_deleted), Toast.LENGTH_SHORT).show();
@@ -3305,7 +3306,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 						gameId = fm_extern_db_game_id;
 					}
 				}
-				if (save_is_done & gamePath == save_path & gameFile == save_file)
+//				if (save_is_done & gamePath == save_path & gameFile == save_file)
+				if (save_is_done & gamePath.equals(save_path) & gameFile.equals(save_file))
 				{
 					save_selected_scroll_game_id = save_scroll_game_id;
 					gameId = save_selected_scroll_game_id;
