@@ -195,7 +195,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
         ed.commit();
 	}
 
-	final String TAG = "PlayEngineSettings";
+//	final String TAG = "PlayEngineSettings";
 	final static int ENGINE_AUTOPLAY_REQUEST_CODE = 50;
 	Util u;
 	Intent fileManagerIntent;

@@ -22,7 +22,9 @@ public class NotificationReceiver extends BroadcastReceiver
 
             int notificationId = intent.getIntExtra("notificationId", 0);
             String fileName = intent.getStringExtra("pgnFileName");
+
 //Log.i(TAG, "onReceive(), ACTION_CANCEL, fileName: " + fileName);
+
             String fileNameDb = fileName + "-db";
             String fileNameJournal = fileName + "-db-journal";
             File fileDb = new File(fileNameDb);
@@ -39,5 +41,6 @@ public class NotificationReceiver extends BroadcastReceiver
         }
     }
 
-    final String TAG = "NotificationReceiver";
+//    final String TAG = "NotificationReceiver";
+
 }

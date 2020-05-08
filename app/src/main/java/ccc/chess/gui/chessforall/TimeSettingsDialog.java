@@ -68,13 +68,15 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 	{
 		switch (view.getId()) 
 		{
-			case R.id.ok: 
+			case R.id.ok:
+
 //Log.i(TAG, "time h, m, s: " + timeH.getCurrentItem() + ", "
 //			+ timeMin.getCurrentItem()  + ", "
 //			+ timeSec.getCurrentItem());
 //Log.i(TAG, "bonus s, ms: " + bonusSec.getCurrentItem() + ", "
 //			+ msecValues[bonusMsec.getCurrentItem()]);
 //Log.i(TAG, "time, moves to go: " + movesValues[moves.getCurrentItem()]);
+
 				c4aCallback.getCallbackValue(2);
 				dismiss();
 				break;
@@ -97,8 +99,10 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 				timeGameS = timeGameS -((timeGameH * 3600) + (timeGameM * 60));
 			}
 		}
+
 //Log.i(TAG, "time, bonus: " + time + ", " + bonus);
 //Log.i(TAG, "h, m, s: " + timeGameH + ", " + timeGameM + ", " + timeGameS);
+
 		if (bonus != 0)
 		{
 			timeBonusS = bonus / 1000;
@@ -153,7 +157,9 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 	// bonus, mil seconds
         createMsecArray();
         bonusMsec = (WheelView) findViewById(R.id.bonusMilSec);
+
 //Log.i(TAG, "msecValues: " + msecValues[15]);
+
         bonusMsecAdapter = new ArrayWheelAdapter(context, msecValues);
         bonusMsecAdapter.setItemResource(R.layout.wheeltextitem);
         bonusMsecAdapter.setItemTextResource(R.id.text);
@@ -197,7 +203,9 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 				else
 					msecVal = "0" + Integer.toString(n);
 			}
+
 //Log.i(TAG, "msecVal: " + msecVal);
+
 			msecValues[i] = msecVal;
         }
 	}
@@ -223,7 +231,7 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 			+	msec;
 	}
 
-	final String TAG = "ChessClockSettingsDialog";
+//	final String TAG = "ChessClockSettingsDialog";
 	boolean showMovesToGo = true;
 	boolean showTime = true;
 	boolean showBonus = true;

@@ -34,15 +34,21 @@ public class PgnDb
 			raf.close();
 			if (buffer != null & readedBytes > 0 & readedBytes <= gameLength)
 			{
+
 //Log.i(TAG, "seekStart, gameLength, readedBytes,  + buffer.length: " + gameOffset + ", " + gameLength + ", " + readedBytes  + ", " + buffer.length);
+
 				data = new String(buffer);
+
 //Log.i(TAG, "seekStart, gameLength, readedBytes: " + gameOffset + ", " + gameLength + ", " + readedBytes);
 //Log.i(TAG, "\n" + data);
+
 				return data;
 			}
 			else
 			{
+
 //Log.i(TAG, "buffer, readedBytes: " + buffer + ", " + readedBytes);
+
 				return "";
 			}
 		} 
@@ -95,7 +101,9 @@ public class PgnDb
 		try 
 		{
 			db = SQLiteDatabase.openDatabase(pgnPath + pgnDbFile, null, flags);
+
 //Log.i(TAG, "db.getVersion(): "+ pgnPath + pgnDbFile + ", " + db.getVersion());
+
 			return db.isOpen();
 		} 
 		catch (SQLiteException e) {e.printStackTrace(); return false;}	// database open error
@@ -112,7 +120,9 @@ public class PgnDb
     {	// query games from db(MAX_CURSOR_ROWS) and put the result to Cursor(return)
 		if (db != null)
 		{
+
 //Log.i(TAG, "gameId: " + gameId);
+
 			int rowCnt = getRowCount(PgnDb.TABLE_NAME);
 			int fromRow = 1;
 			int toRow = getRowCount(PgnDb.TABLE_NAME);
@@ -124,8 +134,10 @@ public class PgnDb
 				scrollGameId = toRow - gameId + 1;
 			else
 				scrollGameId = gameId;
+
 //	Log.i(TAG, "1, gameId, maxCursorRow, isDesc, fromRow, toRow, rowCnt, scrollGameId: \n"
 //		+ gameId + ", " + maxCursorRow + ", " + isDesc + ", " + fromRow + ", " + toRow + ", " + rowCnt + ", " + scrollGameId);
+
 			if (toRow > maxCursorRow)
 			{
 				if (isDesc)
@@ -149,7 +161,9 @@ public class PgnDb
 						toRow = fromRow + maxCursorRow;
 					}
 				}
+
 //Log.i(TAG, "gameId, fromRow, toRow, scrollGameId: " + gameId + ", " + fromRow + ", " + toRow + ", " + scrollGameId);
+
 				query = PGN_QUERY + "WHERE _id >= " + fromRow + " AND _id <= " + toRow;
 			}
 
@@ -199,7 +213,6 @@ public class PgnDb
 		    			break; 	// 2=White and Black
 	        }
 			
-//			explainQueryPlan("EXPLAIN QUERY PLAN " +PGN_QUERY +qWhere +qOrder); // test only
 			pgnC = db.rawQuery(PGN_QUERY +qWhere +qOrder, null);
 			if (pgnC != null)
 				pgnC.moveToFirst();
@@ -211,7 +224,9 @@ public class PgnDb
 
 	public Cursor queryPgnIdxEvent(String event, String site)
     {	// select all games from event, site
+
 //Log.i(TAG, "event, site: " + event + ", " + site);
+
 		if (event.equals("") & site.equals(""))
 			return null;
 		event = event.replace("'", "''");
@@ -256,7 +271,6 @@ public class PgnDb
 			String qOrder = "ORDER BY Date ";
 			if (dateDesc)
 				qOrder = qOrder + "DESC ";
-//			explainQueryPlan("EXPLAIN QUERY PLAN " +PGN_QUERY +qEvent +qSite); // test only
 			pgnC = db.rawQuery(PGN_QUERY +qEco +qOpening +qVariation +qDate +qOrder, null);
 			if (pgnC != null)
 				pgnC.moveToFirst();
@@ -297,7 +311,9 @@ public class PgnDb
 
 	public String getDataFromGameId(int gameId)
     {	// 	game data from pgn(_id)
+
 //Log.i(TAG, "getDataFromGameId()");
+
 		String gameData = "";
 		int gameCnt = getRowCount(TABLE_NAME);
 		if (gameCnt > 0)
@@ -315,7 +331,9 @@ public class PgnDb
 				pgnGameCount = gameCnt;
 				pgnGameOffset = gameFileOffset;
 			}
+
 //Log.i(TAG, "games, gameId, gameFileOffset, gameLength: " + gameCnt + ", " + gameId + ", " + gameFileOffset + ", " + gameLength);
+
 		}
 		return gameData;
     }
@@ -338,12 +356,16 @@ public class PgnDb
 
         if (db.inTransaction() | db.isDbLockedByCurrentThread() | db.isDbLockedByOtherThreads())
         {
+
 //            Log.i(TAG, "getStateFromLastGame(), db.inTransaction()");
+
             return 5;
         }
 
 		int gameCnt = getRowCount(TABLE_NAME);
+
 //Log.i(TAG, "getStateFromLastGame(), gameCnt: " + gameCnt);
+
 		pgnRafOffset = 0;
 		if (gameCnt > 0)
 		{
@@ -355,7 +377,9 @@ public class PgnDb
 			cur.moveToFirst();
 			long gameFileOffset = cur.getInt(cur.getColumnIndex("GameFileOffset"));
 			long gameLength = cur.getInt(cur.getColumnIndex("GameLength"));
+
 //Log.i(TAG, "pgnLength, gameFileOffset, gameLength " + pgnLength + ", " + gameFileOffset + ", " + gameLength);
+
 			if (pgnLength == gameFileOffset + gameLength)
 				return 1;
 			else
@@ -404,7 +428,6 @@ public class PgnDb
 		String query = "SELECT MAX(_id) AS max_id FROM " + tableName;
 		try	
 		{
-//err: at ccc.chess.gui.chessforall.PgnDb.getRowCount (PgnDb.java:382)
 			Cursor cursor = db.rawQuery(query, null);
 			if (cursor.moveToFirst())
 			{
@@ -415,9 +438,10 @@ public class PgnDb
 		catch (IllegalStateException e) 	{e.printStackTrace(); return 0;}
 		catch (SQLiteDatabaseLockedException e) 				{e.printStackTrace(); return 0;}
 		catch (SQLException e) 				{e.printStackTrace(); return 0;}
-//err>>>: at ccc.chess.gui.chessforall.PgnDb.getRowCount (PgnDb.java:382)
 		catch (NullPointerException e) 				{e.printStackTrace(); return 0;}
+
 //Log.i(TAG, "row count table " + tableName + ": " + id);
+
 		return id;
     }
 

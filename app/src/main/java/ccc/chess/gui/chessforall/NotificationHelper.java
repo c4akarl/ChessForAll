@@ -26,7 +26,9 @@ public class NotificationHelper
     }
     public void createNotification(String title, String actionTyp, String pgnFileName)
     {
+
 //        Log.i(TAG, "createNotification(), notificationId: " + notificationId + ", pgnFileName: " + pgnFileName);
+
         mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         int icon = R.drawable.stat_db_add;
         CharSequence tickerText = mContext.getString(R.string.app_pgnFileManager);
@@ -113,4 +115,5 @@ public class NotificationHelper
     final String TAG = "NotificationHelper";
     public static final String ACTION_CONTINUE = "ccc.chess.gui.chessforall.CONTINUE";
     public static final String ACTION_CANCEL = "ccc.chess.gui.chessforall.CANCEL";
+
 }

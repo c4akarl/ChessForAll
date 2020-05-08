@@ -40,31 +40,26 @@ class FileIO
 	{
 		String[] dirs = null;
 		String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
-//err>>>: at ccc.chess.gui.chessforall.FileIO.getExternalDirs (FileIO.java:45)
-
-		// Android API < 19 (Build.VERSION_CODES.KITKAT)
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
 		{
-//err>>>: at ccc.chess.gui.chessforall.FileIO.getExternalDirs (FileIO.java:45)
 			dirs = new String[1];
-//err: at ccc.chess.gui.chessforall.FileIO.getExternalDirs (FileIO.java:45)
 			dirs[0] = externalStorage;
 			return dirs;
 		}
 
-		// Android API >= 19 (Build.VERSION_CODES.KITKAT)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
 		{
 			final Set<String> rv = new HashSet<>();
-			//Get primary & secondary external device storage (internal storage & micro SDCARD slot...)
 			File[] listExternalDirs = context.getExternalFilesDirs(null);
 			for (int i = 0; i < listExternalDirs.length; i++)
 			{
 				if (listExternalDirs[i] != null)
 				{
 					String path = listExternalDirs[i].getAbsolutePath();
+
 //Log.i(TAG, "1 getExternalDirs(), path:         " + i + " " + path);
 //Log.i(TAG, "1 getExternalDirs(), storageState: " + i + " " + storageState);
+
 					int indexMountRoot = path.indexOf(ANDROID_DATA);
 					if (indexMountRoot >= 0 && indexMountRoot <= path.length())
 					{
@@ -83,10 +78,12 @@ class FileIO
 				dirs[0] = externalStorage;
 				return dirs;
 			}
+
 //			for(int i=0; i < dirs.length;i++)
 //			{
 //				Log.i(TAG, "getExternalDirs(), external dirs: " + dirs[i]);
 //			}
+
 		}
 
 		return dirs;
@@ -100,7 +97,9 @@ class FileIO
 		String[] dirs = getExternalDirs();
 		for(int i=0; i < dirs.length;i++)
 		{
+
 //Log.i(TAG, "isExternalDir(), dirs[i]: " + dirs[i] + ", path: " + path);
+
 			if (dirs[i].equals(path))
 				return true;
 		}
@@ -131,7 +130,9 @@ class FileIO
 				}
 			}
 		}
+
 //Log.i(TAG, "isStorageStateMounted(), file: " + file + ", isMounted:  " + isMounted);
+
 		return isMounted;
 	}
 
@@ -184,21 +185,19 @@ class FileIO
 
 	public boolean copyFile(String srcFile, String targetPath)
 	{
+
 //		Log.i(TAG, "copyFile(), srcFile: " + srcFile + "\ntargetPath: " + targetPath);
+
 		boolean copyOk = false;
 		if (srcFile.startsWith("file:"))
 			srcFile = srcFile.replace("file:", "");
-//        if (srcFile.startsWith("content:") & srcFile.contains(ANDROID_DATA))
-//        {
-//            int x = srcFile.indexOf(ANDROID_DATA);
-//			srcFile = Environment.getExternalStorageDirectory().getAbsolutePath() + srcFile.substring(x, srcFile.length());
-//        }
 		File fFrom = new File(srcFile);
 		File fDir = new File(targetPath);
 		File fTo = new File(targetPath, fFrom.getName());
+
 //Log.i(TAG, "fFrom: " + fFrom.toString() + ", " + fFrom.exists());
 //Log.i(TAG, "fDir: " + fDir.toString() + ", " + fDir.isDirectory());
-//Log.i(TAG, "fTo: " + fTo.toString() + ", " + fTo.exists());
+//Log.i(TAG, "fTo: " + fTo.toString() + ", " + fTo.exists())
 		if (fFrom.exists() & fDir.isDirectory())
 		{
 			if (!fTo.exists())
@@ -222,7 +221,9 @@ class FileIO
 
 	public String getExternalStorageFromContent(String content)
 	{
+
 //Log.i(TAG, "getExternalStorageFromContent(), content: " + content);
+
 		if (content.startsWith(CONTENT))
 		{
 			if (content.contains(ANDROID_DATA))
@@ -251,7 +252,9 @@ class FileIO
 
 	public String[] getFileArrayFromPath(String path, boolean allDirectory, String extension)
     {
+
 //Log.i(TAG, "getFileArrayFromPath(), path: " + path + ", file extension: " + extension);
+
 		String[] tmpA = null;
 		String[] fileA = null;
 		File f;
@@ -274,7 +277,9 @@ class FileIO
 					{
 						if (f.isDirectory() & !f.isHidden())
 						{
+
 //Log.i(TAG, "File: " + path + tmpA[i] + ", allDirectory: " + allDirectory);
+
 							isPgnFile = false;
 							if (allDirectory)
 								fileA[i] = tmpA[i];
@@ -364,7 +369,9 @@ class FileIO
 
 	public String dataFromFile(String path, String file, String lastGame, int gameControl, long offest)
     {
+
 //Log.i(TAG, "dataFromFile(), gameControl: " + gameControl);
+
 		String pgnData = "";
 		String previousGame = "";
 		gameCount = 0;
@@ -577,10 +584,13 @@ class FileIO
     }
 
 	private void printData(int gameControl, String lastGame, String newGame, String pgnStat, long gameOffset, long newGameOffset)
-	{	// TEST ONLY !!!
+	{
+
+		// TEST ONLY !!!
 //		Log.i(TAG, "gameControl, pgnStat, gameOffset, newGameOffset: " + gameControl + ", " + pgnStat + ", " + gameOffset + ", " + newGameOffset);
 //		Log.i(TAG, "last game: \n" + lastGame + "\n\n");
 //		Log.i(TAG, "new game: \n" + newGame);
+
 	}
 
 	String getDataFromInputStream(InputStream is)
@@ -594,7 +604,9 @@ class FileIO
 				String readString;
 				while((readString = buf.readLine())!= null)
 				{
+
 //Log.i(TAG, readString);
+
 					txt = txt + readString + "\n";
 				}
 				is.close();
@@ -698,8 +710,11 @@ class FileIO
 	final String SEP = "/";
 	private Context context;
 	private boolean isPgnFile = false;
+
+	//karl ???
 	private boolean lastGameNotFound = false;
 	private boolean isGameEnd = false;
+
 	private int gameCount = 0;
 	String pgnStat = "-";
 	long gameOffset = 0;

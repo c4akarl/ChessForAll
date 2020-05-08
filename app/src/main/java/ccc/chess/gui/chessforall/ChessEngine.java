@@ -30,12 +30,6 @@ public class ChessEngine
         isReady = false;
         userPrefs = context.getSharedPreferences("user", 0);
         isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
-//        efm = new EngineFileManager();
-//        efm.dataEnginesPath = context.getFilesDir() + "/engines/";
-//        assetsEngineProcessName = getInternalStockFishProcessName();
-//        assetsEngineProcessName = "";
-//        if (isLogOn)
-//            Log.i(TAG, "ChessEngine(), assetsEngineProcessName: " + assetsEngineProcessName);
     }
 
     public boolean initProcess(String processName)
@@ -50,151 +44,15 @@ public class ChessEngine
         writer = null;
 
         boolean isInitOk = false;
-//        engineProcess = "";
         engineProcess = processName;
-//        if (startNewProcess(false))
         if (startNewProcess(true))
             isInitOk = true;
         else
             engineProcess = "";
 
-        // engine oex
-//        if (!processName.equals(assetsEngineProcessName))
-//        {
-//            ChessEngineResolver resolver = new ChessEngineResolver(context);
-//            List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
-//            for (com.kalab.chess.enginesupport.ChessEngine engine : engines)
-//            {
-//                if (engine.getName().equals(processName))
-//                {
-//                    engineProcess = processName;
-//                    if (startNewProcess(false))
-//                        isInitOk = true;
-//                    else
-//                        engineProcess = "";
-//                }
-//            }
-//        }
-//
-//        // engine intern
-//        if (!isInitOk)
-//        {
-//
-//            if (processName.equals(""))
-//                processName = assetsEngineProcessName;
-//
-//            //karl, NEW STOCKFISH UPDATE !
-//            if (!processName.equals(assetsEngineProcessName) & processName.startsWith("stockfish-") & assetsEngineProcessName.startsWith("stockfish-"))
-//                processName = assetsEngineProcessName;
-//
-//            if (!efm.dataFileExist(processName))
-//            {
-//                if (isLogOn)
-//                    Log.i(TAG, "initProcess(), install dataProcess: " + efm.dataEnginesPath + processName);
-//                writeDefaultEngineToData();
-//            }
-//            if (efm.dataFileExist(processName))
-//            {
-//                engineProcess = processName;
-//                isInitOk = startNewProcess(false);
-//            } else
-//            {
-//				if (isLogOn)
-//                 Log.i(TAG, "initProcess(), install error, dataProcess: " + efm.dataEnginesPath + processName);
-//            }
-//        }
-
         return isInitOk;
 
     }
-
-//    public boolean initProcessFromFile(String filePath, String fileName)
-//    {
-//        // write process to app data; test; quit
-//        if (process != null)
-//            destroyProcess();
-//        process = null;
-//        reader = null;
-//        writer = null;
-//
-//        boolean isInitOk = false;
-//        engineProcess = "";
-//        if (!efm.dataFileExist(fileName))
-//        {
-//            if (isLogOn)
-//                Log.i(TAG, "initProcessFromFile(), write to app data: " + efm.dataEnginesPath + fileName);
-//            boolean writeOk = efm.writeEngineToData(filePath, fileName, null);
-//            if (!writeOk)
-//            {
-//                if (isLogOn)
-//                    Log.i(TAG, "initProcessFromFile(), efm.writeEngineToData error: " + efm.dataEnginesPath + fileName);
-//                mesInitProcess = fileName + ": " + context.getString(R.string.engineNoRespond) + "\n";
-//                mesInitProcess = mesInitProcess + "\n" + fileName + " " + context.getString(R.string.engineNotInstalled);
-//            }
-//        }
-//        if (efm.dataFileExist(fileName))
-//        {
-//            engineProcess = fileName;
-//            isInitOk = startNewProcess(true);
-//        }
-//        if (isInitOk)
-//        {
-//            if (isLogOn)
-//                Log.i(TAG, "initProcessFromFile(), init ok: " + efm.dataEnginesPath + fileName + ", engineProcess: " + engineProcess);
-//            shutDown();                     // quit
-//        }
-//        else
-//        {
-//            if (isLogOn)
-//                Log.i(TAG, "initProcessFromFile(), install error, dataProcess: " + efm.dataEnginesPath + fileName);
-//        }
-//
-//        return isInitOk;
-//
-//    }
-
-//    private String getInternalStockFishProcessName()
-//    {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-//            cpuAbi = Build.CPU_ABI;
-//        else
-//            cpuAbi = Build.SUPPORTED_ABIS[0];
-//
-//        if (isLogOn)
-//            Log.i(TAG, "getInternalStockFishProcessName(), cpu abi: " + cpuAbi);
-//
-////        String osArch = System.getProperty("os.arch");
-//
-////        Log.i(TAG, "getInternalStockFishProcessName(), osArch: " + osArch + ", cpuAbi: " + cpuAbi);
-//
-//        if (cpuAbi.startsWith("x86"))
-//            return ASSET_STOCKFISH_CPU_X86;
-//        if (cpuAbi.equals("armeabi-v7a"))
-//            return ASSET_STOCKFISH_ARM_7;
-//        else
-//            return ASSET_STOCKFISH_ARM_64;
-//    }
-
-//    private void writeDefaultEngineToData()
-//    {
-//        try
-//        {
-//            InputStream istream = context.getAssets().open(assetsEngineProcessName);
-//            if (efm.writeEngineToData("", assetsEngineProcessName, istream))
-//                engineProcess = assetsEngineProcessName;
-//            else
-//                engineProcess = "";
-//        }
-//        catch (IOException e)
-//        {
-//            e.printStackTrace();
-//            if (isLogOn)
-//                Log.i(TAG, "writeDefaultEngineToData(), IOException");
-//            engineProcess = "";
-//        }
-//        if (isLogOn)
-//            Log.i(TAG, "writeDefaultEngineToData(), assetsEngineProcess, engineProcess: " + assetsEngineProcessName + ", " + engineProcess);
-//    }
 
     private boolean readUCIOptions()
     {
@@ -235,16 +93,11 @@ public class ChessEngine
         long checkTime = startTime;
         stopBestMove = "";
         stopPonderMove = "";
-//        int cntSpace = 0;
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
             CharSequence s = readLineFromProcess(1000);
             if (s.equals("ERROR"))
                 return false;
-//            if (s.equals(""))   // null
-//                cntSpace++;
-//            else
-//                cntSpace = 0;
             if (s.toString().startsWith("bestmove"))
             {
                 String[] txtSplit = s.toString().split(" ");
@@ -257,7 +110,9 @@ public class ChessEngine
             }
             checkTime = System.currentTimeMillis();
         }
+
 //Log.i(TAG, "syncStopSearch(), end");
+
         if (isStopAndMove)
             return true;
         else
@@ -266,7 +121,9 @@ public class ChessEngine
 
     public boolean syncReady()
     {
+
 //Log.i(TAG, "syncReady(), start");
+
         if (isError())
             return false;
 
@@ -340,7 +197,9 @@ public class ChessEngine
     public void startSearch(CharSequence fen, CharSequence moves, int wTime, int bTime,	int wInc, int bInc,
                             int movesTime, int movesToGo, boolean isInfinite, boolean isGoPonder, int mate)
     {
+
 //Log.i(TAG, "startSearch(), fen: " + fen + "\nmoves: " + moves + ", isGoPonder: " + isGoPonder);
+
         if (isChess960)
             fen = convertCastlingRight(fen);
         String posStr = "";
@@ -389,7 +248,9 @@ public class ChessEngine
             while (i < nTokens - 1)
             {
                 CharSequence is = tokens[i++];
+
 //Log.i(TAG, "tokens, i: " + i + "(" + (nTokens -1) + "), is: " + is);
+
                 if (is.equals("depth"))     {statCurrDepth = Integer.parseInt(tokens[i++].toString());}
                 if (is.equals("seldepth"))  {statCurrSelDepth = Integer.parseInt(tokens[i++].toString());}
                 if (is.equals("time"))      {statTime = Integer.parseInt(tokens[i++].toString());}
@@ -446,7 +307,9 @@ public class ChessEngine
                 statPvMoves = getMoves(statPv, infoPvMoveMax);
             }
         }
+
 //Log.i(TAG, "size, values?, score, moves: " + statPv.size() + ", " + infoHasPvValues + ", " + statPvScore + "\nstatPvMoves: " + statPvMoves);
+
     }
 
     public CharSequence getMoves(ArrayList<CharSequence> statPv, int infoPvMoveMax)
@@ -519,9 +382,11 @@ public class ChessEngine
         tokens[2] = castling;
         for (int i = 0; i < tokens.length; i++)
             convertFen = convertFen.toString() + tokens[i] + " ";
+
 //Log.i(TAG, "FEN sta: " + startFen);
 //Log.i(TAG, "FEN fen: " + fen);
 //Log.i(TAG, "FEN new: " + convertFen);
+
         return convertFen;
     }
     public void setIsChess960(boolean chess960) {isChess960 = chess960;}
@@ -560,12 +425,6 @@ public class ChessEngine
         {
             if (isLogOn)
                 Log.i(TAG, "startNewProcess(), engine process started: " + engineProcess);
-//            if (fromFile)
-//            {
-//                mesInitProcess = context.getString(R.string.engineStartProcess) + ",\n";
-//                mesInitProcess = mesInitProcess + "CPU-ABI: " + cpuAbi + "\n\n";
-//                mesInitProcess = mesInitProcess + "uci"  + "\n";
-//            }
             writeLineToProcess("uci");
             processAlive = readUCIOptions();
             if (fromFile & processAlive)
@@ -588,7 +447,9 @@ public class ChessEngine
 
     public void writeLineToProcess(String data)
     {
+
 //Log.i(TAG, "data: " + data);
+
         try {writeToProcess(data + "\n");}
         catch (IOException e)
         {
@@ -654,14 +515,9 @@ public class ChessEngine
 
     private void setChessEngineName(String uciIdName)
     {
-//        if (!STOCKFISH_DEFAULT_NAME.equals(""))
-//            engineName = STOCKFISH_DEFAULT_NAME;
-//        else
-//        {
         engineName = uciIdName.substring(8, uciIdName.length());
         if (uciIdName.startsWith("White(1): id name "))
             engineName = uciIdName.substring(18, uciIdName.length());
-//        }
     }
 
     void setUciEloValues(String message)
@@ -792,8 +648,6 @@ public class ChessEngine
             }
         }
 
-//        if (engineProcess.endsWith(INTERN_ENGINE_NAME_END))
-//        {
         // intern engine
         if (processBuilder == null)
         {
@@ -812,15 +666,10 @@ public class ChessEngine
                                 if (parser.getAttributeValue(null, "name").equals(engineProcess)
                                         || !engineProcess.endsWith(INTERN_ENGINE_NAME_END))
                                 {
-//                                    ChessEngineResolver resolver = new ChessEngineResolver(context);
                                     engineProcess = parser.getAttributeValue(null, "name");
-
-//                                    String enginePath = INTERN_ENGINE_LIB_PATH + resolver.target + "/" + parser.getAttributeValue(null, "filename");
                                     String enginePath = context.getApplicationInfo().nativeLibraryDir + "/" + parser.getAttributeValue(null, "filename");
-
                                     if (isLogOn)
                                         Log.i(TAG, "startProcess(), intern engine, enginePath: " + enginePath);
-
                                     processBuilder = new ProcessBuilder(enginePath);
                                     break;
                                 }
@@ -900,20 +749,10 @@ public class ChessEngine
     public int engineNumber = 1;		                    // default engine (Stockfish)
     private static final String ENGINE_TYPE = "UCI";		//> ChessEngine type: CE(Chess Engines)
     SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
-//    EngineFileManager efm;
     String engineName = "";				                    // the uci engine name
     public CharSequence engineNameStrength = "";	        // native engine name + strength
     String engineProcess = "";			                    // the compiled engine process name (file name)
-
-//    final String INTERN_ENGINE_LIB_PATH = "/data/data/ccc.chess.gui.chessforall/lib/";
-//    final String INTERN_ENGINE_LIB_PATH = "/data/data/ccc.chess.gui.chessforall/jniLibs/";
-//    final String INTERN_ENGINE_LIB_PATH = "/data/data/ccc.chess.gui.chessforall/libs/";
-//    final String INTERN_ENGINE_LIB_PATH = "/data/app-libs/ccc.chess.gui.chessforall/";
     final String INTERN_ENGINE_NAME_END = " CfA";
-
-//    String cpuAbi = "";
-
-//    String assetsEngineProcessName = "";
     String mesInitProcess = "";
 
     ProcessBuilder processBuilder;
@@ -979,12 +818,6 @@ public class ChessEngine
             11, 11, 11, 11,	12, 12, 12, 12, 12, 12,
             13, 13, 13, 14,	15, 16, 17, 17, 17, 17,
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
-
-//    final String ASSET_STOCKFISH_CPU_X86 = "stockfish_7_0_x86";
-//    final String ASSET_STOCKFISH_ARM_64 = "stockfish-11-arm64v8";
-//    final String ASSET_STOCKFISH_ARM_7 = "stockfish-11-armv7a";
-//
-//    final String STOCKFISH_DEFAULT_NAME = "";
 
     boolean isLogOn;			// LogFile on/off(SharedPreferences)
 

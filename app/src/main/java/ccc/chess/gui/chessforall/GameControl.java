@@ -21,7 +21,9 @@ public class GameControl
     		isGameOver = true;
     	else
     		isGameOver = false;
+
 //Log.i(TAG, "gameResult, isGameOver: " + gameResult + ", " + isGameOver);
+
     }
     public CharSequence getValueFromFen(CharSequence fen, int value)	
     {	// get split value from fenMes

@@ -25,7 +25,9 @@ public class BoardView extends View
         Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         if (Math.min(display.getWidth(), display.getHeight()) / 100 > STROKE_SIZE)
             STROKE_SIZE = Math.min(display.getWidth(), display.getHeight()) / 100;
+
 //Log.d(TAG, "BoardView(), STROKE_SIZE: " + STROKE_SIZE);
+
     }
 
     public void setColor()
@@ -149,7 +151,9 @@ public class BoardView extends View
 
     public CharSequence getChessField(int position, boolean boardTurn)
     {
+
 //		Log.i(TAG, "position: " + position);
+
         CharSequence chessField = "";
         if (position >= 0 & position <= 63)
         {
@@ -171,7 +175,9 @@ public class BoardView extends View
             y = screenY - viewY;
         int posX = x / fieldSize;
         int posY = y / fieldSize;
+
 //Log.i(TAG, "getPositionFromTouch(), posX: " + posX + ", posY: " + posY);
+
         return posX + (posY * 8);
     }
 
@@ -217,7 +223,9 @@ public class BoardView extends View
 
     void changePieceColor(Bitmap bitmap, int originalColor, int newColor)
     {
+
 //        Log.i(TAG, "changePieceColor(), originalColor:     " + originalColor + ", newColor: " + newColor);
+
         if (Math.abs(originalColor - newColor) <= COLOR_CHECK_DIFF)
             return;
 
@@ -263,6 +271,7 @@ public class BoardView extends View
             boardSize = height;
         fieldSize = getSqSizeW(boardSize);
         textSize = fieldSize / 3;
+
 //Log.d(TAG, "onMeasure(), BoardView, width: " + width + ", height: " + height + ", boardSize: " + boardSize + ", fieldSize: " + fieldSize);
 
         setMeasuredDimension(boardSize, boardSize);
@@ -288,7 +297,9 @@ public class BoardView extends View
                 lastMoveTo      = getPosition(lastMove.subSequence(2, 4), isBoardTurn);
             }
         }
+
 //Log.d(TAG, "onDraw(), lastMove: " + lastMove);
+
         // 1. draw field, coordinates . . .
         for (int y = 0; y < 8; y++)
         {
@@ -306,7 +317,9 @@ public class BoardView extends View
                 else
                     mPaint.setColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
                 canvas.drawRect(mRect, mPaint);
+
 //Log.d(TAG, "fenMes, boardPos: " + boardPos + ", Char: " + posFen.charAt(boardPos));
+
                 if (!isBlindMode)
                 {
                     switch (charFen[boardPos])
@@ -361,7 +374,6 @@ public class BoardView extends View
 						canvas.drawCircle(circleX, circleY, circleR, mPaint);
 					}
 
-//                if (possibleMoves != null)
 					if (possibleMoves != null & !isBlindMode)
 					{
 						if (possibleMoves.size() > 0)
@@ -371,7 +383,9 @@ public class BoardView extends View
 
 							for (int i = 0; i < possibleMoves.size(); i++)
 							{
+
 //Log.i(TAG, "updatePosibleMoves: " + possibleMoves.get(i));
+
 								if (possibleMoves.get(i).length() == 4)
 								{
 									int posibleMovePos = getPosition(possibleMoves.get(i).subSequence(2, 4), isBoardTurn);
@@ -385,7 +399,6 @@ public class BoardView extends View
 							}
 						}
 					}
-//                if (possibleMovesTo != null)
 					if (possibleMovesTo != null & !isBlindMode)
 					{
 						if (possibleMovesTo.size() >= 2)
@@ -395,7 +408,9 @@ public class BoardView extends View
 
 							for (int i = 0; i < possibleMovesTo.size(); i++)
 							{
+
 //Log.i(TAG, "updatePosibleMoves: " + possibleMovesTo.get(i));
+
 								if (possibleMovesTo.get(i).length() >= 4)
 								{
 									int posibleMovePos = getPosition(possibleMovesTo.get(i).subSequence(0, 2), isBoardTurn);
@@ -440,7 +455,6 @@ public class BoardView extends View
                                 cooAH = String.valueOf(coo.charAt(0));
                         }
                     }
-//Log.i(TAG, "onDraw, coo18: " + coo18);
                     if (!coo18.equals(""))
                     {
                         canvas.drawText(coo18, x18, y18, mPaint);
@@ -547,7 +561,6 @@ public class BoardView extends View
 				}
 				if (possibleMovesTo != null)
 				{
-// java.lang.IndexOutOfBoundsException
 					if (possibleMovesTo.size() > 0)
 					{
 						if (possibleMovesTo.get(0).length() >= 4)

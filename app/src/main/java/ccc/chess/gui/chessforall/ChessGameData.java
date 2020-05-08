@@ -86,7 +86,9 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 				try	{type = Integer.parseInt(txtTags[3].toString());} catch (NumberFormatException e) {type = 0;}
 				int digits = 0;
 				try	{digits = Integer.parseInt(txtTags[4].toString());} catch (NumberFormatException e) {digits = 0;}
+
 //Log.i(TAG, "name, value, type, digits: " + name + ", " + value + ", " + type + ", " + digits);
+
 				RelativeLayout.LayoutParams rPar = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				TextView tv = (TextView)getLayoutInflater().inflate(R.layout.c4atextview, null);
 				EditText et = null;
@@ -173,7 +175,9 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 				for(int h = 0; h < history.tagState.length; h++)
 			    {
 					String[] txtTagStats = history.tagState[h].toString().split("\b");
+
 //Log.i(TAG, "txtTagStats[0], txtTags[0]: " + txtTagStats[0]+ ", " + txtTags[0]);
+
 					if (txtTagStats[0].equals(txtTags[0]))
 					{
 						if (initTagState)
@@ -202,7 +206,9 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 			String tagValue = et.getText().toString();
 			if (tagValue.equals(""))
 				tagValue = txtTagStats[2];
+
 //Log.i(TAG, "tags: " + tv.getText().toString() + ", " + et.getText().toString());
+
 			newTags = newTags + tv.getText().toString() + "\b" + tagValue + "\n";
 	    }
 		return newTags;
@@ -387,7 +393,9 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 						}
 					}
 		        }
+
 //Log.i(TAG, "h, m, s: " + h + ", " + m + ", " + s);
+
 				if (h.length() < 1 | h.length() > 2 | m.length() != 2 | s.length() != 2)
 				{
 					setEditData(et, false);
@@ -408,7 +416,9 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 				if (!timeOk)
 					et.setText(clockColor + h + ":" + m + ":" + s);
 				setEditData(et, true);
+
 //Log.i(TAG, "h, m, s: " + h + ", " + m + ", " + s);
+
 				break;
 		}
 	}

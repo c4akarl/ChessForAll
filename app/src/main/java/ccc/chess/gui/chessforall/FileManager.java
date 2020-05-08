@@ -66,7 +66,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 {
 	public void onCreate(Bundle savedInstanceState)
 	{
-//		Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u = new Util();
@@ -430,33 +429,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				case 5: 														// engine autoPlay
 					getPathFile();											
 					break;
-//				case 81: 														// load engine from SD card
-////Log.i(TAG, "myClickHandler(), fileActionCode: 81, engine path/file: " + etPath.getText().toString() + "/" + etFile.getText().toString());
-//					String path = etPath.getText().toString();
-//					String file = etFile.getText().toString();
-//					if (!path.equals("") & !file.equals(""))
-//					{
-//						if (ce.initProcessFromFile(path, file))
-//						{
-//							ed.putString("fm_extern_engine_path", etPath.getText().toString());
-//							ed.putString("fm_extern_engine_file", etFile.getText().toString());
-//							ed.commit();
-//						}
-//						removeDialog(ENGINE_INSTALL_DIALOG);
-//						showDialog(ENGINE_INSTALL_DIALOG);
-//					}
-//					break;
-//				case 82: 														// load engine from //data
-////Log.i(TAG, "myClickHandler(), fileActionCode: 82, engine path/file: " + etPath.getText().toString() + "/" + etFile.getText().toString());
-//					ed.putString("fm_intern_engine_path", etPath.getText().toString());
-//					ed.putString("fm_intern_engine_file", etFile.getText().toString());
-//					ed.commit();
-//					returnIntent = new Intent();
-//					returnIntent.putExtra("filePath", etPath.getText().toString());
-//					returnIntent.putExtra("fileName", etFile.getText().toString());
-//					setResult(RESULT_OK, returnIntent);
-//					finish();
-//					break;
 				case 91:														// load opening book
 					if (!etFile.getText().toString().endsWith(BIN_EXTENSION))
 						etFile.setText("");
@@ -601,11 +573,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			fileIO.fileDelete(etPath.getText().toString(), fileName);
 			isEditFileChanged = false;
 			etFile.setText("");
-
-//			if (fileActionCode == 82) // load engines from app data after delete a file
-//				showFileListFromData("");
-//			else
-				showFileList(etPath.getText().toString());
+			showFileList(etPath.getText().toString());
 			fileName = "";
 			fmBtnAction.setVisibility(ImageView.INVISIBLE);
 		}
@@ -1079,12 +1047,16 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	@Override
 	public void afterTextChanged(Editable s) 
 	{
+
 //		Log.i(TAG, "1 afterTextChanged(), s: " + s + ", setQueryData: " + setQueryData);
+
 		if (setQueryData == 99 & fileActionCode == 2 & fmBtnAction != null)	// etFile
 		{
 			if (!fileIO.fileExists(etPath.getText().toString(), etFile.getText().toString()))
 			{
+
 //				Log.i(TAG, "2 afterTextChanged(), path/file: " + etPath.getText().toString() + etFile.getText().toString());
+
 				if (lvGames != null)
 				{
 					if (lvGames.isShown())
@@ -1096,8 +1068,10 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			}
 			else
 			{
+
 //				Log.i(TAG, "2 afterTextChanged(), path/file: " + etPath.getText().toString() + etFile.getText().toString());
 //				Log.i(TAG, "2 afterTextChanged(), fmInfoSaveGame, isEditFileChanged: " + isEditFileChanged);
+
 				if (isEditFileChanged)
                 {
 					isEditFileChanged = false;
@@ -1240,7 +1214,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 // 	pgn methods			pgn methods			pgn methods			pgn methods		pgn methods		pgn methods
 	public void startLoad(int location, boolean isStart) 
 	{
+
 //Log.i(TAG, "startLoad(), fileActionCode: " + fileActionCode + ", location: " + location + ", isStart: " + isStart);
+
 		title.setText(getString(R.string.fmTitleLoad));
 		if (fileActionCode == 81)
 			title.setText(getString(R.string.menu_enginesettings_install));
@@ -1279,7 +1255,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 						{
 							if (fileActionCode == 1)
 							{
+
 //Log.i(TAG, "startLoad(), fm_extern_load_last_path: " + fmPrefs.getString("fm_extern_load_last_path", fmPrefs.getString("fm_extern_load_path", "")));
+
 								etPath.setText(fmPrefs.getString("fm_extern_load_last_path", fmPrefs.getString("fm_extern_load_path", "")));
 								etFile.setText(fmPrefs.getString("fm_extern_load_last_file", fmPrefs.getString("fm_extern_load_file", "")));
 							}
@@ -1288,17 +1266,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					else
 						etFile.setText("");
 				}
-//				if (fileActionCode == 81) // load engine from sd
-//				{
-//					if (!fmPrefs.getString("fm_extern_engine_path", "").equals(""))
-//					{
-//						fmBtnAction.setVisibility(ImageView.VISIBLE);
-//						btnMenu.setVisibility(ImageView.INVISIBLE);
-//						fmBtnGames.setVisibility(ImageView.INVISIBLE);
-//						etPath.setText(fmPrefs.getString("fm_extern_engine_path", ""));
-//						etFile.setText(fmPrefs.getString("fm_extern_engine_file", ""));
-//					}
-//				}
 				if (fm_file_extension.endsWith(".bin"))
 				{
 					if (!fmPrefs.getString("fm_extern_book_path", "").equals(""))
@@ -1329,23 +1296,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					}
 				}
 				break;
-//			case 2:		// Intern
-//				isEditFileChanged = false;
-//				fmBtnAction.setVisibility(ImageView.VISIBLE);
-//				btnDirBack.setVisibility(ImageView.INVISIBLE);
-//				btnMenu.setVisibility(ImageView.INVISIBLE);
-//				fmBtnGames.setVisibility(ImageView.INVISIBLE);
-//				String setFileName = fmPrefs.getString("fm_intern_engine_file", ce.assetsEngineProcessName);
-//				if (!getIntent().getExtras().getString("fileName").equals(""))
-//					setFileName = getIntent().getExtras().getString("fileName");
-//				if (fileActionCode == 82) // load engine from //data
-//				{
-//					etPath.setText(fmPrefs.getString("fm_intern_engine_path", ce.efm.dataEnginesPath));
-//					etPath.setSelection(etPath.getText().length());
-//					etFile.setText(setFileName);
-//				}
-//				showFileListFromData(setFileName);
-//				break;
 			case 3:		// WWW
 				etUrl.setVisibility(ListView.VISIBLE);
 				etPath.setVisibility(ListView.INVISIBLE);
@@ -1474,7 +1424,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 	public void showFileList(String path)
 	{
+
 //Log.i(TAG, "showFileList(), path: " + path);
+
 		if (fileActionCode == 91 | fileActionCode == 5 | fileActionCode == 81 | fileActionCode == 82)
 			fmBtnAction.setVisibility(ImageView.VISIBLE);
 		else
@@ -1528,7 +1480,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 						isEngineFile = true;
 					if ((itemName.endsWith(fm_file_extension) & !fm_file_extension.equals("")) | isEngineFile)
                     {
+
 //Log.i(TAG, "showFileList(), onItemClick(), itemName: " + itemName);
+
                         showPositionInFileList(position, itemName);
                     }
 					else
@@ -1585,85 +1539,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		}
 	}
 
-//	public void showFileListFromData(String setFileName)
-//	{
-//		fmBtnAction.setVisibility(ImageView.VISIBLE);
-//		String[] fileA = ce.efm.getFileArrayFromData(ce.efm.dataEnginesPath);
-//		if (fileA != null)
-//		{
-//			files = new ArrayAdapter<String>(this, R.layout.c4alistitem, fileA);
-//			lvFiles.setAdapter(files);
-//			lvFiles.setTextFilterEnabled(true);
-//			lvFiles.setVisibility(ListView.VISIBLE);
-//			lvFiles.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-//			int scrollId = -1;
-//			for (int i = 0; i < fileA.length; i++)
-//			{
-//				if (fileA[i].equals(setFileName))
-//				{
-//					scrollId = i;
-//					break;
-//				}
-//			}
-//			if (fileA.length > 0 & scrollId == -1)
-//			{
-//				scrollId = 0;
-//				isEditFileChanged = false;
-//				etFile.setText(fileA[0]);
-//				SharedPreferences.Editor ed = fmPrefs.edit();
-//				ed.putString("fm_intern_engine_file", etFile.getText().toString());
-//				ed.commit();
-//			}
-//			if (scrollId >= 0)
-//			{
-//				lvFiles.setItemChecked(scrollId, true);
-//				lvFiles.setSelection(scrollId);
-//				int h1 = lvFiles.getHeight();
-//				int h2 = 100;
-//				lvFiles.setSelectionFromTop(scrollId, h1 / 2 - h2 / 2);
-//			}
-//
-//			lvFiles.setOnItemClickListener(new OnItemClickListener()
-//			{
-//				@Override
-//				public void onItemClick(AdapterView<?> listView, View view, int position, long id)
-//				{
-//					String itemName = files.getItem(position);
-////Log.i(TAG, "showFileList(), onItemClick(), itemName: " + itemName);
-//					showPositionInFileList(position, itemName);
-//					etPath.setSelection(etPath.getText().length());
-//				}
-//			});
-//
-//			lvFiles.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-//			{
-//				@Override
-//				public boolean onItemLongClick(AdapterView<?> parent, View view,  int position, long id)
-//				{
-//					String itemName = files.getItem(position);
-//					if (fileIO.fileExists(etPath.getText().toString(), itemName))
-//					{
-//						isEditFileChanged = false;
-//						etFile.setText(itemName);
-//						fileName = itemName;
-//						removeDialog(DELETE_FILE_DIALOG);
-//						showDialog(DELETE_FILE_DIALOG);
-//					}
-//					return true;
-//				}
-//			});
-//			setFmInfo(getString(R.string.fmInfoSelectEngine));
-//		}
-//		else
-//		{
-//			etPath.setText("");
-//			isEditFileChanged = false;
-//			etFile.setText("");
-//			removeDialog(PATH_NOT_EXISTS_DIALOG);
-//			showDialog(PATH_NOT_EXISTS_DIALOG);
-//		}
-//	}
-
 	public void showPositionInFileList(int position, String fileName)
 	{
 		int scrollId = position;
@@ -1701,7 +1576,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			scroll_game_id = 1;
 			fm_extern_db_key_id = 0;
 			db_state = getDbFileState(fileName, fm_location);
+
 //Log.i(TAG, "showPositionInFileList(), db_state: " + db_state);
+
 			handleDb(etPath.getText().toString(), fileName, db_state, true);
 			if (fileActionCode == 1)
 			{
@@ -1733,7 +1610,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
         {
 			if (!path.equals(fm_extern_load_path) | !file.equals(fm_extern_load_file))
 				gameControl = 1;
+
 //Log.i(TAG, "loadExternFile(), gameControl: " + gameControl  + ", fm_extern_game_offset: " + fm_extern_game_offset);
+
         	fileData = fileIO.dataFromFile(path, file, fm_extern_last_game, gameControl, fm_extern_game_offset);
         	if (!fileData.equals(""))
 				finishAfterLoad(path, file);
@@ -1753,7 +1632,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	
 	public void finishAfterLoad(String path, String file) 
 	{
-//Log.i(TAG, "finishAfterLoad()");
 		returnIntent = new Intent();
 		returnIntent.putExtra("pgnStat", fileIO.getPgnStat());
 		if (!userPrefs.getBoolean("user_options_gui_usePgnDatabase", true))
@@ -1833,7 +1711,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	{
 		if (!fileIO.canWrite(etPath.getText().toString(), fileName))
 		{
+
 //Log.i(TAG, "1b saveFile(), file: " + etPath.getText().toString() + fileName + ", append: " + append);
+
 			removeDialog(FILE_NO_WRITE_PERMISSIONS);
 			showDialog(FILE_NO_WRITE_PERMISSIONS);
 			return;
@@ -1859,7 +1739,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					long pgnOldLength = pgnDb.pgnLength;
 					save_selected_scroll_game_id = pgnDb.getRowCount(PgnDb.TABLE_NAME);
 					save_scroll_game_id = save_selected_scroll_game_id 	+1;
+
 //Log.i(TAG, "saveFile(), save_selected_scroll_game_id: " + save_selected_scroll_game_id + ", save_scroll_game_id: " + save_scroll_game_id);
+
                     pgnDb.closeDb();
                     fileIO.dataToFile(etPath.getText().toString(), fileName, data, append);
 					createDb = false;
@@ -2013,7 +1895,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 	public void setPreferences(String gameData) 
 	{
+
 //Log.i(TAG, "setPreferences(), gameData\n" + gameData);
+
 		if (etPath == null)
 			return;
 
@@ -2032,17 +1916,23 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
         ed.putInt("fm_location", fm_location);
         if (fileActionCode == 1)
         	ed.putInt("fm_load_location", fm_location);
+
 //Log.i(TAG, "fm_location: " + fm_location + ", fileActionCode: " + fileActionCode);
+
         switch (fm_location)
         { 
         case 1:
         	if (fileActionCode == 1)	// load
         	{
+
 //Log.i(TAG, "setPreferences(), gameData\n" + gameData);
+
 				ed.putInt("fm_last_file_action_code", fileActionCode);
 				ed.putString("fm_extern_load_path", etPath.getText().toString());
 				ed.putString("fm_extern_load_file", etFile.getText().toString());
+
 //Log.i(TAG, "pgnDb.pgnGameOffset, fileIO.gameOffset: " + pgnDb.pgnGameOffset + ", " + fileIO.gameOffset);
+
 				if (userPrefs.getBoolean("user_options_gui_usePgnDatabase", true))
 					ed.putLong("fm_extern_game_offset", pgnDb.pgnGameOffset);
 				else
@@ -2085,11 +1975,15 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 	public void setSkipPreferences(int location, String gameData) 
 	{
+
 //Log.i(TAG, "setSkipPreferences(), gameData\n" + gameData);
+
         SharedPreferences.Editor ed = fmPrefs.edit();
         if (location == 1)
         {
+
 //        	Log.i(TAG, "\nfm_extern_skip_bytes: " + fileIO.getSkipBytes());
+
         	if (!gameData.equals(""))
         	{
 	        	ed.putString("fm_extern_last_game", gameData);
@@ -2108,7 +2002,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 	public void setDbPreferences() 
 	{
+
 //Log.i(TAG, "setDbPreferences()");
+
 		SharedPreferences.Editor edDb = fmPrefs.edit();
 		
 		edDb.putInt("fm_extern_db_game_id", pgnDb.pgnGameId);
@@ -2146,7 +2042,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 	public void setQueryPreferences(int gameId) 
 	{
+
 //Log.i(TAG, "setQueryPreferences(), gameId: " + gameId);
+
 		SharedPreferences.Editor ed = fmPrefs.edit();
 		String white = "";
 		String black = "";
@@ -2192,7 +2090,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 	public String[] getGameIdList(String gl)
     {
+
 //		Log.i(TAG, "gameIdList: " + gl);
+
 		String[] splitGl = gl.split(";");
 		return splitGl;
     }
@@ -2343,7 +2243,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		setQueryData = SET_QUERY_DATA_EVENT;
     	isQuery = true;
     	queryEventLayout.setVisibility(RelativeLayout.VISIBLE);
+
 //    	Log.i(TAG, "queryFromGameId, isGameValues: " + queryFromGameId + ", " + isGameValues);
+
     	if (isGameValues)
     	{
     		qeEvent.setText(pgnDb.fCur.getString(pgnDb.fCur.getColumnIndex("Event")));
@@ -2433,8 +2335,10 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				return "NumberFormatException, doInBackground()";
 			}
 			save_action_id = action;
+
 //Log.i(TAG, "pgnPath: " + pgnPath + ", pgnFile: " + pgnFile + ", pgnData:\n" + pgnData);
 //Log.i(TAG, "action: " + action + ", replaceStart: " + replaceStart + ", replaceEnd: " + replaceEnd + ", moveStart: " + moveStart);
+
 			mNotificationHelper.createNotification(getString(R.string.rebuild_pgn_file) + " " + pgnFile,
                     FileManager.PGN_ACTION_UPDATE, pgnPath + pgnFile);
 
@@ -2502,7 +2406,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					long percentage = 0;
 					try	{ percentage = (rafLinePointer * 100) / pgnRaf.length(); }
 					catch (ArithmeticException e) {}
+
 //Log.i(TAG, "prevPercentage: " + prevPercentage + ", percentage: " + percentage);
+
 					if (prevPercentage != percentage & System.currentTimeMillis() - startTime > 2000)
 					{
 						publishProgress(percentage, rafLinePointer, pgnRaf.length());
@@ -2640,8 +2546,10 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				if (params[3].equals("dropidx"))
 					dropIdx = true;
 			}
+
 //Log.i(TAG, "pgnFile: " + pgnPath + pgnFile);
 //Log.i(TAG, "CreateDatabaseTask(), pgnOffset: " + pgnOffset + ", dropCreateIdx: " + dropCreateIdx + ", dropIdx: " + dropIdx);
+
             startCreateDatabase = System.currentTimeMillis();
             fPgn = new File(pgnPath + pgnFile);
 			if (fPgn.exists())
@@ -2651,6 +2559,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				pgnFileExists = false;
 				return null;
 			}
+
 //Log.i(TAG, "CreateDatabaseTask(), fPgn.length(): " + fPgn.length());
 
 			if (pgnOffset == 0 & fPgn.length() == 0)	// no data, no create db!
@@ -2694,7 +2603,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				rafParsed = +pgnOffset;
 				rafLength = pgnRaf.length();
 				GameId = 0;
+
 //Log.i(TAG, "rafParsed: " + rafParsed + ", rafLength: " + rafLength + ", GameId: " + GameId);
+
 				publishProgress(getPercentageComplete(), rafParsed, rafLength, GameId);
 			} 
 			catch (FileNotFoundException e) {e.printStackTrace(); runMessage = "EX 1"; db.close(); return null;}	// error file not exist
@@ -2715,7 +2626,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 				while (line != null)
 				{
+
 //					Log.i(TAG, "line: " + line);
+
 					if (line.startsWith("[Event "))
 					{
 						hasGames = true;
@@ -2768,7 +2681,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					rafLinePointer = pgnRaf.getFilePointer();
 					line = pgnRaf.readLine();
 				}
+
 //Log.i(TAG, "hasGames: " + hasGames);
+
 				if (hasGames)
 				{
 					gameLength = (int) (pgnRaf.length() - rafGamePointer);
@@ -2819,7 +2734,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		protected void onProgressUpdate(Long... progress) 
 		{
 	        mNotificationHelper.progressUpdate(progress[0], progress[1], progress[2], progress[3]);
+
 //Log.i(TAG, "onProgressUpdate(), isStartTask: " + isStartTask + ", save_action_id: " + save_action_id);
+
 	        if (isStartTask)
 			{
 				if (save_action_id == 0 & rafLength > 50000)
@@ -2836,12 +2753,12 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 			if (!runMessage.equals("OK!"))
 			{
-//				Log.i(TAG, "onPostExecute(), runMessage: " + runMessage);
 				mNotificationHelper.completed();
 				return;
 			}
 
 		    long diffTime = System.currentTimeMillis() - startCreateDatabase;
+
             String runningTime = String.format("%02d:%02d:%02d",
                     TimeUnit.MILLISECONDS.toHours(diffTime),
                     TimeUnit.MILLISECONDS.toMinutes(diffTime) -
@@ -2885,6 +2802,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		        {
 		        	if (pgnDb.initPgnFiles(pgnPath, pgnFile))
 		        	{
+
 //Log.i(TAG, "onPostExecute(), fileActionCode: " + fileActionCode + ", fm_extern_db_key_id: " + fm_extern_db_key_id);
 
 		        		fm_extern_db_key_id = 0;
@@ -2893,9 +2811,11 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 						if (fileActionCode == 2)
 						{
 							setPreferences("");
+
 //							if (pgnPath == save_path & pgnFile == save_file)
 							if (pgnPath.equals(save_path) & pgnFile.equals(save_file))
 								save_is_done = true;
+
 							if (save_action_id == 6)
 								Toast.makeText(context, getString(R.string.game_deleted), Toast.LENGTH_SHORT).show();
 							else
@@ -2973,7 +2893,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			String tagValue = "";
 			String nextTag = "";
 			int startValues = lineValue.indexOf('"') +1;
+
 //			Log.i(TAG, "lineValue, startValues: " + lineValue + ", " + startValues);
+
 			if (startValues > 1 & startValues < lineValue.length())
 			{
 				for (int i = startValues; i < lineValue.length(); i++)
@@ -2993,7 +2915,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			String[] txtSplit = lineValue.split(" ");
 			if (txtSplit.length > 0)
 				tagName =  txtSplit[0].replace("[", "");
+
 //			Log.i(TAG, "tagName, tagValue: " + tagName + ", " + tagValue);
+
 			if (tagName.equals("Event")) 		Event = tagValue;
 			if (tagName.equals("Site")) 		Site = tagValue;
 			if (tagName.equals("Date")) 		Date = tagValue;
@@ -3060,7 +2984,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			cv.put("EventType", EventType);
 			try 					{pgnId = db.insertOrThrow(TABLE_NAME, null, cv);}
 			catch (SQLException e) 	{e.printStackTrace(); GameId = 0; return false;}
+
 //Log.i(TAG, "insertValuesToDb(), pgnId: " + pgnId);
+
 			if (pgnId >= 0)
 				GameId = pgnId +1;
 			return true;
@@ -3159,13 +3085,17 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			isNewFile = false;
 			if (params[3].equals("true"))
 				isNewFile = true;
+
 //Log.i(TAG, "QueryTask, path/file: " + gamePath + gameFile + ", setInfo: " + setInfo + ", isNewFile: " + isNewFile);
+
 			boolean isFilesOk = pgnDb.initPgnFiles(gamePath, gameFile);
 			if (isFilesOk & pgnDb.openDb(gamePath, gameFile, SQLiteDatabase.OPEN_READONLY))
 			{
 				int rowCnt = pgnDb.getRowCount(PgnDb.TABLE_NAME);
+
 //Log.i(TAG, "QueryTask, path/file: " + gamePath + gameFile + ", rowCnt: " + rowCnt);
 //Log.i(TAG, "QueryTask, save_selected_scroll_game_id: " + save_selected_scroll_game_id + ", save_scroll_game_id: " + save_scroll_game_id);
+
 				if (isNewFile & rowCnt > 0)
 				{
 					if (fm_extern_db_game_desc | fileActionCode == 2)
@@ -3277,11 +3207,15 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			int queryCount = 0;
 			if (fm_extern_db_key_id != 0)
 				queryCount = queryCursor.getCount();
+
 //			Log.i(TAG, "fm_extern_db_key_id, scroll_game_id: " + fm_extern_db_key_id + ", " + scroll_game_id);
+
 			int gameId = 0;
 			if (queryCount > 0)
 				gameId = queryCursor.getInt(queryCursor.getColumnIndex("_id"));
+
 //Log.i(TAG, "gameId: " + gameId);
+
 			if (fm_extern_db_key_id == 0)
 				gameId = fm_extern_db_game_id;
 
@@ -3306,6 +3240,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 						gameId = fm_extern_db_game_id;
 					}
 				}
+
 //				if (save_is_done & gamePath == save_path & gameFile == save_file)
 				if (save_is_done & gamePath.equals(save_path) & gameFile.equals(save_file))
 				{
@@ -3350,6 +3285,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			int h1 = lvGames.getHeight();
 			int h2 = 100;
 			lvGames.setSelectionFromTop(scrollId, h1/2 - h2/2);
+
 //Log.i(TAG, "queryCursor, db_key_id: " + fm_extern_db_key_id + ", scrollId: " + scrollId + ", save_selected_scroll_game_id: " + save_selected_scroll_game_id);
 
 			if (queryCursor.getCount() == 0)
@@ -3375,7 +3311,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					if (queryCursor.moveToPosition(position))
 					{
 					   	int gameId = queryCursor.getInt(queryCursor.getColumnIndex("_id"));
+
 //Log.i(TAG, "lvGames.onItemLongClick(), lvPosition: " + position + ", gameId: " + gameId);
+
 						if (fileActionCode == 2)
 						{
 							if (pgnDb.openDb(gamePath, gameFile, SQLiteDatabase.OPEN_READONLY))
@@ -3395,7 +3333,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 									if (replaceEnd > 0 & replaceEnd > gameReplaceStart)
 										gameReplaceEnd = replaceEnd;
 									pgnLength = pgnDb.pgnLength;
+
 //Log.i(TAG, "gameReplaceEnd: " + gameReplaceEnd + ", pgnDb.pgnLength: " + pgnDb.pgnLength);
+
 								}
 								catch (NumberFormatException e)	{return;}
 								gameMoveStart = 0;
@@ -3411,7 +3351,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 							int queryCount = 1;
 							if (fm_extern_db_key_id != 0)
 							   queryCount = queryCursor.getCount();
+
 //Log.i(TAG, "fm_extern_db_key_id, gameId: " + fm_extern_db_key_id + ", " + gameId);
+
 							scroll_game_id = position +1;
 							setQueryDataToTitle(fm_extern_db_key_id, gameId, pgnDb.getRowCount(PgnDb.TABLE_NAME), scroll_game_id, queryCount);
 							pgnDb.getGameId(gameId, 10);	// set pgnStat value
@@ -3450,7 +3392,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					if (queryCursor.moveToPosition(position))
 					{
 						int gameId = queryCursor.getInt(queryCursor.getColumnIndex("_id"));
+
 //Log.i(TAG, "lvGames.onItemLongClick(), lvPosition: " + position + ", gameId: " + gameId);
+
 						if (pgnDb.openDb(gamePath, gameFile, SQLiteDatabase.OPEN_READONLY))
 						{
 							try
@@ -3521,9 +3465,11 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 	public void loadGameFromDb(String path, String file, int gameId, int gameLoadControl) 
 	{
+
 //		Log.i(TAG, "path, file, fm_extern_db_key_id: " + path + ", " + file + ", " + fm_extern_db_key_id);
 //		Log.i(TAG, "gameId, Control, cursor_count, cursor_id, scroll: " 
 //				+ gameId + ", " + gameLoadControl + ", " + fm_extern_db_cursor_count + ", " + fm_extern_db_cursor_id + ", " + scroll_game_id);
+
 		returnIntent = new Intent();
 		int newGameId = 0;
 		boolean pgnDbNotExists = false;
@@ -3568,7 +3514,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 							gameId = 0;
 					}
 					catch (NumberFormatException e) {gameId = 0;}
+
 //					Log.i(TAG, "gameLoadControl, fm_extern_db_cursor_id, curserIdx, gameId: " + gameLoadControl + ", " + fm_extern_db_cursor_id + ", " + curserIdx + ", " + gameId);
+
 					if (gameId > 0)
 					{
 						fm_extern_db_cursor_id = curserIdx;
@@ -3597,7 +3545,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			else
 				fileData = "";
 		}
+
 //		Log.i(TAG, "fileData: \n" + fileData);
+
 		returnIntent.putExtra("pgnStat", pgnDb.pgnStat);
 		if (!fileData.equals(""))
 		{
@@ -3662,7 +3612,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 					if 	(pgnDb.openDb(etPath.getText().toString(), fileName, SQLiteDatabase.OPEN_READONLY))
 					{
 						int state = pgnDb.getStateFromLastGame();
+
 //Log.i(TAG, "state: "  + state);
+
 						pgnDb.closeDb();
 						switch (state) 
 						{
@@ -3682,7 +3634,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	
 	private void handleDb(String path, String file, int state, boolean isNewFile) 
 	{
+
 //Log.i(TAG, "path/file: " + path + file + ", state: " + state + ", isNewFile: " + isNewFile);
+
 		switch (state)
 		{
 			case STATE_DB_OK: 
@@ -3789,7 +3743,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	{
 		if (!fileIO.canWrite(path, file))
 		{
+
 //Log.i(TAG, "startCreateDatabaseTask(), file: " + path + file);
+
 			isCreateDb = true;
 			removeDialog(FILE_NO_WRITE_PERMISSIONS);
 			showDialog(FILE_NO_WRITE_PERMISSIONS);
@@ -3805,7 +3761,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 
 	private void startQueryTask(String path, String file, boolean setInfo, boolean isNewFile)
 	{
+
 //Log.i(TAG, "startQueryTask(), path/file: " + path + file + ", setInfo: " + setInfo + ", isNewFile: " + isNewFile);
+
 		fmBtnAction.setVisibility(ImageView.VISIBLE);
 		if (fileActionCode == 1)
 		{
@@ -3832,7 +3790,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
         SharedPreferences.Editor ed = fmPrefs.edit();
         ed.putInt("fm_notificationId", notificationId);
         ed.commit();
+
 //Log.i(TAG, "startCreateDatabaseTask(), notificationId: " + notificationId);
+
     }
 
 	public void setInfoValues(String title, String message, String dbVersion)

@@ -45,7 +45,9 @@ public class EngineControl
     }
 	void setPlayData(SharedPreferences userP, String white, String black)
     {	// setting the PGN-Data
+
 //Log.i(TAG, "setPlayData(), white: " + white + ", black: " + black);
+
 		chessEngineEvent = "Android " + android.os.Build.VERSION.RELEASE;
 		chessEngineSite = android.os.Build.MODEL;
 		chessEngineRound = "-";
@@ -110,7 +112,9 @@ public class EngineControl
 			en_1.startPlay = false;
 			makeMove = false;
 		}
+
 //		Log.i(TAG, "setStartPlay(), playMod: " + chessEnginePlayMod + ", color: " + color + ", makeMove: " + makeMove);
+
     }
 
 //	final String TAG = "EngineControl";

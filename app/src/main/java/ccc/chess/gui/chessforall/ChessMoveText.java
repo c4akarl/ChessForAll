@@ -21,13 +21,11 @@ public class ChessMoveText extends Activity
 		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.movetext);
         moveText = findViewById(R.id.mtEt);
-//        moveText.setText(getIntent().getExtras().getString("move_text"));
         moveText.setText(Objects.requireNonNull(getIntent().getExtras()).getString("move_text"));
         moveText.requestFocus();
  	}
 	public void myClickHandler(View view) 		// ClickHandler 					(ButtonEvents)
     {
-//		switch (view.getId())
 		if (view.getId() == R.id.mtBtnOk)
 		{
 			String text = moveText.getText().toString();

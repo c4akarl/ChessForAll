@@ -38,7 +38,6 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
-//Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         u = new Util();
         userPrefs = getSharedPreferences("user", 0);
@@ -73,8 +72,10 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			newFen = initFen(currentFen);
 			isStartActivity = false;
 		}
+
 //Log.i(TAG, "setGui(), currentFen: " + currentFen);
 //Log.i(TAG, "setGui(), newFen: " + newFen + ", chess960Id: " + chess960Id);
+
 		fieldSize = getIntent().getExtras().getInt("fieldSize");
 
 		btnCancel = findViewById(R.id.btnCancel);
@@ -115,7 +116,6 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 		super.onConfigurationChanged(newConfig);
-//Log.i(TAG, "onConfigurationChanged()");
 		setGui();
 	}
 
@@ -126,7 +126,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			int screenXY[] = new int[2];
 			boardView.getLocationOnScreen(screenXY);
 			int position = boardView.getPositionFromTouch((int) event.getRawX(), (int) event.getRawY(), screenXY[0], screenXY[1]);
+
 //Log.i(TAG, "onTouch(), position: " + position);
+
 			// 2020.04.25 22:15 in der App-Version 80
 			if (position >= 0 && position < 64)
 				moveAction(position);
@@ -157,7 +159,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
             	if (!nFen.equals(""))
             		newFen = nFen;
         	}
+
 //Log.i(TAG, "position: " + position + ", newFen: " + newFen);
+
             showChessBoard();
     	}
 	}
@@ -178,13 +182,13 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 
 //			Log.i(TAG, "B myClickHandler(), view.getId(): " + view.getId());
 
-//			finishActivity();
 			Intent returnIntent;
 			returnIntent = new Intent();
 			returnIntent.putExtra("newFen", newFen);
 			returnIntent.putExtra("chess960Id", Integer.toString(chess960Id));
 			setResult(RESULT_OK, returnIntent);
 			finish();
+
 			break;
 		case R.id.trash:
 			if (creatingChess960)
@@ -233,18 +237,6 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		showChessBoard();
 	}
 
-//	public void finishActivity()
-//    {
-//
-////Log.i(TAG, "finishActivity(), newFen, chess960Id: " + newFen + ", " + chess960Id);
-//
-//		returnIntent.putExtra("newFen", newFen);
-//		returnIntent.putExtra("chess960Id", Integer.toString(chess960Id));
-//		setResult(RESULT_OK, returnIntent);
-//		finish();
-//
-//    }
-
 	@SuppressLint("ClickableViewAccessibility")
     public Dialog onCreateDialog(int id)
 	{
@@ -256,7 +248,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			dialog.setContentView(R.layout.dialog_edit_board_options);
 
 			MyViewListener myViewListener = new MyViewListener();
+
 //Log.i(TAG, "onCreateDialog(), newFen: " + newFen + ", chess960Id: " + chess960Id);
+
 			getCastleValuesFromFen(newFen);
 			getValuesFromFen(newFen);
 
@@ -496,7 +490,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
     }
 	public CharSequence setChess960(CharSequence fen, int pos, char p) 		
     {
+
 //Log.i(TAG, "pos, piece, fenMes: " + pos + ", " + p + ", " + fenMes );
+
 		if (cntB == 1)
 		{
 			if ((cntBPos + pos) % 2 == 0)	// error: both bishops on same field color
@@ -842,17 +838,19 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 
 	public CharSequence setPieceToFen(CharSequence fen, int pos, char p) 		
     {
+
 //Log.i(TAG, "oldfen: " + fenMes + " >>> " + pos + ", " + p);
+
 		CharSequence nFen = "";
 		char[] fen64 = getFen64(fen);
 		if (runP.getBoolean("run_game0_is_board_turn", false))
 		{
+
 //Log.i(TAG, "setPieceToFen(), p: "+ p + ", pos: " + pos + ", turnPos: " + turnPos);
+
 			pos = 63 - pos;
 		}
 
-// java.lang.ArrayIndexOutOfBoundsException: App-Version 73
-//		if (fen64.length == 64 & pos < 64)
 		if (fen64.length == 64 & pos >= 0 & pos < 64)
 		{
 			fen64[pos] = p;
@@ -982,7 +980,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			rowDif = rowKb -rowKw;
 		if ((posDif == 1 & rowDif == 0) | rowDif == 1 & (posDif == 7 | posDif == 8 | posDif == 9))
 			posOk = false;
+
 //Log.i(TAG, "checkKing(), cntPieces: " + cntPieces + ", cntKw: " + cntKw + ", cntKb: " + cntKb + ", posOk: " + posOk);
+
 		if (cntPieces > 2 & cntKw == 1 & cntKb == 1 & posOk)
 			return true;
 		else
@@ -1056,7 +1056,9 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 
 	public void showChessBoard() 		
     {
+
 //Log.i(TAG, "showChessBoard, selectedPosition, piece: " + selectedPosition + ", " + piece);
+
 		if (creatingChess960 & cntEmpty == 3)
 		{
 			showChess960();
@@ -1097,10 +1099,14 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 			message.setText(messageChessLogic);
 			positionOk = false;
 		}
+
 //Log.i(TAG, "newFen: " + newFen);
+
 		if (creatingChess960)
 			showPosibleMoves();
+
 //Log.i(TAG, "showChessBoard(), board_turn: " + runP.getBoolean("run_game0_is_board_turn", false));
+
 		boardView.updateBoardView(newFen, runP.getBoolean("run_game0_is_board_turn", false), null, null, null,
 				null, true, userPrefs.getBoolean("user_options_gui_BlindMode", false));
     }
@@ -1253,8 +1259,10 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 				catch 	(NumberFormatException exception) { draw50 = DRAW50_MIN; }
 				try 	{ move_counter = Integer.parseInt(tmp[5]); }
 				catch 	(NumberFormatException exception) { move_counter = MOVE_COUNTER_MIN; }
+
 //Log.i(TAG, "getValuesFromFen(), fen: " + fen);
 //Log.i(TAG, "getValuesFromFen(), en_passant: " + en_passant + ", draw50: " + draw50 + ", move_counter: " + move_counter);
+
 			}
 		}
 	}
@@ -1577,7 +1585,6 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 	CharSequence fenEnPassant = "-";
 	CharSequence fenDraw50 = "0";
 	CharSequence fenMoveCounter = "1";
-//	Intent returnIntent = new Intent();
 	BoardView boardView;
 
 	ImageView wKing;

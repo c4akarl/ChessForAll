@@ -5,7 +5,9 @@ public class TimeControl
 
 	public TimeControl()
     {
+
 //Log.i(TAG, "TimeControl(), initChessClock()");
+
 		initChessClock(1, 300000, 300000, 0, 0, 0);	// init: 5 minutes + 2 seconds(move)
 		setCurrentShowValues(1);
     }
@@ -30,7 +32,9 @@ public class TimeControl
 
 	public void startChessClock(boolean whiteMoves, long currentTime, int playMod)
     {
+
 //Log.i(TAG, "1 startChessClock(), clockIsRunning: " + clockIsRunning + ", timeControl: " + timeControl);
+
 		if (!clockIsRunning & timeControl != 4)
 		{
 			clockIsRunning = true;
@@ -74,9 +78,11 @@ public class TimeControl
 			colorChanged = false;
 		else
 			colorChanged = true;
+
 //Log.i(TAG, "OLD: timeControl: " + timeControl + ", whiteMoves: " + whiteMoves + ", currentTime: " + currentTime + ", startTime: " + startTime);
 //Log.i(TAG, "OLD: timeWhite: " + timeWhite + ", bonusWhite: " + bonusWhite + ", clockIsRunning: " + clockIsRunning);
 //Log.i(TAG, "OLD: timeBlack: " + timeBlack + ", bonusBlack: " + bonusBlack + ", colorChanged: " + colorChanged);
+
 		if (clockIsRunning)
 		{
 			if (timeControl == 11)	// analysis
@@ -118,8 +124,10 @@ public class TimeControl
 					}
 				}
 			}
+
 //Log.i(TAG, "NEW: timeWhite: " + timeWhite + ", bonusWhite: " + bonusWhite);
 //Log.i(TAG, "NEW: timeBlack: " + timeBlack + ", bonusBlack: " + bonusBlack);
+
 			startTime = currentTime;
 			this.whiteMoves = whiteMoves;
 			setCurrentShowValues(playMod);
@@ -201,14 +209,18 @@ public class TimeControl
 			showTime = "0:00";
 		if (secOnly)
 			showTime = showTime + "s";
+
 //Log.i(TAG, "getShowValues(), showTime: " + showTime);
+
 		return showTime;
     }
 
 	public void setCurrentShowValues(int playMod)
     {	// set the current white/black time on screen
+
 //Log.i(TAG, "OLD time White: " + showModusWhite + ", " + timeWhite + ", " + showWhiteTime);
 //Log.i(TAG, "OLD time Black: " + showModusBlack + ", " + timeBlack + ", " + showBlackTime);
+
 		int t;
 		int h = 0;
 		int m = 0;
@@ -349,8 +361,10 @@ public class TimeControl
 			showWhiteTime = "";
 			showBlackTime = "";
 		}
+
 //Log.i(TAG, "NEW time White: " + showModusWhite + ", " + timeWhite + ", " + showWhiteTime);
 //Log.i(TAG, "NEW time Black: " + showModusBlack + ", " + timeBlack + ", " + showBlackTime);
+
     }
 	
 	final String TAG = "TimeControl";

@@ -1540,19 +1540,22 @@ public class ChessHistory
     	}
     	catch (IndexOutOfBoundsException e) {e.printStackTrace(); return "";}
     }
-    public CharSequence getNextMoveFen(int idx) 
-    {
-    	CharSequence fen = "";
-    	if (idx < moveHistory.size() - 1)
-    	{
-    		fen = chessMove.getVal(moveHistory.get(idx +1), 5);
-    	}
-    	return fen;
-    }
-    public CharSequence getPreviousMoveFen(int idx) 
-    {
-    	return chessMove.getVal(moveHistory.get(idx), 10);
-     }
+
+    //karl
+//    public CharSequence getNextMoveFen(int idx)
+//    {
+//    	CharSequence fen = "";
+//    	if (idx < moveHistory.size() - 1)
+//    	{
+//    		fen = chessMove.getVal(moveHistory.get(idx +1), 5);
+//    	}
+//    	return fen;
+//    }
+//    public CharSequence getPreviousMoveFen(int idx)
+//    {
+//    	return chessMove.getVal(moveHistory.get(idx), 10);
+//    }
+
     public int getMoveIdx() {return moveIdx;}
     public CharSequence getMoveRank() {return moveRank;}
     public CharSequence getMoveVariant() {return moveVariant;}
