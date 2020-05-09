@@ -6,7 +6,7 @@
     <string name="app_chessNotation">Notation</string>
     <string name="app_optionsGUI">Options - User settings</string>
     <string name="app_optionsPlay">Game mode - New game</string>
-    <string name="app_optionsEnginePlay">Engine Stockfish - Settings</string>
+    <string name="app_optionsEnginePlay">Engine Settings</string>
     <string name="app_optionsTimeControl">Options - Time control</string>
     <string name="app_editChessBoard">Edit chessboard</string>
     <string name="app_playEngineSettings">Automatic computer playing</string>
@@ -85,7 +85,7 @@
     <string name="menu_play_options">Playing (options)</string>
     <string name="menu_enginesettings">Chess engine</string>
     <string name="menu_enginesettings_shutdown">Shutdown engines</string>
-    <string name="menu_enginesettings_playOptions">Engine play options</string>
+    <string name="menu_enginesettings_playOptions">Engine Settings</string>
     <string name="menu_usersettings">Settings</string>
     <string name="menu_usersettings_gui">UI options</string>
     <string name="menu_usersettings_timeControl">Time control</string>

@@ -6,7 +6,7 @@
   <string name="app_chessNotation">Нотация</string>
   <string name="app_optionsGUI">Опции - Пользовательские настройки</string>
   <string name="app_optionsPlay">Игровой режим - Новая игра</string>
-  <string name="app_optionsEnginePlay">Движок Stockfish - Настрока</string>
+  <string name="app_optionsEnginePlay">Движок Настрока</string>
   <string name="app_optionsTimeControl">Опции - Контроль времени</string>
   <string name="app_editChessBoard">Редактирование доски</string>
   <string name="app_playEngineSettings">Автоматическая игра компьютера</string>
@@ -79,7 +79,7 @@
   <string name="menu_play_options">Игра(опции)</string>
   <string name="menu_enginesettings">Шахматный движок</string>
   <string name="menu_enginesettings_shutdown">Отключение движка</string>
-  <string name="menu_enginesettings_playOptions">Опции игры</string>
+  <string name="menu_enginesettings_playOptions">Движок Настрока</string>
   <string name="menu_usersettings">Настройки</string>
   <string name="menu_usersettings_gui">UI опции</string>
   <string name="menu_usersettings_timeControl">Контроль времени</string>

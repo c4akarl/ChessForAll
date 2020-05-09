@@ -2,18 +2,18 @@
 <html><head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
 <body>
-<p><em>ChessForAll</em> ist ein Schachprogramm mit der starken Schach-Engine <em>Stockfish</em> und vielen nützlichen Funktionen.</p>
+<p><em>ChessForAll</em> ist ein Schachprogramm mit&nbsp;starken Schach-Engines und vielen nützlichen Funktionen.</p>
 <h3>Funktionen</h3>
 <ul>
 	<li>Spiel gegen Computer</li>
 	<li>Zwei-Spieler-Modus</li>
 	<li>Computer gegen Computer</li>
 	<li>Analysemodus</li>
-	<li>Editiermodus</li>
+	<li>Editiermodus</li><li>Chess960</li><li>PGN Unterstützung</li>
 	<li>Eigene Datenbank (.pgn-db)</li>
 	<li>Speichern, Einfügen, Ersetzen und Löschen einer Partie</li>
 	<li>Stellungseingabe</li>
-	<li>Zwischenablage (Partie oder Stellung)</li><li>UCI-Engines installieren</li>
+	<li>Zwischenablage (Partie oder Stellung)</li><li>UCI-Engines mit Open Exchange (OEX) Protokoll</li>
 	<li>Eröffnungsbuch</li>
 	<li>Spielstärke</li>
 	<li>Schachuhroptionen</li>
@@ -30,7 +30,7 @@
 	<li><em>Anfangsstellung</em>: Bis zum linken Rand wischen</li>
 	<li><em>Schlußstellung</em>: Bis zum rechten Rand wischen</li>
 </ul>
-<p><em>Schnellstart-Tasten</em></p>
+<p>Die Brettoption Wischen kann in den Einstellungen deaktiviert werden<em>.</em></p><p><em>Schnellstart-Tasten</em></p>
 <ul>
 	<li>Spiel-Dialog</li>
 	<li>Pause-Dialog</li>
@@ -82,7 +82,7 @@ Probleme ausgeführt werden.</p>
 <p>Die Verwendung der PGN-Datenbank kann in den Einstellungen
 deaktiviert werden. Beim Speichern wird dann eine Partie immer an das
 Dateiende angehängt.</p>
-<h3>UCI-Engines<br></h3><p>1. Kopieren Sie eine oder mehrere UCI-Engines in ein Verzeichnis auf die SD-Karte.&nbsp;<br>2. Wählen Sie aus dem Haupt-Menü: &nbsp;<span style="font-style: italic;">Schach-Engine &gt;&gt;&gt; &nbsp;Schach-Engine installiern</span>. Wählen Sie eine&nbsp;Engine aus und drücken Sie die OK-Taste.<br>3. Wählen Sie aus dem Haupt-Menü: &nbsp;<span style="font-style: italic;">Schach-Engine &gt;&gt;&gt; &nbsp;Schach-Engine auswählen</span>. Wählen Sie dann die zu verwendende Engine aus.</p><h3>Eröffnungsbücher
+<h3>UCI-Engines mit Open Exchange (OEX) Protokoll<br></h3><p>Die Engines <span style="font-style: italic;">Rodent</span> und <span style="font-style: italic;">Stockfish</span> sind in die App integriert. Im Play Store können mit der Suche <br>"schach engines oex" weitere Engines aktiviert werden.</p><h3>Eröffnungsbücher
 </h3><p>Ein kleines Eröffnungsbuch ist in <em>ChessForAll </em>bereits
 integriert. Es können jedoch auch externe Polyglot-Eröffnungsbücher
 (.bin) verwendet werden. Die Verwaltung der Eröffnungsbücher erfolgt in
@@ -90,34 +90,31 @@ den Computer-Spieloptionen, Aufruf über: Hauptmenü/Computer oder durch
 langes Drücken auf das Feld Computerberechnungen.</p>
 <h3>Einstellungen - Anwenderoptionen</h3>
 <ul>
-	<li>Spielername</li>
-	<li>Statusbar anzeigen</li>
+	<li>Spielername</li><li>Figurenbezeichnungen</li>
+	<li>Vollbildanzeige</li>
 	<li>Nach Zug die Seite wechseln</li>
 	<li>Letzte Stellung anzeigen (laden)</li>
-	<li>Bildschirm-Timeout deaktivieren</li>
+	<li>Bildschirm-Timeout deaktivieren</li><li>Zugmöglichkeiten anzeigen</li><li>Schnelle Zugeingabe</li>
 	<li>Partie-Navigation (Brett)</li>
 	<li>PGN-Datenbank verwenden</li>
 	<li>Toneffekte</li>
-	<li>Koordinaten (1-h, 1-8)</li>
+	<li>Koordinaten (1-h, 1-8)</li><li>Blindspiel-Modus</li>
 </ul>
-<h3>Stockfish-Einstellungen</h3>
+<h3>Engine Einstellungen</h3>
 <ul>
 	<li>Automatischer Start bei Programmöffnung</li>
 	<li>Berechnungen anzeigen</li><li>Vorausberechnung</li>
-	<li>1. Zug (weiss): Zufallszug</li>
-	<li>Polyglot Eröffnungsbuch aktivieren/deaktivieren</li>
-	<li>Polyglot Eröffnungsbuch: externe .bin Datei laden</li>
-	<li>Computerberechnungen: Anzahl der Varianten und Züge</li>
+	<li>1. Zug (weiss): Zufallszug</li><li>Polyglot Eröffnungsbuch: externe .bin Datei laden</li>
+	
+	<li>Polyglot Eröffnungsbuch aktivieren/deaktivieren<br></li>
+	<li>Computerberechnungen: Anzahl der Varianten, Züge und der angezeigten Zeilen</li>
 	<li>Spielstärke (0...100)</li>
 	<li>Aggressivität (0...100), Passivität (0...-100)</li>
 	<li>Protokollaufzeichnungen (Engine-Nachrichten)</li>
 </ul>
 <h3>Entwickler</h3>
 <p><em>ChessForAll</em> wird von <em>Karl Schreiner</em> entwickelt</p>
-<p>Grafische Elemente von <em>Lars Streblow</em></p>
-<p>Java-Engine-Routinen von <em>Peter Österlund</em></p>
-<p>Anwendung der UCI-Engines von <em>Aart Bik</em></p>
-<p><em>Chesspresso</em> (Schach-Logik) von <em>Bernhard Seybold</em></p><p><em>Stockfish </em>wird von <span style="font-style: italic;">Tord Romstad, Marco Costalba, Joona Kiiski </span>und<span style="font-style: italic;"> Gary Linscott </span>entwickelt</p><p></p>
+<p>Grafische Elemente von <em>Lars Streblow</em></p><em>Chesspresso</em> (Schach-Logik) von <em>Bernhard Seybold</em><p><em>Rodent </em>wird von&nbsp;<span style="color: rgb(60, 64, 67); font-family: arial,sans-serif; font-size: 14px; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none; font-style: italic;">Pawel Koziol</span><span style="font-style: italic;"> </span>entwickelt</p><p><em>Stockfish </em>wird von <span style="font-style: italic;">Tord Romstad, Marco Costalba, Joona Kiiski </span>und<span style="font-style: italic;"> Gary Linscott </span>entwickelt</p><p>Die Engines werden von <span style="font-style: italic;">Bernhard C. März </span>kompiliert.</p>
 <h3>Übersetzungen</h3>
 <p>Französisch: <em>Eric Gallula</em></p>
 <p>Spanisch: <em>Sergio Ballesteros</em></p>

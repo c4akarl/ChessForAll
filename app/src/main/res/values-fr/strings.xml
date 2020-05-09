@@ -6,7 +6,7 @@
     <string name="app_chessNotation">Notation</string>
     <string name="app_optionsGUI">Mode Play - Nouveau jeu</string>
     <string name="app_optionsPlay">Options -Paramètres Jeu</string>
-    <string name="app_optionsEnginePlay">Moteur Stockfish - réglages</string>
+    <string name="app_optionsEnginePlay">Moteur réglages</string>
     <string name="app_optionsTimeControl">Options - Réglage du temps</string>
     <string name="app_editChessBoard">Mise en place position</string>
     <string name="app_playEngineSettings">Lecture automatique de moteur</string>
@@ -85,7 +85,7 @@
     <string name="menu_play_options">Jouer (options)</string>
     <string name="menu_enginesettings">moteur de jeu</string>
     <string name="menu_enginesettings_shutdown">Arret des moteurs</string>
-    <string name="menu_enginesettings_playOptions">Options de lecture de moteur</string>
+    <string name="menu_enginesettings_playOptions">Moteur réglages</string>
     <string name="menu_usersettings">Réglages</string>
     <string name="menu_usersettings_gui">Interface Options</string>
     <string name="menu_usersettings_timeControl">Contrôle du temps</string>
