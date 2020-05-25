@@ -29,14 +29,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/cancel" />
+                android:text="@string/btn_Cancel" />
 
             <Button
                 android:id="@+id/eo_reset"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/reset" />
+                android:text="@string/colorReset" />
 
             <Button
                 android:id="@+id/eo_ok"

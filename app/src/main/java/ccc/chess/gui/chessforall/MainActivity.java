@@ -3432,7 +3432,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		else
 		{
 			if (ec.getEngine().isError())
+			{
 				isStop = true;
+
+				Log.i(TAG, "stopComputerThinking(), ec.getEngine().isError(): " + isStop);
+
+			}
 		}
 		if (isStop)
 		{
@@ -3794,7 +3799,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		if (ec.getEngine().process != null)
 			isReady = ec.getEngine().syncReady();
 
-//Log.i(TAG, "startEnginePlay(), isReady : " + isReady);
+Log.i(TAG, "startEnginePlay(), isReady : " + isReady);
 
 		if (!isReady)
 		{
@@ -3807,7 +3812,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			if (ec.getEngine().process == null | isError)
 			{
 
-//Log.i(TAG, "2 startEnginePlay(), restartEngine(), isError: " + isError);
+Log.i(TAG, "2 startEnginePlay(), restartEngine(), isError: " + isError);
 
 				if (!restartEngine())
 					return;
@@ -3836,7 +3841,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		boolean isError = ec.getEngine().isError();
 
-//Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
+Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 
 		if (!isError)
 		{
@@ -3957,6 +3962,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				boolean isError = false;
 				if (ec.getEngine().process != null)
 					isError = ec.getEngine().isError();
+
+				Log.i(TAG, "chessEngineBestMove(), isError: " + isError);
+
 				if (ec.getEngine().process == null | isError)
 				{
 					if (!restartEngine())

@@ -54,26 +54,54 @@ public class ChessEngine
 
     }
 
-    private boolean readUCIOptions()
+    //karl UCIOptions ???
+    //karl uciOptions : original von engine
+    //karl EditUciOptions : edit und save if != default in sd/c4a/uci pro engine mit uciPath/fileName (von Droidfish)
+    //karl setEngineOptions(sd/c4a/uci) --> engine
+//    private boolean readUCIOptions()
+    private synchronized boolean readUCIOptions()
     {
         int timeout = 1000;
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
         isUciPonder = false;
-        while (checkTime - startTime <= 500)
+        //karl time? sd/c4a/uci; synchronized readUCIOptions() ?
+//        while (checkTime - startTime <= 500)
+        while (true)
         {
+			if (Thread.currentThread().isInterrupted())
+			{
+
+				if (isLogOn)
+					Log.i(TAG, "readUCIOptions(), Thread.currentThread().isInterrupted()");
+
+				return false;
+			}
             CharSequence s = readLineFromProcess(timeout);
             if (s.equals("ERROR"))
-                return false;
+			{
+
+				if (isLogOn)
+					Log.i(TAG, "readUCIOptions(), ERROR");
+
+				return false;
+			}
             if (s.toString().contains("option") & s.toString().contains("Ponder"))
                 isUciPonder = true;
             CharSequence[] tokens = tokenize(s);
             if (tokens[0].equals("uciok"))
                 return true;
-            checkTime = System.currentTimeMillis();
+//            checkTime = System.currentTimeMillis();
         }
-        return false;
+
+//		if (isLogOn)
+//			Log.i(TAG, "readUCIOptions(), timeout");
+
+//        return false;
+
     }
+
+
 
     public CharSequence[] tokenize(CharSequence cmdLine)
     {
@@ -83,7 +111,8 @@ public class ChessEngine
 
     public boolean syncStopSearch(boolean isStopAndMove)
     {
-//Log.i(TAG, "syncStopSearch(), isStopAndMove: " + isStopAndMove);
+
+Log.i(TAG, "syncStopSearch(), isStopAndMove: " + isStopAndMove);
 
         if (isError())
             return false;
@@ -122,7 +151,7 @@ public class ChessEngine
     public boolean syncReady()
     {
 
-//Log.i(TAG, "syncReady(), start");
+Log.i(TAG, "syncReady(), start");
 
         if (isError())
             return false;
@@ -630,7 +659,7 @@ public class ChessEngine
     private final boolean startProcess()
     {
 
-        Log.i(TAG, "startProcess(), engineProcess: " + engineProcess);
+//        Log.i(TAG, "startProcess(), engineProcess: " + engineProcess);
 
 		processBuilder = null;
 
