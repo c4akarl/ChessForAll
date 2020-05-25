@@ -35,7 +35,7 @@ public class ChessEngine
     public boolean initProcess(String processName)
     {
 
-//Log.i(TAG, "initProcess(), processName: " + processName + ", assetsEngineProcessName: " + assetsEngineProcessName);
+Log.i(TAG, "1 initProcess(), processName: " + processName);
 
         if (process != null)
             destroyProcess();
@@ -49,6 +49,8 @@ public class ChessEngine
             isInitOk = true;
         else
             engineProcess = "";
+
+		Log.i(TAG, "2 initProcess(), processName: " + processName + ", isInitOk: " +isInitOk);
 
         return isInitOk;
 
@@ -148,7 +150,8 @@ Log.i(TAG, "syncStopSearch(), isStopAndMove: " + isStopAndMove);
             return false;
     }
 
-    public boolean syncReady()
+//    public boolean syncReady()
+    public synchronized boolean syncReady()
     {
 
 Log.i(TAG, "syncReady(), start");
@@ -172,10 +175,10 @@ Log.i(TAG, "syncReady(), start");
                 cntSpace++;
             else
                 cntSpace = 0;
-            if (cntSpace >= SYNC_CNT)
-            {
-                return false;
-            }
+//            if (cntSpace >= SYNC_CNT)
+//            {
+//                return false;
+//            }
             if (s.equals("readyok"))
             {
                 isReady = true;
@@ -659,7 +662,7 @@ Log.i(TAG, "syncReady(), start");
     private final boolean startProcess()
     {
 
-//        Log.i(TAG, "startProcess(), engineProcess: " + engineProcess);
+        Log.i(TAG, "startProcess(), engineProcess: " + engineProcess);
 
 		processBuilder = null;
 
@@ -720,6 +723,8 @@ Log.i(TAG, "syncReady(), start");
 
         if (processBuilder == null) {
 
+			Log.i(TAG, "startProcess(), processBuilder: " + processBuilder);
+
             return false;
         }
 
@@ -771,7 +776,8 @@ Log.i(TAG, "syncReady(), start");
     }
 
     final String TAG = "ChessEngine";
-    final long MAX_SYNC_TIME = 200;
+//    final long MAX_SYNC_TIME = 200;
+    final long MAX_SYNC_TIME = 2000;
     final int SYNC_CNT = 200;
 
     Context context;

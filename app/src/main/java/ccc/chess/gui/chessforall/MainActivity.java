@@ -3686,7 +3686,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void startPlay(boolean isNewGame, boolean setClock)
 	{
 
-//Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
+Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 
 		ec.chessEngineSearching = false;
 		ec.chessEnginePaused = false;
@@ -3794,12 +3794,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		ec.setStartPlay(gc.getValueFromFen(gc.fen, 2));
 		boolean	isReady = false;
 
-//Log.i(TAG, "1 startEnginePlay(), ec.getEngine().process: " + ec.getEngine().process);
+Log.i(TAG, "0 startEnginePlay(), ec.getEngine().process: " + ec.getEngine().process);
 
 		if (ec.getEngine().process != null)
 			isReady = ec.getEngine().syncReady();
 
-Log.i(TAG, "startEnginePlay(), isReady : " + isReady);
+Log.i(TAG, "1 startEnginePlay(), isReady : " + isReady);
 
 		if (!isReady)
 		{
@@ -3892,8 +3892,8 @@ Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 	public boolean restartEngine()
 	{
 
-//Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
-//Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_engineProcess", ""));
+Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
+Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_engineProcess", ""));
 
 		if (ec.getEngine().initProcess(runP.getString("run_engineProcess", "")))
 		{
@@ -3963,7 +3963,7 @@ Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 				if (ec.getEngine().process != null)
 					isError = ec.getEngine().isError();
 
-				Log.i(TAG, "chessEngineBestMove(), isError: " + isError);
+//				Log.i(TAG, "chessEngineBestMove(), isError: " + isError);
 
 				if (ec.getEngine().process == null | isError)
 				{
@@ -5962,7 +5962,7 @@ Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 	public void enginePlay(CharSequence result, CharSequence taskFen, CharSequence currentPonderMove)
 	{
 
-//Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
+Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 
 		if (!result.equals(""))
 		{
@@ -6073,6 +6073,8 @@ Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
 							)
 						{
+							//karl ponder
+
 							enginePlayPonder(newFen, currentPonderMove);
 							return;
 						}
@@ -6103,6 +6105,8 @@ Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 				ec.chessEnginePaused = true;
 				updateGui();
 				stopChessClock();
+
+				Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
 
 				if (ec.getEngine().initProcess(runP.getString("run_engineProcess", "")))
 					setInfoMessage(getString(R.string.engine_paused) + " (8)", null, null, false);
