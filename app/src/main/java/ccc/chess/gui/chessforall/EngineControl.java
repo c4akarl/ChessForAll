@@ -135,8 +135,8 @@ public class EngineControl
     boolean chessEngineSearching = false;
     boolean chessEngineIsInSearchTask = false;
 
-    boolean chessEngineSearchingPonder = false;
-    CharSequence ponderUserFen = "";
+//    boolean chessEngineSearchingPonder = false;
+//    CharSequence ponderUserFen = "";
 
     boolean chessEnginePaused = false;
     boolean chessEnginePausedPrev = false;

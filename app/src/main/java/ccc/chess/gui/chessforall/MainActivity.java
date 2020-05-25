@@ -84,6 +84,7 @@ import ccc.chess.book.Pair;
 import ccc.chess.book.TextIO;
 import ccc.chess.logic.c4aservice.Chess960;
 import ccc.chess.logic.c4aservice.ChessPosition;
+import ccc.chess.gui.chessforall.ChessEngine.EngineState;
 
 public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouchListener
 {
@@ -2710,7 +2711,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					}
 					else
 					{
-						if (isPlayer & !ec.chessEngineSearchingPonder)
+//						if (isPlayer & !ec.chessEngineSearchingPonder)
+						if (isPlayer & ec.getEngine().engineState != EngineState.PONDER)
 						{
 							if (tc.clockIsRunning)
 							{
@@ -2736,7 +2738,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			case R.id.btn_6:    // move back
 				cancelEngineMessage();
 				nextMove(1, 0);
-				if (ec.chessEngineSearchingPonder)
+//				if (ec.chessEngineSearchingPonder)
+				if (ec.getEngine().engineState == EngineState.PONDER)
 					engineStopPonder(gc.cl.p_fen, ec.chessEnginePlayMod);
 				else
 				{
@@ -2750,7 +2753,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			case R.id.btn_7:    // next move
 				cancelEngineMessage();
 				nextMove(2, 0);
-				if (ec.chessEngineSearchingPonder)
+//				if (ec.chessEngineSearchingPonder)
+				if (ec.getEngine().engineState == EngineState.PONDER)
 					engineStopPonder(gc.cl.p_fen, ec.chessEnginePlayMod);
 				else
 				{
@@ -2793,7 +2797,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	private void onLongTouchAction(View view)
 	{
-		if (ec.chessEngineSearchingPonder)
+//		if (ec.chessEngineSearchingPonder)
+		if (ec.getEngine().engineState == EngineState.PONDER)
 		{
 			setPauseEnginePlay(false);
 			initPonder();
@@ -3340,7 +3345,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		else
 		{
 			stopComputerThinking(false);
-			ec.chessEngineSearchingPonder = false;
+//			ec.chessEngineSearchingPonder = false;
 			ec.chessEnginePaused = true;
 			if (!gc.isGameOver & !gc.cl.p_variationEnd)
 				setInfoMessage(getEnginePausedMessage(), null, null, false);
@@ -3379,13 +3384,27 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				switch (engineAction)
 				{
 					case 0:		// stop engine
-						ec.chessEngineAnalysisStat = 0;
+//						ec.chessEngineAnalysisStat = 0;
+
+						Log.i(TAG, "pauseEnginePlay(), syncStopSearch(), eState: STOP_IDLE");
+
+						ec.getEngine().syncStopSearch(EngineState.STOP_IDLE);
 						break;
 					case 1:		// make best move and stop engine (analysis)
-						ec.chessEngineAnalysisStat = 1;
+//						ec.chessEngineAnalysisStat = 1;
+
+						Log.i(TAG, "pauseEnginePlay(), syncStopSearch(), eState: STOP_MOVE");
+
+						ec.getEngine().syncStopSearch(EngineState.STOP_MOVE);
 						break;
 					case 2:		// make best move and continue engine search (analysis)
-						ec.chessEngineAnalysisStat = 2;
+//						ec.chessEngineAnalysisStat = 2;
+
+						Log.i(TAG, "pauseEnginePlay(), syncStopSearch(), eState: STOP_MOVE_CONTINE");
+
+						//karl ???
+						ec.getEngine().continueFen = gc.cl.p_fen;
+						ec.getEngine().syncStopSearch(EngineState.STOP_MOVE_CONTINE);
 						break;
 				}
 			}
@@ -3458,12 +3477,18 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			if (ec.getEngine().processAlive)
 			{
-				if (!ec.getEngine().syncStopSearch(false))
-				{
+				//STOP ??? quite ???
+//				if (!ec.getEngine().syncStopSearch(false))
+//				{
 
 //Log.i(TAG, "stopComputerThinking, !getEngine().syncStopSearch(): false");
 
-				}
+//				}
+
+				Log.i(TAG, "stopComputerThinking(), syncStopSearch(), eState: STOP_IDLE");
+
+				ec.getEngine().syncStopSearch(EngineState.STOP_IDLE);
+
 			}
 		}
 		catch (NullPointerException e) {e.printStackTrace();}
@@ -3636,7 +3661,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			gc.cl.p_hasPossibleMoves = false;
 			updateGui();
 		}
-		if (ec.chessEngineSearchingPonder)
+//		if (ec.chessEngineSearchingPonder)
+		if (ec.getEngine().engineState == EngineState.PONDER)
 			engineStopPonder(gc.cl.p_fen, ec.chessEnginePlayMod);
 		else
 		{
@@ -3794,7 +3820,7 @@ Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 		ec.setStartPlay(gc.getValueFromFen(gc.fen, 2));
 		boolean	isReady = false;
 
-Log.i(TAG, "0 startEnginePlay(), ec.getEngine().process: " + ec.getEngine().process);
+Log.i(TAG, "0 startEnginePlay(), ec.getEngine().process: " + ec.getEngine().process + ", newGame: " + newGame);
 
 		if (ec.getEngine().process != null)
 			isReady = ec.getEngine().syncReady();
@@ -3814,12 +3840,20 @@ Log.i(TAG, "1 startEnginePlay(), isReady : " + isReady);
 
 Log.i(TAG, "2 startEnginePlay(), restartEngine(), isError: " + isError);
 
+				if (ec.getEngine().process != null)
+				{
+					ec.getEngine().process.destroy();
+					ec.getEngine().process = null;
+				}
+
 				if (!restartEngine())
 					return;
 			}
 
 		}
+
 		startEnginePlayIsReady(newGame);
+
 	}
 
 	public void startEnginePlayIsReady(boolean newGame)
@@ -3845,7 +3879,7 @@ Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 
 		if (!isError)
 		{
-			if (!startNewGame(ec.getEngine().engineNumber))
+			if (!startNewGame(ec.getEngine().engineNumber, false))
 			{
 				stopChessClock();
 				ec.chessEngineSearching = false;
@@ -3883,8 +3917,19 @@ Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 			if (!(gc.fen.equals(gc.startFen) & ec.chessEnginePlayMod == 1))
 				startChessClock();
 			messageEngineShort  = "";
+
+			Log.i(TAG, "9 startEnginePlayIsReady(), ec.makeMove: " + ec.makeMove);
+
 			setInfoMessage(getString(R.string.player_move), null, null, false);
 			ec.chessEngineSearching = false;
+
+//			if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
+//					&	ec.getEngine().isUciPonder
+//					& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+//					& 	!gc.cl.p_fen.equals("")
+//			)
+//			 	enginePlayPonder(gc.cl.p_fen, " ");
+
 		}
 	}
 
@@ -3897,7 +3942,7 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 
 		if (ec.getEngine().initProcess(runP.getString("run_engineProcess", "")))
 		{
-			startNewGame(ec.getEngine().engineNumber);
+			startNewGame(ec.getEngine().engineNumber, true);
 			return true;
 		}
 		else
@@ -3912,19 +3957,22 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 		}
 	}
 
-	public boolean startNewGame(int engineNumber)
+	public boolean startNewGame(int engineNumber, boolean initEngine)
 	{
 		switch (engineNumber)
 		{
 			case 1:	// default engine Stockfish
-				ec.getEngine().setUciMultiPV(userPrefs.getInt("user_options_enginePlay_MultiPv", OptionsEnginePlay.PV_MULTI));
-				ec.getEngine().setIsChess960(gc.isChess960);
-				ec.getEngine().setUciStrength(userPrefs.getInt("user_options_enginePlay_strength", 100));
-				ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 0));
-				ec.getEngine().setUciHash(16);
-				ec.getEngine().setUciPonder(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
-				ec.getEngine().setStartFen(gc.startFen);
-				ec.getEngine().newGame();
+				if (initEngine)
+				{
+					ec.getEngine().setUciMultiPV(userPrefs.getInt("user_options_enginePlay_MultiPv", OptionsEnginePlay.PV_MULTI));
+					ec.getEngine().setIsChess960(gc.isChess960);
+					ec.getEngine().setUciStrength(userPrefs.getInt("user_options_enginePlay_strength", 100));
+					ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 0));
+					ec.getEngine().setUciHash(16);
+					ec.getEngine().setUciPonder(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
+					ec.getEngine().setStartFen(gc.startFen);
+					ec.getEngine().newGame();
+				}
 				break;
 			case 2:
 
@@ -3945,14 +3993,18 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 					ec.engineNumber = 1;
 			}
 
-//Log.i(TAG, "chessEngineBestMove(), fen, w/b, engine: " + fen + ",   moves: " + moves);
+Log.i(TAG, "chessEngineBestMove(), fen, w/b, engine: " + fen + ",   moves: " + moves);
 //Log.i(TAG, "isGoPonder: " + isGoPonder + ", ec.chessEngineSearchingPonder: " + ec.chessEngineSearchingPonder);
-//Log.i(TAG, "ec.ponderUserFen: " + ec.ponderUserFen);
+Log.i(TAG, "engineState: " + ec.getEngine().engineState);
 
-			if (!isGoPonder & ec.chessEngineSearchingPonder)
+			//karl
+//			if (!isGoPonder & ec.chessEngineSearchingPonder)
+			if (!isGoPonder & ec.getEngine().engineState == EngineState.PONDER)
 			{
-				searchTaskFen = fen;
-				ec.ponderUserFen = fen;
+//				searchTaskFen = fen;
+//				ec.ponderUserFen = fen;
+				ec.getEngine().continueFen = fen;
+				ec.getEngine().syncStopSearch(EngineState.STOP_CONTINE);
 			}
 			else
 			{
@@ -3970,6 +4022,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 					if (!restartEngine())
 						return;
 				}
+
+				Log.i(TAG, "chessEngineBestMove(), engineState: " + ec.getEngine().engineState);
 
 				searchTaskFen = fen;
 				searchTaskMoves = moves;
@@ -4013,7 +4067,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 			{
 				if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
 						&	ec.getEngine().isUciPonder
-						& 	ec.chessEngineSearchingPonder & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+//						& 	ec.chessEngineSearchingPonder & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+						& 	ec.getEngine().engineState == EngineState.PONDER & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 					)
 				{
 					return getString(R.string.player_move);
@@ -4400,7 +4455,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 			if (ec.chessEnginesOpeningBook)
 				messageEngineShort = getString(R.string.engine_openingBook);
 		}
-		if (!gc.cl.p_fen.equals(searchTaskFen) & !ec.chessEngineSearchingPonder)
+//		if (!gc.cl.p_fen.equals(searchTaskFen) & !ec.chessEngineSearchingPonder)
+		if (!gc.cl.p_fen.equals(searchTaskFen) & ec.getEngine().engineState != EngineState.PONDER)
 		{
 
 //Log.i(TAG,"setInfoMessage(), gc.cl.p_fen:   " + gc.cl.p_fen);
@@ -5083,7 +5139,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 				case 2:     // engine vs player
 				case 3:     // computer vs computer
 				case 4:     // analysis
-					if ((ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2) & ec.chessEngineSearchingPonder)
+//					if ((ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2) & ec.chessEngineSearchingPonder)
+					if ((ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2) & ec.getEngine().engineState == EngineState.PONDER)
 					{
 //						if (chessEngineSearchTask.currentBestMove != "")
 						if (!chessEngineSearchTask.currentBestMove.equals(""))
@@ -5094,12 +5151,17 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 							{
 								updateGui();
 								gc.move = "";
-								ec.ponderUserFen = gc.cl.p_fen;
+//								ec.ponderUserFen = gc.cl.p_fen;
 							}
 							else
 							{
-								if (ec.getEngine().syncStopSearch(false))
-									return;
+								//STOP ???
+//								if (ec.getEngine().syncStopSearch(false))
+
+								Log.i(TAG, "startForceComputerMove(), syncStopSearch(), eState: STOP_MOVE");
+
+								ec.getEngine().syncStopSearch(EngineState.STOP_MOVE);
+								return;
 							}
 						}
 					}
@@ -5246,7 +5308,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 
 //Log.i(TAG, "stopThreads(), shutDown: " + shutDown);
 
-		if (ec.chessEngineSearchingPonder & !shutDown)
+//		if (ec.chessEngineSearchingPonder & !shutDown)
+		if (ec.getEngine().engineState == EngineState.PONDER & !shutDown)
 		{
 			setPauseEnginePlay(false);
 		}
@@ -5312,7 +5375,7 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 						{
 							ec.chessEngineSearching = false;
 							stopComputerThinking(false);
-							ec.chessEngineSearchingPonder = false;
+//							ec.chessEngineSearchingPonder = false;
 							ec.chessEnginePaused = true;
 							ec.chessEngineInit = true;
 							updateCurrentPosition("");
@@ -5353,7 +5416,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 			if (ec.chessEnginePlayMod == 3)
 				tc.clockIsRunning = true;
 			if 	(		userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true)
-					& 	ec.chessEnginePlayMod != 4 & !ec.chessEngineSearchingPonder
+//					& 	ec.chessEnginePlayMod != 4 & !ec.chessEngineSearchingPonder
+					& 	ec.chessEnginePlayMod != 4 & ec.getEngine().engineState != EngineState.PONDER
 				)
 			{	// using openingBook
 
@@ -5398,7 +5462,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 				ec.chessEngineAnalysis = false;
 				ec.chessEngineAnalysisStat = 0;
 			}
-			ec.getEngine().startSearch(taskFen, taskMoves, wTime, bTime, wInc, bInc, moveTime, movesToGo, ec.chessEngineAnalysis, isGoPonder, mate);
+			boolean isPonder = isGoPonder;
+			ec.getEngine().startSearch(taskFen, taskMoves, wTime, bTime, wInc, bInc, moveTime, movesToGo, ec.chessEngineAnalysis, isPonder, mate);
 			isGoPonder = false;
 
 			isTimeCheck = false;
@@ -5517,13 +5582,15 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 					}
 				}
 
-				if (isInfo & ec.chessEnginePlayMod <= 3 & taskFen.equals(gc.standardFen) & currentBestMove != null)
-				{
-					if (ec.getEngine().syncStopSearch(false))
-						currentBestMove = ec.getEngine().stopBestMove;
-					if (!currentBestMove.equals(""))
-						return currentBestMove;
-				}
+				//karl ???
+//				if (isInfo & ec.chessEnginePlayMod <= 3 & taskFen.equals(gc.standardFen) & currentBestMove != null)
+//				{
+//					//STOP ???
+//					if (ec.getEngine().syncStopSearch(false))
+//						currentBestMove = ec.getEngine().stopBestMove;
+//					if (!currentBestMove.equals(""))
+//						return currentBestMove;
+//				}
 
 				if (tokens[0].equals("bestmove") & ec.chessEnginePlayMod != 4)
 				{	// get best move if not analysis
@@ -5536,91 +5603,99 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 					return tokens[1];	//>242	return bestmove
 				}
 
-				if 	(ec.chessEngineAnalysisStat == 2) // stop, make move and continue
-				{	// engine searching has stopped by user
 
-					if (!currentBestMove.equals(""))
-					{
-						boolean isStop = ec.getEngine().syncStopSearch(true);
+//				if 	(ec.chessEngineAnalysisStat == 2) // stop, make move and continue
+//				{	// engine searching has stopped by user
+//
+//					if (!currentBestMove.equals(""))
+//					{
+//						//STOP ???
+//						boolean isStop = ec.getEngine().syncStopSearch(true);
+//
+////Log.i(TAG, "analysis has stopped, stat: " + ec.chessEngineAnalysisStat + ", bestMove: " + currentBestMove + ", isStop: " + isStop);
+//
+//						if (isStop & !ec.getEngine().stopBestMove.equals(""))
+//						{
+//							currentBestMove = ec.getEngine().stopBestMove;
+//							currentPonderMove = ec.getEngine().stopPonderMove;
+//						}
+//						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
+//								&	ec.getEngine().isUciPonder
+//								& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+//								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
+//							)
+//							ec.chessEngineAnalysisStat = 0;	// trigger ponder searching
+//						cancelTask = false;
+//						return currentBestMove;
+//					}
+//				}
 
-//Log.i(TAG, "analysis has stopped, stat: " + ec.chessEngineAnalysisStat + ", bestMove: " + currentBestMove + ", isStop: " + isStop);
+				//karl ???
+//				if 	(isTimeCheck & !currentBestMove.equals("") & !ec.chessEngineSearchingPonder) // stop, time control <= 200ms
+//				{
+//					long currentTime = System.currentTimeMillis();
+//					timeCheck = timeCheck - currentTime + timeCheckStart;
+//					timeCheckStart = currentTime;
+//					if (timeCheck < timeCheckControl)
+//					{
+//						//STOP ???
+//						if (ec.getEngine().syncStopSearch(false))
+//						{
+//							if (isGoPonder)
+//								timeCheck = timeCheckControl + 100;
+//							else
+//							{
+//								if (!ec.getEngine().stopBestMove.equals(""))
+//									currentBestMove = ec.getEngine().stopBestMove;
+//								if (!ec.getEngine().stopPonderMove.equals(""))
+//									currentPonderMove = ec.getEngine().stopPonderMove;
+//								return currentBestMove;
+//							}
+//						}
+//						else
+//							return currentBestMove;
+//					}
+//				}
 
-						if (isStop & !ec.getEngine().stopBestMove.equals(""))
-						{
-							currentBestMove = ec.getEngine().stopBestMove;
-							currentPonderMove = ec.getEngine().stopPonderMove;
-						}
-						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
-								&	ec.getEngine().isUciPonder
-								& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
-								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
-							)
-							ec.chessEngineAnalysisStat = 0;	// trigger ponder searching
-						cancelTask = false;
-						return currentBestMove;
-					}
-				}
-
-				if 	(isTimeCheck & !currentBestMove.equals("") & !ec.chessEngineSearchingPonder) // stop, time control <= 200ms
-				{
-					long currentTime = System.currentTimeMillis();
-					timeCheck = timeCheck - currentTime + timeCheckStart;
-					timeCheckStart = currentTime;
-					if (timeCheck < timeCheckControl)
-					{
-						if (ec.getEngine().syncStopSearch(false))
-						{
-							if (isGoPonder)
-								timeCheck = timeCheckControl + 100;
-							else
-							{
-								if (!ec.getEngine().stopBestMove.equals(""))
-									currentBestMove = ec.getEngine().stopBestMove;
-								if (!ec.getEngine().stopPonderMove.equals(""))
-									currentPonderMove = ec.getEngine().stopPonderMove;
-								return currentBestMove;
-							}
-						}
-						else
-							return currentBestMove;
-					}
-				}
-
+				//karl
 				// user move action: stop ponder search and start new search (ec.ponderUserFen)
-				if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
-						&	ec.getEngine().isUciPonder
-						& 	ec.chessEngineSearchingPonder & !ec.ponderUserFen.equals("")
-					)
-				{
-					taskFen = ec.ponderUserFen;
-					taskMoves = "";
-					initInfoArrays(true);
-					if (ec.getEngine().syncStopSearch(false))
-						return "PONDER_ACTION";
-					else
-					{
-						cancelTask = true;
-						return "CANCEL";
-					}
-				}
+//				if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
+//						&	ec.getEngine().isUciPonder
+//						& 	ec.chessEngineSearchingPonder & !ec.ponderUserFen.equals("")
+//					)
+//				{
+//					taskFen = ec.ponderUserFen;
+//					taskMoves = "";
+//					initInfoArrays(true);
+//					//STOP ???
+//					if (ec.getEngine().syncStopSearch(false))
+//						return "PONDER_ACTION";
+//					else
+//					{
+//						cancelTask = true;
+//						return "CANCEL";
+//					}
+//				}
 
-				if (cancelTask & !s.equals(""))
-				{
-
-//Log.i(TAG, "cancelTask, s: " + s);
-
-					if (ec.chessEnginePlayMod == 4 & ec.chessEngineAnalysisStat < 9 & !currentBestMove.equals(""))
-					{	// analysis has stopped
-						if (ec.getEngine().syncStopSearch(false) & !ec.getEngine().stopBestMove.equals(""))
-						{
-							currentBestMove = ec.getEngine().stopBestMove;
-							currentPonderMove = ec.getEngine().stopPonderMove;
-						}
-						return currentBestMove;
-					}
-					else
-						return "CANCEL";			// ChessEngineSearchTask is cancelled
-				}
+				//karl !!! ???
+//				if (cancelTask & !s.equals(""))
+//				{
+//
+////Log.i(TAG, "cancelTask, s: " + s);
+//
+//					if (ec.chessEnginePlayMod == 4 & ec.chessEngineAnalysisStat < 9 & !currentBestMove.equals(""))
+//					{	// analysis has stopped
+//						//STOP ???
+//						if (ec.getEngine().syncStopSearch(false) & !ec.getEngine().stopBestMove.equals(""))
+//						{
+//							currentBestMove = ec.getEngine().stopBestMove;
+//							currentPonderMove = ec.getEngine().stopPonderMove;
+//						}
+//						return currentBestMove;
+//					}
+//					else
+//						return "CANCEL";			// ChessEngineSearchTask is cancelled
+//				}
 			}
 		}
 
@@ -5720,7 +5795,7 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 				stopChessClock();
 				ec.chessEngineSearching = false;
 				stopComputerThinking(true);
-				ec.chessEngineSearchingPonder = false;
+//				ec.chessEngineSearchingPonder = false;
 				ec.chessEnginePaused = true;
 				ec.chessEngineInit = true;
 				updateCurrentPosition("");
@@ -5739,25 +5814,25 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 				return;
 			}
 
-			if (result.equals("PONDER_ACTION"))
-			{
-
-				// !!! stop ponder searching and start new search: ec.ponderUserFen
+//			if (result.equals("PONDER_ACTION"))
+//			{
+//
+//				// !!! stop ponder searching and start new search: ec.ponderUserFen
 //Log.i(TAG, "onPostExecute(), PONDER_ACTION, ec.ponderUserFen: " + ec.ponderUserFen);
-
-				CharSequence newFen = ec.ponderUserFen;
-				initPonder();
-				if (!newFen.equals(""))
-					chessEngineBestMove(newFen, "");
-				return;
-			}
+//
+//				CharSequence newFen = ec.ponderUserFen;
+//				initPonder();
+//				if (!newFen.equals(""))
+//					chessEngineBestMove(newFen, "");
+//				return;
+//			}
 
 			if (result.equals("CANCEL") | cancelTask)
 			{
 				ec.chessEngineSearching = false;
 				ec.chessEngineStopSearch = false;
 				stopChessClock();
-				ec.chessEngineSearchingPonder = false;
+//				ec.chessEngineSearchingPonder = false;
 				if (ec.chessEnginePlayMod == 4)
 				{
 					ec.chessEnginePaused = true;
@@ -5795,7 +5870,7 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 					else
 					{
 						stopComputerThinking(false);
-						ec.chessEngineSearchingPonder = false;
+//						ec.chessEngineSearchingPonder = false;
 						ec.chessEngineInit = true;
 						ec.chessEnginePaused = true;
 						updateGui();
@@ -5897,7 +5972,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 		protected CharSequence getInfoStat(int depth, int selDepth, int moveNumber, int moveNumberCnt, int nodes, CharSequence move, CharSequence fen)
 		{
 			CharSequence infoStat = "";
-			if (!ec.chessEngineSearchingPonder)
+//			if (!ec.chessEngineSearchingPonder)
+			if (ec.getEngine().engineState != EngineState.PONDER)
 				infoStat = getString(R.string.engineThinking);
 			else
 				infoStat = getString(R.string.epPonder);
@@ -5963,134 +6039,318 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 	{
 
 Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
+Log.i(TAG, "enginePlay(), engineState: " + ec.getEngine().engineState);
+
+//		public enum EngineState {
+//			READ_OPTIONS,  // "uci" command sent, waiting for "option" and "uciok" response.
+//			WAIT_READY,    // "isready" sent, waiting for "readyok".
+//			IDLE,          // engine not searching.
+//			SEARCH,        // "go" sent, waiting for "bestmove"
+//			PONDER,        // "go" sent, waiting for "bestmove"
+//			ANALYZE,       // "go" sent, waiting for "bestmove" (which will be ignored)
+//			STOP_IDLE,   	// "stop" sent, waiting for "bestmove", and set to IDLE
+//			STOP_MOVE,   	// "stop" sent, waiting for "bestmove", and make move
+//			STOP_MOVE_CONTINE,   // "stop" sent, waiting for "bestmove", make move and continue: start next search ? go, ponder, infinite ?
+//			DEAD,          // engine process has terminated
+//		}
 
 		if (!result.equals(""))
 		{
 			searchTaskRestart = false;
 			if (!ec.chessEnginePaused & !result.equals("(none)"))
 			{
-				cancelSearchTask();
+//				cancelSearchTask();
+
+				isGoPonder = false;
 				CharSequence newFen = "";
-				if (ec.chessEnginePlayMod == 4 | ec.chessEngineAnalysisStat == 2)
-				{	// analysis | make move by user action
-					if (ec.chessEngineAnalysisStat == 1 | ec.chessEngineAnalysisStat == 2)
-						newFen = chessEngineGui(taskFen, result);
-					if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
-					{
-						ec.chessEngineSearching = false;
-						if (userPrefs.getInt("user_options_timeControl", 1) == 2)
-							setMoveTime();
-						playSound(1, 0);
-						engineControlTime = System.currentTimeMillis();
-						handlerChessClock.removeCallbacks(mUpdateChessClock);
-						handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
-						return;
-					}
 
-					if (ec.chessEngineAnalysisStat == 0 | ec.chessEngineAnalysisStat == 1)
-					{
-						newFen = "";
-						setPauseEnginePlay(false);
-					}
-
-					stopChessClock();
-
-					if (ec.chessEngineAnalysisStat == 2)
-					{
-						startChessClock();
-						isGoPonder = false;
-						chessEngineBestMove(newFen, "");
-						ec.chessEngineSearching = true;
-					}
-					else
-						updateCurrentPosition("");
-
-					ec.chessEngineStopSearch = false;
-				}
-				else
+				switch (ec.getEngine().engineState)
 				{
-					newFen = chessEngineGui(taskFen, result);
-					if (!newFen.equals(""))
+					case READ_OPTIONS:
+					case WAIT_READY:
+					case PONDER:
+					case ANALYZE:
+					case IDLE:
+					case DEAD:
 					{
-						if (ec.chessEnginePlayMod == 3)
-						{	// engine vs engine
-							if (ec.chessEngineAutoRun)
-							{
+						break;
+					}
+					case SEARCH:
+					{
+						newFen = chessEngineGui(taskFen, result);
+						if (!newFen.equals(""))
+						{
+							if (ec.chessEnginePlayMod == 3)
+							{	// engine vs engine
+								if (ec.chessEngineAutoRun)
+								{
 
 //Log.i(TAG, "gameOver, variationEnd, result: " + gc.isGameOver + ", " + gc.cl.p_variationEnd + ", " + gc.cl.history.getGameResult());
 
-								if 		(		gc.isGameOver | result.equals("(none)")
+									if 		(		gc.isGameOver | result.equals("(none)")
 											| 	gc.cl.p_variationEnd | gc.cl.p_mate | gc.cl.p_stalemate | gc.cl.p_auto_draw
-										)
-								{
-									if (userPrefs.getBoolean("user_play_eve_autoSave", true))
-										startSaveGame(0);	// >>> onActivityResult(), SAVE_GAME_REQUEST_CODE
+									)
+									{
+										if (userPrefs.getBoolean("user_play_eve_autoSave", true))
+											startSaveGame(0);	// >>> onActivityResult(), SAVE_GAME_REQUEST_CODE
+										else
+											nextGameEngineAutoPlay();
+									}
 									else
-										nextGameEngineAutoPlay();
+									{
+										ec.chessEngineSearching = true;
+										isGoPonder = false;
+										chessEngineBestMove(newFen, "");
+									}
 								}
 								else
 								{
-									ec.chessEngineSearching = true;
-									isGoPonder = false;
-									chessEngineBestMove(newFen, "");
+
+//Log.i(TAG, "gc.isGameOver, gc.cl.p_variationEnd, gc.cl.p_mate, gc.cl.p_stalemate: " + gc.isGameOver + ", " + gc.cl.p_variationEnd + ", " + gc.cl.p_mate + ", " + gc.cl.p_stalemate);
+
+									if 	(	!gc.isGameOver & !gc.cl.p_variationEnd & !result.equals("(none)")
+											& !gc.cl.p_mate & !gc.cl.p_stalemate & !gc.cl.p_auto_draw
+									)
+									{
+										ec.chessEngineSearching = true;
+										isGoPonder = false;
+										chessEngineBestMove(newFen, "");
+									}
+									else
+									{
+										stopComputerThinking(false);
+//										ec.chessEngineSearchingPonder = false;
+										ec.chessEnginePaused = true;
+										updateCurrentPosition("");
+										setInfoMessage(getEnginePausedMessage(), null, null, false);
+									}
 								}
 							}
 							else
 							{
-
-//Log.i(TAG, "gc.isGameOver, gc.cl.p_variationEnd, gc.cl.p_mate, gc.cl.p_stalemate: " + gc.isGameOver + ", " + gc.cl.p_variationEnd + ", " + gc.cl.p_mate + ", " + gc.cl.p_stalemate);
-
-								if 	(	!gc.isGameOver & !gc.cl.p_variationEnd & !result.equals("(none)")
-										& !gc.cl.p_mate & !gc.cl.p_stalemate & !gc.cl.p_auto_draw
-										)
-								{
-									ec.chessEngineSearching = true;
-									isGoPonder = false;
-									chessEngineBestMove(newFen, "");
-								}
-								else
-								{
-									stopComputerThinking(false);
-									ec.chessEngineSearchingPonder = false;
-									ec.chessEnginePaused = true;
-									updateCurrentPosition("");
-									setInfoMessage(getEnginePausedMessage(), null, null, false);
-								}
+								ec.chessEngineSearching = false;
+								if (userPrefs.getInt("user_options_timeControl", 1) == 2)
+									setMoveTime();
 							}
+
+//Log.i(TAG, "enginePlay(), newFen: " + newFen + "\nresult: " + result + ", ponderMove: " + currentPonderMove);
+
+							if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
+									&	ec.getEngine().isUciPonder
+									& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+//									& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
+							)
+							{
+								//karl ponder
+//								enginePlayPonder(newFen, currentPonderMove);
+
+								Log.i(TAG, "enginePlay(), newFen: " + newFen + "\nresult: " + result + ", START PONDER");
+
+//								ec.chessEngineSearchingPonder = true;
+								isGoPonder = true;
+//								chessEngineBestMove(ec.getEngine().continueFen, ponderMove);    // ponderMove !!!
+								chessEngineBestMove(newFen, ponderMove);    // ponderMove !!!
+								playSound(1, 0);
+								return;
+
+							}
+							else
+								initPonder();
+							if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2 | ec.chessEnginePlayMod == 3)
+								playSound(1, 0);
+							engineControlTime = System.currentTimeMillis();
+							handlerChessClock.removeCallbacks(mUpdateChessClock);
+							handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
 						}
-						else
+						break;
+					}
+					case STOP_MOVE:
+					{
+						newFen = chessEngineGui(taskFen, result);
+						stopChessClock();
+						updateCurrentPosition("");
+						break;
+					}
+					case STOP_MOVE_CONTINE:
+					{
+						newFen = chessEngineGui(taskFen, result);
+						if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 						{
 							ec.chessEngineSearching = false;
 							if (userPrefs.getInt("user_options_timeControl", 1) == 2)
 								setMoveTime();
-						}
-
-//Log.i(TAG, "enginePlay(), newFen: " + newFen + "\nresult: " + result + ", ponderMove: " + currentPonderMove);
-
-						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
-								&	ec.getEngine().isUciPonder
-								& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
-								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
-							)
-						{
-							//karl ponder
-
-							enginePlayPonder(newFen, currentPonderMove);
-							return;
+							playSound(1, 0);
+							engineControlTime = System.currentTimeMillis();
+							handlerChessClock.removeCallbacks(mUpdateChessClock);
+							handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
 						}
 						else
-							initPonder();
-						if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2 | ec.chessEnginePlayMod == 3)
-							playSound(1, 0);
-						engineControlTime = System.currentTimeMillis();
-						handlerChessClock.removeCallbacks(mUpdateChessClock);
-						handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
+						{
+							stopChessClock();
+							startChessClock();
+							isGoPonder = false;
+							chessEngineBestMove(newFen, "");
+							ec.chessEngineSearching = true;
+						}
+
+						break;
+					}
+					case STOP_CONTINE:
+					{
+						isGoPonder = false;
+//						ec.chessEngineSearchingPonder = false;
+						chessEngineBestMove(ec.getEngine().continueFen, "");
+						ec.chessEngineSearching = true;
+						break;
+					}
+					case STOP_IDLE:
+					{
+						setPauseEnginePlay(false);
+						break;
 					}
 				}
+
+				ec.getEngine().engineState = EngineState.IDLE;
+
+
+
+
+
+//				CharSequence newFen = "";
+//				if (ec.chessEnginePlayMod == 4 | ec.chessEngineAnalysisStat == 2)
+//				{	// analysis | make move by user action
+//					if (ec.chessEngineAnalysisStat == 1 | ec.chessEngineAnalysisStat == 2)
+//						newFen = chessEngineGui(taskFen, result);
+//					if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+//					{
+//						ec.chessEngineSearching = false;
+//						if (userPrefs.getInt("user_options_timeControl", 1) == 2)
+//							setMoveTime();
+//						playSound(1, 0);
+//						engineControlTime = System.currentTimeMillis();
+//						handlerChessClock.removeCallbacks(mUpdateChessClock);
+//						handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
+//						return;
+//					}
+//
+//					if (ec.chessEngineAnalysisStat == 0 | ec.chessEngineAnalysisStat == 1)
+//					{
+//						newFen = "";
+//						setPauseEnginePlay(false);
+//					}
+//
+//					stopChessClock();
+//
+//					if (ec.chessEngineAnalysisStat == 2)
+//					{
+//						startChessClock();
+//						isGoPonder = false;
+//						chessEngineBestMove(newFen, "");
+//						ec.chessEngineSearching = true;
+//					}
+//					else
+//						updateCurrentPosition("");
+//
+//					ec.chessEngineStopSearch = false;
+//				}
+//				else
+//				{
+//
+//
+//					newFen = chessEngineGui(taskFen, result);
+//					if (!newFen.equals(""))
+//					{
+//						if (ec.chessEnginePlayMod == 3)
+//						{	// engine vs engine
+//							if (ec.chessEngineAutoRun)
+//							{
+//
+////Log.i(TAG, "gameOver, variationEnd, result: " + gc.isGameOver + ", " + gc.cl.p_variationEnd + ", " + gc.cl.history.getGameResult());
+//
+//								if 		(		gc.isGameOver | result.equals("(none)")
+//											| 	gc.cl.p_variationEnd | gc.cl.p_mate | gc.cl.p_stalemate | gc.cl.p_auto_draw
+//										)
+//								{
+//									if (userPrefs.getBoolean("user_play_eve_autoSave", true))
+//										startSaveGame(0);	// >>> onActivityResult(), SAVE_GAME_REQUEST_CODE
+//									else
+//										nextGameEngineAutoPlay();
+//								}
+//								else
+//								{
+//									ec.chessEngineSearching = true;
+//									isGoPonder = false;
+//									chessEngineBestMove(newFen, "");
+//								}
+//							}
+//							else
+//							{
+//
+////Log.i(TAG, "gc.isGameOver, gc.cl.p_variationEnd, gc.cl.p_mate, gc.cl.p_stalemate: " + gc.isGameOver + ", " + gc.cl.p_variationEnd + ", " + gc.cl.p_mate + ", " + gc.cl.p_stalemate);
+//
+//								if 	(	!gc.isGameOver & !gc.cl.p_variationEnd & !result.equals("(none)")
+//										& !gc.cl.p_mate & !gc.cl.p_stalemate & !gc.cl.p_auto_draw
+//										)
+//								{
+//									ec.chessEngineSearching = true;
+//									isGoPonder = false;
+//									chessEngineBestMove(newFen, "");
+//								}
+//								else
+//								{
+//									stopComputerThinking(false);
+//									ec.chessEngineSearchingPonder = false;
+//									ec.chessEnginePaused = true;
+//									updateCurrentPosition("");
+//									setInfoMessage(getEnginePausedMessage(), null, null, false);
+//								}
+//							}
+//						}
+//						else
+//						{
+//							ec.chessEngineSearching = false;
+//							if (userPrefs.getInt("user_options_timeControl", 1) == 2)
+//								setMoveTime();
+//						}
+//
+////Log.i(TAG, "enginePlay(), newFen: " + newFen + "\nresult: " + result + ", ponderMove: " + currentPonderMove);
+//
+//						if 	(		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
+//								&	ec.getEngine().isUciPonder
+//								& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
+//								& 	!currentPonderMove.equals("") & !ec.chessEngineSearchingPonder
+//							)
+//						{
+//							//karl ponder
+//
+//							enginePlayPonder(newFen, currentPonderMove);
+//							return;
+//						}
+//						else
+//							initPonder();
+//						if (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2 | ec.chessEnginePlayMod == 3)
+//							playSound(1, 0);
+//						engineControlTime = System.currentTimeMillis();
+//						handlerChessClock.removeCallbacks(mUpdateChessClock);
+//						handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
+//					}
+//
+//
+//				}
+
+
+
+
+
+
 			}
 		}
+		//karl ???
 		else
 		{
+
+			Log.i(TAG, "??? restartEngine(), process: " + ec.getEngine().process);
+
 			if (!searchTaskRestart)
 			{
 				searchTaskRestart = true;
@@ -6114,60 +6374,80 @@ Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 					setInfoMessage(getString(R.string.engine_noRespond) + " (searchTaskRestart)", null, null, false);
 				return;
 			}
+
+
 		}
 	}
 
 	public void initPonder()
 	{
-		ec.chessEngineSearchingPonder = false;
+//		ec.chessEngineSearchingPonder = false;
 		isGoPonder = false;
-		ec.ponderUserFen = "";
 	}
 
 	public void enginePlayPonder(CharSequence fen, CharSequence move)
 	{
 
-//Log.i(TAG, "enginePlayPonder(), fen: " + fen + ", ponderMove: " + move);
+Log.i(TAG, "1 enginePlayPonder(), fen: " + fen + ", ponderMove: " + move);
 
-		ec.chessEngineSearchingPonder = false;
+//		ec.chessEngineSearchingPonder = false;
 		isGoPonder = false;
 		ponderMove = move;
-		boolean isStop = ec.getEngine().syncStopSearch(false);
-		if (isStop | ponderMove != null)
-		{
-			if (!ponderMove.equals(""))
-			{
-				ec.chessEngineSearchingPonder = true;
-				isGoPonder = true;
-				chessEngineBestMove(fen, ponderMove);    // ponderMove !!!
-				playSound(1, 0);
-				return;
-			}
-		}
+//		boolean isStop = ec.getEngine().syncStopSearch(false);
 
-		stopComputerThinking(false);
-		ec.chessEngineSearchingPonder = false;
-		ec.chessEnginePaused = true;
-		updateCurrentPosition("");
+		Log.i(TAG, "enginePlayPonder(), syncStopSearch(), eState: STOP_MOVE_CONTINE");
+
+		ec.getEngine().continueFen = fen;
+		ec.getEngine().syncStopSearch(EngineState.STOP_MOVE_CONTINE);
+
+		//karl ???
+//		if (isStop | ponderMove != null)
+//		{
+//
+//			Log.i(TAG, "2 enginePlayPonder(), fen: " + fen + ", ponderMove: " + ponderMove);
+//
+//			if (!ponderMove.equals(""))
+//			{
+//				ec.chessEngineSearchingPonder = true;
+//				isGoPonder = true;
+//				chessEngineBestMove(fen, ponderMove);    // ponderMove !!!
+//				playSound(1, 0);
+//				return;
+//			}
+//		}
+
+		Log.i(TAG, "3 enginePlayPonder(), fen: " + fen + ", ponderMove: " + move);
+
+		//karl ???
+//		stopComputerThinking(false);
+//		ec.chessEngineSearchingPonder = false;
+//		ec.chessEnginePaused = true;
+//		updateCurrentPosition("");
+
 		setInfoMessage(getString(R.string.player_move), null, null, false);
 
 	}
 
 	public void engineStopPonder(CharSequence fen, int playMod)
 	{
-		if (ec.chessEngineSearchingPonder)
+		//karl ???
+//		if (ec.chessEngineSearchingPonder)
+		if (ec.getEngine().engineState == EngineState.PONDER)
 		{
 
-//Log.i(TAG, "engineStopPonder(), ec.chessEngineSearchingPonder, gc.cl.p_fen: " + fen);
+			Log.i(TAG, "engineStopPonder(), gc.cl.p_fen: " + fen + ", playMod: " + playMod);
 
 			if 	(		(gc.getValueFromFen(fen, 2).equals("b") & playMod == 1)
 					|	(gc.getValueFromFen(fen, 2).equals("w") & playMod == 2)
 				)
 			{
-				ec.ponderUserFen = fen;	// ---> chessEngineSearchTask : stop ponder search and start search (ec.ponderUserFen)
+//				ec.ponderUserFen = fen;	// ---> chessEngineSearchTask : stop ponder search and start search (ec.ponderUserFen)
+				ec.getEngine().continueFen = fen;
+				ec.getEngine().syncStopSearch(EngineState.STOP_CONTINE);
 			}
 			else
 			{
+				//karl
 				setPauseEnginePlay(false);
 				startChessClock();
 				messageEngineShort  = "";
@@ -6417,7 +6697,8 @@ Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 		int lastMoveIdx = gc.cl.p_moveIdx;
 		setInfoMoveValuesFromView(view, event);
 		nextMove(19, getMoveIdxFromInfo());		// set moveIdx
-		if (ec.chessEngineSearchingPonder)
+//		if (ec.chessEngineSearchingPonder)
+		if (ec.getEngine().engineState == EngineState.PONDER)
 			engineStopPonder(gc.cl.p_fen, ec.chessEnginePlayMod);
 		else
 		{
@@ -6470,7 +6751,7 @@ Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 	protected void moveAction(int position)
 	{
 
-//Log.i(TAG, "moveAction(), position: " + position);
+Log.i(TAG, "moveAction(), position: " + position);
 
 		if (gc.cl.p_mate | gc.cl.p_stalemate)	// mate, steal mate?
 		{
@@ -6600,6 +6881,9 @@ Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 						startChessClock();
 					}
 					updateGui();
+
+					Log.i(TAG, "C moveAction(), gc.move: " + gc.move + ", ec.chessEngineSearching: " + ec.chessEngineSearching);
+
 					if 	(		ec.chessEngineSearching & gc.cl.p_stat.equals("1")
 							& 	!gc.isGameOver & !gc.cl.p_variationEnd
 						)
@@ -6781,7 +7065,7 @@ Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 	{
 		stopComputerThinking(false);
 		ec.setPlaySettings(userPrefs, gc.cl.p_color);
-		ec.chessEngineSearchingPonder = false;
+//		ec.chessEngineSearchingPonder = false;
 		ec.chessEngineInit = true;
 		ec.chessEnginePaused = true;
 		initChessClock();
@@ -6845,7 +7129,8 @@ Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 	public void pauseStopPlay(boolean isFromDialog)
 	{
 		boolean isSearching = ec.chessEngineSearching;
-		if (ec.chessEngineSearchingPonder)
+//		if (ec.chessEngineSearchingPonder)
+		if (ec.getEngine().engineState == EngineState.PONDER)
 		{
 			setPauseEnginePlay(false);
 			initPonder();
@@ -7390,7 +7675,8 @@ Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 					else
 					{
 						Toast.makeText(MainActivity.this, getString(R.string.epPonder) + " " + getString(R.string.disabled), Toast.LENGTH_SHORT).show();
-						if (ec.chessEngineSearchingPonder)
+//						if (ec.chessEngineSearchingPonder)
+						if (ec.getEngine().engineState == EngineState.PONDER)
 						{
 							setPauseEnginePlay(false);
 							initPonder();

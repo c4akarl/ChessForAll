@@ -69,7 +69,8 @@ Log.i(TAG, "1 initProcess(), processName: " + processName);
         isUciPonder = false;
         //karl time? sd/c4a/uci; synchronized readUCIOptions() ?
 //        while (checkTime - startTime <= 500)
-        while (true)
+        while (checkTime - startTime <= MAX_SYNC_TIME)
+//        while (true)
         {
 			if (Thread.currentThread().isInterrupted())
 			{
@@ -93,13 +94,13 @@ Log.i(TAG, "1 initProcess(), processName: " + processName);
             CharSequence[] tokens = tokenize(s);
             if (tokens[0].equals("uciok"))
                 return true;
-//            checkTime = System.currentTimeMillis();
+            checkTime = System.currentTimeMillis();
         }
 
-//		if (isLogOn)
-//			Log.i(TAG, "readUCIOptions(), timeout");
+		if (isLogOn)
+			Log.i(TAG, "readUCIOptions(), timeout");
 
-//        return false;
+        return false;
 
     }
 
@@ -111,43 +112,49 @@ Log.i(TAG, "1 initProcess(), processName: " + processName);
         return cmdLine.toString().split("\\s+");
     }
 
-    public boolean syncStopSearch(boolean isStopAndMove)
+//    public boolean syncStopSearch(boolean isStopAndMove)
+    public void syncStopSearch(EngineState eState)
     {
 
-Log.i(TAG, "syncStopSearch(), isStopAndMove: " + isStopAndMove);
+Log.i(TAG, "syncStopSearch(), eState: " + eState);
 
         if (isError())
-            return false;
+//            return false;
+            return;
 
+		engineState = eState;
         writeLineToProcess("stop");
-        long startTime = System.currentTimeMillis();
-        long checkTime = startTime;
-        stopBestMove = "";
-        stopPonderMove = "";
-        while (checkTime - startTime <= MAX_SYNC_TIME)
-        {
-            CharSequence s = readLineFromProcess(1000);
-            if (s.equals("ERROR"))
-                return false;
-            if (s.toString().startsWith("bestmove"))
-            {
-                String[] txtSplit = s.toString().split(" ");
-                if (txtSplit.length == 4)
-                {
-                    stopBestMove = txtSplit[1];
-                    stopPonderMove = txtSplit[3];
-                }
-                return true;
-            }
-            checkTime = System.currentTimeMillis();
-        }
 
-//Log.i(TAG, "syncStopSearch(), end");
 
-        if (isStopAndMove)
-            return true;
-        else
-            return false;
+//        long startTime = System.currentTimeMillis();
+//        long checkTime = startTime;
+//        stopBestMove = "";
+//        stopPonderMove = "";
+//        while (checkTime - startTime <= MAX_SYNC_TIME)
+//        {
+//            CharSequence s = readLineFromProcess(1000);
+//            if (s.equals("ERROR"))
+//                return false;
+//            if (s.toString().startsWith("bestmove"))
+//            {
+//                String[] txtSplit = s.toString().split(" ");
+//                if (txtSplit.length == 4)
+//                {
+//                    stopBestMove = txtSplit[1];
+//                    stopPonderMove = txtSplit[3];
+//                }
+//                return true;
+//            }
+//            checkTime = System.currentTimeMillis();
+//        }
+//
+////Log.i(TAG, "syncStopSearch(), end");
+//
+//        if (isStopAndMove)
+//            return true;
+//        else
+//            return false;
+
     }
 
 //    public boolean syncReady()
@@ -160,6 +167,7 @@ Log.i(TAG, "syncReady(), start");
             return false;
 
         isReady = false;
+		engineState = EngineState.WAIT_READY;
         writeLineToProcess("isready");
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
@@ -181,6 +189,7 @@ Log.i(TAG, "syncReady(), start");
 //            }
             if (s.equals("readyok"))
             {
+				engineState = EngineState.IDLE;
                 isReady = true;
                 return true;
             }
@@ -189,7 +198,7 @@ Log.i(TAG, "syncReady(), start");
         return isReady;
     }
 
-    public boolean isError()
+    public synchronized boolean isError()
     {
         if (process == null)
             return true;
@@ -208,7 +217,7 @@ Log.i(TAG, "syncReady(), start");
             {
 				if (isLogOn)
                 	Log.i(TAG, "chess engine process, stream error: \n" + errorStream);
-                return true;
+				return !errorStream.contains(ACCEPT_ENGINE_ERROR_CODE_1);
             }
         }
         catch (Exception ex) {Log.i(TAG, "chess engine process, stream error(Exception): " + errorStream + "\n"); ex.printStackTrace();}
@@ -223,6 +232,9 @@ Log.i(TAG, "syncReady(), start");
             writeLineToProcess("setoption name UCI_Chess960 value false");
 
         writeLineToProcess("ucinewgame");
+        //karl engineState = EngineState.IDLE;  ???
+        writeLineToProcess("isready");
+
         return true;
     }
 
@@ -242,15 +254,22 @@ Log.i(TAG, "syncReady(), start");
         writeLineToProcess(posStr);										// writeLineToProcess
         String goStr = "";
         goStr = goStr + "go ";
+		engineState = EngineState.SEARCH;
         if (isGoPonder)
-            goStr = goStr + " ponder ";
+		{
+			engineState = EngineState.PONDER;
+			goStr = goStr + " ponder ";
+		}
         // go
         if (mate > 0)
             goStr = goStr + " mate " + mate;	                        // mate
         else
         {
             if (isInfinite)
-            goStr = goStr + " infinite ";								// search until the "stop" command
+			{
+				engineState = EngineState.ANALYZE;
+				goStr = goStr + " infinite ";                                // search until the "stop" command
+			}
             else
             {
                 if (movesTime > 0)
@@ -436,6 +455,7 @@ Log.i(TAG, "syncReady(), start");
 
     public final void shutDown()
     {	//quit the ChessEngine(Shut down process)
+		engineState = EngineState.DEAD;
         writeLineToProcess("quit");
         processAlive = false;
         try {Thread.sleep(100);}
@@ -457,6 +477,7 @@ Log.i(TAG, "syncReady(), start");
         {
             if (isLogOn)
                 Log.i(TAG, "startNewProcess(), engine process started: " + engineProcess);
+			engineState = EngineState.READ_OPTIONS;
             writeLineToProcess("uci");
             processAlive = readUCIOptions();
             if (fromFile & processAlive)
@@ -658,6 +679,21 @@ Log.i(TAG, "syncReady(), start");
         catch (IOException e) {e.printStackTrace();}
     }
 
+    public final synchronized boolean engineBusy() {
+        switch (engineState) {
+            case SEARCH:
+            case PONDER:
+            case ANALYZE:
+            case STOP_IDLE:
+            case STOP_MOVE:
+            case STOP_MOVE_CONTINE:
+            case STOP_CONTINE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     // NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS
     private final boolean startProcess()
     {
@@ -788,12 +824,28 @@ Log.i(TAG, "syncReady(), start");
     public CharSequence engineNameStrength = "";	        // native engine name + strength
     String engineProcess = "";			                    // the compiled engine process name (file name)
     final String INTERN_ENGINE_NAME_END = " CfA";
+    final String ACCEPT_ENGINE_ERROR_CODE_1= "78111321151179910432111112";	// Cfish, accept ?!
     String mesInitProcess = "";
 
     ProcessBuilder processBuilder;
     public Process process;
     private BufferedReader reader = null;
     private BufferedWriter writer = null;
+
+	public enum EngineState {
+		READ_OPTIONS,       // "uci" command sent, waiting for "option" and "uciok" response.
+		WAIT_READY,         // "isready" sent, waiting for "readyok".
+		IDLE,               // engine not searching.
+		SEARCH,             // "go" sent, waiting for "bestmove"
+		PONDER,             // "go" sent, waiting for "bestmove"
+		ANALYZE,            // "go" sent, waiting for "bestmove" (which will be ignored)
+		STOP_IDLE,   	    // "stop" sent, waiting for "bestmove", and set to IDLE
+		STOP_MOVE,   	    // "stop" sent, waiting for "bestmove", and make move
+		STOP_MOVE_CONTINE,  // "stop" sent, waiting for "bestmove", make move and continue: start next search ? go, ponder, infinite ?
+        STOP_CONTINE,       // "stop" sent, ignore "bestmove", continue with next "search"
+		DEAD,               // engine process has terminated
+	}
+	public EngineState engineState = EngineState.DEAD;
 
     boolean processAlive;
     boolean isReady = false;
@@ -811,6 +863,7 @@ Log.i(TAG, "syncReady(), start");
     int uciStrength = 4000;
 
     CharSequence startFen = "";
+    CharSequence continueFen = "";
     public boolean searchAlive = true;
     ArrayList<CharSequence> statPv = new ArrayList<CharSequence>();
     boolean pvValuesChanged = false;
