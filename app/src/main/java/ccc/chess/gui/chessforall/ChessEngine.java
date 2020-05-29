@@ -122,7 +122,7 @@ Log.i(TAG, "syncStopSearch(), eState: " + eState);
 //            return false;
             return;
 
-		engineState = eState;
+        engineState = eState;
         writeLineToProcess("stop");
 
 
@@ -189,7 +189,8 @@ Log.i(TAG, "syncReady(), start");
 //            }
             if (s.equals("readyok"))
             {
-				engineState = EngineState.IDLE;
+                if (engineState == EngineState.WAIT_READY)
+				    engineState = EngineState.IDLE;
                 isReady = true;
                 return true;
             }
@@ -233,7 +234,7 @@ Log.i(TAG, "syncReady(), start");
 
         writeLineToProcess("ucinewgame");
         //karl engineState = EngineState.IDLE;  ???
-        writeLineToProcess("isready");
+//        writeLineToProcess("isready");
 
         return true;
     }
@@ -481,7 +482,11 @@ Log.i(TAG, "syncReady(), start");
             writeLineToProcess("uci");
             processAlive = readUCIOptions();
             if (fromFile & processAlive)
-                mesInitProcess = mesInitProcess + "uciok"  + "\n";
+            {
+                if (engineState == EngineState.READ_OPTIONS)
+                    engineState = EngineState.IDLE;
+                mesInitProcess = mesInitProcess + "uciok" + "\n";
+            }
         }
         if (!processAlive)
         {
@@ -687,7 +692,18 @@ Log.i(TAG, "syncReady(), start");
             case STOP_IDLE:
             case STOP_MOVE:
             case STOP_MOVE_CONTINE:
-            case STOP_CONTINE:
+            case STOP_CONTINUE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public final synchronized boolean engineSearching() {
+        switch (engineState) {
+            case SEARCH:
+            case PONDER:
+            case ANALYZE:
                 return true;
             default:
                 return false;
@@ -842,7 +858,7 @@ Log.i(TAG, "syncReady(), start");
 		STOP_IDLE,   	    // "stop" sent, waiting for "bestmove", and set to IDLE
 		STOP_MOVE,   	    // "stop" sent, waiting for "bestmove", and make move
 		STOP_MOVE_CONTINE,  // "stop" sent, waiting for "bestmove", make move and continue: start next search ? go, ponder, infinite ?
-        STOP_CONTINE,       // "stop" sent, ignore "bestmove", continue with next "search"
+        STOP_CONTINUE,       // "stop" sent, ignore "bestmove", continue with next "search"
 		DEAD,               // engine process has terminated
 	}
 	public EngineState engineState = EngineState.DEAD;
