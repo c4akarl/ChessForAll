@@ -235,7 +235,7 @@ Log.i(TAG, "syncReady(), start");
         writeLineToProcess("ucinewgame");
         //karl engineState = EngineState.IDLE;  ???
 //        writeLineToProcess("isready");
-
+//
         return true;
     }
 
@@ -684,11 +684,8 @@ Log.i(TAG, "syncReady(), start");
         catch (IOException e) {e.printStackTrace();}
     }
 
-    public final synchronized boolean engineBusy() {
+    public final synchronized boolean engineStop() {
         switch (engineState) {
-            case SEARCH:
-            case PONDER:
-            case ANALYZE:
             case STOP_IDLE:
             case STOP_MOVE:
             case STOP_MOVE_CONTINE:

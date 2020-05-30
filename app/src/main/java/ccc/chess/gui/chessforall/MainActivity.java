@@ -902,8 +902,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ec.chessEngineSearching = true;
 				ec.chessEnginePaused = false;
 				updateGui();
-				stopThreads(false);
-				startPlay(false, true);
+//				stopThreads(false);
+//				startPlay(false, true);
+				if (!gc.cl.p_fen.equals(""))
+					stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 			}
 			else
 				updateGui();
@@ -1006,8 +1008,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						nextMove(4, 0);
 						if (!ec.chessEnginePaused)
 						{
-							stopThreads(false);
-							startPlay(false, true);
+//							stopThreads(false);
+//							startPlay(false, true);
+							if (!gc.cl.p_fen.equals(""))
+								stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 						}
 					}
 				}
@@ -1770,14 +1774,17 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 								case 1:     // white
 								case 2:     // black
 								case 3:     // engine vs engine
-									stopThreads(false);
+									//karl ???
+//									stopThreads(false);
 									ec.chessEnginePaused = false;
 									ec.chessEngineInit = false;
 									msgEngine.setVisibility(TextView.GONE);
 									messageInfo 		= "";
 									messageEngine 		= "";
 									messageEngineShort  = "";
-									startPlay(true, true);
+//									startPlay(true, true);
+									if (!gc.cl.p_fen.equals(""))
+										stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 									break;
 								case 5:     // two players
 									analysisMessage = "";
@@ -2552,8 +2559,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					}
 					if (!ec.chessEnginePaused)
 					{
-						stopThreads(false);
-						startPlay(false, true);
+//						stopThreads(false);
+//						startPlay(false, true);
+						if (!gc.cl.p_fen.equals(""))
+							stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 					}
 				}
 
@@ -2745,8 +2754,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 					if (!ec.chessEnginePaused)
 					{
-						stopThreads(false);
-						startPlay(false, true);
+//						stopThreads(false);
+//						startPlay(false, true);
+
+						Log.i(TAG, "onTouchAction(), gc.cl.p_fen: " + gc.cl.p_fen);
+
+						if (!gc.cl.p_fen.equals(""))
+							stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 					}
 				}
 				break;
@@ -2760,8 +2774,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 					if (!ec.chessEnginePaused)
 					{
-						stopThreads(false);
-						startPlay(false, true);
+//						stopThreads(false);
+//						startPlay(false, true);
+						if (!gc.cl.p_fen.equals(""))
+							stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 					}
 				}
 				break;
@@ -2832,8 +2848,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				nextMove(3, 0);
 				if (!ec.chessEnginePaused)
 				{
-					stopThreads(false);
-					startPlay(false, true);
+//					stopThreads(false);
+//					startPlay(false, true);
+					if (!gc.cl.p_fen.equals(""))
+						stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 				}
 				break;
 			case R.id.btn_7:    // last move
@@ -2845,8 +2863,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					nextMove(4, 0);
 					if (!ec.chessEnginePaused)
 					{
-						stopThreads(false);
-						startPlay(false, true);
+//						stopThreads(false);
+//						startPlay(false, true);
+						if (!gc.cl.p_fen.equals(""))
+							stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 					}
 				}
 				break;
@@ -3337,14 +3357,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void setPauseEnginePlay(boolean shutDown)
 	{
 
-//Log.i(TAG, "setPauseEnginePlay, ec.chessEnginePaused: " + ec.chessEnginePaused);
+		Log.i(TAG, "setPauseEnginePlay, ec.chessEnginePaused: " + ec.chessEnginePaused);
 
 		ec.chessEnginePausedPrev = ec.chessEnginePaused;
 		if (shutDown)
 			stopAllEngines(isAppEnd);
 		else
 		{
-			stopComputerThinking(false);
+//			stopComputerThinking(false);
+			stopSearchAndContinue(EngineState.STOP_IDLE, "");
+
 //			ec.chessEngineSearchingPonder = false;
 			ec.chessEnginePaused = true;
 			if (!gc.isGameOver & !gc.cl.p_variationEnd)
@@ -3426,7 +3448,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void stopSearchAndContinue(EngineState engineState, CharSequence fen)
 	{
 
-		Log.i(TAG, "stopSearchAndContinue)=, ec.chessEnginePaused, engineState: " + engineState + ", fen: " + fen);
+		Log.i(TAG, "stopSearchAndContinue), engineState: " + engineState + ", fen: " + fen);
+		Log.i(TAG, "stopSearchAndContinue), engineState: " + ", engineState: " + ec.getEngine().engineState);
 
 		if (ec.getEngine().engineSearching())
 		{
@@ -3443,76 +3466,88 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public final synchronized void stopComputerThinking(boolean shutDown)
 	{
 
-//Log.i(TAG, "stopComputerThinking, processAlive: " + ec.getEngine().processAlive + ", shutDown: " + shutDown + ", ec.chessEngineIsInSearchTask: " + ec.chessEngineIsInSearchTask);
+Log.i(TAG, "stopComputerThinking, processAlive: " + ec.getEngine().processAlive + ", shutDown: " + shutDown + ", ec.chessEngineIsInSearchTask: " + ec.chessEngineIsInSearchTask);
 
-		ec.chessEngineStopSearch = true;
+//		ec.chessEngineStopSearch = true;
+
 		if (shutDown)
 		{
 			ec.getEngine().shutDown();
 			return;
 		}
-
-		if (!ec.chessEngineIsInSearchTask)
-		{
-			ec.chessEngineStopSearch = false;
+		if (!ec.getEngine().engineSearching())
 			return;
-		}
 
-		if (chessEngineSearchTask != null)
-		{
-			chessEngineSearchTask.cancel(true);
-			try {Thread.sleep(sleepTime);}
-			catch (InterruptedException e) {}
-		}
+		stopSearchAndContinue(EngineState.STOP_IDLE, "");
 
-		boolean isStop = false;
-		if (ec.getEngine().process == null)
-			isStop = true;
-		else
-		{
-			if (ec.getEngine().isError())
-			{
-				isStop = true;
 
-				Log.i(TAG, "stopComputerThinking(), ec.getEngine().isError(): " + isStop);
 
-			}
-		}
-		if (isStop)
-		{
+//		if (!ec.chessEngineIsInSearchTask)
+//		{
+//			ec.chessEngineStopSearch = false;
+//			return;
+//		}
+//
+//		if (chessEngineSearchTask != null)
+//		{
+//			chessEngineSearchTask.cancel(true);
+//			try {Thread.sleep(sleepTime);}
+//			catch (InterruptedException e) {}
+//		}
 
-//Log.i(TAG, "stopComputerThinking, getEngine().isError()");
+//		boolean isStop = false;
+//		if (ec.getEngine().process == null)
+//			isStop = true;
+//		else
+//		{
+//			if (ec.getEngine().isError())
+//			{
+//				isStop = true;
+//
+//				Log.i(TAG, "stopComputerThinking(), ec.getEngine().isError(): " + isStop);
+//
+//			}
+//		}
+//		if (isStop)
+//		{
+//
+////Log.i(TAG, "stopComputerThinking, getEngine().isError()");
+//
+//            if (ec.getEngine().process != null)
+//			    ec.getEngine().process.destroy();
+//			stopChessClock();
+//			ec.chessEngineSearching = false;
+//			ec.chessEnginePaused = true;
+//			ec.chessEngineInit = true;
+//			ec.getEngine().processAlive = false;
+//			return;
+//		}
+//
+//		try
+//		{
+//			if (ec.getEngine().processAlive)
+//			{
+//				//STOP ??? quite ???
+////				if (!ec.getEngine().syncStopSearch(false))
+////				{
+//
+////Log.i(TAG, "stopComputerThinking, !getEngine().syncStopSearch(): false");
+//
+////				}
+//
+//
+//				Log.i(TAG, "stopComputerThinking(), syncStopSearch(), eState: STOP_IDLE");
+//
+////				ec.getEngine().syncStopSearch(EngineState.STOP_IDLE);
+//
+//				stopSearchAndContinue(EngineState.STOP_IDLE, "");
+//
+//			}
+//		}
+//		catch (NullPointerException e) {e.printStackTrace();}
 
-            if (ec.getEngine().process != null)
-			    ec.getEngine().process.destroy();
-			stopChessClock();
-			ec.chessEngineSearching = false;
-			ec.chessEnginePaused = true;
-			ec.chessEngineInit = true;
-			ec.getEngine().processAlive = false;
-			return;
-		}
 
-		try
-		{
-			if (ec.getEngine().processAlive)
-			{
-				//STOP ??? quite ???
-//				if (!ec.getEngine().syncStopSearch(false))
-//				{
 
-//Log.i(TAG, "stopComputerThinking, !getEngine().syncStopSearch(): false");
-
-//				}
-
-				Log.i(TAG, "stopComputerThinking(), syncStopSearch(), eState: STOP_IDLE");
-
-//				ec.getEngine().syncStopSearch(EngineState.STOP_IDLE);
-				stopSearchAndContinue(EngineState.STOP_IDLE, "");
-
-			}
-		}
-		catch (NullPointerException e) {e.printStackTrace();}
 	}
 
 	public void stopAllEngines(boolean isAppEnd)
@@ -3689,8 +3724,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			if (!ec.chessEnginePaused)
 			{
-				stopThreads(false);
-				startPlay(false, true);
+//				stopThreads(false);
+//				startPlay(false, true);
+				if (!gc.cl.p_fen.equals(""))
+					stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 			}
 			if (ec.chessEnginePaused)
 				setInfoMessage(getString(R.string.engine_paused), "", null, false);
@@ -3778,14 +3815,18 @@ Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 			engineMes = "";
 			initInfoArrays(false);
 
-//Log.i(TAG, "startPlay(), isAppStart: " + isAppStart);
+Log.i(TAG, "startPlay(), isAppStart: " + isAppStart);
 
-			if (!isAppStart)
+//			if (!isAppStart)
+			if (isAppStart)
+				isAppStart = false;
+			else
 			{
 				ec.initClockAfterAnalysis = false;
 				if (isNewGame | setClock)
 					initChessClock();
 			}
+
 			if (ec.chessEnginePlayMod <= 5)
 			{
 				if (!(gc.fen.equals(gc.startFen) & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 5)))
@@ -3955,7 +3996,7 @@ Log.i(TAG, "startEnginePlayIsReady(), isError: " + isError);
 	}
 
 
-	public boolean restartEngine()
+	public synchronized boolean restartEngine()
 	{
 
 Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
@@ -3978,7 +4019,7 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 		}
 	}
 
-	public boolean startNewGame(int engineNumber, boolean initEngine)
+	public synchronized boolean startNewGame(int engineNumber, boolean initEngine)
 	{
 		switch (engineNumber)
 		{
@@ -3993,6 +4034,7 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 					ec.getEngine().setUciPonder(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
 					ec.getEngine().setStartFen(gc.startFen);
 					ec.getEngine().newGame();
+					return ec.getEngine().syncReady();
 				}
 				break;
 			case 2:
@@ -4040,6 +4082,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 					if (!restartEngine())
 						return;
 				}
+
+				cancelSearchTask();
 
 				Log.i(TAG, "chessEngineBestMove(), engineState: " + ec.getEngine().engineState);
 
@@ -4287,8 +4331,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 				break;
 		}
 
-//Log.i(TAG, "initChessClock(), mod: " + ec.chessEnginePlayMod + ", timeControl: " + timeControl);
-//Log.i(TAG, "initChessClock(), tw: " + timeWhite + ", tb: " + timeBlack + ", movesToGo: " + movesToGo + ", bw: " + bonusWhite + ", bb: " + bonusBlack);
+Log.i(TAG, "initChessClock(), mod: " + ec.chessEnginePlayMod + ", timeControl: " + timeControl);
+Log.i(TAG, "initChessClock(), tw: " + timeWhite + ", tb: " + timeBlack + ", movesToGo: " + movesToGo + ", bw: " + bonusWhite + ", bb: " + bonusBlack);
 
 		tc.initChessClock(timeControl, timeWhite, timeBlack, movesToGo, bonusWhite, bonusBlack);
 	}
@@ -5413,8 +5457,10 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 							ec.chessEngineSearching = true;
 							ec.chessEnginePaused = false;
 							updateGui();
-							stopThreads(false);
-							startPlay(false, false);
+//							stopThreads(false);
+//							startPlay(false, false);
+							if (!gc.cl.p_fen.equals(""))
+								stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 						}
 
 						return;
@@ -5435,6 +5481,8 @@ Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_enginePr
 			taskMoves = args[1];
 
 			ec.getEngine().engineState = EngineState.SEARCH;
+			startEngineState = EngineState.SEARCH;
+
 
 			Log.i(TAG, "searchTask, doInBackground(), taskFen, taskMoves: " + taskFen + ", " +taskMoves);
 			Log.i(TAG, "searchTask, doInBackground(), engineState: " + ec.getEngine().engineState);
@@ -5512,15 +5560,15 @@ Log.i(TAG, "searchTask, doInBackground(), taskFen: " + taskFen);
 
 			while(true)
 			{
-				ec.chessEngineIsInSearchTask = true;
-
-				if (ec.chessEngineStopSearch)
-				{
-
-//Log.i(TAG, "searchTask, ec.chessEngineStopSearch: " + ec.chessEngineStopSearch);
-
-					return "CANCEL";
-				}
+//				ec.chessEngineIsInSearchTask = true;
+//
+//				if (ec.chessEngineStopSearch)
+//				{
+//
+////Log.i(TAG, "searchTask, ec.chessEngineStopSearch: " + ec.chessEngineStopSearch);
+//
+//					return "CANCEL";
+//				}
 
 				currentBestMove = ec.getEngine().statPvBestMove;		// current best move
 				currentPonderMove = ec.getEngine().statPvPonderMove;	// current ponder move
@@ -5727,6 +5775,8 @@ Log.i(TAG, "searchTask, doInBackground(), taskFen: " + taskFen);
 //					else
 //						return "CANCEL";			// ChessEngineSearchTask is cancelled
 //				}
+
+
 			}
 		}
 
@@ -5736,7 +5786,7 @@ Log.i(TAG, "searchTask, doInBackground(), taskFen: " + taskFen);
 			Log.i(TAG, "onPreExecute(), engineState: " + ec.getEngine().engineState);
 
 			cancelTask = false;
-			ec.chessEngineStopSearch = false;
+//			ec.chessEngineStopSearch = false;
 			ec.chessEngineIsInSearchTask = false;
 			searchStartTimeInfo = System.currentTimeMillis();
 			currentBestMove = "";
@@ -5769,8 +5819,8 @@ Log.i(TAG, "searchTask, doInBackground(), taskFen: " + taskFen);
 //Log.i(TAG, "onProgressUpdate(), engineMes: " + engineMes);
 //Log.i(TAG, "onProgressUpdate(), engineStat: " + engineStat);
 
-			if (ec.chessEngineStopSearch)
-				return;
+//			if (ec.chessEngineStopSearch)
+//				return;
 
 			if (tc.clockIsRunning)
 			{
@@ -5807,7 +5857,8 @@ Log.i(TAG, "searchTask, doInBackground(), taskFen: " + taskFen);
 					{
 						if (getEngineThinkingMessage().equals(getString(R.string.engineAnalysisStopWait)))
 							engineStat = "";
-						if (!ec.chessEngineStopSearch)
+//						if (!ec.chessEngineStopSearch)
+						if (!ec.getEngine().engineStop())
 							setInfoMessage(getEngineThinkingMessage() + " " + engineStat, engineMes, engineUpdate, false);
 					}
 					else
@@ -5820,7 +5871,12 @@ Log.i(TAG, "searchTask, doInBackground(), taskFen: " + taskFen);
 		protected void onPostExecute(CharSequence result)
 		{
 
-Log.i(TAG, "onPostExecute(), result: " + result + ", prevResult: " + prevResult + ", engineState: " + ec.getEngine().engineState);
+			Log.i(TAG, "onPostExecute(), result: " + result + ", prevResult: " + prevResult + ", engineState: " + ec.getEngine().engineState);
+
+			//karl isready --> readyok from main thread ???
+			if (ec.getEngine().engineState == EngineState.IDLE) {
+				ec.getEngine().engineState = startEngineState;
+			}
 
 			ec.chessEngineIsInSearchTask = false;
 			ec.chessEngineAnalysis = false;
@@ -5861,21 +5917,21 @@ Log.i(TAG, "onPostExecute(), result: " + result + ", prevResult: " + prevResult 
 //				return;
 //			}
 
-			if (result.equals("CANCEL") | cancelTask)
-			{
-				ec.chessEngineSearching = false;
-				ec.chessEngineStopSearch = false;
-				stopChessClock();
-//				ec.chessEngineSearchingPonder = false;
-				if (ec.chessEnginePlayMod == 4)
-				{
-					ec.chessEnginePaused = true;
-					updateGui();
-					setInfoMessage(getEnginePausedMessage(), null, null, false);
-					Toast.makeText(MainActivity.this, getString(R.string.engineAnalysisStop), Toast.LENGTH_SHORT).show();
-				}
-				return;
-			}
+//			if (result.equals("CANCEL") | cancelTask)
+//			{
+//				ec.chessEngineSearching = false;
+//				ec.chessEngineStopSearch = false;
+//				stopChessClock();
+////				ec.chessEngineSearchingPonder = false;
+//				if (ec.chessEnginePlayMod == 4)
+//				{
+//					ec.chessEnginePaused = true;
+//					updateGui();
+//					setInfoMessage(getEnginePausedMessage(), null, null, false);
+//					Toast.makeText(MainActivity.this, getString(R.string.engineAnalysisStop), Toast.LENGTH_SHORT).show();
+//				}
+//				return;
+//			}
 
 			if (!result.equals(""))
 			{
@@ -6038,6 +6094,7 @@ Log.i(TAG, "onPostExecute(), result: " + result + ", prevResult: " + prevResult 
 			return score;
 		}
 
+		private EngineState startEngineState = EngineState.DEAD;
 		int wTime = 100;
 		int bTime = 100;
 		int wInc = 1000;
@@ -6072,6 +6129,8 @@ Log.i(TAG, "onPostExecute(), result: " + result + ", prevResult: " + prevResult 
 	public void enginePlay(CharSequence result, CharSequence taskFen, CharSequence currentPonderMove)
 	{
 
+//		cancelSearchTask();
+
 Log.i(TAG, "enginePlay(), result: " + result + "\ntaskFen: " + taskFen);
 Log.i(TAG, "enginePlay(), engineState: " + ec.getEngine().engineState);
 
@@ -6080,6 +6139,7 @@ Log.i(TAG, "enginePlay(), engineState: " + ec.getEngine().engineState);
 			searchTaskRestart = false;
 			if (!ec.chessEnginePaused & !result.equals("(none)"))
 			{
+
 //				cancelSearchTask();
 
 				isGoPonder = false;
@@ -6224,6 +6284,9 @@ Log.i(TAG, "enginePlay(), engineState: " + ec.getEngine().engineState);
 						ec.getEngine().engineState = EngineState.IDLE;
 						isGoPonder = false;
 //						ec.chessEngineSearchingPonder = false;
+
+						Log.i(TAG, "enginePlay(), STOP_CONTINUE, continueFen: " + ec.getEngine().continueFen);
+
 						chessEngineBestMove(ec.getEngine().continueFen, "");
 						ec.chessEngineSearching = true;
 						break;
@@ -6733,8 +6796,10 @@ Log.i(TAG, "1 enginePlayPonder(), fen: " + fen + ", ponderMove: " + move);
 		{
 			if (!ec.chessEnginePaused & gc.cl.p_stat.equals("1"))
 			{
-				stopThreads(false);
-				startPlay(false, true);
+//				stopThreads(false);
+//				startPlay(false, true);
+				if (!gc.cl.p_fen.equals(""))
+					stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 			}
 			else
 			{
@@ -6756,8 +6821,9 @@ Log.i(TAG, "1 enginePlayPonder(), fen: " + fen + ", ponderMove: " + move);
 
 //Log.i(TAG, "startBoardMoveAction(), onScreenTouch, x: " + event.getRawX() + ", y: " + event.getRawY());
 //Log.i(TAG, "startBoardMoveAction(), boardView.getLocationOnScreen(), x: " + screenXY[0] + ", y: " + screenXY[1] + ", pos: " + pos);
-//Log.i(TAG, "startBoardMoveAction(), ec.chessEngineSearching: " + ec.chessEngineSearching + ", ec.chessEngineSearchingPonder: "+ ec.chessEngineSearchingPonder);
-//Log.i(TAG, "startBoardMoveAction(), gc.fen: " + gc.fen);
+
+//			Log.i(TAG, "startBoardMoveAction(), ec.chessEngineSearching: " + ec.chessEngineSearching);
+//			Log.i(TAG, "startBoardMoveAction(), gc.fen: " + gc.fen);
 
 			gc.isMoveError = false;
 			if (ec.chessEngineSearching & !ec.chessEnginePaused)
