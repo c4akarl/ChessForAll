@@ -8,11 +8,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -81,11 +83,12 @@ public class BoardView extends View
 
     }
 
-    public void updateBoardView(CharSequence fen, boolean boardTurn, ArrayList<CharSequence> possibleMoves,
+    public void updateBoardView(CharSequence fen, boolean boardTurn, ArrayList<CharSequence> displayArrows, ArrayList<CharSequence> possibleMoves,
                                 ArrayList<CharSequence> possibleMovesTo, CharSequence lastMove, CharSequence selectedMove, boolean coordinates, boolean blindMode)
     {
         posFen = "";
         isBoardTurn = boardTurn;
+        this.displayArrows = displayArrows;
         this.possibleMoves = possibleMoves;
         this.possibleMovesTo = possibleMovesTo;
         this.lastMove = lastMove;
@@ -498,7 +501,8 @@ public class BoardView extends View
 						mPaint.setStyle(Paint.Style.STROKE);
 						canvas.drawRect(mRect, mPaint);
 					}
-					if (mvPos == boardPos) {
+//					if (mvPos == boardPos) {
+					if (mvPos == boardPos && displayArrows == null) {
 						mPaint.setColor(Color.TRANSPARENT);
 						mPaint.setStyle(Paint.Style.FILL);
 						canvas.drawRect(mRect, mPaint);
@@ -589,6 +593,74 @@ public class BoardView extends View
             }
         }
 
+        //karl
+        if (displayArrows != null)
+        {
+            int strokeSize = fieldSize / 6;
+            for (int i = 0; i < displayArrows.size(); i++)
+            {
+                int from = getPosition(displayArrows.get(i).subSequence(0, 2), isBoardTurn);
+                int to = getPosition(displayArrows.get(i).subSequence(2, 4), isBoardTurn);
+                int x0 = ((from % 8) * fieldSize) + fieldSize / 2;
+                int y0 = ((from / 8) * fieldSize) + fieldSize / 2;
+                int x1 = ((to % 8) * fieldSize) + fieldSize / 2;
+                int y1 = ((to / 8) * fieldSize) + fieldSize / 2;
+                int iMod = i % 2;
+                int a = i / 2;
+                if (a >= colorAlpha.length)
+                    a = colorAlpha.length -1;
+
+//                Log.i(TAG, "onDraw, i: " + i + ", move: " + displayArrows.get(i) + ", " + from + "/" + to + ", x0: " + x0 + ", y0: " + y0 + ", x1: " + x1 + ", y1: " + y1 + ", iMod: " + iMod);
+
+                int color = cv.getAlphaColor(cv.COLOR_ARROWS1_23, colorAlpha[a]);
+                if (iMod > 0)
+                    color = cv.getAlphaColor(cv.COLOR_ARROWS2_24, colorAlpha[a]);
+
+                float deltaX = x1 - x0;
+                float deltaY = y1 - y0;
+                double distance = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+                float frac = (float) (1 / (distance / 30));
+
+                float point_x_1 = x0 + (float) ((1 - frac) * deltaX + frac * deltaY);
+                float point_y_1 = y0 + (float) ((1 - frac) * deltaY - frac * deltaX);
+
+                float point_x_2 = x1;
+                float point_y_2 = y1;
+
+                float point_x_3 = x0 + (float) ((1 - frac) * deltaX - frac * deltaY);
+                float point_y_3 = y0 + (float) ((1 - frac) * deltaY + frac * deltaX);
+
+                Log.i(TAG, "onDraw, deltaX: " + deltaX + ", deltaY: " + deltaY + ", distance: " + distance + ", frac: " + frac);
+                Log.i(TAG, "onDraw, point_x_1: " + point_x_1 + ", point_y_1: " + point_y_1 + ", point_x_2: " + point_x_2 + ", point_y_2: " + point_y_2 + ", point_x_3: " + point_x_3 + ", point_y_3: " + point_y_3);
+
+                mPaint.setColor(color);
+                mPaint.setStrokeWidth(strokeSize);
+                float point_x_4 = (point_x_1 + point_x_3) / 2;
+                float point_y_4 = (point_y_1 + point_y_3) / 2;
+                canvas.drawLine(x0, y0, point_x_4, point_y_4, mPaint);
+
+                Path path = new Path();
+                path.setFillType(Path.FillType.EVEN_ODD);
+                mPaint.setStyle(Paint.Style.FILL);
+                mPaint.setColor(color);
+
+                path.moveTo(point_x_1, point_y_1);
+                path.lineTo(point_x_2, point_y_2);
+                path.lineTo(point_x_3, point_y_3);
+                path.lineTo(point_x_1, point_y_1);
+                path.close();
+
+                canvas.drawPath(path, mPaint);
+
+                if (iMod > 0) {
+                    strokeSize = strokeSize - 10;
+                    if (strokeSize < 4)
+                        strokeSize = 3;
+                }
+
+            }
+        }
+
     }
 
     final String TAG = "BoardView";
@@ -673,12 +745,19 @@ public class BoardView extends View
     private Rect mRect;
     CharSequence posFen = "";
     boolean isBoardTurn;
+    ArrayList<CharSequence> displayArrows;
     ArrayList<CharSequence> possibleMoves;
     ArrayList<CharSequence> possibleMovesTo;
     CharSequence lastMove;
     CharSequence selectedMove;
     boolean isCoordinates;
     boolean isBlindMode = false;
+
+    private String[] colorAlpha = {
+            "#AA",
+            "#88",
+            "#66"
+    };
 
     private char[] charFen = new char[64];
 }

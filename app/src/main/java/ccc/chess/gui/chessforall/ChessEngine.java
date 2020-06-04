@@ -35,7 +35,7 @@ public class ChessEngine
     public boolean initProcess(String processName)
     {
 
-Log.i(TAG, "1 initProcess(), processName: " + processName);
+//Log.i(TAG, "1 initProcess(), processName: " + processName);
 
         if (process != null)
             destroyProcess();
@@ -50,27 +50,44 @@ Log.i(TAG, "1 initProcess(), processName: " + processName);
         else
             engineProcess = "";
 
-		Log.i(TAG, "2 initProcess(), processName: " + processName + ", isInitOk: " +isInitOk);
+//		Log.i(TAG, "2 initProcess(), processName: " + processName + ", isInitOk: " +isInitOk);
 
         return isInitOk;
 
     }
 
-    //karl UCIOptions ???
-    //karl uciOptions : original von engine
+    public void initPv()
+    {
+        pvValuesChanged = false;
+        statPv = new ArrayList<CharSequence>();
+        statPvAction = "";
+        statPvIdx = 0;
+        statPvScore = 0;
+        statPvBestScore = 0;
+        statPvMoves = "";
+        statPvBestMove = "";
+        statPvPonderMove = "";
+        statPVDepth = 0;
+        statTime = 0;
+        statCurrDepth = 0;
+        statCurrSelDepth = 0;
+        statCurrMoveNr = 0;
+        statCurrMoveCnt = 0;
+        statCurrMove = "";
+        statCurrNodes = 0;
+        statCurrNps = 0;
+        statIsMate = false;
+    }
+
     //karl EditUciOptions : edit und save if != default in sd/c4a/uci pro engine mit uciPath/fileName (von Droidfish)
     //karl setEngineOptions(sd/c4a/uci) --> engine
-//    private boolean readUCIOptions()
     private synchronized boolean readUCIOptions()
     {
         int timeout = 1000;
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
         isUciPonder = false;
-        //karl time? sd/c4a/uci; synchronized readUCIOptions() ?
-//        while (checkTime - startTime <= 500)
         while (checkTime - startTime <= MAX_SYNC_TIME)
-//        while (true)
         {
 			if (Thread.currentThread().isInterrupted())
 			{
@@ -112,48 +129,18 @@ Log.i(TAG, "1 initProcess(), processName: " + processName);
         return cmdLine.toString().split("\\s+");
     }
 
-//    public boolean syncStopSearch(boolean isStopAndMove)
-    public void syncStopSearch(EngineState eState)
+    public synchronized void stopSearch(EngineState eState)
     {
 
-Log.i(TAG, "syncStopSearch(), eState: " + eState);
+//Log.i(TAG, "1 stopSearch(), eState: " + eState);
 
-        if (isError())
-//            return false;
+        if (process == null)
             return;
 
         engineState = eState;
+
+
         writeLineToProcess("stop");
-
-
-//        long startTime = System.currentTimeMillis();
-//        long checkTime = startTime;
-//        stopBestMove = "";
-//        stopPonderMove = "";
-//        while (checkTime - startTime <= MAX_SYNC_TIME)
-//        {
-//            CharSequence s = readLineFromProcess(1000);
-//            if (s.equals("ERROR"))
-//                return false;
-//            if (s.toString().startsWith("bestmove"))
-//            {
-//                String[] txtSplit = s.toString().split(" ");
-//                if (txtSplit.length == 4)
-//                {
-//                    stopBestMove = txtSplit[1];
-//                    stopPonderMove = txtSplit[3];
-//                }
-//                return true;
-//            }
-//            checkTime = System.currentTimeMillis();
-//        }
-//
-////Log.i(TAG, "syncStopSearch(), end");
-//
-//        if (isStopAndMove)
-//            return true;
-//        else
-//            return false;
 
     }
 
@@ -161,12 +148,12 @@ Log.i(TAG, "syncStopSearch(), eState: " + eState);
     public synchronized boolean syncReady()
     {
 
-Log.i(TAG, "syncReady(), start");
+//Log.i(TAG, "syncReady(), start");
 
-        if (isError())
+        if (process == null)
             return false;
 
-        isReady = false;
+//        isReady = false;
 		engineState = EngineState.WAIT_READY;
         writeLineToProcess("isready");
         long startTime = System.currentTimeMillis();
@@ -175,7 +162,6 @@ Log.i(TAG, "syncReady(), start");
 
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
-//ANR: keyDispatchingTimedOut, 13. Dez. 01:02 in der App-Version 75
             CharSequence s = readLineFromProcess(1000);
             if (s.equals("ERROR"))
                 return false;
@@ -183,46 +169,18 @@ Log.i(TAG, "syncReady(), start");
                 cntSpace++;
             else
                 cntSpace = 0;
-//            if (cntSpace >= SYNC_CNT)
-//            {
-//                return false;
-//            }
             if (s.equals("readyok"))
             {
-                if (engineState == EngineState.WAIT_READY)
-				    engineState = EngineState.IDLE;
-                isReady = true;
+//                if (engineState == EngineState.WAIT_READY)
+                engineState = EngineState.IDLE;
+//                isReady = true;
                 return true;
             }
             checkTime = System.currentTimeMillis();
         }
-        return isReady;
-    }
 
-    public synchronized boolean isError()
-    {
-        if (process == null)
-            return true;
+        return false;
 
-        boolean isError = false;
-        String errorStream = "";
-        try
-        {
-            InputStream error = process.getErrorStream();
-            for (int i = 0; i < error.available(); i++)
-            {
-                int returnValue = error.read();
-                errorStream = errorStream + returnValue;
-            }
-            if (!errorStream.equals(""))
-            {
-				if (isLogOn)
-                	Log.i(TAG, "chess engine process, stream error: \n" + errorStream);
-				return !errorStream.contains(ACCEPT_ENGINE_ERROR_CODE_1);
-            }
-        }
-        catch (Exception ex) {Log.i(TAG, "chess engine process, stream error(Exception): " + errorStream + "\n"); ex.printStackTrace();}
-        return isError;
     }
 
     public boolean newGame()
@@ -231,11 +189,7 @@ Log.i(TAG, "syncReady(), start");
             writeLineToProcess("setoption name UCI_Chess960 value true");
         else
             writeLineToProcess("setoption name UCI_Chess960 value false");
-
         writeLineToProcess("ucinewgame");
-        //karl engineState = EngineState.IDLE;  ???
-//        writeLineToProcess("isready");
-//
         return true;
     }
 
@@ -301,7 +255,7 @@ Log.i(TAG, "syncReady(), start");
             {
                 CharSequence is = tokens[i++];
 
-//Log.i(TAG, "tokens, i: " + i + "(" + (nTokens -1) + "), is: " + is);
+//Log.i(TAG,  "tokens, i: " + i + "(" + (nTokens -1) + "), is: " + is);
 
                 if (is.equals("depth"))     {statCurrDepth = Integer.parseInt(tokens[i++].toString());}
                 if (is.equals("seldepth"))  {statCurrSelDepth = Integer.parseInt(tokens[i++].toString());}
@@ -357,11 +311,30 @@ Log.i(TAG, "syncReady(), start");
             if (infoHasPvValues)
             {
                 statPvMoves = getMoves(statPv, infoPvMoveMax);
+
+//                Log.i(TAG,  "parseInfoCmd(), moves: " + statPvMoves);
+
             }
         }
 
-//Log.i(TAG, "size, values?, score, moves: " + statPv.size() + ", " + infoHasPvValues + ", " + statPvScore + "\nstatPvMoves: " + statPvMoves);
+//Log.i(TAG,  "size, values?, score, moves: " + statPv.size() + ", " + infoHasPvValues + ", " + statPvScore + "\nstatPvMoves: " + statPvMoves);
 
+    }
+
+    public CharSequence getDisplayMoves(CharSequence moves, int cntMoves)
+    {
+        CharSequence displayMoves = "";
+        String[] split = moves.toString().split(" ");
+        if (split.length >= 0) {
+            for (int i = 0; i < split.length; i++) {
+                if (i < cntMoves)
+                    displayMoves = displayMoves + split[i] + " ";
+            }
+        }
+
+//        Log.i(TAG,  "getDisplayMoves(), displayMoves: " + displayMoves);
+
+        return  displayMoves;
     }
 
     public CharSequence getMoves(ArrayList<CharSequence> statPv, int infoPvMoveMax)
@@ -378,10 +351,11 @@ Log.i(TAG, "syncReady(), start");
             else
                 moves = moves + statPv.get(i).toString() + " ";
         }
+
+//        Log.i(TAG,  "getMoves(), moves: " + moves);
+
         return moves;
     }
-
-    public boolean getSearchAlive() {return searchAlive;}
 
     public CharSequence convertCastlingRight(CharSequence fen)	// using for chess960(castle rook's line instead of "QKqk")
     {
@@ -435,14 +409,14 @@ Log.i(TAG, "syncReady(), start");
         for (int i = 0; i < tokens.length; i++)
             convertFen = convertFen.toString() + tokens[i] + " ";
 
-//Log.i(TAG, "FEN sta: " + startFen);
-//Log.i(TAG, "FEN fen: " + fen);
-//Log.i(TAG, "FEN new: " + convertFen);
+//Log.i(TAG,  "FEN sta: " + startFen);
+//Log.i(TAG,  "FEN fen: " + fen);
+//Log.i(TAG,  "FEN new: " + convertFen);
 
         return convertFen;
     }
-    public void setIsChess960(boolean chess960) {isChess960 = chess960;}
 
+    public void setIsChess960(boolean chess960) {isChess960 = chess960;}
     public void setStartFen(CharSequence fen) {startFen = fen;}
 
     public CharSequence getRandomFirstMove()
@@ -454,20 +428,22 @@ Log.i(TAG, "syncReady(), start");
         return move;
     }
 
-    public final void shutDown()
+    public synchronized final void shutDown()
     {	//quit the ChessEngine(Shut down process)
+
+//        Log.i(TAG,  "shutDown(), engine process: " + engineProcess);
+
 		engineState = EngineState.DEAD;
         writeLineToProcess("quit");
         processAlive = false;
-        try {Thread.sleep(100);}
-        catch (InterruptedException e) {}
+
     }
 
     public boolean  startNewProcess(boolean fromFile)
     {
 
         if (isLogOn)
-            Log.i(TAG, "startNewProcess(), engine process started: " + engineProcess);
+            Log.i(TAG,  "startNewProcess(), engine process started: " + engineProcess);
 
         mesInitProcess = "";
         processAlive = false;
@@ -477,7 +453,7 @@ Log.i(TAG, "syncReady(), start");
         if (processAlive)
         {
             if (isLogOn)
-                Log.i(TAG, "startNewProcess(), engine process started: " + engineProcess);
+                Log.i(TAG,  "startNewProcess(), engine process started: " + engineProcess);
 			engineState = EngineState.READ_OPTIONS;
             writeLineToProcess("uci");
             processAlive = readUCIOptions();
@@ -491,7 +467,7 @@ Log.i(TAG, "syncReady(), start");
         if (!processAlive)
         {
             if (isLogOn)
-                Log.i(TAG, "startNewProcess(), start error, engine process: " + engineProcess);
+                Log.i(TAG,  "startNewProcess(), start error, engine process: " + engineProcess);
             if (fromFile)
             {
                 mesInitProcess = mesInitProcess + engineProcess + ": " + context.getString(R.string.engineNoRespond) + "\n";
@@ -506,12 +482,14 @@ Log.i(TAG, "syncReady(), start");
     public void writeLineToProcess(String data)
     {
 
-//Log.i(TAG, "data: " + data);
+//Log.i(TAG,  "data: " + data);
 
         try {writeToProcess(data + "\n");}
         catch (IOException e)
         {
-            Log.i(TAG, "IOException, writeLineToProcess()");
+
+//            Log.i(TAG,  "IOException, writeLineToProcess()");
+
             e.printStackTrace();
             engineName = "";
             processAlive = false;
@@ -519,8 +497,10 @@ Log.i(TAG, "syncReady(), start");
         if (data.equals("quit"))
         {
             engineName = "";
-            if (process != null)
+            if (process != null) {
                 process.destroy();
+                process = null;
+            }
         }
     }
 
@@ -530,7 +510,9 @@ Log.i(TAG, "syncReady(), start");
         try{message =  readFromProcess();}
         catch (IOException e)
         {
-            Log.i(TAG, "IOException, readLineFromProcess()");
+
+//            Log.i(TAG,  "IOException, readLineFromProcess()");
+
             e.printStackTrace();
             engineName = "";
             processAlive = false;
@@ -540,7 +522,9 @@ Log.i(TAG, "syncReady(), start");
 // 28. Aug. 11:44 in der App-Version 70 : ccc.chess.gui.chessforall.ChessEngine.readFromProcess
         catch (NullPointerException e)
         {
-            Log.i(TAG, "NullPointerException, readLineFromProcess()");
+
+//            Log.i(TAG,  "NullPointerException, readLineFromProcess()");
+
             e.printStackTrace();
             engineName = "";
             processAlive = false;
@@ -564,7 +548,7 @@ Log.i(TAG, "syncReady(), start");
                 setUciSkillLevelValues(message);
             }
             if (isLogOn)
-                Log.i(TAG, engineName + ": " + message);
+                Log.i(TAG,  engineName + ": " + message);
         }
         else
             message = "";
@@ -577,6 +561,8 @@ Log.i(TAG, "syncReady(), start");
         if (uciIdName.startsWith("White(1): id name "))
             engineName = uciIdName.substring(18, uciIdName.length());
     }
+
+    public boolean getSearchAlive() {return searchAlive;}
 
     void setUciEloValues(String message)
     {
@@ -690,6 +676,7 @@ Log.i(TAG, "syncReady(), start");
             case STOP_MOVE:
             case STOP_MOVE_CONTINE:
             case STOP_CONTINUE:
+            case STOP_QUIT:
                 return true;
             default:
                 return false;
@@ -711,7 +698,7 @@ Log.i(TAG, "syncReady(), start");
     private final boolean startProcess()
     {
 
-        Log.i(TAG, "startProcess(), engineProcess: " + engineProcess);
+//        Log.i(TAG,  "startProcess(), engineProcess: " + engineProcess);
 
 		processBuilder = null;
 
@@ -722,7 +709,7 @@ Log.i(TAG, "syncReady(), start");
             if (engine.getName().equals(engineProcess))
             {
                 if (isLogOn)
-                    Log.i(TAG, "startProcess(), OEX engine, enginePath: " + engine.getEnginePath());
+                    Log.i(TAG,  "startProcess(), OEX engine, enginePath: " + engine.getEnginePath());
 
                 processBuilder = new ProcessBuilder(engine.getEnginePath());
                 break;
@@ -750,7 +737,7 @@ Log.i(TAG, "syncReady(), start");
                                     engineProcess = parser.getAttributeValue(null, "name");
                                     String enginePath = context.getApplicationInfo().nativeLibraryDir + "/" + parser.getAttributeValue(null, "filename");
                                     if (isLogOn)
-                                        Log.i(TAG, "startProcess(), intern engine, enginePath: " + enginePath);
+                                        Log.i(TAG,  "startProcess(), intern engine, enginePath: " + enginePath);
                                     processBuilder = new ProcessBuilder(enginePath);
                                     break;
                                 }
@@ -760,19 +747,23 @@ Log.i(TAG, "syncReady(), start");
                     }
                     catch (IOException e)
                     {
-                        Log.e(TAG, e.getLocalizedMessage(), e);
+
+//                        Log.e, e.getLocalizedMessage(), e);
+
                     }
                 }
             }
             catch (XmlPullParserException e)
             {
-                Log.e(TAG, e.getLocalizedMessage(), e);
+
+//                Log.e, e.getLocalizedMessage(), e);
+
             }
         }
 
         if (processBuilder == null) {
 
-			Log.i(TAG, "startProcess(), processBuilder: " + processBuilder);
+//			Log.i(TAG,  "startProcess(), processBuilder: " + processBuilder);
 
             return false;
         }
@@ -791,7 +782,7 @@ Log.i(TAG, "syncReady(), start");
             catch (IOException e)
             {
                 if (isLogOn)
-                    Log.i(TAG, engineName + ": startProcess, IOException");
+                    Log.i(TAG,  engineName + ": startProcess, IOException");
                 return false;
             }
         }
@@ -825,7 +816,6 @@ Log.i(TAG, "syncReady(), start");
     }
 
     final String TAG = "ChessEngine";
-//    final long MAX_SYNC_TIME = 200;
     final long MAX_SYNC_TIME = 2000;
     final int SYNC_CNT = 200;
 
@@ -837,7 +827,6 @@ Log.i(TAG, "syncReady(), start");
     public CharSequence engineNameStrength = "";	        // native engine name + strength
     String engineProcess = "";			                    // the compiled engine process name (file name)
     final String INTERN_ENGINE_NAME_END = " CfA";
-    final String ACCEPT_ENGINE_ERROR_CODE_1= "78111321151179910432111112";	// Cfish, accept ?!
     String mesInitProcess = "";
 
     ProcessBuilder processBuilder;
@@ -852,10 +841,13 @@ Log.i(TAG, "syncReady(), start");
 		SEARCH,             // "go" sent, waiting for "bestmove"
 		PONDER,             // "go" sent, waiting for "bestmove"
 		ANALYZE,            // "go" sent, waiting for "bestmove" (which will be ignored)
+		BOOK,               // book move
 		STOP_IDLE,   	    // "stop" sent, waiting for "bestmove", and set to IDLE
 		STOP_MOVE,   	    // "stop" sent, waiting for "bestmove", and make move
 		STOP_MOVE_CONTINE,  // "stop" sent, waiting for "bestmove", make move and continue: start next search ? go, ponder, infinite ?
-        STOP_CONTINUE,       // "stop" sent, ignore "bestmove", continue with next "search"
+        STOP_CONTINUE,      // "stop" sent, ignore "bestmove", continue with next "search"
+        STOP_QUIT,          // "stop" sent and quit
+        STOP_QUIT_RESTART,  // "stop" sent and quit and restart an engine
 		DEAD,               // engine process has terminated
 	}
 	public EngineState engineState = EngineState.DEAD;
@@ -878,10 +870,10 @@ Log.i(TAG, "syncReady(), start");
     CharSequence startFen = "";
     CharSequence continueFen = "";
     public boolean searchAlive = true;
-    ArrayList<CharSequence> statPv = new ArrayList<CharSequence>();
-    boolean pvValuesChanged = false;
     boolean engineWithMultiPv = false;
 
+    boolean pvValuesChanged = false;
+    ArrayList<CharSequence> statPv = new ArrayList<CharSequence>();
     CharSequence statPvAction = "";
     int statPvIdx = 0;
     int statPvScore = 0;
@@ -889,12 +881,8 @@ Log.i(TAG, "syncReady(), start");
     CharSequence statPvMoves = "";
     CharSequence statPvBestMove = "";
     CharSequence statPvPonderMove = "";
-    CharSequence stopBestMove = "";
-    CharSequence stopPonderMove = "";
-
     int statPVDepth = 0;
     int statTime = 0;
-
     int statCurrDepth = 0;
     int statCurrSelDepth = 0;
     int statCurrMoveNr = 0;
@@ -902,8 +890,8 @@ Log.i(TAG, "syncReady(), start");
     CharSequence statCurrMove = "";
     int statCurrNodes = 0;
     int statCurrNps = 0;
-
     boolean statIsMate = false;
+
     final CharSequence firstMove[] =	{	"a2a3", "a2a4", "b2b3", "b2b4",
             "c2c3", "c2c4", "d2d3", "d2d4",
             "e2e3", "e2e4", "f2f3", "f2f4",
