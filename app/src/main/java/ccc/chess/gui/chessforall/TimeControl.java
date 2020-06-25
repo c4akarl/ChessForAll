@@ -1,5 +1,7 @@
 package ccc.chess.gui.chessforall;
 
+import android.util.Log;
+
 public class TimeControl
 {
 
@@ -27,13 +29,16 @@ public class TimeControl
 		showModusBlack = 2;
 		showWhiteTime = "";
 		showBlackTime = "";
+
+//		Log.i(TAG, "initChessClock(), timeControl: " + timeControl + ", tw: " + timeWhite + ", tb: " + timeBlack + ", movesToGo: " + movesToGo + ", bw: " + bonusWhite + ", bb: " + bonusBlack);
+
 		setCurrentShowValues(1);
     }
 
 	public void startChessClock(boolean whiteMoves, long currentTime, int playMod)
     {
 
-//Log.i(TAG, "1 startChessClock(), clockIsRunning: " + clockIsRunning + ", timeControl: " + timeControl);
+//Log.i(TAG, "1 startChessClock(), clockIsRunning: " + clockIsRunning + ", timeControl: " + timeControl + ", whiteMoves: " + whiteMoves + ", currentTime: " + currentTime + ", playMod: " + playMod);
 
 		if (!clockIsRunning & timeControl != 4)
 		{

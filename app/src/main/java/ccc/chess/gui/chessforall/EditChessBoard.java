@@ -129,7 +129,6 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 
 //Log.i(TAG, "onTouch(), position: " + position);
 
-			// 2020.04.25 22:15 in der App-Version 80
 			if (position >= 0 && position < 64)
 				moveAction(position);
 		}

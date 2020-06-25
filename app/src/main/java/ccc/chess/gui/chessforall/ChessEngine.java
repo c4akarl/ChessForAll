@@ -109,8 +109,13 @@ public class ChessEngine
             if (s.toString().contains("option") & s.toString().contains("Ponder"))
                 isUciPonder = true;
             CharSequence[] tokens = tokenize(s);
-            if (tokens[0].equals("uciok"))
+            if (tokens[0].equals("uciok")) {
+
+                if (isLogOn)
+                    Log.i(TAG, "readUCIOptions(), uciok");
+
                 return true;
+            }
             checkTime = System.currentTimeMillis();
         }
 
@@ -120,8 +125,6 @@ public class ChessEngine
         return false;
 
     }
-
-
 
     public CharSequence[] tokenize(CharSequence cmdLine)
     {
@@ -144,7 +147,6 @@ public class ChessEngine
 
     }
 
-//    public boolean syncReady()
     public synchronized boolean syncReady()
     {
 
@@ -153,7 +155,6 @@ public class ChessEngine
         if (process == null)
             return false;
 
-//        isReady = false;
 		engineState = EngineState.WAIT_READY;
         writeLineToProcess("isready");
         long startTime = System.currentTimeMillis();
@@ -171,9 +172,7 @@ public class ChessEngine
                 cntSpace = 0;
             if (s.equals("readyok"))
             {
-//                if (engineState == EngineState.WAIT_READY)
                 engineState = EngineState.IDLE;
-//                isReady = true;
                 return true;
             }
             checkTime = System.currentTimeMillis();
@@ -453,10 +452,13 @@ public class ChessEngine
         if (processAlive)
         {
             if (isLogOn)
-                Log.i(TAG,  "startNewProcess(), engine process started: " + engineProcess);
+                Log.i(TAG,  "startNewProcess(), engine process started: " + engineProcess + ", processAlive: " + processAlive);
 			engineState = EngineState.READ_OPTIONS;
             writeLineToProcess("uci");
+
+            //karl ???
             processAlive = readUCIOptions();
+
             if (fromFile & processAlive)
             {
                 if (engineState == EngineState.READ_OPTIONS)
@@ -519,7 +521,6 @@ public class ChessEngine
             process = null;
             return "ERROR";
         }
-// 28. Aug. 11:44 in der App-Version 70 : ccc.chess.gui.chessforall.ChessEngine.readFromProcess
         catch (NullPointerException e)
         {
 
@@ -842,10 +843,11 @@ public class ChessEngine
 		PONDER,             // "go" sent, waiting for "bestmove"
 		ANALYZE,            // "go" sent, waiting for "bestmove" (which will be ignored)
 		BOOK,               // book move
-		STOP_IDLE,   	    // "stop" sent, waiting for "bestmove", and set to IDLE
+		STOP_IDLE,   	    // "stop" sent, ignore "bestmove", and set to IDLE
 		STOP_MOVE,   	    // "stop" sent, waiting for "bestmove", and make move
-		STOP_MOVE_CONTINE,  // "stop" sent, waiting for "bestmove", make move and continue: start next search ? go, ponder, infinite ?
-        STOP_CONTINUE,      // "stop" sent, ignore "bestmove", continue with next "search"
+		STOP_MOVE_CONTINE,  // "stop" sent, waiting for "bestmove", continue with next "search" (continueFen)
+        STOP_CONTINUE,      // "stop" sent, ignore "bestmove", continue with next "search" (continueFen)
+        STOP_NEW_GAME,      // "stop" sent, ignore "bestmove", start new game
         STOP_QUIT,          // "stop" sent and quit
         STOP_QUIT_RESTART,  // "stop" sent and quit and restart an engine
 		DEAD,               // engine process has terminated

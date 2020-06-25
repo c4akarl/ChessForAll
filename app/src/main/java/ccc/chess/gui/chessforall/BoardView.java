@@ -593,77 +593,66 @@ public class BoardView extends View
             }
         }
 
-        //karl
+        // BCM
         if (displayArrows != null)
         {
-            int strokeSize = fieldSize / 6;
             for (int i = 0; i < displayArrows.size(); i++)
             {
                 int from = getPosition(displayArrows.get(i).subSequence(0, 2), isBoardTurn);
                 int to = getPosition(displayArrows.get(i).subSequence(2, 4), isBoardTurn);
-                int x0 = ((from % 8) * fieldSize) + fieldSize / 2;
-                int y0 = ((from / 8) * fieldSize) + fieldSize / 2;
-                int x1 = ((to % 8) * fieldSize) + fieldSize / 2;
-                int y1 = ((to / 8) * fieldSize) + fieldSize / 2;
-                int iMod = i % 2;
                 int a = i / 2;
                 if (a >= colorAlpha.length)
                     a = colorAlpha.length -1;
 
-//                Log.i(TAG, "onDraw, i: " + i + ", move: " + displayArrows.get(i) + ", " + from + "/" + to + ", x0: " + x0 + ", y0: " + y0 + ", x1: " + x1 + ", y1: " + y1 + ", iMod: " + iMod);
+                int colorFill = cv.getAlphaColor(cv.COLOR_ARROWS1_23, colorAlpha[a]);
+                if (i % 2 > 0)
+                    colorFill = cv.getAlphaColor(cv.COLOR_ARROWS2_24, colorAlpha[a]);
+                int colorStroke = Color.BLACK;
+                int strokeWidth = 2;
 
-                int color = cv.getAlphaColor(cv.COLOR_ARROWS1_23, colorAlpha[a]);
-                if (iMod > 0)
-                    color = cv.getAlphaColor(cv.COLOR_ARROWS2_24, colorAlpha[a]);
+                int size = 80;
+                size = (int)(size/(0.5*a+1));
+
+                // DrawArrow: from, to, size, colorFill, colorStroke, strokeWidth
+
+                int x0 = ((from % 8) * fieldSize) + fieldSize / 2;
+                int y0 = ((from / 8) * fieldSize) + fieldSize / 2;
+                int x1 = ((to % 8) * fieldSize) + fieldSize / 2;
+                int y1 = ((to / 8) * fieldSize) + fieldSize / 2;
 
                 float deltaX = x1 - x0;
                 float deltaY = y1 - y0;
-                double distance = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
-                float frac = (float) (1 / (distance / 30));
-
-                float point_x_1 = x0 + (float) ((1 - frac) * deltaX + frac * deltaY);
-                float point_y_1 = y0 + (float) ((1 - frac) * deltaY - frac * deltaX);
-
-                float point_x_2 = x1;
-                float point_y_2 = y1;
-
-                float point_x_3 = x0 + (float) ((1 - frac) * deltaX - frac * deltaY);
-                float point_y_3 = y0 + (float) ((1 - frac) * deltaY + frac * deltaX);
-
-                Log.i(TAG, "onDraw, deltaX: " + deltaX + ", deltaY: " + deltaY + ", distance: " + distance + ", frac: " + frac);
-                Log.i(TAG, "onDraw, point_x_1: " + point_x_1 + ", point_y_1: " + point_y_1 + ", point_x_2: " + point_x_2 + ", point_y_2: " + point_y_2 + ", point_x_3: " + point_x_3 + ", point_y_3: " + point_y_3);
-
-                mPaint.setColor(color);
-                mPaint.setStrokeWidth(strokeSize);
-                float point_x_4 = (point_x_1 + point_x_3) / 2;
-                float point_y_4 = (point_y_1 + point_y_3) / 2;
-                canvas.drawLine(x0, y0, point_x_4, point_y_4, mPaint);
+                float distance = (float)Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+                float dX = deltaX * fieldSize/8 / distance * size/100;
+                float dY = deltaY * fieldSize/8 / distance * size/100;
 
                 Path path = new Path();
                 path.setFillType(Path.FillType.EVEN_ODD);
-                mPaint.setStyle(Paint.Style.FILL);
-                mPaint.setColor(color);
-
-                path.moveTo(point_x_1, point_y_1);
-                path.lineTo(point_x_2, point_y_2);
-                path.lineTo(point_x_3, point_y_3);
-                path.lineTo(point_x_1, point_y_1);
+                path.moveTo( x0               , y0               );
+                path.lineTo( x1 +   dY - 4*dX , y1 -   dX - 4*dY );
+                path.lineTo( x1 + 4*dY - 6*dX , y1 - 4*dX - 6*dY );
+                path.lineTo( x1               , y1               );
+                path.lineTo( x1 - 4*dY - 6*dX , y1 + 4*dX - 6*dY );
+                path.lineTo( x1 -   dY - 4*dX , y1 +   dX - 4*dY );
+                path.lineTo( x0               , y0               );
                 path.close();
 
+                mPaint.setStyle(Paint.Style.FILL);
+                mPaint.setColor(colorFill);
                 canvas.drawPath(path, mPaint);
 
-                if (iMod > 0) {
-                    strokeSize = strokeSize - 10;
-                    if (strokeSize < 4)
-                        strokeSize = 3;
-                }
-
+                mPaint.setStyle(Paint.Style.STROKE);
+                mPaint.setColor(colorStroke);
+                mPaint.setStrokeWidth(strokeWidth);
+                mPaint.setAntiAlias(true);
+                mPaint.setDither(true);
+                canvas.drawPath(path, mPaint);
             }
         }
 
     }
 
-    final String TAG = "BoardView";
+//    final String TAG = "BoardView";
 
     Context context;
     SharedPreferences userPrefs;

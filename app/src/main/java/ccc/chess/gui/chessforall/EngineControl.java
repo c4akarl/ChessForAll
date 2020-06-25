@@ -21,14 +21,13 @@ public class EngineControl
 	final void setBookOptions()
 	{
 		book = new C4aBook(context);
-//		book.getInstance();
 		bookOptions.filename = userPrefs.getString("user_options_enginePlay_OpeningBookName", "");
         book.setOptions(bookOptions);
     }
 
 	void setPlaySettings(SharedPreferences userP, CharSequence color)
-    {	// get play settings data from userPrefs + setting engine number
-		// play settings data from userPrefs
+    {
+    	// get play settings data from userPrefs + setting engine number
 		chessEnginePlayMod = userP.getInt("user_play_playMod", 1);
 		if (chessEnginePlayMod == 4)
 			initClockAfterAnalysis = true;
@@ -44,7 +43,8 @@ public class EngineControl
 		}
     }
 	void setPlayData(SharedPreferences userP, String white, String black)
-    {	// setting the PGN-Data
+    {
+    	// setting the PGN-Data
 
 //Log.i(TAG, "setPlayData(), white: " + white + ", black: " + black);
 
@@ -82,17 +82,10 @@ public class EngineControl
 
 	void setEngineNumber()
 	{	//>361 engine Number: for better controlling multiple ChessEngines in GUI
-//		engineNumber = eNumber;
 		engineNumber = 1;
 	}
 	public ChessEngine getEngine()
     {
-//    	switch (engineNumber)
-//        {
-//        	case 1:		return en_1;
-//        	case 2:		return en_2;
-//        	default:	return en_1;
-//        }
 		return en_1;
     }
 
@@ -120,32 +113,22 @@ public class EngineControl
 //	final String TAG = "EngineControl";
 	private Context context;
 	private SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
-	ChessEngine en_1;	// default: Stockfish
+	ChessEngine en_1;
 	C4aBook book;
 	private BookOptions bookOptions = new BookOptions();
 	int engineNumber = 1;					// for controlling ChessEngines: en_1 | en_2
 	boolean twoEngines = false;				// true if two different engines(b/w)
 	boolean makeMove = false;				// engine makes first move
-    int chessEnginePlayMod = 1;				// 1 = player vs engine, 2 = engine vs player, 3 = engine vs engine, 4 = engine analysis
-    				                        // 5 = player vs player, 6 = edit
+    int chessEnginePlayMod = 1;				// 1 = player vs engine, 2 = engine vs player, 3 = engine vs engine, 4 = engine analysis, 5 = player vs player, 6 = edit
 	boolean initClockAfterAnalysis = false;
-
     boolean chessEngineInit = false;
     boolean chessEnginesOpeningBook = false;
     boolean chessEngineSearching = false;
-    boolean chessEngineIsInSearchTask = false;
-
-//    boolean chessEngineSearchingPonder = false;
-//    CharSequence ponderUserFen = "";
-
     boolean chessEnginePaused = false;
     boolean chessEnginePausedPrev = false;
     boolean chessEngineProblem = false;
     boolean chessEngineAutoRun = false;
     boolean chessEngineAnalysis = false;
-    boolean chessEngineStopSearch = false;
-    int chessEngineAnalysisStat = 0; 	// 0 = no analysis, 1 = make move ans stop engine, 2 = make move and continue analysis
-
     CharSequence chessEnginePlayerWhite = "Me";
     CharSequence chessEnginePlayerBlack = "";
     CharSequence chessEngineEvent = ""; 
