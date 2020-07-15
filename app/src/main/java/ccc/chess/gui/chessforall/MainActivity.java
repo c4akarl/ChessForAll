@@ -2159,7 +2159,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						edR.putString("run_engineProcess", items.get(item));
 						edR.commit();
 
-						stopSearchAndRestart(true, true);
+						stopSearchAndRestart(false, true);
 
 					});
 				builder.setCancelable(true);
@@ -2946,7 +2946,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //							Log.i(TAG, "onActivityResult, OPTIONS_ENGINE_PLAY_REQUEST_CODE, requestCode: " + requestCode + ", " + "resultCode: " + resultCode);
 
-							stopSearchAndRestart(true, true);
+							stopSearchAndRestart(false, true);
 							break;
 						case 5:     // two players
 						case 6:     // edit
@@ -3104,7 +3104,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						ed.commit();
 						setInfoMessage("", "", "", false);
 						updateGui();
-						stopSearchAndRestart(true, true);
+						stopSearchAndRestart(false, true);
 					}
 				}
 				break;
@@ -3461,10 +3461,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void stopSearchAndRestart(boolean isNewGame, boolean setClock)
 	{
 
-//		Log.i(TAG, "stopSearchAndRestart(), current engineState: " + ec.getEngine().engineState + ", isNewGame: " + isNewGame + ", setClock: " + setClock);
+//		Log.i(TAG, "stopSearchAndRestart(), current engineState: " + ec.getEngine().engineState + ", isNewGame: " + isNewGame + ", setClock: " + setClock + ", ec.chessEnginePaused: " + ec.chessEnginePaused);
 
 		ec.setPlaySettings(userPrefs, gc.cl.p_color);
-//		setTimeValuesFromPauseMod(ec.chessEnginePlayMod, 1);
 
 		if (ec.getEngine().engineSearching())
 		{
@@ -4369,7 +4368,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		CharSequence[] pgnSplit = pgnData.toString().split(" ");
 		if (pgnSplit.length > 0)
 		{
-			if (pgnSplit[0].toString().contains("/"))
+//			if (pgnSplit[0].toString().contains("/"))
+			if (pgnSplit[0].toString().contains("/") && !pgnSplit[0].toString().contains("["))
 			{
 				if (pgnSplit.length == 6)
 				{
@@ -4390,7 +4390,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (fen.equals(""))
 		{
-			getGameData("", "", "", pgnData, false, getIsEndPosition(), 0, false);
+//			getGameData("", "", "", pgnData, false, getIsEndPosition(), 0, false);
+			getGameData("", "", "", pgnData, false, true, 0, false);
 			gc.startFen = gc.cl.history.getStartFen();
 		}
 		else
@@ -4420,12 +4421,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		ec.chessEngineAutoRun = false;
 		gc.isChess960 = false;
 		gc.fen = gc.cl.p_fen;
+
+//		Log.i(TAG, "getFromClipboard(), gc.fen: " + gc.fen);
+
 		setPauseValues(false, "", 4, "");
 		SharedPreferences.Editor ed = userPrefs.edit();
 		ed.putInt("user_game_chess960Id", 518);
 		ed.commit();
 		updateGui();
-		stopSearchAndRestart(true, true);
+//		stopSearchAndRestart(true, true);
+		stopSearchAndRestart(false, true);
 
 	}
 
