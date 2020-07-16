@@ -7827,7 +7827,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	int dContinueId = 3; 	// 1 new game, 2 continue, set clock, 3 continue
 
 	//karl --> settings
-	int maxArrows = 6; 		// max display arrows
-//	int maxArrows = 0; 		// max display arrows
+//	int maxArrows = 6; 		// max display arrows
+	int maxArrows = 0; 		// max display arrows
 
 }
