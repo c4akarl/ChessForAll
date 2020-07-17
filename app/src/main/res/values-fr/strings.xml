@@ -360,5 +360,6 @@
     <string name="play_pgnDb">PGN-DB</string>
     <string name="play_boardNavi">Carte de navigation</string>
 	<string name="play_quickMove">mouvement rapide</string>
+    <string name="noFileActions">En raison des changements importants dans la gestion des fichiers, aucune action sur les fichiers n\'est actuellement possible pour les appareils à partir d\'Android 11 et plus. \nLe développeur demande la compréhension.</string>
 
 </resources>

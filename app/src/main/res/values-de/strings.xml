@@ -295,7 +295,7 @@
     <string name="btn_Continue">Weiter</string>
     <string name="epPonder">Vorausberechnung</string>
     <string name="engineDisplayedLines">Angezeigte Zeilen</string>
-    <string name="engineThinking">Berechung</string>
+    <string name="engineThinking">Berechnung</string>
     <string name="engineError">Engine-Fehler</string>
     <string name="epShowBookHints">EB-Hinweise</string>
     <string name="menu_colorsettings">Farbeinstellungen</string>
@@ -359,4 +359,5 @@
     <string name="play_blindMode">Blindspiel-Modus</string>
     <string name="play_pgnDb">PGN-DB</string>
     <string name="play_quickMove">Schnelle Zugeingabe</string>
+    <string name="noFileActions">Aufgrund der gravierenden Änderungen im Dateien-Management sind derzeit für Geräte ab Android 11 keine Datei Aktionen möglich. \nDer Entwickler bittet um Verständnis.</string>
 </resources>

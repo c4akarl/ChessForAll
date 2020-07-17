@@ -24,7 +24,6 @@ import android.media.SoundPool;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -65,14 +64,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import androidx.core.app.ActivityCompat;
@@ -210,7 +205,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	}
 
-	public void startGame()
+	public void startApp()
 	{
 		mSoundPool = new SoundPool(2, AudioManager.STREAM_RING, 100);
 		soundsMap = new HashMap<Integer, Integer>();
@@ -552,7 +547,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //Log.i(TAG, "onResume(): " + ec.chessEnginePaused + ", isAppStart: " + isAppStart + ", gc.isAutoPlay: " + gc.isAutoPlay);
 
 		if (isAppStart)
-			startGame();
+			startApp();
 
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
     	if (!isAppStart & gc.isAutoPlay)
@@ -591,7 +586,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public boolean getDataFromIntent(Intent intent)
 	{
 
-//Log.i(TAG, "getDataFromIntent(), intentType: " + intent.getType());
+//		Log.i(TAG, "getDataFromIntent(), intentType: " + intent.getType());
 
 		boolean isOk = false;
 		// call from another Activity, passing the FEN(String)
@@ -631,115 +626,42 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				Toast.makeText(this, "This MIME type is not supported.", Toast.LENGTH_LONG).show();
 				return false;
 			}
-			String intentData = intent.getDataString();
+			String pgnPath = intent.getDataString();
+			Uri uri = intent.getData();
 
-			intentData = fileIO.getExternalStorageFromContent(intentData); // ? content://
+			pgnPath = fileIO.getExternalStoragePgnPathFromContent(pgnPath);
 
-			String fPath = "";
-			String fName = "";
+//			Log.i(TAG, "getDataFromIntent(), pgnPath: " + pgnPath);
 
-
-			if (intent.getType().endsWith("x-chess-pgn") & intentData.endsWith(".pgn"))	//".pgn-db" canceled
+//			if (intent.getType().endsWith("x-chess-pgn") & pgnPath.endsWith(".pgn"))	//".pgn-db" canceled
+			if (pgnPath.endsWith(".pgn"))
 			{
-				// extract path, name from uri
-				Uri data = intent.getData();
-				String filename = data.getEncodedPath();
-				if (filename != null)
-					filename = Uri.decode(filename);
-				if (filename.contains("/storage")) {
-					filename = filename.substring(filename.indexOf("/storage"), filename.length());
-					File file = new File(filename);
-					if (file.exists()) {
-						fPath = file.getParent() + "/";
-						fName = file.getName();
-
-//					Log.i(TAG, "getDataFromIntent(), filename: " + filename + ", fPath: " + fPath + ", fName: " + fName);
-
-						SharedPreferences.Editor ed = fmPrefs.edit();
-						ed.putString("fm_extern_load_path", fPath);
-						ed.putString("fm_extern_load_file", fName);
-						ed.commit();
-						startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
-						return isOk;
-					}
-				}
-
-				fileIO = new FileIO(this);
-				String externLoadPath = fmPrefs.getString("fm_extern_load_path", "");
-				if (!fmPrefs.getString("fm_last_selected_folder", "").equals(""))
-					externLoadPath = fmPrefs.getString("fm_last_selected_folder", "");
-				if (externLoadPath.equals(""))
-				{
-					String basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileIO.BASE_PATH;
-					File f = new File(basePath);
-					if (f.isDirectory())
-						externLoadPath = basePath;
-					else
-					{
-						if (fileIO.createDir(basePath))
-							externLoadPath = basePath;
-					}
-				}
-				File fUri = new File(intentData);
-				fName = fUri.getName();
-				fPath = fUri.getParent();
-				boolean isDownload = false;
-				if (fPath.contains("ownload") | fPath.contains("/Android") | fPath.contains("ontent"))
-					isDownload = true;
-				if (fPath.startsWith("file:"))
-					fPath = fPath.replace("file:", "");
-				if (!fPath.endsWith("/"))
-					fPath = fPath + "/";
-
-//Log.i(TAG, "getDataFromIntent(), fPath: " + fPath + ", fName: " + fName);
-
-				if (!isDownload & fileIO.fileExists(fPath, fName))
-				{
-					isOk = true;
-
-					File file = new File(fPath + fName);
-					java.util.Date lastModDate = new java.util.Date(file.lastModified());
-					SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-					long timeInMilliseconds = 0;
-					try
-					{
-						Date mDate = sdf.parse(lastModDate.toString());
-						timeInMilliseconds = mDate.getTime();
-
-//Log.i(TAG, "getDataFromIntent(), timeInMilliseconds: " + timeInMilliseconds);
-
-					}
-					catch (ParseException e) {e.printStackTrace();}
-					long currentTime = System.currentTimeMillis();
-
-//Log.i(TAG, "getDataFromIntent(), timeDiff: " + (currentTime - timeInMilliseconds));
-
-					if ((currentTime - timeInMilliseconds) > MAX_DOWNLOAD_DIFF)		// from sd-card
-					{
-						SharedPreferences.Editor ed = fmPrefs.edit();
-						ed.putString("fm_extern_load_path", fPath);
-						ed.putString("fm_extern_load_file", fName);
-						ed.commit();
-						startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
-						return isOk;
-					}
-				}
-
-				if (fileIO.copyFile(intentData, externLoadPath))							// download
-				{
-					isOk = true;
-					SharedPreferences.Editor ed = fmPrefs.edit();
-					ed.putString("fm_extern_load_path", externLoadPath);
-					ed.putString("fm_extern_load_file", fName);
-					ed.commit();
-					startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
-				}
-				else
-				{
-					String error = "\n\ndownload file:\n" + intentData + "\n\ncopy path:\n" + externLoadPath;
-					downloadErrorMessage = getString(R.string.menu_load_www) + "\n" + getString(R.string.fmPgnError) + error;
+				File file = new File(pgnPath);
+				if (!file.exists()) {
+					String error = "\n\nload error:\n" + pgnPath;
+					downloadErrorMessage = getString(R.string.menu_pgn_load) + error;
 					c4aShowDialog(DOWNLOAD_ERROR_DIALOG);
+					return false;
 				}
+				String fPath = file.getParent() + "/";
+				String fName = file.getName();
+
+//				Log.i(TAG, "getDataFromIntent(), fPath: " + fPath + ", fName: " + fName);
+
+				SharedPreferences.Editor ed = fmPrefs.edit();
+				ed.putString("fm_extern_load_path", fPath);
+				ed.putString("fm_extern_load_file", fName);
+				ed.putString("fm_extern_load_last_path", fPath);
+				ed.putString("fm_extern_load_last_file", fName);
+				ed.putInt("fm_extern_db_game_id", 1);
+				ed.commit();
+				startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
+				return true;
+			}
+			else {
+				downloadErrorMessage = getString(R.string.menu_pgn_load) + "\n" + getString(R.string.menu_pgn_load);
+				c4aShowDialog(DOWNLOAD_ERROR_DIALOG);
+				return false;
 			}
 		}
 		return isOk;
@@ -766,8 +688,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 					for (int i = 0; i < grantResults.length; i++)
 					{
+
 						if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
 							Log.i(TAG, permissions[i] + " denied");
+
 						if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[i] == PackageManager.PERMISSION_GRANTED)
 							storagePermission = PermissionState.GRANTED;
 						if (permissions[i].equals(Manifest.permission.INTERNET) && grantResults[i] == PackageManager.PERMISSION_GRANTED)
@@ -796,6 +720,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public void startFileManager(int fileActionCode, int displayActivity, int gameLoad)
 	{
+
+		if (fileIO.isSdk30() && !fileActions) {
+			removeDialog(NO_FILE_ACTIONS_DIALOG);
+			showDialog(NO_FILE_ACTIONS_DIALOG);
+			return;
+		}
 
 //Log.i(TAG, "fileActionCode,: "	+ fileActionCode + ", displayActivity: " + displayActivity + ", gameLoad: " + gameLoad);
 
@@ -958,7 +888,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		return storagePermission == PermissionState.GRANTED;
 	}
 
-
 	@Override
     protected Dialog onCreateDialog(int id)
 	{
@@ -982,6 +911,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			AlertDialog alert = builder.create();
 			alert.setCancelable(true);
 			return alert;
+		}
+		if (id == NO_FILE_ACTIONS_DIALOG)
+		{
+			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog),
+					"", getString(R.string.btn_Ok), "", getString(R.string.noFileActions), 0, "");
+			return c4aDialog;
 		}
 		if (id == DOWNLOAD_ERROR_DIALOG)
 		{
@@ -1845,7 +1780,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 									ec.chessEnginePaused = false;
 									ec.chessEngineInit = false;
 									getRunPrefsTime();
-//									stopSearchAndRestart(false, false);
 									startChessClock();
 									stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.fen);
 									break;
@@ -2007,10 +1941,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							startActivityForResult(irs, RATE_REQUEST_CODE);
 							break;
 						case MENU_ABOUT_CONTACT:
-							Intent send = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", APP_EMAIL.toString(), null));
-							send.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-							send.putExtra(android.content.Intent.EXTRA_TEXT, "");
-							startActivity(Intent.createChooser(send, getString(R.string.sendEmail)));
+							Intent intent = new Intent(Intent.ACTION_SENDTO);
+							intent.setData(Uri.parse("mailto:"));
+							intent.putExtra(Intent.EXTRA_EMAIL, new String[]{APP_EMAIL.toString()});
+							intent.putExtra(Intent.EXTRA_SUBJECT, "");
+							intent.putExtra(Intent.EXTRA_TEXT,"");
+							if (intent.resolveActivity(getPackageManager()) != null) {
+								startActivity(intent);
+							}
 							break;
 					}
 				}
@@ -2186,7 +2124,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void getCallbackValue(int btnValue)
 	{
 
-//Log.i(TAG, "getCallbackValue(), btnValue: " + btnValue);
+//		Log.i(TAG, "getCallbackValue(), btnValue: " + btnValue + ", activDialog: " + activDialog);
 
 		if (activDialog == PGN_ERROR_DIALOG)
 		{
@@ -2199,10 +2137,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				int versionCodeAndroid = android.os.Build.VERSION.SDK_INT;
 				String androidVersion = "\nAndroid Version: " + versionAndroid + "(" + versionCodeAndroid + ")";
 				String deviceName = "\nDevice name: " + android.os.Build.MODEL;
-				Intent send = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", APP_EMAIL.toString(), null));
-				send.putExtra(android.content.Intent.EXTRA_SUBJECT, gc.errorMessage);
-				send.putExtra(android.content.Intent.EXTRA_TEXT, gc.errorPGN + c4aVersion + androidVersion + deviceName);
-				startActivity(Intent.createChooser(send, getString(R.string.sendEmail)));
+				Intent intent = new Intent(Intent.ACTION_SENDTO);
+				intent.setData(Uri.parse("mailto:"));
+				intent.putExtra(Intent.EXTRA_EMAIL, new String[]{APP_EMAIL.toString()});
+				intent.putExtra(Intent.EXTRA_SUBJECT, gc.errorMessage);
+				intent.putExtra(Intent.EXTRA_TEXT,gc.errorPGN + c4aVersion + androidVersion + deviceName);
+				if (intent.resolveActivity(getPackageManager()) != null) {
+					startActivity(intent);
+				}
 			}
 		}
 		if (activDialog == TIME_SETTINGS_DIALOG)
@@ -2728,7 +2670,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						ec.chessEnginePaused = false;
 						ec.chessEngineInit = false;
 						updateCurrentPosition("");
-//						stopSearchAndRestart(false, false);
 						stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.fen);
 					}
 					else
@@ -3194,6 +3135,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ActivityCompat.requestPermissions(this, new String[]{extStorage}, PERMISSIONS_REQUEST_CODE);
 			}
 		}
+
+//		Log.i(TAG, "getPermissions(), storagePermissions: " + storagePermission);
+//		Log.i(TAG, "getPermissions(), internetPermission: " + internetPermission);
+//		Log.i(TAG, "getPermissions(), wakeLockPermission: " + wakeLockPermission);
 
 	}
 
@@ -4368,7 +4313,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		CharSequence[] pgnSplit = pgnData.toString().split(" ");
 		if (pgnSplit.length > 0)
 		{
-//			if (pgnSplit[0].toString().contains("/"))
 			if (pgnSplit[0].toString().contains("/") && !pgnSplit[0].toString().contains("["))
 			{
 				if (pgnSplit.length == 6)
@@ -4390,7 +4334,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (fen.equals(""))
 		{
-//			getGameData("", "", "", pgnData, false, getIsEndPosition(), 0, false);
 			getGameData("", "", "", pgnData, false, true, 0, false);
 			gc.startFen = gc.cl.history.getStartFen();
 		}
@@ -4429,7 +4372,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		ed.putInt("user_game_chess960Id", 518);
 		ed.commit();
 		updateGui();
-//		stopSearchAndRestart(true, true);
 		stopSearchAndRestart(false, true);
 
 	}
@@ -6942,7 +6884,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					else
 						stopSearchAndRestart(isNewGame, isSetClock);
 				}
-//				stopSearchAndRestart(isNewGame, isSetClock);
 				break;
 			case 4:     // analysis
 				ec.initClockAfterAnalysis = true;
@@ -7628,6 +7569,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int PLAY_DIALOG = 100;
 	final static int PAUSE_DIALOG = 109;
 	final static int MOVE_NOTIFICATION_DIALOG = 110;
+	final static int NO_FILE_ACTIONS_DIALOG = 193;
 	final static int DOWNLOAD_ERROR_DIALOG = 195;
 	final static int PGN_ERROR_DIALOG = 198;
 	final static int FILE_LOAD_PROGRESS_DIALOG = 199;
@@ -7827,7 +7769,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	int dContinueId = 3; 	// 1 new game, 2 continue, set clock, 3 continue
 
 	//karl --> settings
-//	int maxArrows = 6; 		// max display arrows
-	int maxArrows = 0; 		// max display arrows
+	int maxArrows = 6; 		// max display arrows
+//	int maxArrows = 0; 		// max display arrows
+//	boolean fileActions = true;
+	boolean fileActions = false;
 
 }

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteReadOnlyDatabaseException;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -59,7 +60,10 @@ public class PgnDb
 	
 	// .pgn-db (sqlite databse)			.pgn-db (sqlite databse)			.pgn-db (sqlite databse) 
 	public boolean initPgnFiles(String pgnPath, String pgnFile)
-    {	// setting the file values and return true if the files ".pgn" and ".pgn-db" exists	
+    {	// setting the file values and return true if the files ".pgn" and ".pgn-db" exists
+
+//		Log.i(TAG, "initPgnFiles(), pgnPath: " + pgnPath + pgnFile);
+
 		this.pgnPath = ""; 
 		this.pgnFile = "";
 		this.pgnDbFile = "";
@@ -74,8 +78,12 @@ public class PgnDb
 		File fPgnDb = new File(pgnPath + pgnDbFile);
 		if (fPgnDb.exists())
 			return true;
-		else
+		else {
+
+//			Log.i(TAG, "initPgnFiles(), PgnDb not exists: " + pgnDbFile);
+
 			return false;
+		}
     }
 
 	public void deleteDbFile()
@@ -100,6 +108,7 @@ public class PgnDb
 			initPgnFiles(path, file);
 		try 
 		{
+
 			db = SQLiteDatabase.openDatabase(pgnPath + pgnDbFile, null, flags);
 
 //Log.i(TAG, "db.getVersion(): "+ pgnPath + pgnDbFile + ", " + db.getVersion());

@@ -5,6 +5,7 @@
           package="ccc.chess.gui.chessforall" >
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE " />-->
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<supports-screens android:smallScreens="true" android:normalScreens="true" android:largeScreens="true"/>
 
@@ -16,7 +17,8 @@
         android:allowBackup="true" >
 		
 		<activity android:name=".MainActivity"
-	        android:theme="@style/Theme.C4a" >
+	        android:theme="@style/Theme.C4a"
+            android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -28,6 +30,11 @@
                 <data android:mimeType="application/x-chess-pgn" />
                 <data android:mimeType="application/x-chess-fen" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+                <data android:scheme="mailto" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         
         <activity
@@ -37,6 +44,7 @@
             android:label="@string/app_pgnFileManager"
             android:windowSoftInputMode="adjustPan">
         </activity>
+
         <activity android:name=".ChessGameData" android:label="@string/app_chessData" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
         <activity android:name=".ChessNotation" android:label="@string/app_chessNotation" > </activity>
         <activity android:name=".ChessMoveText" android:label="" > </activity>
@@ -49,6 +57,16 @@
         <activity android:name=".PlayEngineSettings" android:label="@string/app_playEngineSettings" > </activity>
 
         <receiver android:name=".NotificationReceiver" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="ccc.chess.gui.chessforall.fileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
 
     </application>
 

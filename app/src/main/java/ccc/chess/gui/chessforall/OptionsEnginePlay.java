@@ -1,6 +1,7 @@
 package ccc.chess.gui.chessforall;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -18,13 +19,14 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class OptionsEnginePlay extends Activity implements TextWatcher
+public class OptionsEnginePlay extends Activity implements TextWatcher, Ic4aDialogCallback
 {
 	public void onCreate(Bundle savedInstanceState) 
 	{
         super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u = new Util();
+		fileIO = new FileIO(this);
 		userPrefs = getSharedPreferences("user", 0);
 		runP = getSharedPreferences("run", 0);
 	}
@@ -113,12 +115,36 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 			break;
 		case R.id.epBook:
 		case R.id.tvEpBookName:
+			if (fileIO.isSdk30()) {
+				removeDialog(NO_FILE_ACTIONS_DIALOG);
+				showDialog(NO_FILE_ACTIONS_DIALOG);
+				return;
+			}
 			fileManagerIntent.putExtra("fileActionCode", LOAD_OPENING_BOOK_REQUEST_CODE);
 	    	fileManagerIntent.putExtra("displayActivity", 1);
 	    	this.startActivityForResult(fileManagerIntent, LOAD_OPENING_BOOK_REQUEST_CODE);
 			break;
 		}
 	}
+
+	@Override
+	protected Dialog onCreateDialog(int id)
+	{
+		if (id == NO_FILE_ACTIONS_DIALOG)
+		{
+			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog),
+					"", getString(R.string.btn_Ok), "", getString(R.string.noFileActions), 0, "");
+			return c4aDialog;
+		}
+		return null;
+	}
+
+	@Override
+	public void getCallbackValue(int btnValue)
+	{
+
+	}
+
 	@Override
 	public void afterTextChanged(Editable s) 
 	{
@@ -229,13 +255,16 @@ public class OptionsEnginePlay extends Activity implements TextWatcher
 
 	final String TAG = "PlaySettings";
 	Util u;
+	FileIO fileIO;
 	final static int LOAD_OPENING_BOOK_REQUEST_CODE = 91;
+	final static int NO_FILE_ACTIONS_DIALOG = 193;
 	final static int PV_MULTI = 2;
 	final static int PV_MOVES = 8;
 	final static int DISPLAYED_LINES = 3;
 	Intent fileManagerIntent;
 	SharedPreferences userPrefs;
 	SharedPreferences runP;
+	C4aDialog c4aDialog;
 //	GUI	
 	CheckBox engineMessage;
 	CheckBox ponder;

@@ -1,29 +1,62 @@
 package ccc.chess.gui.chessforall;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-public class NotificationHelper 
+public class NotificationHelper extends ContextWrapper
 {
     private Context mContext;
     public int notificationId = 1;
     private Notification mNotification;
     private NotificationManager mNotificationManager;
-    private NotificationCompat.Builder builder;
+//    private NotificationCompat.Builder builder;
+    private Notification.Builder builder;
     private PendingIntent mContentIntent;
     private PendingIntent pendingIntentContinue;
     private PendingIntent pendingIntentCancel;
     private CharSequence mContentTitle;
+    public static final String CHANNEL_ONE_ID = "ccc.chess.gui.chessforall.ONE";
+    public static final String CHANNEL_ONE_NAME = "Channel One";
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public NotificationHelper(Context context, int notificationId)
     {
+        super(context);
         mContext = context;
         this.notificationId = notificationId;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            createChannels();
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void createChannels() {
+        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ONE_ID,
+                CHANNEL_ONE_NAME, mNotificationManager.IMPORTANCE_LOW);
+        notificationChannel.enableLights(true);
+        notificationChannel.setLightColor(Color.RED);
+        notificationChannel.setShowBadge(true);
+        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+        getManager().createNotificationChannel(notificationChannel);
+    }
+
+    private NotificationManager getManager() {
+        if (mNotificationManager == null) {
+            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return mNotificationManager;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void createNotification(String title, String actionTyp, String pgnFileName)
     {
 
@@ -52,7 +85,18 @@ public class NotificationHelper
         intentContinue.putExtra("pgnFileName", pgnFileName);
         pendingIntentContinue = PendingIntent.getBroadcast(mContext, notificationId, intentContinue, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        builder = new NotificationCompat.Builder(mContext);
+//        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ONE_ID,
+//                CHANNEL_ONE_NAME, mNotificationManager.IMPORTANCE_HIGH);
+//        notificationChannel.enableLights(true);
+//        notificationChannel.setLightColor(Color.RED);
+//        notificationChannel.setShowBadge(true);
+//        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+//        builder = new NotificationCompat.Builder(mContext);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            builder = new Notification.Builder(mContext, CHANNEL_ONE_ID);
+        else
+            builder = new Notification.Builder(mContext);
         mNotification = builder.setContentIntent(mContentIntent)
                 .setSmallIcon(icon).setTicker(tickerText).setWhen(when)
                 .setAutoCancel(true)

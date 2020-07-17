@@ -85,6 +85,11 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 			}
 			break;
 		case R.id.btnPeAutoSetFile:
+			if (fileIO.isSdk30()) {
+				removeDialog(NO_FILE_ACTIONS_DIALOG);
+				showDialog(NO_FILE_ACTIONS_DIALOG);
+				return;
+			}
 			fileManagerIntent.putExtra("fileActionCode", 5);
 	    	fileManagerIntent.putExtra("displayActivity", 1);
 	    	startActivityForResult(fileManagerIntent, ENGINE_AUTOPLAY_REQUEST_CODE);		// start FileManager - Activity(with GUI)
@@ -128,7 +133,13 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 	            }
 	        });
 	        return progressDialog;
-        } 
+        }
+		if (id == NO_FILE_ACTIONS_DIALOG)
+		{
+			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog),
+					"", getString(R.string.btn_Ok), "", getString(R.string.noFileActions), 0, "");
+			return c4aDialog;
+		}
         return null;
 	}
 
@@ -200,7 +211,9 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 	Util u;
 	Intent fileManagerIntent;
 	private static final int ENGINE_PROGRESS_DIALOG = 1;
+	final static int NO_FILE_ACTIONS_DIALOG = 193;
 	ProgressDialog progressDialog = null;
+	C4aDialog c4aDialog;
 	FileIO fileIO;
 	String path = "";
 	String file = "";

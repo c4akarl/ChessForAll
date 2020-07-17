@@ -1,8 +1,13 @@
 package ccc.chess.gui.chessforall;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.util.Log;
 
 import com.kalab.chess.enginesupport.ChessEngine;
 
@@ -29,6 +34,16 @@ class FileIO
 	FileIO(Context context)
 	{
 		this.context = context;
+	}
+
+	public Boolean isSdk30()
+	{
+		int deviceSdk = android.os.Build.VERSION.SDK_INT;
+		int targetSdk = context.getApplicationContext().getApplicationInfo().targetSdkVersion;
+
+//		Log.i(TAG, "isSdk30(), sdkInt: " + deviceSdk + ", targetSdk: " + targetSdk);
+
+		return deviceSdk >= 30 && targetSdk >= 30;
 	}
 
 	String getExternalDirectory(int var)
@@ -78,12 +93,6 @@ class FileIO
 				dirs[0] = externalStorage;
 				return dirs;
 			}
-
-//			for(int i=0; i < dirs.length;i++)
-//			{
-//				Log.i(TAG, "getExternalDirs(), external dirs: " + dirs[i]);
-//			}
-
 		}
 
 		return dirs;
@@ -219,32 +228,30 @@ class FileIO
 		return copyOk; 
 	}
 
-	public String getExternalStorageFromContent(String content)
+	public String getExternalStoragePgnPathFromContent(String content)
 	{
 
-//Log.i(TAG, "getExternalStorageFromContent(), content: " + content);
+		if (content.contains("%2F"))
+			content = content.replace("%2F", "/");
+		if (content.contains("%3A")) // ':' --> '/'
+			content = content.replace("%3A", "/");
+		if (content.contains(":"))
+			content = content.replace(":", "/");
 
-		if (content.startsWith(CONTENT))
+//		Log.i(TAG, "getExternalStoragePgnPathFromContent(), externalStorageDirectory: " + Environment.getExternalStorageDirectory().getAbsolutePath());
+//		Log.i(TAG, "getExternalStoragePgnPathFromContent(), content:                  " + content);
+
+		String checkString = "";
+		String[] split = content.split("/");
+		for (int i = split.length -1; i >= 0; i--)
 		{
-			if (content.contains(ANDROID_DATA))
-			{
-				int x = content.indexOf(ANDROID_DATA);
-				String srcFile = Environment.getExternalStorageDirectory().getAbsolutePath() + content.substring(x, content.length());
-				File file = new File(srcFile);
-				if (file.exists())
-					return srcFile;
-			}
-			else
-			{
-				if (content.contains(EXTERNAL + "/"))
-				{
-					int x = content.indexOf(EXTERNAL);
-					String srcFile = content.substring(x, content.length());
-					srcFile = srcFile.replace(EXTERNAL, Environment.getExternalStorageDirectory().getAbsolutePath());
-					File file = new File(srcFile);
-					if (file.exists())
-						return srcFile;
-				}
+			checkString = "/" + split[i] + checkString;
+			File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + checkString);
+			if (file.exists()) {
+
+//				Log.i(TAG, "getExternalStoragePgnPathFromContent():                           " + Environment.getExternalStorageDirectory().getAbsolutePath() + checkString);
+
+				return Environment.getExternalStorageDirectory().getAbsolutePath() + checkString;
 			}
 		}
 		return content;
@@ -253,7 +260,7 @@ class FileIO
 	public String[] getFileArrayFromPath(String path, boolean allDirectory, String extension)
     {
 
-//Log.i(TAG, "getFileArrayFromPath(), path: " + path + ", file extension: " + extension);
+//		Log.i(TAG, "getFileArrayFromPath(), path: " + path + ", file extension: " + extension);
 
 		String[] tmpA = null;
 		String[] fileA = null;
@@ -262,6 +269,9 @@ class FileIO
 		{ 
 			f = new File(path);
 			tmpA = f.list();
+
+//			Log.i(TAG, "getFileArrayFromPath(), f.exists(): " + f.exists()+ ", tmpA.length:" + tmpA.length);
+
 			fileA = new String[tmpA.length];
 			fileA = initArray(fileA);
 			for (int i = 0; i < tmpA.length; i++) 
@@ -632,9 +642,26 @@ class FileIO
 
 	public void dataToFile(String path, String file, String data, boolean append)
     {
+//		Log.i(TAG, "dataToFile(), file: " + path + file + ", append: " + append);
+//		Log.i(TAG, "dataToFile(), data: \n" + data );
+
 		try
 		{ 
 			File f = new File(path + file);
+			if (!f.exists())
+				f.createNewFile();
+
+			if (!f.exists()) {
+				//karl Dialog !
+//				Log.i(TAG, "dataToFile(), file create error, file: " + f);
+				return;
+			}
+
+			if (data.equals(""))
+				return;
+
+//			Log.i(TAG, "dataToFile(), f.length(): " + f.length());
+
 			FileOutputStream fOut;
 			if (append)
 			{
@@ -648,6 +675,7 @@ class FileIO
 			osw.write(data); 
             osw.flush(); 
             osw.close();
+
 		} 
 		catch (FileNotFoundException e) 	{e.printStackTrace();} 
 		catch (IOException e)				{e.printStackTrace();}
@@ -678,6 +706,7 @@ class FileIO
 		return fileNames;
 	}
 
+	// OEX
 	public static String openExchangeFileName(ChessEngine engine) {
 		String ret = "";
 		if (engine.getPackageName() != null)
@@ -702,7 +731,60 @@ class FileIO
 		return sb.toString();
 	}
 
-//	final String TAG = "FileIO";
+	// Uri (<= Android sdk 29)
+	public String getPathFromURI(Context context, Uri uri) {
+		// DocumentProvider, ExternalStorageProvider
+		if (DocumentsContract.isDocumentUri(context, uri) && isExternalStorageDocument(uri)) {
+			String docId = DocumentsContract.getDocumentId(uri);
+			String[] split = docId.split(":");
+			String type = split[0];
+			if ("primary".equalsIgnoreCase(type))
+				return Environment.getExternalStorageDirectory() + "/" + split[1];
+		}
+		// DocumentProvider, DownloadsProvider
+		if (DocumentsContract.isDocumentUri(context, uri) && isDownloadsDocument(uri)) {
+			final String id = DocumentsContract.getDocumentId(uri);
+			final Uri contentUri = ContentUris.withAppendedId(
+					Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+			return getDataColumn(context, contentUri, null, null);
+		}
+		// File
+		if ("file".equalsIgnoreCase(uri.getScheme())) {
+			return uri.getPath();
+		}
+
+		return null;
+	}
+
+	public boolean isExternalStorageDocument(Uri uri) {
+		return "com.android.externalstorage.documents".equals(uri.getAuthority());
+	}
+
+	public boolean isDownloadsDocument(Uri uri) {
+		return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+	}
+
+	public static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+		Cursor cursor = null;
+		String column = "_data";
+		String[] projection = {
+				column
+		};
+		try {
+			cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+					null);
+			if (cursor != null && cursor.moveToFirst()) {
+				int column_index = cursor.getColumnIndexOrThrow(column);
+				return cursor.getString(column_index);
+			}
+		} finally {
+			if (cursor != null)
+				cursor.close();
+		}
+		return null;
+	}
+
+	final String TAG = "FileIO";
 	private final String CONTENT = "content:";
 	private final String EXTERNAL = "/external";
 	private final String ANDROID_DATA = "/Android/data";
