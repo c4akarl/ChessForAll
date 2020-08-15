@@ -17,8 +17,7 @@
         android:allowBackup="true" >
 		
 		<activity android:name=".MainActivity"
-	        android:theme="@style/Theme.C4a"
-            android:launchMode="singleInstance" >
+	        android:theme="@style/Theme.C4a" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
