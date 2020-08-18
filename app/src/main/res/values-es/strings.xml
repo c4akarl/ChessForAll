@@ -360,5 +360,6 @@
     <string name="play_boardNavi">Navegación Junta</string>
 	<string name="play_quickMove">Movimiento rápido</string>
     <string name="noFileActions">Debido a los serios cambios en la administración de archivos, actualmente no es posible realizar acciones de archivos para dispositivos con Android 11 o superior. \nEl desarrollador pide comprensión.</string>
+    <string name="analysisFinished">El motor ha terminado el análisis.</string>
 
 </resources>

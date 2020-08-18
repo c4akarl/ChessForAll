@@ -341,5 +341,6 @@
     <string name="play_boardNavi">Совет навигации</string>
 	<string name="play_quickMove">Быстрый ход</string>
     <string name="noFileActions">Из-за серьезных изменений в управлении файлами, в настоящее время никакие действия с файлами не возможны для устройств с Android 11 и выше. \nРазработчик просит понимания.</string>
+    <string name="analysisFinished">Движок закончил анализ.</string>
 
 </resources>

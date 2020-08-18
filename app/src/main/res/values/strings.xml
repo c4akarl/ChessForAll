@@ -361,5 +361,6 @@
 	<string name="chess960" translatable="false">Chess 960</string>
     <string name="play_quickMove">Quick move</string>
     <string name="noFileActions">Due to the serious changes in the file management, no file actions are currently possible for devices from Android 11 and up. \nThe developer asks for understanding.</string>
+    <string name="analysisFinished">The Engine has finished the analysis.</string>
 
 </resources>

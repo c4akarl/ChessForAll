@@ -258,8 +258,8 @@ public class OptionsEnginePlay extends Activity implements TextWatcher, Ic4aDial
 	FileIO fileIO;
 	final static int LOAD_OPENING_BOOK_REQUEST_CODE = 91;
 	final static int NO_FILE_ACTIONS_DIALOG = 193;
-	final static int PV_MULTI = 2;
-	final static int PV_MOVES = 8;
+	final static int PV_MULTI = 1;
+	final static int PV_MOVES = 16;
 	final static int DISPLAYED_LINES = 3;
 	Intent fileManagerIntent;
 	SharedPreferences userPrefs;
