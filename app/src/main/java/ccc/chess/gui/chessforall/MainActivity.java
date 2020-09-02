@@ -5442,9 +5442,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			else
 				ec.chessEngineAnalysis = false;
 			boolean isPonder = isGoPonder;
+
+//			Log.i(TAG, "1 searchTask, doInBackground(), ec.chessEngineAnalysis: " + ec.chessEngineAnalysis + ", isPonder: " + isPonder + ", mate");
+
 			ec.getEngine().startSearch(taskFen, taskMoves, wTime, bTime, wInc, bInc, moveTime, movesToGo, ec.chessEngineAnalysis, isPonder, mate);
 
-//			Log.i(TAG, "searchTask, doInBackground(), engineState: " + ec.getEngine().engineState);
+//			Log.i(TAG, "2 searchTask, doInBackground(), engineState: " + ec.getEngine().engineState);
 
 			isGoPonder = false;
 
@@ -5471,10 +5474,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 				if (s == null | s.length() == 0)
 				{
-
-//					Log.i(TAG, "line: " + s);
-
 					s = "";
+				}
+				else {
+
+//					Log.i(TAG, "searchTask, doInBackground(), s: " + s);
+
 				}
 
 				if (!s.equals(""))
@@ -5486,6 +5491,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 				else
 				{
+
+//					Log.i(TAG, "searchTask, doInBackground(), line: no message");
+
 					currentTime = System.currentTimeMillis();
 					if (cancelTask & ((int) (currentTime - searchStartTimeInfo) > MAX_SEARCH_CANCEL_TIMEOUT))
 						return "NO_RESPOND";
@@ -5549,14 +5557,22 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 				}
 
-				if ((!s.equals("") & isInfo) | isPV)
+//				Log.i(TAG, "searchTask, doInBackground(), isInfo: " + isInfo + ", isPV: " + isPV);
+
+//				if ((!s.equals("") & isInfo) | isPV)
+//				if ((!engineMes.equals("") & isInfo) | isPV)
+//				if (!engineMes.equals("") | isPV)
+//				{
+//					if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME)
+//					{
+//						publishTime = searchStartTimeInfo;
+//						publishProgress(ec.getEngine().statPvAction, "" + engineStat + engineMes, "", searchDisplayMoves);
+//					}
+//				}
+				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isPV || s.toString().contains(" mate "))
 				{
-					if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME)
-//					if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || s.toString().contains(" mate "))
-					{
-						publishTime = searchStartTimeInfo;
-						publishProgress(ec.getEngine().statPvAction, "" + engineStat + engineMes, "", searchDisplayMoves);
-					}
+					publishTime = searchStartTimeInfo;
+					publishProgress(ec.getEngine().statPvAction, "" + engineStat + engineMes, "", searchDisplayMoves);
 				}
 
 				if (tokens[0].equals("bestmove"))
@@ -5625,14 +5641,36 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 			if (result.equals("NO_RESPOND"))
 			{
+
+//				ec.chessEngineSearching = false;
+//				stopComputerThinking(true);
+//				stopComputerThinking(false);
+//				ec.chessEnginePaused = true;
+//				ec.chessEngineInit = true;
+//				updateCurrentPosition("");
+
+				ec.getEngine().engineState = EngineState.IDLE;
+				Boolean isMate = false;
+				Boolean isDraw = false;
+				if (messageEngine.toString().contains("(M"))
+					isMate = true;
+				if (messageEngine.toString().contains("0.00"))
+					isDraw = true;
 				stopChessClock();
 				ec.chessEngineSearching = false;
-				stopComputerThinking(true);
 				ec.chessEnginePaused = true;
-				ec.chessEngineInit = true;
-				updateCurrentPosition("");
+				stopComputerThinking(true);
+//				Log.i(TAG, "onPostExecute(), messageEngine: " + messageEngine);
+//				Log.i(TAG, "onPostExecute(), isMate: " + isMate + ", isDraw: " + isDraw);
+
+				gc.isGameLoaded = false;
 				if (!cancelTask)
 					setInfoMessage(getString(R.string.engine_timeout), null, null, false);
+				if (isMate)
+					setInfoMessage(getString(R.string.engineAnalysisStop) +  " (" + getString(R.string.cl_mate) + ")", null, null, false);
+				if (isDraw)
+					setInfoMessage(getString(R.string.engineAnalysisStop) +  " (" + getString(R.string.cl_draw) + ")", null, null, false);
+
 				return;
 			}
 
@@ -5640,9 +5678,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			{
 				stopChessClock();
 				ec.chessEngineSearching = false;
+				//karl ???
+				stopComputerThinking(true);
+				setInfoMessage(getString(R.string.engine_noRespond) + " (10)", null, null, false);
 				ec.chessEnginePaused = true;
 				ec.chessEngineInit = true;
-				setInfoMessage(getString(R.string.engine_noRespond) + " (10)", null, null, false);
 				return;
 			}
 
@@ -5873,9 +5913,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		CharSequence searchDisplayMoves = null;
 
 		long searchStartTimeInfo = 0;		// info != ""
-		int MAX_SEARCH_TIMEOUT = 180000;	// max. search time engine timeout (3 min: no info message)
 		int MAX_SEARCH_CANCEL_TIMEOUT = 1500;	// max. search time engine timeout
-		int MIN_PUBLISH_TIME = 400;				// min. time for publishing
+
+//		int MAX_SEARCH_TIMEOUT = 180000;		// max. search time engine timeout (3 min: no info message)
+		int MAX_SEARCH_TIMEOUT = 30000;		// max. search time engine timeout (30sec: no info message (null))
+//		int MIN_PUBLISH_TIME = 400;				// min. time for publishing
+		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
+
 		boolean cancelTask = false;
 
 		boolean isTimeCheck = false;
@@ -7837,8 +7881,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	int dContinueId = 3; 	// 1 new game, 2 continue, set clock, 3 continue
 
 	//karl --> settings
-//	int maxArrows = 6; 		// max display arrows
-	int maxArrows = 0; 		// max display arrows
+	int maxArrows = 6; 		// max display arrows
+//	int maxArrows = 0; 		// max display arrows
 
 	// sdk >= 30
 //	boolean fileActions = true;
