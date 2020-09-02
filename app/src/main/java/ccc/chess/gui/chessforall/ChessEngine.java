@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+//karl EditUciOptions : edit / save if != default in sd/c4a/uci pro engine mit uciPath/fileName (von Droidfish)
+//karl setEngineOptions(sd/c4a/uci) --> engine
 public class ChessEngine
 {
     ChessEngine(Context con, int eNumber)
@@ -79,8 +81,6 @@ public class ChessEngine
         statIsMate = false;
     }
 
-    //karl EditUciOptions : edit und save if != default in sd/c4a/uci pro engine mit uciPath/fileName (von Droidfish)
-    //karl setEngineOptions(sd/c4a/uci) --> engine
     private synchronized boolean readUCIOptions()
     {
         int timeout = 1000;

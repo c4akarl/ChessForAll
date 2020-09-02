@@ -188,26 +188,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher, Ic4aDial
 				break;
 	    }
     }
-	public Bitmap combineImages(int image1, int image2, int image3) 
-	{	// paint over ImageView
-    	Bitmap drawBitmap = null;
-    	try
-    	{
-	    	Bitmap image1Bitmap = BitmapFactory.decodeResource(getResources(), image1);
-	    	Bitmap image2Bitmap = BitmapFactory.decodeResource(getResources(), image2);
-	    	Bitmap image3Bitmap = null;
-	    	if (image3 != 0)
-	    		image3Bitmap = BitmapFactory.decodeResource(getResources(), image3);
-	    	drawBitmap = Bitmap.createBitmap(image1Bitmap.getWidth(), image1Bitmap.getHeight(), Config.ARGB_8888);
-			Canvas canvas = new Canvas(drawBitmap);
-			canvas.drawBitmap(image1Bitmap, 0, 0, null);
-			canvas.drawBitmap(image2Bitmap, 0, 0, null);
-			if (image3 != 0)
-				canvas.drawBitmap(image3Bitmap, 0, 0, null);
-    	}
-		catch (NullPointerException e) {e.printStackTrace();}
-    	return drawBitmap;
-	}
+
 	protected void setPrefs() 
 	{
 		SharedPreferences.Editor ed = userPrefs.edit();

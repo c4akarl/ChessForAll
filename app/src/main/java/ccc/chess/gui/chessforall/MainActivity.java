@@ -633,7 +633,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //			Log.i(TAG, "getDataFromIntent(), pgnPath: " + pgnPath);
 
-//			if (intent.getType().endsWith("x-chess-pgn") & pgnPath.endsWith(".pgn"))	//".pgn-db" canceled
 			if (pgnPath.endsWith(".pgn"))
 			{
 				File file = new File(pgnPath);
@@ -5605,82 +5604,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		protected void onProgressUpdate(CharSequence... args)
 		{	// called from doInBackground() : publishProgress()
-//			CharSequence pvAction = args[0];
 			CharSequence engineMes = args[1];
 			CharSequence engineStat = args[2];
 			CharSequence displMoves = args[3];
-
-//			String engineUpdate = "";
-//			if (isUpdated)
-//				engineUpdate = "ENGINE_UPDATE";
-
-//			Log.i(TAG, "onProgressUpdate(), pvAction: " + pvAction);
-//			Log.i(TAG, "onProgressUpdate(), engineMes: " + engineMes);
-//			Log.i(TAG, "onProgressUpdate(), engineStat: " + engineStat);
-//			Log.i(TAG, "onProgressUpdate(), displayMoves: " + displMoves);
-
-//			if (ec.getEngine().engineStop())
-//				return;
-//
-//			if (tc.clockIsRunning)
-//			{
-//				if (gc.isGameOver | gc.cl.p_variationEnd)
-//				{
-//					tc.stopChessClock(System.currentTimeMillis(), ec.chessEnginePlayMod);
-//					if (!ec.chessEngineAutoRun)
-//					{
-//						ec.chessEnginePaused = true;
-//						ec.chessEngineSearching = false;
-//					}
-//					updateCurrentPosition("");
-//					setInfoMessage("   " + getGameOverMessage(), engineMes, engineUpdate, false);
-//				}
-//				else
-//				{
-//					updateTime(gc.cl.p_color);
-//				}
-//			}
-//			else
-//				updateTime(gc.cl.p_color);
-//			if (!ec.chessEnginePaused)
-//			{
-//				if (ec.chessEnginesOpeningBook)
-//				{
-//					if (!ec.chessEngineAutoRun)
-//						setInfoMessage(getString(R.string.engine_openingBook), "", engineUpdate, false);
-//					else
-//						setInfoMessage(getString(R.string.engine_autoPlay) + showGameCount + "\n" + getString(R.string.engine_openingBook), "", engineUpdate, false);
-//				}
-//				else
-//				{
-//					if (!ec.chessEngineAutoRun)
-//					{
-//						if (getEngineThinkingMessage().equals(getString(R.string.engineAnalysisStopWait)))
-//							engineStat = "";
-//						if (!ec.getEngine().engineStop())
-//							setInfoMessage(getEngineThinkingMessage() + " " + engineStat, engineMes, engineUpdate, false);
-//					}
-//					else
-//						setInfoMessage(null, engineMes, engineUpdate, false);
-//				}
-//			}
-//
-//			//karl DISPLAY_MOVES
-//			if (displMoves != null) {
-//				if (ec.chessEnginePlayMod == 4 && !ec.chessEnginePaused && !displMoves.toString().equals("")) {
-//					displayMoves = displMoves;
-//					updateGui();
-//				}
-//				else
-//					displayMoves = null;
-//			}
-//			else
-//				displayMoves = null;
-//
-//			isUpdated = true;
-
 			updateEngineMessage(engineStat, engineMes, displMoves);
-
 		}
 
 		protected void onPostExecute(CharSequence result)
@@ -5981,7 +5908,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					case READ_OPTIONS:
 					case WAIT_READY:
 					case PONDER:
-//					case ANALYZE:
 					case IDLE:
 					case DEAD:
 					{
@@ -7703,7 +7629,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int OPTIONS_ENGINE_PLAY_REQUEST_CODE = 21;
 	final static int OPTIONS_COLOR_SETTINGS = 22;
 	final static int EDIT_CHESSBOARD_REQUEST_CODE = 44;
-	final static int CHESS960_POSITION_REQUEST_CODE = 20;
 	final static int ENGINE_SETTING_REQUEST_CODE = 41;
 	final static int RATE_REQUEST_CODE = 42;
 
