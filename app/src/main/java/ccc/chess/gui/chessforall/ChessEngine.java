@@ -551,8 +551,11 @@ public class ChessEngine
             if (isLogOn)
                 Log.i(TAG,  engineName + ": " + message);
         }
-        else
+        else {
+//            if (isLogOn)
+//                Log.i(TAG,  engineName + ": " + message);
             message = "";
+        }
         return message;
     }
 
