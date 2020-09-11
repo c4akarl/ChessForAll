@@ -5511,11 +5511,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				if (tokens[0].equals("info"))
 				{
 
-					if (s.toString().contains("info string")) {
-						publishProgress("99", s, "", "");
+					if (userPrefs.getBoolean("user_options_enginePlay_debugInformation", true)) {
+						if (s.toString().contains("info string")) {
+//						publishProgress("99", s, "", ""); 	// toast message
+							engineInfoString = "\n" + s.toString().subSequence(12, s.length() - 1);
+						}
 					}
+					else
+						engineInfoString = "";
 
-					isInfo = true;
+							isInfo = true;
 					ec.getEngine().parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves", OptionsEnginePlay.PV_MOVES));
 					int depth = ec.getEngine().statCurrDepth;
 					int selDepth = ec.getEngine().statCurrSelDepth;
@@ -5570,7 +5575,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isPV || s.toString().contains(" mate "))
 				{
 					publishTime = searchStartTimeInfo;
-					publishProgress(ec.getEngine().statPvAction, "" + engineStat + engineMes, "", searchDisplayMoves);
+//					publishProgress(ec.getEngine().statPvAction, "" + engineStat + engineMes, "", searchDisplayMoves);
+					publishProgress(ec.getEngine().statPvAction, "" + engineStat + engineMes + engineInfoString, "", searchDisplayMoves);
 				}
 
 				if (tokens[0].equals("bestmove"))
@@ -5895,7 +5901,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		int MAX_SEARCH_CANCEL_TIMEOUT = 1500;	// max. search time engine timeout
 
 //		int MAX_SEARCH_TIMEOUT = 180000;		// max. search time engine timeout (3 min: no info message)
-		int MAX_SEARCH_TIMEOUT = 30000;		// max. search time engine timeout (30sec: no info message (null))
+		int MAX_SEARCH_TIMEOUT = 15000;			// max. search time engine timeout (15sec: no info message (null))
 //		int MIN_PUBLISH_TIME = 400;				// min. time for publishing
 		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
 
@@ -7802,6 +7808,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	CharSequence 	messageEngineShort 	= "";
 	CharSequence engineMes = "";
 	CharSequence engineStat = "";
+	CharSequence engineInfoString= "";
 	ArrayList<CharSequence> infoPv;
 	ArrayList<CharSequence> infoMessage;
 	int bestScore = 0;

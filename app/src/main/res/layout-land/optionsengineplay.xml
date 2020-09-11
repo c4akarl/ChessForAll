@@ -201,9 +201,13 @@
 			</LinearLayout>
 
 			<CheckBox
+				android:id="@+id/debugInformation"
+				style="@style/c4aCB1"
+				android:text="@string/debugInformation" />
+
+			<CheckBox
 				android:id="@+id/logOn"
 				style="@style/c4aCB1"
-				android:layout_below="@id/seekBars"
 				android:text="@string/epLogging" />
 
 		</LinearLayout>

@@ -60,6 +60,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher, Ic4aDial
 		multiPv.addTextChangedListener(this);
 		pvMoves.addTextChangedListener(this);
 		displayedLines.addTextChangedListener(this);
+		debugInformation = (CheckBox) findViewById(R.id.debugInformation);
 		logOn = (CheckBox) findViewById(R.id.logOn);
 		getPrefs();
 
@@ -213,6 +214,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher, Ic4aDial
 		ed.putInt("user_options_enginePlay_displayedLines", lines);
 		ed.putInt("user_options_enginePlay_strength", progressStrength);
 		ed.putInt("user_options_enginePlay_aggressiveness", progressAggressiveness - 100);
+		ed.putBoolean("user_options_enginePlay_debugInformation", debugInformation.isChecked());
 		ed.putBoolean("user_options_enginePlay_logOn", logOn.isChecked());
         ed.commit();
 	}
@@ -231,6 +233,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher, Ic4aDial
 		displayedLines.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_displayedLines", DISPLAYED_LINES)));
 		progressStrength = userPrefs.getInt("user_options_enginePlay_strength", 100);
 		progressAggressiveness = userPrefs.getInt("user_options_enginePlay_aggressiveness", 0) + 100;
+		debugInformation.setChecked(userPrefs.getBoolean("user_options_enginePlay_debugInformation", false));
 		logOn.setChecked(userPrefs.getBoolean("user_options_enginePlay_logOn", false));
 	}
 
@@ -262,6 +265,7 @@ public class OptionsEnginePlay extends Activity implements TextWatcher, Ic4aDial
 	TextView strengthValue;
 	SeekBar aggressiveness;
 	TextView aggressivenessValue;
+	CheckBox debugInformation;
 	CheckBox logOn;
 
 	int progressStrength = 100;

@@ -362,5 +362,6 @@
 	<string name="play_quickMove">mouvement rapide</string>
     <string name="noFileActions">En raison des changements importants dans la gestion des fichiers, aucune action sur les fichiers n\'est actuellement possible pour les appareils à partir d\'Android 11 et plus. \nLe développeur demande la compréhension.</string>
     <string name="analysisFinished">Le moteur a terminé l\'analyse.</string>
+    <string name="debugInformation">Informations de débogage</string>
 
 </resources>
