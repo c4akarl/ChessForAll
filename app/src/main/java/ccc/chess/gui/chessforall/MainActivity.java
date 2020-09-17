@@ -5520,7 +5520,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					else
 						engineInfoString = "";
 
-							isInfo = true;
+					isInfo = true;
 					ec.getEngine().parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves", OptionsEnginePlay.PV_MOVES));
 					int depth = ec.getEngine().statCurrDepth;
 					int selDepth = ec.getEngine().statCurrSelDepth;
@@ -5572,7 +5572,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //				Log.i(TAG, "searchTask, doInBackground(), isInfo: " + isInfo + ", isPV: " + isPV);
 
-				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isPV || s.toString().contains(" mate "))
+//				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isPV || s.toString().contains(" mate "))
+				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isInfo || isPV || s.toString().contains(" mate "))
 				{
 					publishTime = searchStartTimeInfo;
 //					publishProgress(ec.getEngine().statPvAction, "" + engineStat + engineMes, "", searchDisplayMoves);
@@ -5900,8 +5901,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		long searchStartTimeInfo = 0;		// info != ""
 		int MAX_SEARCH_CANCEL_TIMEOUT = 1500;	// max. search time engine timeout
 
-//		int MAX_SEARCH_TIMEOUT = 180000;		// max. search time engine timeout (3 min: no info message)
-		int MAX_SEARCH_TIMEOUT = 15000;			// max. search time engine timeout (15sec: no info message (null))
+		int MAX_SEARCH_TIMEOUT = 180000;		// max. search time engine timeout (3 min: no info message)
+//		int MAX_SEARCH_TIMEOUT = 15000;			// max. search time engine timeout (15sec: no info message (null))
 //		int MIN_PUBLISH_TIME = 400;				// min. time for publishing
 		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
 
@@ -6209,18 +6210,28 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			isMate = true;
 		if (messageEngine.toString().contains("0.00"))
 			isDraw = true;
+
+//		if (isMate)
+//			setInfoMessage(getString(R.string.engineAnalysisStop) +  " (" + getString(R.string.cl_mate) + ")", null, null, false);
+//		else if (isDraw)
+//			setInfoMessage(getString(R.string.engineAnalysisStop) +  " (" + getString(R.string.cl_draw) + ")", null, null, false);
+//		else if (isDraw)
+//			setInfoMessage(getString(R.string.engine_timeout), null, null, false);
 		if (isMate)
 			setInfoMessage(getString(R.string.engineAnalysisStop) +  " (" + getString(R.string.cl_mate) + ")", null, null, false);
-		else if (isDraw)
+		if (isDraw)
 			setInfoMessage(getString(R.string.engineAnalysisStop) +  " (" + getString(R.string.cl_draw) + ")", null, null, false);
-		else if (isDraw)
-			setInfoMessage(getString(R.string.engine_timeout), null, null, false);
 
 //		Log.i(TAG, "engineAnalysisAutoStop(), isMate: " + isMate + ", isDraw: " + isDraw);
 
 		if (!fen.toString().equals("") && !bestMove.toString().equals("")) {
 			analysisAutoStopFen = fen;
 			analysisAutoStopMove = bestMove;
+		}
+		if (!isMate && !isDraw) {
+			setInfoMessage(getString(R.string.engine_timeout), null, null, false);
+			analysisAutoStopFen = "";
+			analysisAutoStopMove = "";
 		}
 
 		Toast.makeText(this, getString(R.string.analysisFinished), Toast.LENGTH_LONG).show();
@@ -7896,8 +7907,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	int dContinueId = 3; 	// 1 new game, 2 continue, set clock, 3 continue
 
 	//karl --> settings
-	int maxArrows = 6; 		// max display arrows
-//	int maxArrows = 0; 		// max display arrows
+//	int maxArrows = 6; 		// max display arrows
+	int maxArrows = 0; 		// max display arrows
 
 	// sdk >= 30
 //	boolean fileActions = true;
