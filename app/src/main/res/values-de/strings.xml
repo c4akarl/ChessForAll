@@ -362,4 +362,6 @@
     <string name="noFileActions">Aufgrund der gravierenden Änderungen im Dateien-Management sind derzeit für Geräte ab Android 11 keine Datei Aktionen möglich. \nDer Entwickler bittet um Verständnis.</string>
     <string name="analysisFinished">Die Engine hat die Analyse beendet.</string>
     <string name="debugInformation">Debug-Informationen</string>
+    <string name="app_editUciOptions">UCI-Optionen editieren</string>
+    <string name="menu_enginesettings_uciOptions">UCI-Optionen</string>
 </resources>

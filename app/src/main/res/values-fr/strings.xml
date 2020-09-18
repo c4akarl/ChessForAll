@@ -363,5 +363,7 @@
     <string name="noFileActions">En raison des changements importants dans la gestion des fichiers, aucune action sur les fichiers n\'est actuellement possible pour les appareils à partir d\'Android 11 et plus. \nLe développeur demande la compréhension.</string>
     <string name="analysisFinished">Le moteur a terminé l\'analyse.</string>
     <string name="debugInformation">Informations de débogage</string>
+    <string name="app_editUciOptions">Modifier les options UCI</string>
+    <string name="menu_enginesettings_uciOptions">Options UCI</string>
 
 </resources>

@@ -87,6 +87,7 @@ public class ChessEngine
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
         isUciPonder = false;
+        uciOptions = "";
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
 			if (Thread.currentThread().isInterrupted())
@@ -106,6 +107,8 @@ public class ChessEngine
 
 				return false;
 			}
+            if (s.toString().contains("option name"))
+                uciOptions = uciOptions.toString() + s + "\n";
             if (s.toString().contains("option") & s.toString().contains("Ponder"))
                 isUciPonder = true;
             CharSequence[] tokens = tokenize(s);
@@ -785,8 +788,9 @@ public class ChessEngine
             }
             catch (IOException e)
             {
-                if (isLogOn)
-                    Log.i(TAG,  engineName + ": startProcess, IOException");
+                if (isLogOn) {
+                    Log.i(TAG, engineName + ": startProcess, IOException\n" + e);
+                }
                 return false;
             }
         }
@@ -862,6 +866,7 @@ public class ChessEngine
     boolean isChess960 = false;
     boolean startPlay = false;
 
+    CharSequence uciOptions = "";
     boolean isUciStrength = false;
     boolean isUciEloOption = false;
     boolean isUciSkillOption = false;

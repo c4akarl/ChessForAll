@@ -343,5 +343,7 @@
     <string name="noFileActions">Из-за серьезных изменений в управлении файлами, в настоящее время никакие действия с файлами не возможны для устройств с Android 11 и выше. \nРазработчик просит понимания.</string>
     <string name="analysisFinished">Движок закончил анализ.</string>
     <string name="debugInformation">Информация об отладке</string>
+    <string name="app_editUciOptions">Изменить параметры UCI</string>
+    <string name="menu_enginesettings_uciOptions">UCI-Опции</string>
 
 </resources>
