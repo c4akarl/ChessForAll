@@ -3,11 +3,14 @@ package ccc.chess.gui.chessforall;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -59,6 +62,7 @@ public class EditUciOptions extends Activity {
                 case SPIN:
                     name.setText(getName(uciOptsList.get(i)) + "(" + getMin(uciOptsList.get(i)) + "-"  + getMax(uciOptsList.get(i) + ")     "));
                     editName.setText(getDefault(uciOptsList.get(i)));
+                    editName.setMinWidth(100);
                     llh.addView(name);
                     llh.addView(editName);
                     llv.addView(llh);
@@ -76,6 +80,7 @@ public class EditUciOptions extends Activity {
                 case STRING:
                     name.setText(getName(uciOptsList.get(i)) + "     ");
                     editName.setText(getDefault(uciOptsList.get(i)));
+                    editName.setMinWidth(100);
                     llh.addView(name);
                     llh.addView(editName);
                     llv.addView(llh);

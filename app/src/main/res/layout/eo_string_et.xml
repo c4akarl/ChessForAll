@@ -1,4 +1,3 @@
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginLeft="@dimen/margin_1"
     android:layout_marginBottom="4dip"
     style="@style/c4aET1" />
