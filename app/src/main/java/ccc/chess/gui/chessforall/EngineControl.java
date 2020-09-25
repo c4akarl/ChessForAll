@@ -27,7 +27,6 @@ public class EngineControl
 
 	void setPlaySettings(SharedPreferences userP, CharSequence color)
     {
-    	// get play settings data from userPrefs + setting engine number
 		chessEnginePlayMod = userP.getInt("user_play_playMod", 1);
 		if (chessEnginePlayMod == 4)
 			initClockAfterAnalysis = true;
@@ -41,6 +40,7 @@ public class EngineControl
 			chessEngineSearching = true;
 			chessEnginePaused = false;
 		}
+
     }
 	void setPlayData(SharedPreferences userP, String white, String black)
     {
@@ -125,7 +125,6 @@ public class EngineControl
     boolean chessEnginesOpeningBook = false;
     boolean chessEngineSearching = false;
     boolean chessEnginePaused = false;
-    boolean chessEnginePausedPrev = false;
     boolean chessEngineProblem = false;
     boolean chessEngineAutoRun = false;
     boolean chessEngineAnalysis = false;

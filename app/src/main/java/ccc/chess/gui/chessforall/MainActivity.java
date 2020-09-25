@@ -208,6 +208,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public void startApp()
 	{
+
+//		Log.i(TAG, "startApp()");
+
 		mSoundPool = new SoundPool(2, AudioManager.STREAM_RING, 100);
 		soundsMap = new HashMap<Integer, Integer>();
 		soundsMap.put(1, mSoundPool.load(this, R.raw.move_sound, 1));
@@ -244,11 +247,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			ed.putInt("user", 1);
 			ed.commit();
 		}
+
+//		Log.i(TAG, "startApp(), isNewApp: " + isNewApp + ", ec.chessEnginePlayMod: " + ec.chessEnginePlayMod);
+
 		if  (	isNewApp
 				|   (       userPrefs.getBoolean("user_options_enginePlay_AutoStartEngine", true)
 				& 	!gc.isGameOver & !ec.chessEnginePaused
-		)
-				)
+					)
+			)
 		{
 
 			ec.chessEnginePaused = false;
@@ -289,7 +295,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 			ec.chessEnginePaused = true;
 			ec.chessEngineSearching = false;
-			if (ec.chessEnginePlayMod == 5)
+			if (ec.chessEnginePlayMod == 5 || ec.chessEnginePlayMod == 6)
 				startEdit(false, false);
 		}
 		updateCurrentPosition("");
@@ -1208,9 +1214,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 			d_btn_menu = dialog.findViewById(R.id.btn_menu);
 			d_btn_menu.setOnClickListener(myViewListener);
-			d_btn_960 = dialog.findViewById(R.id.btn_960);
-			d_btn_960.setOnClickListener(myViewListener);
-			d_btn_960.setOnLongClickListener(myViewListener);
+			d_btn_time_position = dialog.findViewById(R.id.btn_time_position);
+			d_btn_time_position.setOnClickListener(myViewListener);
 			d_cb_newGame = dialog.findViewById(R.id.cb_newGame);
 			d_cb_newGame.setOnClickListener(myViewListener);
 			d_btn_ok = dialog.findViewById(R.id.btn_ok);
@@ -1272,13 +1277,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_btn_continue = dialog.findViewById(R.id.btn_continue);
 			d_btn_continue.setOnClickListener(myViewListener);
 
-			d_btn_pause_edit = dialog.findViewById(R.id.btn_pause_edit);
-			d_btn_pause_edit.setOnClickListener(myViewListener);
-			d_btn_pause_analysis = dialog.findViewById(R.id.btn_pause_analysis);
-			d_btn_pause_analysis.setOnClickListener(myViewListener);
 
-			d_btn_pause_menu = dialog.findViewById(R.id.btn_pause_menu);
-			d_btn_pause_menu.setOnClickListener(myViewListener);
+			d_btn_standard = dialog.findViewById(R.id.btn_standard);
+			d_btn_standard.setOnClickListener(myViewListener);
+			d_btn_chess960 = dialog.findViewById(R.id.btn_chess960);
+			d_btn_chess960.setOnClickListener(myViewListener);
+
+			d_btn_position = dialog.findViewById(R.id.btn_position);
+			d_btn_position.setOnClickListener(myViewListener);
 			d_btn_pause_ok = dialog.findViewById(R.id.btn_pause_ok);
 			d_btn_pause_ok.setOnClickListener(myViewListener);
 
@@ -1727,7 +1733,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							showDialog(PLAY_DIALOG);
 							break;
 						case MENU_PAUSE_MODE_NEW_GAME:
-							twoPlayerPaused = false;
 							setPlayModPrefs(pause_mode);
 							switch (pause_mode)
 							{
@@ -1754,7 +1759,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							}
 							break;
 						case MENU_PAUSE_MODE_SET_CLOCK:
-							twoPlayerPaused = false;
 							setPlayModPrefs(pause_mode);
 							switch (pause_mode)
 							{
@@ -1776,7 +1780,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							}
 							break;
 						case MENU_PAUSE_MODE_CONTINUE:
-							twoPlayerPaused = false;
 							setPlayModPrefs(pause_mode);
 							switch (pause_mode)
 							{
@@ -1801,7 +1804,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							}
 							break;
 						case MENU_PAUSE_ANALYSIS:
-							twoPlayerPaused = false;
 							setPlayModPrefs(4);
 							ec.chessEnginePaused = false;
 							ec.chessEngineInit = false;
@@ -2178,12 +2180,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 					tc.setCurrentShowValues(ec.chessEnginePlayMod);
 					updateCurrentPosition("");
-					if (restartPauseDialog)
-					{
-						pauseStopPlay(false);
-						removeDialog(PAUSE_DIALOG);
-						showDialog(PAUSE_DIALOG);
-					}
 				}
 			}
 		}
@@ -2245,8 +2241,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		d_btn_setClock.setText(getString(R.string.play_set_clock) + getTimeValues(pauseMod, 2));
 		d_btn_continue.setBackgroundResource(R.drawable.rectanglewhite);
 		d_btn_continue.setText(getString(R.string.play_continue) + getTimeValues(pauseMod, 3));
-		d_btn_pause_edit.setBackgroundResource(R.drawable.rectanglewhite);
-		d_btn_pause_analysis.setBackgroundResource(R.drawable.rectanglewhite);
 		d_play_mode_name.setTextColor(getResources().getColor(R.color.text_light));
 		d_btn_autom_play.setBackgroundResource(R.drawable.rectanglewhite);
 		setTextViewColors(lblPlayerNameB, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
@@ -2285,16 +2279,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			d_btn_autom_play.setBackgroundResource(R.drawable.dialoggreen);
 			dChessEnginePlayMod = 6;
-		}
-		if (dChessEnginePlayMod == 4)
-		{
-			d_btn_pause_analysis.setBackgroundResource(R.drawable.dialoggreen);
-			d_play_mode_name.setTextColor(getResources().getColor(R.color.text_white));
-		}
-		if (dChessEnginePlayMod == 6)
-		{
-			d_btn_pause_edit.setBackgroundResource(R.drawable.dialoggreen);
-			d_play_mode_name.setTextColor(getResources().getColor(R.color.text_white));
 		}
 		if (!isSearching)
 		{
@@ -2635,6 +2619,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				showDialog(PLAY_DIALOG);
 				break;
 			case R.id.btn_2:    // pause game | start PAUSE_DIALOG
+
+//				Log.i(TAG, "touch, btn_2, mod: " + ec.chessEnginePlayMod + ", paused: " + ec.chessEnginePaused + ", isPlayer: " + isPlayer + ", engineState: " + ec.getEngine().engineState + ", gameOver: " + isStateGameOver());
+
 				if (gc.isAutoPlay)
 				{
 					startStopAutoPlay();
@@ -2645,23 +2632,52 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (ec.chessEnginePlayMod == 5 || ec.chessEnginePlayMod == 6)    // two players  ||  edit
 					{
 						stopComputerThinking(false);
+						setEnginePausePlayBtn(null, null);
 						if (ec.chessEnginePlayMod == 5) {
 							if (tc.clockIsRunning)    // two players
-							{
-								tc.stopChessClock(System.currentTimeMillis(), ec.chessEnginePlayMod);
-								twoPlayerPaused = true;
-							}
+								stopChessClock();
 							else
-								showDialog(PAUSE_DIALOG);
+								startChessClock();
 						}
 						setInfoMessage(getEngineThinkingMessage(), null, null, false);
 					}
 					else {
-						if (ec.chessEnginePaused) {
-							removeDialog(PAUSE_DIALOG);
-							showDialog(PAUSE_DIALOG);
-						} else
+						if (!ec.chessEnginePaused) {
 							pauseStopPlay(false);
+						}
+						else {
+							if (ec.chessEnginePlayMod == 4 && gc.fen.toString().equals(analysisAutoStopFen.toString()) && !analysisAutoStopMove.toString().equals("")) {
+
+								//								Log.i(TAG, "onTouchAction(), R.id.btn_3, gc.fen: " + gc.fen + ", isStateGameOver(): " + isStateGameOver() + ", ec.chessEnginePaused: " + ec.chessEnginePaused);
+
+								CharSequence newFen = chessEngineGui(analysisAutoStopFen, analysisAutoStopMove);
+								if (!newFen.toString().equals("")) {
+									ec.chessEnginePaused = false;
+									ec.chessEngineSearching = true;
+									isGoPonder = false;
+									updateCurrentPosition("");
+									startChessClock();
+									playSound(1, 0);
+									chessEngineBestMove(newFen, "");
+								}
+							}
+							else {
+								setEnginePausePlayBtn(true, null);
+								setPlayModPrefs(ec.chessEnginePlayMod);
+								ec.chessEnginePaused = false;
+								ec.chessEngineInit = false;
+								updateCurrentPosition("");
+
+//								Log.i(TAG, "onTouchAction(), R.id.btn_2, gc.fen: " + gc.fen + ", isStateGameOver(): " + isStateGameOver() + ", ec.chessEnginePaused: " + ec.chessEnginePaused);
+
+								if (isPlayer & ec.getEngine().engineState != EngineState.PONDER) {
+									startChessClock();
+									setInfoMessage(getString(R.string.player_move), null, null, false);
+								} else
+									stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.fen);
+							}
+
+						}
 					}
 				}
 				break;
@@ -2673,74 +2689,25 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 				else
 				{
-//					Log.i(TAG, "onTouchAction(), mod: " + ec.chessEnginePlayMod + ", paused: " + ec.chessEnginePaused + ", isPlayer: " + isPlayer + ", engineState: " + ec.getEngine().engineState);
-//					Log.i(TAG, "onTouchAction(), gc.cl.p_gameOver: " + gc.cl.p_gameOver + ", gc.cl.p_gameEnd: " + gc.cl.p_gameEnd + ", gc.cl.p_auto_draw: " + gc.cl.p_auto_draw);
 
-					if (!isStateGameOver())
+//					Log.i(TAG, "touch, btn_3, mod: " + ec.chessEnginePlayMod + ", paused: " + ec.chessEnginePaused + ", isPlayer: " + isPlayer + ", engineState: " + ec.getEngine().engineState + ", gameOver: " + isStateGameOver());
+
+					if (!isStateGameOver() && ec.getEngine().engineSearching())
 					{
-						if (ec.chessEnginePlayMod == 5 || ec.chessEnginePlayMod == 6)    // two players  ||  edit
-						{
-							stopComputerThinking(false);
-							if (ec.chessEnginePlayMod == 5) {
-								if (!tc.clockIsRunning)    // two players
-								{
-									startChessClock();
-									twoPlayerPaused = false;
-									setInfoMessage(getEngineThinkingMessage(), null, null, false);
-								}
-							}
+						ec.setStartPlay(gc.getValueFromFen(gc.fen, 2));
+						if (isPlayer & ec.getEngine().engineState != EngineState.PONDER) {
+							setInfoMessage(getString(R.string.player_move), null, null, false);
 						}
 						else
-						{
-							ec.setStartPlay(gc.getValueFromFen(gc.fen, 2));
-							if (ec.chessEnginePaused) {
-								if (ec.chessEnginePlayMod == 4 && gc.fen.toString().equals(analysisAutoStopFen.toString()) && !analysisAutoStopMove.toString().equals("")) {
-
-	//								Log.i(TAG, "onTouchAction(), R.id.btn_3, gc.fen: " + gc.fen + ", isStateGameOver(): " + isStateGameOver() + ", ec.chessEnginePaused: " + ec.chessEnginePaused);
-
-									CharSequence newFen = chessEngineGui(analysisAutoStopFen, analysisAutoStopMove);
-									if (!newFen.toString().equals("")) {
-										ec.chessEnginePaused = false;
-										ec.chessEngineSearching = true;
-										isGoPonder = false;
-										updateCurrentPosition("");
-										startChessClock();
-										playSound(1, 0);
-										chessEngineBestMove(newFen, "");
-									}
-								} else {
-									setPlayModPrefs(ec.chessEnginePlayMod);
-									ec.chessEnginePaused = false;
-									ec.chessEngineInit = false;
-									updateCurrentPosition("");
-
-	//								Log.i(TAG, "onTouchAction(), R.id.btn_3, gc.fen: " + gc.fen + ", isStateGameOver(): " + isStateGameOver() + ", ec.chessEnginePaused: " + ec.chessEnginePaused);
-
-									if (isPlayer & ec.getEngine().engineState != EngineState.PONDER) {
-										startChessClock();
-										setInfoMessage(getString(R.string.player_move), null, null, false);
-									} else
-										stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.fen);
-								}
-							}
-							else
-							{
-								if (isPlayer & ec.getEngine().engineState != EngineState.PONDER) {
-									if (tc.clockIsRunning) {
-										removeDialog(PAUSE_DIALOG);
-										showDialog(PAUSE_DIALOG);
-									} else
-										setInfoMessage(getString(R.string.player_move), null, null, false);
-								}
-								else
-									startForceComputerMove();
-							}
-						}
+							startForceComputerMove();
 					}
 
 				}
 				break;
 			case R.id.btn_4:    // delete move(s)
+
+//				Log.i(TAG, "touch, btn_4, mod: " + ec.chessEnginePlayMod + ", paused: " + ec.chessEnginePaused + ", isPlayer: " + isPlayer + ", engineState: " + ec.getEngine().engineState + ", gameOver: " + isStateGameOver());
+
 				isStopAutoPlay = false;
 				cancelEngineMessage();
 				deleteMoves(true);
@@ -2749,6 +2716,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				startTurnBoard();
 				break;
 			case R.id.btn_6:    // move back
+
+//				Log.i(TAG, "touch, btn_6, mod: " + ec.chessEnginePlayMod + ", paused: " + ec.chessEnginePaused + ", isPlayer: " + isPlayer + ", engineState: " + ec.getEngine().engineState + ", gameOver: " + isStateGameOver());
+
 				cancelEngineMessage();
 				nextMove(1, 0);
 				if (ec.getEngine().engineState == EngineState.PONDER)
@@ -2757,22 +2727,19 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 					if (!ec.chessEnginePaused)
 					{
-
-//						Log.i(TAG, "onTouchAction(), gc.cl.p_fen: " + gc.cl.p_fen);
-
-						if (isPlayer) {
-							startChessClock();
-							setInfoMessage(getString(R.string.player_move), null, null, false);
-						}
+						if (ec.chessEnginePlayMod <= 3)
+							pauseStopPlay(false);
 						else {
-							if (!gc.cl.p_fen.equals("")) {
+							if (!gc.cl.p_fen.equals(""))
 								stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
-							}
 						}
 					}
 				}
 				break;
 			case R.id.btn_7:    // next move
+
+//				Log.i(TAG, "touch, btn_7, mod: " + ec.chessEnginePlayMod + ", paused: " + ec.chessEnginePaused + ", isPlayer: " + isPlayer + ", engineState: " + ec.getEngine().engineState + ", gameOver: " + isStateGameOver());
+
 				cancelEngineMessage();
 				nextMove(2, 0);
 				if (ec.getEngine().engineState == EngineState.PONDER)
@@ -2781,10 +2748,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 					if (!ec.chessEnginePaused)
 					{
-						if (isPlayer) {
-							startChessClock();
-							setInfoMessage(getString(R.string.player_move), null, null, false);
-						}
+						if (ec.chessEnginePlayMod <= 3)
+							pauseStopPlay(false);
 						else {
 							if (!gc.cl.p_fen.equals(""))
 								stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
@@ -2858,8 +2823,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				nextMove(3, 0);
 				if (!ec.chessEnginePaused)
 				{
-					if (!gc.cl.p_fen.equals(""))
-						stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
+					if (ec.chessEnginePlayMod <= 3)
+						pauseStopPlay(false);
+					else {
+						if (!gc.cl.p_fen.equals(""))
+							stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
+					}
 				}
 				break;
 			case R.id.btn_7:    // last move
@@ -2871,8 +2840,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					nextMove(4, 0);
 					if (!ec.chessEnginePaused)
 					{
-						if (!gc.cl.p_fen.equals(""))
-							stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
+						if (ec.chessEnginePlayMod <= 3)
+							pauseStopPlay(false);
+						else {
+							if (!gc.cl.p_fen.equals(""))
+								stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
+						}
 					}
 				}
 				break;
@@ -2930,7 +2903,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					messageEngine 		= "";
 					messageEngineShort  = "";
 					ec.chessEngineAutoRun = false;
-					twoPlayerPaused = false;
 					if (requestCode == OPTIONS_ENGINE_PLAY_REQUEST_CODE)
 					{
 						ec.getEngine().isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
@@ -3067,14 +3039,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					initChessClock();
 
 					if (restartPauseDialog)
-					{
 						pauseStopPlay(false);
-						removeDialog(PAUSE_DIALOG);
-						showDialog(PAUSE_DIALOG);
-					}
-					else {
+					else
 						stopSearchAndRestart(false, true);
-					}
 				}
 				break;
 			case EDIT_CHESSBOARD_REQUEST_CODE:
@@ -3210,7 +3177,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
     	SharedPreferences.Editor ed = runP.edit();
 
-//		Log.i(TAG, "setRunPrefs(), current engineProcess: " + ec.getEngine().engineProcess);
+//		Log.i(TAG, "setRunPrefs(), twoPlayerPaused: " + twoPlayerPaused);
 
     	if (!ec.getEngine().engineProcess.equals(""))
 			ed.putString("run_engineProcess", ec.getEngine().engineProcess);
@@ -3364,7 +3331,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //		Log.i(TAG, "setPauseEnginePlay, ec.chessEnginePaused: " + ec.chessEnginePaused);
 
-		ec.chessEnginePausedPrev = ec.chessEnginePaused;
 		if (shutDown)
 			stopAllEngines(isAppEnd);
 		else
@@ -3399,7 +3365,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 		else
 		{
-			ec.chessEnginePaused = true;
 			if (ec.chessEnginePlayMod <= 4)
 			{
 
@@ -3449,10 +3414,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			ec.getEngine().continueFen = fen;
 			ec.getEngine().stopSearch(engineState);
+			setEnginePausePlayBtn(false, null);
 		}
 		else {
 			if (ec.getEngine().engineState == EngineState.STOP_QUIT) {
 				ec.getEngine().shutDown();
+				setEnginePausePlayBtn(false, null);
 			}
 			else {
 				if (!fen.equals("")) {
@@ -3500,13 +3467,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			else {
 				if (ec.getEngine().engineState != EngineState.DEAD)
 					ec.getEngine().shutDown();
+				setEnginePausePlayBtn(false, null);
 			}
 		}
 		else {
 			if (ec.getEngine().engineSearching())
 				stopSearchAndContinue(EngineState.STOP_IDLE, "");
-			else
+			else {
 				ec.getEngine().engineState = EngineState.IDLE;
+				setEnginePausePlayBtn(false, null);
+			}
 		}
 
 	}
@@ -3684,23 +3654,27 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			if (!ec.chessEnginePaused)
 			{
-				if (!gc.cl.p_fen.equals(""))
-					stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
+				if (ec.chessEnginePlayMod <= 3)
+					pauseStopPlay(false);
+				else {
+					if (!gc.cl.p_fen.equals(""))
+						stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
+				}
+
 			}
-			if (ec.chessEnginePaused)
-				setInfoMessage(getEngineThinkingMessage(), null, null, false);
 		}
 	}
 
 	public void startEdit(boolean isNewGame, boolean setClock)
 	{
 
-//Log.i(TAG, "startEdit(), isNewGame: " + isNewGame + ", setClock: " + setClock);
+//		Log.i(TAG, "startEdit(), isNewGame: " + isNewGame + ", setClock: " + setClock);
 
 		ec.chessEngineSearching = false;
 		gc.isGameOver = false;
 		gc.isGameUpdated = true;
 		gc.isPlayerPlayer = false;
+		setEnginePausePlayBtn(null, null);
 		if (!gc.errorMessage.equals(""))
 		{
 			gc.errorMessage = "";
@@ -3715,7 +3689,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{	// player vs player
 			if (isNewGame | setClock)
 				initChessClock();
-			if (!twoPlayerPaused)
+			if (twoPlayerPaused) {
+				updateCurrentPosition("");
+				setEnginePausePlayBtn(false, null);
+			}
+			else
             {
                 if (!(gc.fen.equals(gc.startFen) & (ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 5)))
                     startChessClock();
@@ -3728,7 +3706,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void startPlay(boolean isNewGame, boolean setClock)
 	{
 
-//Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock);
+//		Log.i(TAG, "startPlay(), isNewGame: " + isNewGame + ", setClock: " + setClock + ", ec.chessEnginePlayMod: " + ec.chessEnginePlayMod);
 
 		ec.chessEngineSearching = false;
 		ec.chessEnginePaused = false;
@@ -3774,7 +3752,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			engineMes = "";
 			initInfoArrays(false);
 
-//Log.i(TAG, "startPlay(), isAppStart: " + isAppStart);
+//			Log.i(TAG, "startPlay(), isAppStart: " + isAppStart);
 
 			if (isAppStart)
 				isAppStart = false;
@@ -3784,6 +3762,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				if (isNewGame | setClock)
 					initChessClock();
 			}
+
+			setEnginePausePlayBtn(null, null);
 
 			if (ec.chessEnginePlayMod <= 5)
 			{
@@ -3858,6 +3838,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					ec.chessEnginePaused = true;
 					ec.chessEngineInit = true;
 					updateCurrentPosition("");
+					setEnginePausePlayBtn(false, null);
 					setInfoMessage(getString(R.string.engine_noRespond) + " (8)" + getString(R.string.engine_paused), null, null, false);
 
 				}
@@ -3871,6 +3852,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ec.chessEnginePaused = true;
 				ec.chessEngineInit = true;
 				updateCurrentPosition("");
+				setEnginePausePlayBtn(false, null);
 				setInfoMessage(getString(R.string.engine_noRespond) + " (9)" + getString(R.string.engine_paused), null, null, false);
 
 				return;
@@ -3882,6 +3864,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
 
 //		Log.i(TAG, "startEnginePlayIsReady(), newGame: " + newGame);
+
+		setInfoMessage(getString(R.string.engineInit) + " " + runP.getString("run_engineProcess", ""), null, null, false);
 
 		if (newGame)
 		{
@@ -3902,15 +3886,18 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ec.chessEngineSearching = false;
 				ec.chessEnginePaused = true;
 				ec.chessEngineInit = true;
+				setEnginePausePlayBtn(false, null);
 				setInfoMessage(getString(R.string.engine_noRespond) + " (2)", null, null, false);
 				return;
 			}
 		}
 
-//Log.i(TAG, "startEnginePlayIsReady(), ec.makeMove: " + ec.makeMove);
+//		Log.i(TAG, "startEnginePlayIsReady(), ec.makeMove: " + ec.makeMove);
+
 
 		if (ec.makeMove)
 		{
+			setEnginePausePlayBtn(true, true);
 			ec.chessEngineSearching = true;
 			if (!ec.chessEngineAutoRun)
 				setInfoMessage(getEngineThinkingMessage(), null, null, false);
@@ -3920,6 +3907,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 		else
 		{
+			setEnginePausePlayBtn(false, null);
 			ec.chessEngineProblem = true;
 			if (!(gc.fen.equals(gc.startFen) & ec.chessEnginePlayMod == 1))
 				startChessClock();
@@ -3946,13 +3934,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public synchronized boolean restartEngine()
 	{
 
-//Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
-//Log.i(TAG, "restartEngine(), run_engineProcess: " + runP.getString("run_engineProcess", ""));
+//		Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
+
+		setInfoMessage(getString(R.string.engineInit) + " " + runP.getString("run_engineProcess", ""), null, null, false);
 
 		if (ec.getEngine().initProcess(runP.getString("run_engineProcess", "")))
 		{
-			if (startNewGame(ec.getEngine().engineNumber, true))
+			if (startNewGame(ec.getEngine().engineNumber, true)) {
+
 				return true;
+			}
 			else
 			{
 				stopChessClock();
@@ -3961,6 +3952,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ec.chessEnginePaused = true;
 				ec.chessEngineInit = true;
 				stopThreads(false);
+				setEnginePausePlayBtn(false, null);
 				setInfoMessage(getString(R.string.engine_noRespond) + " (startNewGame)", null, null, false);
 				return false;
 			}
@@ -3973,6 +3965,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			ec.chessEnginePaused = true;
 			ec.chessEngineInit = true;
 			stopThreads(false);
+			setEnginePausePlayBtn(false, null);
 			setInfoMessage(getString(R.string.engine_noRespond) + " (initProcess)", null, null, false);
 			return false;
 		}
@@ -4050,9 +4043,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 			boolean isPlayer = isPlayerMove(ec.chessEnginePlayMod, gc.getValueFromFen(fen, 2));
 			if (ec.getEngine().engineState == EngineState.IDLE || isGoPonder) {
+				setEnginePausePlayBtn(true, true);
 				analysisAutoStopFen = "";
 				analysisAutoStopMove = "";
 				if (isPlayer && !isGoPonder) {
+					btn_3.setBackgroundResource(R.drawable.button);
 					startChessClock();
 					setInfoMessage(getString(R.string.player_move), null, null, false);
 				}
@@ -4085,7 +4080,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			messageEngine = "";
 			messageEngineShort  = "";
-			if (!twoPlayerPaused)
+			if (tc.clockIsRunning)
 				messageInfo = getString(R.string.play_two_players_flip);
 			else
 				messageInfo = getString(R.string.play_two_players_flip) + " (" + getString(R.string.clock_stopped) + ")";
@@ -4135,7 +4130,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public CharSequence getEnginePausedMessage()
 	{
 
-//Log.i(TAG, "getEnginePausedMessage(), ec.chessEnginePlayMod: " + ec.chessEnginePlayMod);
+//		Log.i(TAG, "getEnginePausedMessage(), ec.chessEnginePlayMod: " + ec.chessEnginePlayMod);
 
 		if (ec.chessEnginePlayMod == 5)	// player vs player
 		{
@@ -4298,8 +4293,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				break;
 		}
 
-//Log.i(TAG, "initChessClock(), mod: " + ec.chessEnginePlayMod + ", timeControl: " + timeControl);
-//Log.i(TAG, "initChessClock(), tw: " + timeWhite + ", tb: " + timeBlack + ", movesToGo: " + movesToGo + ", bw: " + bonusWhite + ", bb: " + bonusBlack);
+//		Log.i(TAG, "initChessClock(), mod: " + ec.chessEnginePlayMod + ", timeControl: " + timeControl);
+//		Log.i(TAG, "initChessClock(), tw: " + timeWhite + ", tb: " + timeBlack + ", movesToGo: " + movesToGo + ", bw: " + bonusWhite + ", bb: " + bonusBlack);
 
 		tc.initChessClock(timeControl, timeWhite, timeBlack, movesToGo, bonusWhite, bonusBlack);
 	}
@@ -4308,6 +4303,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
 		handlerChessClock.removeCallbacks(mUpdateChessClock);
 		tc.stopChessClock(System.currentTimeMillis(), ec.chessEnginePlayMod);
+		if (ec.chessEnginePlayMod == 5) {
+			setEnginePausePlayBtn(false, null);
+			twoPlayerPaused = true;
+		}
 	}
 
 	public void startChessClock()
@@ -4322,6 +4321,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		engineControlTime = System.currentTimeMillis();
 		handlerChessClock.removeCallbacks(mUpdateChessClock);
 		handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
+		if (ec.chessEnginePlayMod == 5) {
+			setEnginePausePlayBtn(true, null);
+			twoPlayerPaused = false;
+		}
 	}
 
 	public void c4aShowDialog(int dialogId)
@@ -4472,7 +4475,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void setInfoMessage(CharSequence info, CharSequence engine, CharSequence moveNotification, boolean fullGameNotation)
 	{
 
-//Log.i(TAG,"1 setInfoMessage(), gc.cl.p_moveText: " + gc.cl.p_moveText);
+//		Log.i(TAG,"1 setInfoMessage(), gc.cl.p_moveText: " + gc.cl.p_moveText);
 //    	Log.i(TAG,"setInfoMessage()info: " + info);
 //    	Log.i(TAG,"setInfoMessage(), engine: " + engine);
 //    	Log.i(TAG,"engine: " + engine + ", pause_messageEngine:\n" + pause_messageEngine);
@@ -4506,9 +4509,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		if (!gc.cl.p_fen.equals(searchTaskFen) & ec.getEngine().engineState != EngineState.PONDER)
 		{
 
-//Log.i(TAG,"setInfoMessage(), gc.cl.p_fen:   " + gc.cl.p_fen);
-//Log.i(TAG,"setInfoMessage(), searchTaskFen: " + searchTaskFen);
-//Log.i(TAG,"setInfoMessage(), engine: " + engine + ", messageEngine: " + messageEngine);
+//			Log.i(TAG,"setInfoMessage(), gc.cl.p_fen:   " + gc.cl.p_fen);
+//			Log.i(TAG,"setInfoMessage(), searchTaskFen: " + searchTaskFen);
+//			Log.i(TAG,"setInfoMessage(), engine: " + engine + ", messageEngine: " + messageEngine);
 
 			if (!messageEngine.equals(""))
 				engine = messageEngine;		// show current engine message
@@ -4574,7 +4577,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		if (!messageInfo.equals(""))
 		{
 
-//Log.i(TAG,"messageEngineShort: " + messageEngineShort);
+//		Log.i(TAG,"messageEngineShort: " + messageEngineShort);
 
 		if (!ec.chessEnginesOpeningBook & !messageEngineShort.equals("") & !messageEngineShort.toString().startsWith("M"))
 			{
@@ -4630,7 +4633,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		// msgEngine
 
-//Log.i(TAG,"setInfoMessage(), messageEngine: " + messageEngine);
+//		Log.i(TAG,"setInfoMessage(), messageEngine: " + messageEngine);
 
 		if (!messageEngine.equals(""))
 		{
@@ -5159,6 +5162,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //		Log.i(TAG, "updateCurrentPosition(), msgMoves: " + msgMoves + ", message: " + message + ", gc.cl.p_stat: " + gc.cl.p_stat);
 
+		if (ec.chessEnginePlayMod <= 4) {
+			if (ec.chessEnginePaused)
+				setEnginePausePlayBtn(false, null);
+			else
+				setEnginePausePlayBtn(true, null);
+		}
 		if (msgMoves == null | message == null | gc.cl.p_stat.equals(""))
 			return;
 		try
@@ -5175,6 +5184,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 		catch (IndexOutOfBoundsException e) {e.printStackTrace();}
 		catch (NullPointerException e) 		{e.printStackTrace();}
+
 	}
 
 	public void startForceComputerMove()
@@ -5955,8 +5965,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		int MAX_SEARCH_CANCEL_TIMEOUT = 1500;	// max. search time engine timeout
 
 		int MAX_SEARCH_TIMEOUT = 180000;		// max. search time engine timeout (3 min: no info message)
-//		int MAX_SEARCH_TIMEOUT = 15000;			// max. search time engine timeout (15sec: no info message (null))
-//		int MIN_PUBLISH_TIME = 400;				// min. time for publishing
 		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
 
 		boolean cancelTask = false;
@@ -5964,7 +5972,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		boolean isTimeCheck = false;
 		long timeCheckStart = 0;
 		long timeCheck = 0;
-		long timeCheckControl = 300;
 		boolean isUpdated = false;
 	}
 	//  end ENGINE-SearchTask
@@ -6011,6 +6018,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					case SEARCH:
 					case BOOK:
 					{
+						setEnginePausePlayBtn(true, null);
 						boolean isBook = false;
 						if (ec.getEngine().engineState == EngineState.BOOK)
 							isBook = true;
@@ -6100,6 +6108,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					}
 					case STOP_MOVE:
 					{
+						setEnginePausePlayBtn(false, null);
 						ec.getEngine().engineState = EngineState.IDLE;
 						chessEngineGui(taskFen, result);
 						stopChessClock();
@@ -6159,12 +6168,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					}
 					case STOP_IDLE:
 					{
+						setEnginePausePlayBtn(false, null);
 						ec.getEngine().engineState = EngineState.IDLE;
 						displayMoves = null;
 						return;
 					}
 					case STOP_QUIT:
 					{
+						setEnginePausePlayBtn(false, null);
 						ec.getEngine().shutDown();
 						ec.getEngine().engineState = EngineState.DEAD;
 						return;
@@ -6533,11 +6544,19 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		nextMove(19, getMoveIdxFromInfo());		// set moveIdx
 		if (!ec.chessEnginePaused & gc.cl.p_stat.equals("1"))
 		{
-			if (!gc.cl.p_fen.equals(""))
-				stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
+			if (ec.chessEnginePlayMod <= 3)
+				pauseStopPlay(false);
+			else {
+				if (!gc.cl.p_fen.equals(""))
+					stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
+			}
+
+
+
 		}
 		else
 		{
+			//karl!!! variant end: pauseStartPlay() ???
 			if (!gc.cl.p_moveText.equals("") & gc.cl.p_moveIdx == lastMoveIdx)
 			{
 				removeDialog(MOVE_NOTIFICATION_DIALOG);
@@ -6555,7 +6574,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //			Log.i(TAG, "startBoardMoveAction(), onScreenTouch, x: " + event.getRawX() + ", y: " + event.getRawY());
 //			Log.i(TAG, "startBoardMoveAction(), boardView.getLocationOnScreen(), x: " + screenXY[0] + ", y: " + screenXY[1] + ", pos: " + pos);
-
 //			Log.i(TAG, "startBoardMoveAction(), ec.chessEngineSearching: " + ec.chessEngineSearching);
 //			Log.i(TAG, "startBoardMoveAction(), gc.fen: " + gc.fen);
 
@@ -6695,18 +6713,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					gc.setGameOver(gc.cl.history.getGameTagValue("Result"));
 					if (!(ec.chessEnginePlayMod == 5 | ec.chessEnginePlayMod == 6))
 					{
-//						gc.setGameOver(gc.cl.history.getGameTagValue("Result"));
 						if (gc.cl.p_stat.equals("1") & !gc.isGameOver & !gc.cl.p_variationEnd)
 							ec.chessEngineSearching = true;
 					}
 					if (!tc.clockIsRunning & ec.chessEnginePlayMod == 5 & gc.cl.p_stat.equals("1"))
 					{
-						twoPlayerPaused = false;
 						startChessClock();
 					}
 					if (ec.chessEnginePlayMod == 5 & twoPlayerPaused & gc.cl.p_stat.equals("1"))
 					{
-						twoPlayerPaused = false;
 						startChessClock();
 					}
 					updateGui();
@@ -7006,10 +7021,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				setPauseValues(false, gc.fen, ec.chessEnginePlayMod, messageEngine);
 				stopThreads(false);
 				updateTime(gc.cl.p_color);
-				if (isSearching)
-					setInfoMessage(getString(R.string.engine_paused), null, null, false);
-				else
-					setInfoMessage(getString(R.string.clock_stopped), null, null, false);
+				setInfoMessage(getString(R.string.engine_paused), null, null, false);
+				if (ec.chessEnginePlayMod <= 5)
+					setEnginePausePlayBtn(false, null);
 			}
 		}
 		dContinueId = 3;
@@ -7024,7 +7038,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //		Log.i(TAG, "pauseStartPlay(), playMod: " + playMod + ", continueId: " + continueId);
 
-		twoPlayerPaused = false;
 		boolean isNewGame = false;
 		if (continueId == 1)
 			isNewGame = true;
@@ -7090,6 +7103,25 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		removeDialog(PAUSE_DIALOG);
 
+	}
+
+	void setEnginePausePlayBtn(Boolean setPause, Boolean setPlay) {
+		if (setPause == null)
+			btn_2.setImageResource(R.drawable.button);
+		else {
+			if (setPause)
+				btn_2.setImageResource(R.drawable.btn_paus_analysis);
+			else
+				btn_2.setImageResource(R.drawable.btn_play);
+		}
+		if (setPlay == null)
+			btn_3.setImageResource(R.drawable.button);
+		else {
+			if (setPlay)
+				btn_3.setImageResource(R.drawable.btn_play_move_continue);
+			else
+				btn_3.setImageResource(R.drawable.button);
+		}
 	}
 
 	public void updateGui()
@@ -7297,18 +7329,37 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	}
 
-	public class MyViewListener implements View.OnClickListener, View.OnLongClickListener
+	public void initPosition(Boolean isStandard)
 	{
-		// chess960, random position
-		public boolean onLongClick(View v)
+		Random r;
+		int ir = 518;
+		if (!isStandard)
 		{
-			if (v.getId() == R.id.btn_960)
-			{
-				removeDialog(PLAY_DIALOG);
-				startEditBoard(gc.fen, true);
-			}
-			return true;
+			r = new Random();
+			ir = r.nextInt(960);
 		}
+		CharSequence chess960Id = Integer.toString(ir);
+		gc.cl.newPosition(chess960Id, "", "", "", "", "", "", "");
+		if (gc.cl.p_stat.equals("1"))
+		{
+			gc.isGameOver = false;
+			gc.isGameUpdated = true;
+			gc.fen = gc.cl.p_fen;
+			if (gc.cl.p_chess960ID == 518)
+				gc.isChess960 = false;
+			else
+				gc.isChess960 = true;
+			SharedPreferences.Editor ed = userPrefs.edit();
+			ed.putInt("user_game_chess960Id", gc.cl.p_chess960ID);
+			ed.commit();
+			setInfoMessage("", "", "", false);
+			updateGui();
+			stopSearchAndRestart(true, true);
+		}
+	}
+
+	public class MyViewListener implements View.OnClickListener
+	{
 
 		public void onClick(View v)
 		{
@@ -7334,7 +7385,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					messageEngine 		= "";
 					messageEngineShort  = "";
 					ec.chessEngineAutoRun = false;
-					twoPlayerPaused = false;
 					ec.chessEnginePlayMod = userPrefs.getInt("user_play_playMod", 1);
 					if (ec.chessEnginePlayMod == 4)
 						ec.initClockAfterAnalysis = true;
@@ -7382,33 +7432,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					drawerLayout.openDrawer(Gravity.LEFT);
 					break;
 
-				case R.id.btn_960:
-					Random r;
-					int ir = 518;
-					while (ir == 518)
-					{
-						r = new Random();
-						ir = r.nextInt(960);
-					}
-					CharSequence chess960Id = Integer.toString(ir);
-					gc.cl.newPosition(chess960Id, "", "", "", "", "", "", "");
-					if (gc.cl.p_stat.equals("1"))
-					{
-						gc.isGameOver = false;
-						gc.isGameUpdated = true;
-						gc.fen = gc.cl.p_fen;
-						if (gc.cl.p_chess960ID == 518)
-							gc.isChess960 = false;
-						else
-							gc.isChess960 = true;
-						ed.putInt("user_game_chess960Id", gc.cl.p_chess960ID);
-						ed.commit();
-						setInfoMessage("", "", "", false);
-						updateGui();
-						stopSearchAndRestart(true, true);
-					}
+				case R.id.btn_time_position:
 					removeDialog(PLAY_DIALOG);
+					removeDialog(PAUSE_DIALOG);
+					showDialog(PAUSE_DIALOG);
 					break;
+
                 case R.id.btn_white:
 					if (!isPaused)
 						setPauseEnginePlay(false);
@@ -7623,21 +7652,17 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					setTimeValuesFromPauseMod(pausePlayMod, dContinueId);
 					setPauseModValues(dChessEnginePlayMod, pausePlayMod, ec.chessEnginePaused, dContinueId);
 					break;
-				case R.id.btn_pause_edit:
-					if (isSearching)
-						pauseStopPlay(true);
-					dChessEnginePlayMod = 6;
-					setPauseModValues(dChessEnginePlayMod, pausePlayMod, ec.chessEnginePaused, dContinueId);
-					break;
-				case R.id.btn_pause_analysis:
-					if (isSearching)
-						pauseStopPlay(true);
-					dChessEnginePlayMod = 4;
-					setPauseModValues(dChessEnginePlayMod, pausePlayMod, ec.chessEnginePaused, dContinueId);
-					break;
-				case R.id.btn_pause_menu:
+				case R.id.btn_standard:
 					removeDialog(PAUSE_DIALOG);
-					drawerLayout.openDrawer(Gravity.RIGHT);
+					initPosition(true);
+					break;
+				case R.id.btn_chess960:
+					removeDialog(PAUSE_DIALOG);
+					initPosition(false);
+					break;
+				case R.id.btn_position:
+					removeDialog(PAUSE_DIALOG);
+					startEditBoard(gc.fen, true);
 					break;
 
 				// RATE_DIALOG
@@ -7667,7 +7692,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final String MY_APPS = "https://play.google.com/store/apps/developer?id=Karl+Schreiner";
 	final long CLOCK_START = 0;
 	final long CLOCK_DELAY = 250;
-	final long MAX_DOWNLOAD_DIFF = 20000;
 
 	private static final int PERMISSIONS_REQUEST_CODE = 50;
 	private enum PermissionState {
@@ -7836,7 +7860,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	CharSequence searchTaskMoves = "";
 	CharSequence displayMoves = null;
 	boolean searchTaskRestart = false;
-	long sleepTime = 100;
 
 	long engineControlTime = 0;
 
@@ -7922,7 +7945,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	TextView d_btn_analysis;
 
 	TextView d_btn_menu;
-	TextView d_btn_960;
+	TextView d_btn_time_position;
 	CheckBox d_cb_newGame;
 	TextView d_btn_ok;
 
@@ -7938,10 +7961,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	TextView d_btn_setClock;
 	TextView d_btn_continue;
 
-	TextView d_btn_pause_edit;
-	TextView d_btn_pause_analysis;
+	TextView d_btn_standard;
+	TextView d_btn_chess960;
 
-	TextView d_btn_pause_menu;
+	TextView d_btn_position;
 	TextView d_btn_pause_ok;
 
 	// RATE_DIALOG

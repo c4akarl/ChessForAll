@@ -171,13 +171,13 @@
         android:layout_alignParentLeft="true"
         android:text="@string/menu_title" />
     <TextView
-        android:id="@+id/btn_960"
+        android:id="@+id/btn_time_position"
         style="@style/c4aTV4"
         android:layout_below="@id/btn_play_b"
         android:layout_toRightOf="@id/btn_menu"
-        android:layout_width="@dimen/btn_size_50"
+        android:layout_width="@dimen/btn_size_70"
         android:background="@drawable/rectangleblue"
-        android:text="@string/chess960" />
+        android:text="@string/timePosition" />
     <TextView
         android:id="@+id/btn_ok"
         style="@style/c4aTV4"

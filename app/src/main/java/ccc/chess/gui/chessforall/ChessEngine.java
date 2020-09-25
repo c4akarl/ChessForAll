@@ -677,6 +677,16 @@ public class ChessEngine
         catch (IOException e) {e.printStackTrace();}
     }
 
+    public final synchronized boolean engineInit() {
+        switch (engineState) {
+            case READ_OPTIONS:
+            case WAIT_READY:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public final synchronized boolean engineStop() {
         switch (engineState) {
             case STOP_IDLE:
@@ -695,11 +705,14 @@ public class ChessEngine
             case SEARCH:
             case PONDER:
             case ANALYZE:
+            //karl++
+            case BOOK:
                 return true;
             default:
                 return false;
         }
     }
+
 
     // NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS		NATIVE METHODS
     private final boolean startProcess()

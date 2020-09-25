@@ -17,6 +17,7 @@
     <dimen name="btn1_width">100dp</dimen>
     <dimen name="btn_size">92dp</dimen>
     <dimen name="btn_size_50">85dp</dimen>
+    <dimen name="btn_size_70">95dp</dimen>
     <dimen name="btn_size_2">44dp</dimen>
     <dimen name="btn_size_3">66dp</dimen>
 </resources>

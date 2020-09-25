@@ -1207,11 +1207,15 @@ public class ChessHistory
                 if (idx > 0)
                 {
                 	boolean isStartVar = false;
+                	boolean istVar = false;
                 	int varCnt = 0;
+					int startIdx = getMoveIdx();
                     for (int i = idx -1; i >= 0; i--)
                     {
                     	cmPrev = new ChessMove(moveHistory.get(i));
-//Log.i(TAG, "left idx: " + idx + ", i: " + i + ", R: " + cm.getRank() + ", pR: " + cmPrev.getRank() + ", V: " + cm.getVariant() + ", pV: " + cmPrev.getVariant());
+
+//						Log.i(TAG, "i: " + i + ", move: " + cmPrev.getFields() + ", ni: " + idx + ", pControl: " + cmPrev.getControl() + ", pR: " + cmPrev.getRank()+ ", pV: " + cmPrev.getVariant() + ", isStartVar: " + isStartVar + ", varCnt: " + varCnt);
+
                     	if (isStartVar)
 						{
 							if (cmPrev.getControl().equals("9"))
@@ -1220,8 +1224,21 @@ public class ChessHistory
 							{
 								if (varCnt == 0)
 								{
-									idx = i;
-									break;
+									ChessMove cmP2 = new ChessMove(moveHistory.get(i -1));
+
+//									Log.i(TAG, "cmP2 idx: " + (i -1) + ",  p2.getControl(): " + cmP2.getControl() + ", p2R: " + cmP2.getRank() + ", p2V: " + cmP2.getVariant());
+
+									if (cmP2.getControl().equals("9")) {
+										idx = i - 2;
+										istVar = true;
+									}
+									else {
+										if (istVar)
+											idx = i;
+										else
+											idx = i - 1;
+										break;
+									}
 								}
 								else
 								{
@@ -1244,6 +1261,8 @@ public class ChessHistory
 							}
 						}
                     }
+                    if (startIdx == 1 && idx == 1)
+                    	idx = 0;
                 }
                 break;
             case 2:     // RIGHT_Button    	---> next move
@@ -1279,7 +1298,9 @@ public class ChessHistory
                     for (int i = idx -1; i >= 0; i--)
                     {
                     	cmPrev = new ChessMove(moveHistory.get(i));
-//Log.i(TAG, "setNextMoveHistory, MoveIdx: " + idx + ", i: " + i + ", cm.getRank(): " + cm.getRank() + ", cmPrev.getRank(): " + cmPrev.getRank());
+
+//						Log.i(TAG, "setNextMoveHistory, MoveIdx: " + idx + ", i: " + i + ", cm.getRank(): " + cm.getRank() + ", cmPrev.getRank(): " + cmPrev.getRank());
+
                     	if (cmPrev.getControl().equals("9"))
                     		varCnt++;
                     	if (varCnt <= 0 & cm.getRank().equals(cmPrev.getRank()) & cmPrev.getControl().equals("0"))
@@ -1319,6 +1340,9 @@ public class ChessHistory
             	}
                 break;
         }
+
+//		Log.i(TAG, "setNextMoveHistory, MoveIdx: " + idx);
+
         cm = new ChessMove(moveHistory.get(idx));
         if (!cm.getRank().equals("0"))
         {

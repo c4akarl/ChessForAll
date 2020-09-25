@@ -365,5 +365,8 @@
     <string name="debugInformation">Informations de débogage</string>
     <string name="app_editUciOptions">Modifier les options UCI</string>
     <string name="menu_enginesettings_uciOptions">Options UCI</string>
+    <string name="position">Position</string>
+    <string name="timePosition">Temps\nPosition</string>
+    <string name="engineInit">Moteur d\'initialisation:</string>
 
 </resources>

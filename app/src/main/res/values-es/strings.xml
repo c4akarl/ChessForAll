@@ -364,5 +364,8 @@
     <string name="debugInformation">Información de depuración</string>
     <string name="app_editUciOptions">Editar opciones de UCI</string>
     <string name="menu_enginesettings_uciOptions">Opciones UCI</string>
+    <string name="position">Posición</string>
+    <string name="timePosition">Hora\nPosición</string>
+    <string name="engineInit">Motor de inicialización:</string>
 
 </resources>

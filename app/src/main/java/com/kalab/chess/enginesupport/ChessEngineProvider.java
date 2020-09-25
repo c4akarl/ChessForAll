@@ -58,6 +58,9 @@ public class ChessEngineProvider extends ContentProvider {
 			try {
 				descriptor = new AssetFileDescriptor(openLibFile(new File(
 						libFileName)), 0, AssetFileDescriptor.UNKNOWN_LENGTH);
+
+//				Log.i(TAG, "libFileName: " + libFileName + "\ndescriptor: " + descriptor.toString());
+
 			} catch (IOException ex) {
 				String msg = "Error opening file <" + libFileName + ">.";
 				Log.e(TAG, msg, ex);
