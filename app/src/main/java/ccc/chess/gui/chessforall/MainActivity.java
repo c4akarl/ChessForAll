@@ -1521,7 +1521,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						case MENU_PGN_CB_PAST:
 							messageEngine = "";
 							messageEngineShort  = "";
-							getFromClipboard();
+							getFromClipboard("", 0);
 							break;
 					}
 				}
@@ -1563,7 +1563,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						case MENU_CLIPBOARD_PAST:
 							messageEngine = "";
 							messageEngineShort  = "";
-							getFromClipboard();
+							getFromClipboard("", 0);
 							break;
 					}
 				}
@@ -2429,11 +2429,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			else
 				isDownBtn = false;
 
-			if (view.getId() == R.id.btn_4)
-				isDownBtn4 = true;
-			else
-				isDownBtn4 = false;
-
 			downViewId = view.getId();
 			lastTouchID = view.getId();
 			downRawX = event.getRawX();
@@ -2812,7 +2807,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				startStopAutoPlay();
 				break;
 			case R.id.btn_4:    //
-
+				getUndoPgn();
 				break;
 			case R.id.btn_5:    //
 
@@ -3640,6 +3635,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public void deleteMoves(boolean deleteMoveIdx)
 	{	// delete moves(History) and updateGui
+		setUndoPgn();
 		gc.cl.deleteMovesFromMoveHistory(deleteMoveIdx);
 		if (gc.cl.p_stat.equals("1"))
 		{
@@ -3662,6 +3658,29 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 
 			}
+		}
+	}
+
+	public void setUndoPgn()
+	{
+		if (gc.cl.history.moveHistory.size() - gc.cl.history.getMoveIdx() >= 3) {
+			SharedPreferences.Editor ed = runP.edit();
+			ed.putString("run_undoPgn", (String) gc.cl.history.createPgnFromHistory(1));
+			ed.putInt("run_undoMoveIdx", gc.cl.history.getMoveIdx());
+			ed.commit();
+		}
+	}
+
+	public void getUndoPgn()
+	{
+		if (!runP.getString("run_undoPgn", "").equals("")) {
+			CharSequence pgnData = gc.cl.history.createPgnFromHistory(1);
+			int moveIdx = gc.cl.history.getMoveIdx();
+			getFromClipboard(runP.getString("run_undoPgn", ""), runP.getInt("run_undoMoveIdx", 0));
+			SharedPreferences.Editor ed = runP.edit();
+			ed.putString("run_undoPgn", (String) pgnData);
+			ed.putInt("run_undoMoveIdx", moveIdx);
+			ed.commit();
 		}
 	}
 
@@ -4367,17 +4386,21 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		cm.setText(text);
 	}
 
-	public void getFromClipboard()
+	public void getFromClipboard(String undoPgn, int moveIdx)
 	{
 		CharSequence fen = "";
 		CharSequence pgnData = "";
-		try
-		{
-			Toast.makeText(this, getString(R.string.menu_info_clipboardPaste), Toast.LENGTH_SHORT).show();
-			ClipboardManager cm = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-			pgnData = (String) cm.getText();
+		if (undoPgn.equals("")) {
+			try {
+				Toast.makeText(this, getString(R.string.menu_info_clipboardPaste), Toast.LENGTH_SHORT).show();
+				ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+				pgnData = (String) cm.getText();
+			} catch (ClassCastException e) {
+				return;
+			}
 		}
-		catch (ClassCastException e) {return;}
+		else
+			pgnData = undoPgn;
 
 //		Log.i(TAG, "getFromClipboard(), pgnData: " + pgnData);
 
@@ -4437,6 +4460,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		ec.chessEngineAutoRun = false;
 		gc.isChess960 = false;
 		gc.fen = gc.cl.p_fen;
+		if (!undoPgn.equals("") && moveIdx > 0) {
+			gc.cl.history.setMoveIdx(moveIdx);
+		}
 
 //		Log.i(TAG, "getFromClipboard(), gc.fen: " + gc.fen);
 
@@ -7877,7 +7903,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	float upRawY = 0;
 	boolean isDownBtn = false;
 	boolean isUpBtn = false;
-	boolean isDownBtn4 = false;
 	boolean isUpMsgView = false;
 	int downViewId = 0;
 	int infoMoveStartX = 0;

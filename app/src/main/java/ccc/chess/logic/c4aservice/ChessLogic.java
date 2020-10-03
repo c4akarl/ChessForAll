@@ -488,7 +488,7 @@ public class ChessLogic
     public void deleteMovesFromMoveHistory(boolean deleteMoveIdx)			// delete all moves from moveIdx to variation end in History
     {
 
-    	Log.i(TAG, "history.getMoveIdx(): " + history.getMoveIdx());
+//    	Log.i(TAG, "history.getMoveIdx(): " + history.getMoveIdx());
 
     	if (history.getMoveIdx() > 0)                                  	// moves in History?
         {
