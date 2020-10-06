@@ -1644,6 +1644,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
 						break;
 					case MENU_ENGINE_UCI:
+						removeDialog(MENU_ENGINES_DIALOG);
 						if (!ec.getEngine().uciOptions.equals("") || (ec.getEngine().uciOptions.equals("") && restartEngine())) {
 							editUciOptions.putExtra("uciOpts", ec.getEngine().uciOptions);
 							startActivityForResult(editUciOptions, EDIT_UCI_OPTIONS);
@@ -2883,23 +2884,20 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					return;
 		}
 
-		switch(requestCode)
-		{
+		switch(requestCode) {
 			case OPTIONS_PLAY_REQUEST_CODE:
 			case OPTIONS_ENGINE_PLAY_REQUEST_CODE:
-				if (resultCode == 3)
-				{	// set playOption and play
+				if (resultCode == 3) {    // set playOption and play
 
 //					Log.i(TAG, "onActivityResult, OPTIONS_ENGINE_PLAY_REQUEST_CODE" + ", ec.getEngine().engineState: " + ec.getEngine().engineState);
 
 					gc.isGameLoaded = false;
 					msgEngine.setVisibility(TextView.GONE);
-					messageInfo 		= "";
-					messageEngine 		= "";
-					messageEngineShort  = "";
+					messageInfo = "";
+					messageEngine = "";
+					messageEngineShort = "";
 					ec.chessEngineAutoRun = false;
-					if (requestCode == OPTIONS_ENGINE_PLAY_REQUEST_CODE)
-					{
+					if (requestCode == OPTIONS_ENGINE_PLAY_REQUEST_CODE) {
 						ec.getEngine().isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
 						ec.setBookOptions();
 						msgEngine.setMaxLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
@@ -2909,8 +2907,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					pausePlayMod = userPrefs.getInt("user_pause_playMod", 1);
 					if (ec.chessEnginePlayMod == 4)
 						ec.initClockAfterAnalysis = true;
-					switch (userPrefs.getInt("user_play_playMod", 1))
-					{
+					switch (userPrefs.getInt("user_play_playMod", 1)) {
 						case 1:     // white
 						case 2:     // black
 						case 3:     // engine vs engine
@@ -2929,8 +2926,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 				break;
 			case OPTIONS_ENGINE_AUTO_PLAY_REQUEST_CODE:
-				if (resultCode == RESULT_OK)
-				{
+				if (resultCode == RESULT_OK) {
 					gc.isGameLoaded = false;
 					ec.chessEngineAutoRun = true;
 					ec.chessEnginePaused = false;
@@ -2940,12 +2936,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					gc.startPgn = gc.cl.history.createPgnFromHistory(1);
 					gc.startMoveIdx = gc.cl.history.getMoveIdx();
 
-					if 	(!userPrefs.getBoolean("user_play_eve_autoCurrentGame", false))
+					if (!userPrefs.getBoolean("user_play_eve_autoCurrentGame", false))
 						stopSearchAndRestart(true, true);
-					else
-					{
+					else {
 						setRunMoveHistory();
-						setTagDate();	// current date
+						setTagDate();    // current date
 						stopSearchAndRestart(false, true);
 					}
 				}
@@ -2959,8 +2954,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				gc.isAutoLoad = false;
 				gc.isPlayerPlayer = false;
 				gc.pgnStat = "-";
-				if (resultCode == RESULT_OK)
-				{
+				if (resultCode == RESULT_OK) {
 
 					stopSearchAndContinue(EngineState.STOP_IDLE, "");
 
@@ -2968,17 +2962,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					gc.isGameUpdated = true;
 					ec.chessEngineAutoRun = false;
 					setPauseValues(false, "", 4, "");
-					if (requestCode == LOAD_GAME_REQUEST_CODE | requestCode == LOAD_GAME_PREVIOUS_CODE)
-					{
-						messageInfo 		= "";
-						messageEngine 		= "";
-						messageEngineShort  = "";
+					if (requestCode == LOAD_GAME_REQUEST_CODE | requestCode == LOAD_GAME_PREVIOUS_CODE) {
+						messageInfo = "";
+						messageEngine = "";
+						messageEngineShort = "";
 					}
 					gc.pgnStat = data.getStringExtra("pgnStat");
 					if (requestCode == SAVE_OK_LOAD_GAME_REQUEST_CODE
-							& userPrefs.getBoolean("user_batch_ma_counterOn", true))
-					{
-						ed.putInt("user_batch_ma_gameCounter", userPrefs.getInt("user_batch_ma_gameCounter", 1) +1);
+							& userPrefs.getBoolean("user_batch_ma_counterOn", true)) {
+						ed.putInt("user_batch_ma_gameCounter", userPrefs.getInt("user_batch_ma_gameCounter", 1) + 1);
 						ed.commit();
 					}
 					displayMoves = null;
@@ -2994,7 +2986,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					gc.startFen = gc.cl.history.getStartFen();
 					setRunMoveHistory();
 					setRunPrefs();
-                    setInfoMessage("", "", "", true);
+					setInfoMessage("", "", "", true);
 					ec.chessEnginePaused = true;
 					gc.isGameLoaded = true;
 					setInfoMessage("", null, null, false);
@@ -3010,14 +3002,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				updateCurrentPosition("");
 				break;
 			case OPTIONS_COLOR_SETTINGS:
-                initColors();
+				initColors();
 				boardView.setColor();
 				updateGui();
 				break;
 			case OPTIONS_CHESSBOARD_REQUEST_CODE:
 			case OPTIONS_GUI_REQUEST_CODE:
-				if (requestCode == OPTIONS_GUI_REQUEST_CODE)
-				{
+				if (requestCode == OPTIONS_GUI_REQUEST_CODE) {
 					useWakeLock = !userPrefs.getBoolean("user_options_gui_disableScreenTimeout", false);
 					setWakeLock(useWakeLock);
 					setPieceName(userPrefs.getInt("user_options_gui_PieceNameId", 0));
@@ -3027,7 +3018,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				updateCurrentPosition("");
 				break;
 			case OPTIONS_TIME_CONTROL_REQUEST_CODE:
-				if (resultCode == 101)	// apply
+				if (resultCode == 101)    // apply
 				{
 					ec.chessEnginePaused = false;
 					ec.chessEngineInit = false;
@@ -3043,12 +3034,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //				Log.i(TAG, "onActivityResult, EDIT_CHESSBOARD_REQUEST_CODE" + ", resultCode: " + resultCode);
 
-				if (resultCode == RESULT_OK)
-				{
-                    gc.isBoardTurn = runP.getBoolean("run_game0_is_board_turn", false);
+				if (resultCode == RESULT_OK) {
+					gc.isBoardTurn = runP.getBoolean("run_game0_is_board_turn", false);
 					gc.isGameLoaded = false;
-					messageEngine 		= "";
-					messageEngineShort  = "";
+					messageEngine = "";
+					messageEngineShort = "";
 					gc.errorMessage = "";
 					gc.errorPGN = "";
 					ec.chessEngineAutoRun = false;
@@ -3057,8 +3047,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (!chess960Id.equals("518"))
 						fen = "";
 					gc.cl.newPosition(chess960Id, fen, "", "", "", "", "", "");
-					if (gc.cl.p_stat.equals("1"))
-					{
+					if (gc.cl.p_stat.equals("1")) {
 						gc.isGameOver = false;
 						gc.isGameUpdated = true;
 						gc.fen = gc.cl.p_fen;
@@ -3075,28 +3064,38 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 				break;
 			case MOVETEXT_REQUEST_CODE:
-				if (resultCode == RESULT_OK)
-				{
+				if (resultCode == RESULT_OK) {
 					gc.isGameUpdated = false;
 					gc.cl.history.setMoveText(data.getStringExtra("text"));
 					updateCurrentPosition("");
 				}
 				break;
 			case SAVE_GAME_REQUEST_CODE:
-				if (resultCode == RESULT_OK)
-				{
+				if (resultCode == RESULT_OK) {
 					gc.isGameUpdated = true;
 					gc.fileBase = data.getStringExtra("fileBase");
 					gc.filePath = data.getStringExtra("filePath");
 					gc.fileName = data.getStringExtra("fileName");
 				}
-				if (resultCode == 22) 					// chessEngineAutoPlay | writeNewFile
+				if (resultCode == 22)                    // chessEngineAutoPlay | writeNewFile
 					startEngineAutoplay();
 				else
 					updateCurrentPosition("");
 				break;
 			case ENGINE_SETTING_REQUEST_CODE:
 				stopSearchAndRestart(false, false);
+				break;
+			case EDIT_UCI_OPTIONS:
+				//karl ???
+				//karl globale variable: ec.getEngine().uciSetOpts
+				//karl file save: file path/name; File ContentResolver !?
+				if (resultCode == RESULT_OK) {
+					String setOpts = data.getStringExtra("uciSetOpts");
+
+					Log.i(TAG, "onActivityResult, EDIT_UCI_OPTIONS, uciSetOpts: \n" + setOpts);
+
+				}
+
 				break;
 		}
 
@@ -7800,7 +7799,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int EDIT_CHESSBOARD_REQUEST_CODE = 44;
 	final static int ENGINE_SETTING_REQUEST_CODE = 41;
 	final static int RATE_REQUEST_CODE = 42;
-	final static int EDIT_UCI_OPTIONS = 49;
+	final static int EDIT_UCI_OPTIONS = 50;
 
 	//  dialogs RequestCode
 	final static int PLAY_DIALOG = 100;
@@ -8016,7 +8015,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	boolean fileActions = false;
 
 	// uci options
-//	boolean withUciOptions = true;
-	boolean withUciOptions = false;
+	boolean withUciOptions = true;
+//	boolean withUciOptions = false;
 
 }
