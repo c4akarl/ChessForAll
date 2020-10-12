@@ -28,8 +28,6 @@ public class EngineControl
 	void setPlaySettings(SharedPreferences userP, CharSequence color)
     {
 		chessEnginePlayMod = userP.getInt("user_play_playMod", 1);
-		if (chessEnginePlayMod == 4)
-			initClockAfterAnalysis = true;
 		twoEngines = false;
 		if (chessEnginePlayMod == 3 | chessEnginePlayMod == 4)	// engine vs engine | analysis
 			chessEngineSearching = true;
@@ -120,7 +118,6 @@ public class EngineControl
 	boolean twoEngines = false;				// true if two different engines(b/w)
 	boolean makeMove = false;				// engine makes first move
     int chessEnginePlayMod = 1;				// 1 = player vs engine, 2 = engine vs player, 3 = engine vs engine, 4 = engine analysis, 5 = player vs player, 6 = edit
-	boolean initClockAfterAnalysis = false;
     boolean chessEngineInit = false;
     boolean chessEnginesOpeningBook = false;
     boolean chessEngineSearching = false;

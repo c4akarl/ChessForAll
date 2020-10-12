@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-//karl EditUciOptions : edit / save if != default in sd/c4a/uci pro engine mit uciPath/fileName (von Droidfish)
-//karl setEngineOptions(sd/c4a/uci) --> engine
 public class ChessEngine
 {
     ChessEngine(Context con, int eNumber)
@@ -108,7 +106,7 @@ public class ChessEngine
 				return false;
 			}
             if (s.toString().contains("option name"))
-                uciOptions = uciOptions.toString() + s + "\n";
+                uciOptions = uciOptions + s + "\n";
             if (s.toString().contains("option") & s.toString().contains("Ponder"))
                 isUciPonder = true;
             CharSequence[] tokens = tokenize(s);
@@ -677,6 +675,22 @@ public class ChessEngine
         catch (IOException e) {e.printStackTrace();}
     }
 
+    void setUciOptsFromFile(String uciOpts)
+    {
+        String[] split = uciOpts.split("\n");
+        if (split.length >= 0) {
+            for (int i = 0; i < split.length; i++) {
+                if (split[i].startsWith("setoption")) {
+                    try
+                    {
+                        writeToProcess(split[i] + "\n");
+                    }
+                    catch (IOException e) {e.printStackTrace();}
+                }
+            }
+        }
+    }
+
     public final synchronized boolean engineInit() {
         switch (engineState) {
             case READ_OPTIONS:
@@ -721,22 +735,36 @@ public class ChessEngine
 //        Log.i(TAG,  "startProcess(), engineProcess: " + engineProcess);
 
 		processBuilder = null;
+        oexPackage = "";
+        oexFileName = "";
 
         ChessEngineResolver resolver = new ChessEngineResolver(context);
         List<com.kalab.chess.enginesupport.ChessEngine> engines = resolver.resolveEngines();
+        // extern oex engine
         for (com.kalab.chess.enginesupport.ChessEngine engine : engines)
         {
             if (engine.getName().equals(engineProcess))
             {
-                if (isLogOn)
-                    Log.i(TAG,  "startProcess(), OEX engine, enginePath: " + engine.getEnginePath());
-
                 processBuilder = new ProcessBuilder(engine.getEnginePath());
+                if (processBuilder != null) {
+                    oexPackage = engine.getPackageName();
+                    oexFileName = engine.getFileName();
+                    uciFileName = oexPackage + "_" + oexFileName;
+                    uciFileName = uciFileName.replace(".", "_");
+                    uciFileName = uciFileName + ".txt";
+                    if (isLogOn) {
+                        Log.i(TAG, "startProcess(), extern OEX engine, enginePath: " + engine.getEnginePath());
+                        Log.i(TAG, "startProcess(), extern OEX engine, packageName: " + oexPackage);
+                        Log.i(TAG, "startProcess(), extern OEX engine, filename: " + oexFileName);
+                        Log.i(TAG, "startProcess(), uciFileName: " + uciFileName);
+                    }
+                }
+
                 break;
             }
         }
 
-        // intern engine
+        // intern oex engine
         if (processBuilder == null)
         {
             XmlResourceParser parser = context.getResources().getXml(R.xml.enginelist);
@@ -756,9 +784,22 @@ public class ChessEngine
                                 {
                                     engineProcess = parser.getAttributeValue(null, "name");
                                     String enginePath = context.getApplicationInfo().nativeLibraryDir + "/" + parser.getAttributeValue(null, "filename");
-                                    if (isLogOn)
-                                        Log.i(TAG,  "startProcess(), intern engine, enginePath: " + enginePath);
+//                                    if (isLogOn)
+//                                        Log.i(TAG,  "startProcess(), intern engine, enginePath: " + enginePath);
                                     processBuilder = new ProcessBuilder(enginePath);
+                                    if (processBuilder != null) {
+                                        oexPackage = "ccc.chess.gui.chessforall";
+                                        oexFileName = parser.getAttributeValue(null, "filename");
+                                        uciFileName = oexPackage + "_" + oexFileName;
+                                        uciFileName = uciFileName.replace(".", "_");
+                                        if (isLogOn) {
+                                            Log.i(TAG, "startProcess(), intern OEX engine, enginePath: " + enginePath);
+                                            Log.i(TAG, "startProcess(), intern OEX engine, packageName: " + oexPackage);
+                                            Log.i(TAG, "startProcess(), intern OEX engine, filename: " + oexFileName);
+                                            Log.i(TAG, "startProcess(), uciFileName: " + uciFileName);
+                                        }
+                                    }
+
                                     break;
                                 }
                             }
@@ -838,7 +879,6 @@ public class ChessEngine
 
     final String TAG = "ChessEngine";
     final long MAX_SYNC_TIME = 2000;
-    final int SYNC_CNT = 200;
 
     Context context;
     public int engineNumber = 1;		                    // default engine (Stockfish)
@@ -847,6 +887,9 @@ public class ChessEngine
     String engineName = "";				                    // the uci engine name
     public CharSequence engineNameStrength = "";	        // native engine name + strength
     String engineProcess = "";			                    // the compiled engine process name (file name)
+    String oexPackage = "";			                        // oex package name
+    String oexFileName = "";			                    // oex file name
+    String uciFileName = "";			                    // uci file name (for saving in ExternalStorage)
     final String INTERN_ENGINE_NAME_END = " CfA";
     String mesInitProcess = "";
 
@@ -879,7 +922,8 @@ public class ChessEngine
     boolean isChess960 = false;
     boolean startPlay = false;
 
-    CharSequence uciOptions = "";
+    String uciOptions = "";
+
     boolean isUciStrength = false;
     boolean isUciEloOption = false;
     boolean isUciSkillOption = false;

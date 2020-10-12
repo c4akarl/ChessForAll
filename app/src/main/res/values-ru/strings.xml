@@ -157,7 +157,7 @@
   <string name="guStatusBar">Полноэкранный режим</string>
   <string name="guLastPosition">Показывать последнюю позицию</string>
   <string name="guDisableScreenTimeout">Скрыть окно таймаута</string>
-  <string name="guUsePgnDatabase">Использовать PGN базу данных</string>
+  <string name="guUsePgnDatabase">База данных PGN</string>
   <string name="guEnableSounds">Звуковые эффекты</string>
   <string name="guDisplayCoordinates">Координаты (a-h, 1-8)</string>
   <string name="epEngineMessage">Показывать варианты</string>
@@ -346,7 +346,9 @@
     <string name="app_editUciOptions">Изменить параметры UCI</string>
     <string name="menu_enginesettings_uciOptions">UCI-Опции</string>
     <string name="position">должность</string>
-  <string name="timePosition">время\nдолжность</string>
+  <string name="timePosition">должность</string>
     <string name="engineInit">Механизм инициализации:</string>
+    <string name="clock">Часы</string>
+    <string name="engine">Двигатель</string>
 
 </resources>

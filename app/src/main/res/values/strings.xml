@@ -172,7 +172,7 @@
     <string name="guStatusBar">Fullscreen mode</string>
     <string name="guLastPosition">Last position</string>
     <string name="guDisableScreenTimeout">Screen timeout</string>
-    <string name="guUsePgnDatabase">Use PGN database</string>
+    <string name="guUsePgnDatabase">PGN database</string>
     <string name="guEnableSounds">Sound effects</string>
     <string name="guDisplayCoordinates">Coordinates (a-h, 1-8)</string>
     
@@ -366,7 +366,9 @@
     <string name="app_editUciOptions">Edit UCI-Options</string>
     <string name="menu_enginesettings_uciOptions">UCI-Options</string>
     <string name="position">Position</string>
-    <string name="timePosition">Time\nPosition</string>
+    <string name="timePosition">Position</string>
     <string name="engineInit">Initialization engine:</string>
+    <string name="clock">Clock</string>
+    <string name="engine">Engine</string>
 
 </resources>

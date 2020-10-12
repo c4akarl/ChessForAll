@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ChessForAll.iml" filepath="$PROJECT_DIR$/.idea/modules/ChessForAll.iml" group="ChessForAll" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="ChessForAll/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ChessForAll.iml" filepath="$PROJECT_DIR$/.idea/modules/ChessForAll.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ChessForAll.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ChessForAll.app.iml" />
     </modules>
   </component>
 </project>

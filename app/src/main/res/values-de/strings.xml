@@ -169,10 +169,10 @@
     <string name="dgTitleDialog">C4A - Dialog</string>
 
     <string name="guPlayerName">Spielername</string>
-    <string name="guStatusBar">Vollbild-Anzeige</string>
+    <string name="guStatusBar">Vollbildanzeige</string>
     <string name="guLastPosition">Letzte Stellung</string>
     <string name="guDisableScreenTimeout">Bildschirm-Timeout</string>
-    <string name="guUsePgnDatabase">PGN-Datenbank verwenden</string>
+    <string name="guUsePgnDatabase">PGN-Datenbank</string>
     <string name="guEnableSounds">Toneffekte</string>
     <string name="guDisplayCoordinates">Koordinaten (a-h, 1-8)</string>
     
@@ -198,7 +198,7 @@
     <string name="editError">Fehler: Brett editieren</string>
     <string name="editChessboardDetection">Schachbrett-Ermittlung...\nBitte warten!</string>
     
-    <string name="play_fullScreen">Vollbild-Anzeige</string>
+    <string name="play_fullScreen">Vollbildanzeige</string>
     <string name="play_lastPosition">Letzte Stellung</string>
     <string name="play_screenTimeout">Bildschirm-Timeout</string>
     <string name="play_audio">Toneffekte</string>
@@ -208,7 +208,7 @@
     <string name="play_openingBook">Eröffnungs-buch</string>
     <string name="play_openingBookHints">EB-Hinweise</string>
     <string name="play_thinking">Berechnung</string>
-    <string name="play_ponder">Voraus berechnung</string>
+    <string name="play_ponder">Vorausberechnung</string>
     <string name="play_moveList">Zugliste</string>
 
     <string name="play_white">mit Weiß</string>
@@ -365,6 +365,8 @@
     <string name="app_editUciOptions">UCI-Optionen editieren</string>
     <string name="menu_enginesettings_uciOptions">UCI-Optionen</string>
     <string name="position">Position</string>
-    <string name="timePosition">Zeit\nPosition</string>
+    <string name="timePosition">Position</string>
     <string name="engineInit">"Initialisierung Engine: "</string>
+    <string name="clock">Uhr</string>
+    <string name="engine">Engine</string>
 </resources>

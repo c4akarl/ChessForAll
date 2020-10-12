@@ -53,13 +53,14 @@
 	<ImageView
 		android:id="@+id/btnPlayer"
 		style="@style/c4aImgBtn1"
-		android:src="@drawable/player"
-		android:onClick="myClickHandler"
 		android:layout_below="@id/rgTimeControl"
-		android:layout_marginTop="15dip"
+		android:layout_alignParentLeft="true"
+		android:layout_marginLeft="38dp"
+		android:layout_marginTop="60dp"
 		android:layout_marginBottom="0dip"
-		android:layout_marginLeft="30dip"
-		android:layout_alignParentLeft="true" />
+		android:onClick="myClickHandler"
+		android:src="@drawable/player" />
+
 	<TextView
 		android:id="@+id/tvPlayer"
 		style="@style/c4aET1"
@@ -68,16 +69,18 @@
 		android:layout_below="@id/btnPlayer"
 		android:layout_width="wrap_content"
 		android:layout_alignLeft ="@id/btnPlayer"/>
+
 	<ImageView
 		android:id="@+id/btnEngine"
 		style="@style/c4aImgBtn1"
-		android:src="@drawable/engine"
-		android:onClick="myClickHandler"
 		android:layout_below="@id/rgTimeControl"
-		android:layout_toRightOf="@id/btnPlayer"
-		android:layout_marginTop="15dip"
+		android:layout_marginLeft="100dp"
+		android:layout_marginTop="60dp"
 		android:layout_marginBottom="0dip"
-		android:layout_marginLeft="100dip"/>
+		android:layout_toRightOf="@id/btnPlayer"
+		android:onClick="myClickHandler"
+		android:src="@drawable/engine" />
+
 	<TextView
 		android:id="@+id/tvEngine"
 		style="@style/c4aET1"
@@ -91,20 +94,11 @@
 	<ImageView
 		android:id="@+id/btnTcOk"
 		style="@style/c4aImgBtn1"
-		android:src="@drawable/button_ok"
-		android:onClick="myClickHandler"
-		android:layout_marginLeft="20dip"
-		android:layout_marginBottom="20dip"
 		android:layout_alignParentLeft="true"
-		android:layout_alignParentBottom="true"/>
-	<ImageView
-		android:id="@+id/btnTcApply"
-		style="@style/c4aImgBtn1"
-		android:src="@drawable/button_apply"
+		android:layout_alignParentBottom="true"
+		android:layout_marginLeft="177dp"
+		android:layout_marginBottom="27dp"
 		android:onClick="myClickHandler"
-		android:layout_marginRight="20dip"
-		android:layout_marginBottom="20dip"
-		android:layout_alignParentRight="true"
-		android:layout_alignParentBottom="true"/>
+		android:src="@drawable/button_ok" />
 
 </RelativeLayout>

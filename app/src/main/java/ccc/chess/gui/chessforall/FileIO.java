@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
-import android.util.Log;
 
 import com.kalab.chess.enginesupport.ChessEngine;
 
@@ -16,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -638,10 +638,47 @@ class FileIO
 		return getExternalDirectory(0) + oldPath;
 	}
 
+	public String getUciExternalPath()
+	{
+		String pathC4a = getExternalDirectory(0) + "c4a/";
+		if (!pathExists(pathC4a))
+			createDir(pathC4a);
+		String pathC4aUci = pathC4a + "uci/";
+		if (pathExists(pathC4aUci))
+			return pathC4aUci;
+		else {
+			if (createDir(pathC4aUci))
+				return pathC4aUci;
+			else
+				return "";
+		}
+	}
+
+	public String getDataFromUciFile(String path, String file)
+	{
+		File f = new File(path + file);
+		StringBuilder text = new StringBuilder();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			String line;
+			while ((line = br.readLine()) != null) {
+				text.append(line);
+				text.append('\n');
+			}
+			br.close();
+		}
+		catch (IOException e) {	return ""; }
+
+//		Log.i(TAG, "getDataFromUciFile(), uciOpts: \n" + text.toString());
+
+		return text.toString();
+	}
+
 	public String getPgnStat() {return pgnStat;}
 
 	public void dataToFile(String path, String file, String data, boolean append)
     {
+
 //		Log.i(TAG, "dataToFile(), file: " + path + file + ", append: " + append);
 //		Log.i(TAG, "dataToFile(), data: \n" + data );
 
@@ -785,10 +822,7 @@ class FileIO
 	}
 
 	final String TAG = "FileIO";
-	private final String CONTENT = "content:";
-	private final String EXTERNAL = "/external";
 	private final String ANDROID_DATA = "/Android/data";
-	final String BASE_PATH = "c4a/pgn/";
 	final String SEP = "/";
 	private Context context;
 	private boolean isPgnFile = false;

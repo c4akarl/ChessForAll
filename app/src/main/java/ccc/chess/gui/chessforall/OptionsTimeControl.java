@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -26,11 +27,9 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.optionstimecontrol);
-        resultCode = 101;
         tc = new TimeControl();
         getPrefs();
-        btnTcApply = (ImageView) findViewById(R.id.btnTcApply);
-        rgTimeControl = (RadioGroup) findViewById(R.id.rgTimeControl); 
+        rgTimeControl = (RadioGroup) findViewById(R.id.rgTimeControl);
         rbTcGameClock = (RadioButton) findViewById(R.id.rbTcGameClock); 
         rbTcMoveTime = (RadioButton) findViewById(R.id.rbTcMoveTime); 
         rbTcSandGlass = (RadioButton) findViewById(R.id.rbTcSandGlass); 
@@ -67,6 +66,9 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 		{	// chessClockControl
 			if (btnValue == 2)
     		{
+
+				Log.i(TAG, "getCallbackValue(), timeSettingsDialog.getTime(): " + timeSettingsDialog.getTime());
+
 				SharedPreferences.Editor ed = userP.edit();
 				switch (chessClockControl) 										
 				{
@@ -79,9 +81,7 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	    				ed.putInt("user_bonus_engine_clock", timeSettingsDialog.getBonus());
 						break;
 					case 21: 	// player (move)
-						resultCode = timeSettingsDialog.getBonus();
 						ed.putInt("user_time_player_move", timeSettingsDialog.getTime());
-						resultCode = 101;
 	    				break;
 					case 22: 	// engine (move)
 	    				ed.putInt("user_time_engine_move", timeSettingsDialog.getTime());
@@ -162,13 +162,6 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 			setPrefs();
         	returnIntent = new Intent();
        		setResult(RESULT_OK, returnIntent);
-			finish();
-			break;
-		case R.id.btnTcApply:
-			setTitle(getString(R.string.engineProgressDialog));
-			setPrefs();
-        	returnIntent = new Intent();
-       		setResult(resultCode, returnIntent);
 			finish();
 			break;
 		}
@@ -258,7 +251,6 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 		timeControl = userP.getInt("user_options_timeControl", 1);
 	}
 	
-//	MainActivity RequestCode: OPTIONS_TIME_CONTROL_REQUEST_CODE
 	final String TAG = "OptionsTimeControl";
 	Util u;
 	final static int TIME_SETTINGS_DIALOG = 400;
@@ -266,7 +258,6 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	SharedPreferences userP;
 	SharedPreferences runP;
 	TimeSettingsDialog timeSettingsDialog;
-	int resultCode = 0;
 	int activDialog = 0;
 	int timeControl = 1;
 	RadioGroup rgTimeControl;
@@ -276,7 +267,6 @@ public class OptionsTimeControl extends Activity implements Ic4aDialogCallback
 	RadioButton rbTcNone;
 	ImageView btnPlayer = null;
 	ImageView btnEngine = null;
-	ImageView btnTcApply = null;
 	TextView tvPlayer = null;
 	TextView tvEngine = null;
 

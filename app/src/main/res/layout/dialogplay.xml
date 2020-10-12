@@ -8,194 +8,324 @@
      android:layout_marginBottom="2dp"
      android:background="@android:color/black">
 
-    <LinearLayout
-        android:id="@+id/cb__a"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal" >
-        <CheckBox
-            android:id="@+id/cb_fullScreen"
-            style="@style/c4aCB2"
-            android:text="@string/play_fullScreen" />
-        <CheckBox
-            android:id="@+id/cb_lastPosition"
-            style="@style/c4aCB2"
-            android:text="@string/play_lastPosition" />
-        <CheckBox
-            android:id="@+id/cb_screenTimeout"
-            style="@style/c4aCB2"
-            android:text="@string/play_screenTimeout" />
-    </LinearLayout>
+        android:layout_height="wrap_content" >
 
-    <LinearLayout
-        android:id="@+id/cb__b"
-        android:layout_below="@id/cb__a"
-        android:layout_width="fill_parent"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <CheckBox
-            android:id="@+id/cb_audio"
-            style="@style/c4aCB2"
-            android:text="@string/play_audio" />
-        <CheckBox
-            android:id="@+id/cb_posibleMoves"
-            style="@style/c4aCB2"
-            android:text="@string/play_posibleMoves" />
-        <CheckBox
-            android:id="@+id/cb_quickMove"
-            style="@style/c4aCB2"
-            android:text="@string/play_quickMove" />
-    </LinearLayout>
+        <RelativeLayout android:id="@+id/rl"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
 
-    <LinearLayout
-        android:id="@+id/cb_c"
-        android:layout_below="@id/cb__b"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal" >
-        <CheckBox
-            android:id="@+id/cb_coordinates"
-            style="@style/c4aCB2"
-            android:text="@string/play_coordinates" />
-        <CheckBox
-            android:id="@+id/cb_blindMode"
-            style="@style/c4aCB2"
-            android:text="@string/play_blindMode" />
-        <CheckBox
-            android:id="@+id/cb_pgnDb"
-            style="@style/c4aCB2"
-            android:text="@string/play_pgnDb" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cb0"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginTop="@dimen/margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_debugInformation"
+                    style="@style/c4aCB2"
+                    android:text="@string/debugInformation" />
+                <CheckBox
+                    android:id="@+id/cb_logging"
+                    style="@style/c4aCB2"
+                    android:text="@string/epLogging" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/cb_d"
-        android:layout_below="@id/cb_c"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal" >
-        <CheckBox
-            android:id="@+id/cb_engineAutostart"
-            style="@style/c4aCB2"
-            android:text="@string/play_engineAutostart" />
-        <CheckBox
-            android:id="@+id/cb_openingBook"
-            style="@style/c4aCB2"
-            android:text="@string/play_openingBook" />
-        <CheckBox
-            android:id="@+id/cb_openingBookHints"
-            style="@style/c4aCB2"
-            android:text="@string/play_openingBookHints" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cb1"
+                android:layout_below="@id/cb0"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_screenTimeout"
+                    style="@style/c4aCB2"
+                    android:text="@string/guDisableScreenTimeout" />
+                <CheckBox
+                    android:id="@+id/cb_engineAutostart"
+                    style="@style/c4aCB2"
+                    android:text="@string/epAutoStartEngine" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/cb_e"
-        android:layout_below="@id/cb_d"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal" >
-        <CheckBox
-            android:id="@+id/cb_engineThinking"
-            style="@style/c4aCB2"
-            android:text="@string/play_thinking" />
-        <CheckBox
-            android:id="@+id/cb_ponder"
-            style="@style/c4aCB2"
-            android:text="@string/play_ponder" />
-        <CheckBox
-            android:id="@+id/cb_moveList"
-            style="@style/c4aCB2"
-            android:text="@string/play_moveList" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cb2"
+                android:layout_below="@id/cb1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_fullScreen"
+                    style="@style/c4aCB2"
+                    android:text="@string/play_fullScreen" />
+                <CheckBox
+                    android:id="@+id/cb_boardFlip"
+                    style="@style/c4aCB2"
+                    android:text="@string/menu_board_flip" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/btn_play_a"
-        android:layout_below="@id/cb_e"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <TextView
-            android:id="@+id/btn_white"
-            style="@style/c4aTV4"
-            android:text="@string/play_white" />
-        <TextView
-            android:id="@+id/btn_black"
-            style="@style/c4aTV4"
-            android:text="@string/play_black" />
-        <TextView
-            android:id="@+id/btn_engine"
-            style="@style/c4aTV4"
-            android:layout_alignTop="@id/btn_white"
-            android:layout_alignBottom="@+id/btn_white"
-            android:text="@string/play_engine" />
+            <LinearLayout
+                android:id="@+id/cb3"
+                android:layout_below="@id/cb2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_lastPosition"
+                    style="@style/c4aCB2"
+                    android:text="@string/guLastPosition" />
+                <CheckBox
+                    android:id="@+id/cb_pgnDb"
+                    style="@style/c4aCB2"
+                    android:text="@string/guUsePgnDatabase" />
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cb4"
+                android:layout_below="@id/cb3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_coordinates"
+                    style="@style/c4aCB2"
+                    android:text="@string/play_coordinates" />
+                <CheckBox
+                    android:id="@+id/cb_blindMode"
+                    style="@style/c4aCB2"
+                    android:text="@string/guBlindMode" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/btn_play_b"
-        android:layout_below="@id/btn_play_a"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:orientation="horizontal" >
-        <TextView
-            android:id="@+id/btn_player"
-            style="@style/c4aTV4"
-            android:text="@string/play_two_players_flip" />
-        <TextView
-            android:id="@+id/btn_edit"
-            style="@style/c4aTV4"
-            android:text="@string/play_two_players" />
-        <TextView
-            android:id="@+id/btn_analysis"
-            style="@style/c4aTV4"
-            android:text="@string/play_analysis" />
+            <LinearLayout
+                android:id="@+id/cb5"
+                android:layout_below="@id/cb4"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_openingBook"
+                    style="@style/c4aCB2"
+                    android:text="@string/engine_openingBook" />
+                <CheckBox
+                    android:id="@+id/cb_openingBookHints"
+                    style="@style/c4aCB2"
+                    android:text="@string/play_openingBookHints" />
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cb6"
+                android:layout_below="@id/cb5"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_posibleMoves"
+                    style="@style/c4aCB2"
+                    android:text="@string/play_posibleMoves" />
+                <CheckBox
+                    android:id="@+id/cb_quickMove"
+                    style="@style/c4aCB2"
+                    android:text="@string/play_quickMove" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/btn_menu"
-        style="@style/c4aTV4"
-        android:layout_below="@id/btn_play_b"
-        android:layout_width="@dimen/btn_size_50"
-        android:background="@drawable/rectangleblue"
-        android:layout_alignParentLeft="true"
-        android:text="@string/menu_title" />
-    <TextView
-        android:id="@+id/btn_time_position"
-        style="@style/c4aTV4"
-        android:layout_below="@id/btn_play_b"
-        android:layout_toRightOf="@id/btn_menu"
-        android:layout_width="@dimen/btn_size_70"
-        android:background="@drawable/rectangleblue"
-        android:text="@string/timePosition" />
-    <TextView
-        android:id="@+id/btn_ok"
-        style="@style/c4aTV4"
-        android:layout_below="@id/btn_play_b"
-        android:layout_width="@dimen/btn_size_50"
-        android:background="@drawable/dialoggreen"
-        android:layout_alignParentRight="true"
-        android:text="@string/pause_start" />
-    <CheckBox
-        android:id="@+id/cb_newGame"
-        style="@style/c4aCB2"
-        android:layout_below="@id/btn_play_b"
-        android:layout_toLeftOf="@id/btn_ok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:layout_alignBaseline="@id/btn_ok"
-        android:layout_marginRight="10dp"
-        android:text="@string/play_newGame" />
+            <LinearLayout
+                android:id="@+id/cb7"
+                android:layout_below="@id/cb6"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_audio"
+                    style="@style/c4aCB2"
+                    android:text="@string/guEnableSounds" />
+                <CheckBox
+                    android:id="@+id/cb_moveList"
+                    style="@style/c4aCB2"
+                    android:text="@string/play_moveList" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cb8"
+                android:layout_below="@id/cb7"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/tv_color_margin_1"
+                android:layout_marginRight="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:orientation="horizontal" >
+                <CheckBox
+                    android:id="@+id/cb_ponder"
+                    style="@style/c4aCB2"
+                    android:text="@string/play_ponder" />
+                <CheckBox
+                    android:id="@+id/cb_engineThinking"
+                    style="@style/c4aCB2"
+                    android:text="@string/play_thinking" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_time"
+                android:layout_below="@id/cb8"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/tv_color_margin_1"
+                android:background="@color/fm_save"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/btn_time_setting"
+                    style="@style/c4aTV5"
+                    android:layout_marginTop="@dimen/tv_color_margin_1"
+                    android:layout_marginBottom="@dimen/tv_color_margin_1"
+                    android:layout_marginLeft="@dimen/tv_color_margin_1"
+                    android:background="@drawable/rectangleblue"
+                    android:text="@string/clock" />
+                <TextView
+                    android:id="@+id/btn_time_white"
+                    style="@style/c4aTV5"
+                    android:layout_marginTop="@dimen/tv_color_margin_1"
+                    android:layout_marginBottom="@dimen/tv_color_margin_1"
+                    android:layout_marginLeft="@dimen/tv_color_margin_1"
+                    android:background="@drawable/rectanglewhite"
+                    android:textColor="@color/text_dark"
+                    android:text="0:00" />
+                <TextView
+                    android:id="@+id/btn_time_black"
+                    style="@style/c4aTV5"
+                    android:layout_marginTop="@dimen/tv_color_margin_1"
+                    android:layout_marginBottom="@dimen/tv_color_margin_1"
+                    android:background="@drawable/rectangleblack"
+                    android:layout_marginLeft="@dimen/tv_color_margin_1"
+                    android:layout_marginRight="@dimen/tv_color_margin_1"
+                    android:textColor="@color/text_white"
+                    android:text="0:00" />
+                <TextView
+                    android:id="@+id/btn_time_ok"
+                    style="@style/c4aTV5"
+                    android:layout_marginTop="@dimen/tv_color_margin_1"
+                    android:layout_marginBottom="@dimen/tv_color_margin_1"
+                    android:layout_marginRight="@dimen/tv_color_margin_1"
+                    android:background="@drawable/dialoggreen"
+                    android:text="@string/btn_Ok" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_engines"
+                android:layout_below="@id/btn_time"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/tv_color_margin_1"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/btn_engine_select"
+                    style="@style/c4aTV5"
+                    android:background="@drawable/rectangleblue"
+                    android:text="@string/engine" />
+                <TextView
+                    android:id="@+id/btn_engine_setting"
+                    style="@style/c4aTV5"
+                    android:background="@drawable/rectangleblue"
+                    android:text="@string/menu_usersettings" />
+                <TextView
+                    android:id="@+id/btn_engine_uci_options"
+                    style="@style/c4aTV5"
+                    android:background="@drawable/rectangleblue"
+                    android:text="@string/menu_enginesettings_uciOptions" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_play_a"
+                android:layout_below="@id/btn_engines"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/btn_white"
+                    style="@style/c4aTV5"
+                    android:text="@string/play_white" />
+                <TextView
+                    android:id="@+id/btn_black"
+                    style="@style/c4aTV5"
+                    android:text="@string/play_black" />
+                <TextView
+                    android:id="@+id/btn_engine"
+                    style="@style/c4aTV5"
+                    android:text="@string/play_engine" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_play_b"
+                android:layout_below="@id/btn_play_a"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/tv_color_margin_1"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/btn_player"
+                    style="@style/c4aTV5"
+                    android:text="@string/play_two_players_flip" />
+                <TextView
+                    android:id="@+id/btn_edit"
+                    style="@style/c4aTV5"
+                    android:text="@string/play_two_players" />
+                <TextView
+                    android:id="@+id/btn_analysis"
+                    style="@style/c4aTV5"
+                    android:text="@string/play_analysis" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_pos"
+                android:layout_below="@id/btn_play_b"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/tv_color_margin_1"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/btn_standard"
+                    style="@style/c4aTV5"
+                    android:background="@drawable/dialoggreen"
+                    android:text="@string/menu_edit_board_standard" />
+                <TextView
+                    android:id="@+id/btn_chess960"
+                    style="@style/c4aTV5"
+                    android:background="@drawable/dialoggreen"
+                    android:text="@string/chess960" />
+                <TextView
+                    android:id="@+id/btn_continue"
+                    style="@style/c4aTV5"
+                    android:background="@drawable/dialoggreen"
+                    android:text="@string/play_continue" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

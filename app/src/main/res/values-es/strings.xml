@@ -173,7 +173,7 @@
     <string name="guStatusBar">Pantalla completa</string>
     <string name="guLastPosition">Ultima posición</string>
     <string name="guDisableScreenTimeout">Tiempo de espera de la pantalla</string>
-    <string name="guUsePgnDatabase">utilizar la base de datos PGN</string>
+    <string name="guUsePgnDatabase">Base de datos PGN</string>
     <string name="guEnableSounds">Efectos de sonido</string>
     <string name="guDisplayCoordinates">Coordenadas (a-h, 1-8)</string>
     
@@ -365,7 +365,9 @@
     <string name="app_editUciOptions">Editar opciones de UCI</string>
     <string name="menu_enginesettings_uciOptions">Opciones UCI</string>
     <string name="position">Posición</string>
-    <string name="timePosition">Hora\nPosición</string>
+    <string name="timePosition">Posición</string>
     <string name="engineInit">Motor de inicialización:</string>
+    <string name="clock">Reloj</string>
+    <string name="engine">Motor</string>
 
 </resources>
