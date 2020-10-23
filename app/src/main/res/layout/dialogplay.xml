@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:layout_marginLeft="2dp"
@@ -186,12 +187,38 @@
                     android:id="@+id/cb_engineThinking"
                     style="@style/c4aCB2"
                     android:text="@string/play_thinking" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/btn_menues"
+                android:layout_below="@id/cb8"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/tv_color_margin_1"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/btn_menu_left"
+                    style="@style/c4aTV5"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical|left"
+                    android:paddingLeft="@dimen/tv_color_margin_2"
+                    android:paddingRight="@dimen/tv_color_margin_2"
+                    android:background="@drawable/rectangleyellow"
+                    android:text="@string/menu_left" />
+                <TextView
+                    android:id="@+id/btn_menu_right"
+                    style="@style/c4aTV5"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_vertical|right"
+                    android:paddingLeft="@dimen/tv_color_margin_2"
+                    android:paddingRight="@dimen/tv_color_margin_2"
+                    android:background="@drawable/rectangleyellow"
+                    android:text="@string/menu_right" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/btn_time"
-                android:layout_below="@id/cb8"
+                android:layout_below="@id/btn_menues"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/tv_color_margin_1"
@@ -245,6 +272,7 @@
                 <TextView
                     android:id="@+id/btn_engine_select"
                     style="@style/c4aTV5"
+                    android:scrollHorizontally="true"
                     android:background="@drawable/rectangleblue"
                     android:text="@string/engine" />
                 <TextView

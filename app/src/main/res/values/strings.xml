@@ -370,5 +370,7 @@
     <string name="engineInit">Initialization engine:</string>
     <string name="clock">Clock</string>
     <string name="engine">Engine</string>
+    <string name="menu_left">&gt; &gt; &gt;   Menu</string>
+    <string name="menu_right"> Menu   &lt; &lt; &lt;</string>
 
 </resources>

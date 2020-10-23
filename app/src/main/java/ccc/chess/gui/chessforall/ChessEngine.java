@@ -193,14 +193,17 @@ public class ChessEngine
         return true;
     }
 
-    public void startSearch(CharSequence fen, CharSequence moves, int wTime, int bTime,	int wInc, int bInc,
+    public void startSearch(CharSequence searchFen, CharSequence moves, CharSequence startFen, int wTime, int bTime,	int wInc, int bInc,
                             int movesTime, int movesToGo, boolean isInfinite, boolean isGoPonder, int mate)
     {
 
 //Log.i(TAG, "startSearch(), fen: " + fen + "\nmoves: " + moves + ", isGoPonder: " + isGoPonder);
 
+        CharSequence fen = searchFen;
+
         if (isChess960)
-            fen = convertCastlingRight(fen);
+            fen = convertCastlingRight(fen, startFen);
+
         String posStr = "";
         posStr = posStr + "position fen ";								// position(FEN)
         posStr = posStr.toString() + fen;
@@ -357,8 +360,12 @@ public class ChessEngine
         return moves;
     }
 
-    public CharSequence convertCastlingRight(CharSequence fen)	// using for chess960(castle rook's line instead of "QKqk")
+    public CharSequence convertCastlingRight(CharSequence fen, CharSequence startFen)	// using for chess960(castle rook's line instead of "QKqk")
     {
+
+//        Log.i(TAG,  "convertCastlingRight(), startFen: " + startFen);
+//        Log.i(TAG,  "convertCastlingRight(), fen:      " + fen);
+
         CharSequence convertFen = "";
         CharSequence startLineBlack = "abcdefgh";
         CharSequence startLineWhite = "ABCDEFGH";
@@ -417,7 +424,7 @@ public class ChessEngine
     }
 
     public void setIsChess960(boolean chess960) {isChess960 = chess960;}
-    public void setStartFen(CharSequence fen) {startFen = fen;}
+//    public void setStartFen(CharSequence fen) {startFen = fen;}
 
     public CharSequence getRandomFirstMove()
     {
@@ -934,8 +941,10 @@ public class ChessEngine
     int uciSkillLevelMax = 100;
     int uciStrength = 4000;
 
-    CharSequence startFen = "";
-    CharSequence continueFen = "";
+    //karl
+//    CharSequence startFen = "";
+//    CharSequence continueFen = "";
+
     public boolean searchAlive = true;
     boolean engineWithMultiPv = false;
 

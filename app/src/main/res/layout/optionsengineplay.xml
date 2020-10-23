@@ -109,7 +109,7 @@
 				<EditText
 					android:id="@+id/etEpMultiPv"
 					style="@style/c4aET1"
-					android:layout_width="30dip"
+					android:layout_width="@dimen/btn1_width"
 					android:layout_marginLeft="@dimen/margin_1"
 					android:inputType="number"
 					android:maxLength="1"
@@ -131,7 +131,7 @@
 				<EditText
 					android:id="@+id/etEpPvMoves"
 					style="@style/c4aET1"
-					android:layout_width="30dip"
+					android:layout_width="@dimen/btn1_width"
 					android:layout_marginLeft="@dimen/margin_1"
 					android:inputType="number"
 					android:maxLength="2"
@@ -153,7 +153,7 @@
 				<EditText
 					android:id="@+id/etEpDisplayedLines"
 					style="@style/c4aET1"
-					android:layout_width="30dip"
+					android:layout_width="@dimen/btn1_width"
 					android:layout_marginLeft="@dimen/margin_1"
 					android:inputType="number"
 					android:maxLength="1"

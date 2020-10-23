@@ -369,5 +369,7 @@
     <string name="engineInit">Motor de inicialización:</string>
     <string name="clock">Reloj</string>
     <string name="engine">Motor</string>
+    <string name="menu_left">Menú</string>
+    <string name="menu_right">Menú   &lt; &lt; &lt;</string>
 
 </resources>

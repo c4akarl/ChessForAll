@@ -370,5 +370,7 @@
     <string name="engineInit">Moteur d\'initialisation:</string>
     <string name="clock">L\'horloge</string>
     <string name="engine">Moteur</string>
+    <string name="menu_left">&gt; &gt; &gt;   Menu</string>
+    <string name="menu_right">Menu   &lt; &lt; &lt;</string>
 
 </resources>

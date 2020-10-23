@@ -1,5 +1,7 @@
 package ccc.chess.logic.c4aservice;
 
+import android.util.Log;
+
 import java.util.Random;
 
 public class Chess960
@@ -132,14 +134,16 @@ public class Chess960
     public void setFen(CharSequence requestList) {fen = requestList;}
     public void setBaseLine(CharSequence baseLine) {basLine = baseLine;}
     public CharSequence setCastling(CharSequence baseLine)
-    {	// not activated, set: castling = "KQkq";
+    {	// not activated, set: castling = "KQkq"; changed: 20201024
     	CharSequence castling = "-";
+    	String standard = "rnbqkbnr";
     	boolean isStandard = true;
     	CharSequence lineL = "abcdefgh";
     	CharSequence lineU = "ABCDEFGH";
     	int posR1 = -1;
     	int posR2 = -1;
-    	if (baseLine.charAt(4) != 'k')
+//    	if (baseLine.charAt(4) != 'k')
+    	if (!baseLine.toString().equals(standard))
     		isStandard = false;
     	if (isStandard)
     		castling = "KQkq";
@@ -157,11 +161,18 @@ public class Chess960
 		    				posR2 = i;
 		    		}
 		        }
-		    	if (posR1 != -1 & posR2 != -1)
-		    		castling = "" + lineU.charAt(posR1) + lineU.charAt(posR2) + lineL.charAt(posR1) + lineL.charAt(posR2);
+		    	if (posR1 != -1 & posR2 != -1) {
+		    		//karl!!!
+//					castling = "" + lineU.charAt(posR1) + lineU.charAt(posR2) + lineL.charAt(posR1) + lineL.charAt(posR2);
+					castling = "" + lineU.charAt(posR2) + lineU.charAt(posR1) + lineL.charAt(posR2) + lineL.charAt(posR1);
+				}
 	    	}
     	}
+    	//karl, Shredder-FEN not supported in Chesspesso !?
     	castling = "KQkq";
+
+//		Log.d(TAG, "setCastling(), baseLine: " + baseLine + ", castling: " + castling);
+
     	return castling;
     }
 

@@ -350,5 +350,7 @@
     <string name="engineInit">Механизм инициализации:</string>
     <string name="clock">Часы</string>
     <string name="engine">Двигатель</string>
+    <string name="menu_left">&gt; &gt; &gt;   Меню</string>
+  <string name="menu_right">Меню   &lt; &lt; &lt;</string>
 
 </resources>

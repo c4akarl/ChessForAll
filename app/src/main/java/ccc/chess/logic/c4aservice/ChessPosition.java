@@ -1,5 +1,7 @@
 package ccc.chess.logic.c4aservice;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import chesspresso.Chess;
@@ -375,8 +377,11 @@ public class ChessPosition
 					lanMove = getCastlingLAN(fen, lanMove);
 				lanMove = lanMove.replace("-", "");
 				lanMove = lanMove.replace("x", "");
-//				if (lanMove.startsWith("O"))
-//					lanMove = getCastlingLAN(fen, lanMove);
+
+				//karl ?!
+				if (lanMove.startsWith("O"))
+					lanMove = getCastlingLAN(fen, lanMove);
+
 				if (isChess960)
     				chess960SetFenCastling(lanMove);
 //Log.i(TAG, "OLD, sanMove: " + sanMove + ", lanMove: " + lanMove);
@@ -551,7 +556,9 @@ public class ChessPosition
 		int cntTo = 0;
 		for (int i = 0; i < moveList.size(); i++)
 		{
-//			Log.i(TAG, "moveList.get(i): " + moveList.get(i));
+
+//			Log.i(TAG, "1 moveList.get(i): " + moveList.get(i));
+
 			if (moveList.get(i).length() >= 4)
 			{
 				if (moveList.get(i).toString().substring(0, 2).equals(mv1.toString()))
@@ -586,6 +593,16 @@ public class ChessPosition
 						{
 							cntFrom++;
 							listFrom = listFrom + moveList.get(i).toString().substring(5, 9) + " ";
+						}
+					}
+					if (fastMove.toString().equals("") && moveList.get(i).contains("|")) {
+						String[] split = moveList.get(i).split("\\|");
+						if (split.length >= 2) {
+							if (split[0].equals(split[1])) {
+								isChess960Castling = true;
+								fast_move = FAST_MOVE_OK;
+								return split[0];
+							}
 						}
 					}
 				}
@@ -785,6 +802,9 @@ public class ChessPosition
 
 	public boolean chess960CanCastling(CharSequence gameFen, CharSequence fen, int toPlay, CharSequence move)	
 	{		// move: d1b1(LAN) | O-O (SAN)
+
+//		Log.i(TAG, "1 chess960CanCastling(), fen: " + fen + ", toPlay: " + toPlay + ", move: " + move);
+
 		if (move.toString().startsWith("O"))
 		{	// SAN to c4aLAN
 			if (toPlay == 0 & move.toString().equals("O-O")) move = "" + wK + wRS;
@@ -799,6 +819,9 @@ public class ChessPosition
 		if (move.toString().equals(wLongCastC4aLan.subSequence(0, 4))) castChar = "Q";
 		if (move.toString().equals(bShortCastC4aLan.subSequence(0, 4))) castChar = "k";
 		if (move.toString().equals(bLongCastC4aLan.subSequence(0, 4))) castChar = "q";
+
+//		Log.i(TAG, "2 chess960CanCastling(), castChar: " + castChar);
+
 		if (castChar.equals(" ")) return false;
 		String[] tmpList = fen.toString().split(" ");
 		if (tmpList.length > 2)
@@ -831,6 +854,9 @@ public class ChessPosition
 				if (cpCastPosition.getColor(i) != -1) return false;	// castling way not empty
 			}
         }
+
+//		Log.i(TAG, "3 chess960CanCastling(), castling way OK");
+
 		// is king checked(all k-fields)
 		sqiLow = kFrom;
 		sqiHigh = kFrom;
@@ -847,7 +873,9 @@ public class ChessPosition
 			if (cpCastPosition.isCheck()) return false;	// castling way king is checked!
 			cpCastPosition.setStone(i, 0);
         }
-//		Log.i(TAG, "can castle !!!");
+
+//		Log.i(TAG, "9 chess960CanCastling(), OK");
+
 		return true;	// castling OK!
 	}
 
@@ -904,15 +932,29 @@ public class ChessPosition
 				delBS = true;
 			if (move.subSequence(0, 2).equals(bRL) | move.subSequence(2, 4).equals(bRL))
 				delBL = true;
+			//karl, Shredder-FEN not supported in Chesspresso ?!
+//			char wK1 = wK.charAt(0);
+//			char bK1 = bK.charAt(0);
 			for (int i = 0; i < chess960OldCast.length(); i++)
 			{
+//				char cast = chess960OldCast.charAt(i);
+				//karl
 				if (chess960OldCast.charAt(i) == 'K' & !delWS) newCast = newCast.toString() + chess960OldCast.charAt(i);
 				if (chess960OldCast.charAt(i) == 'Q' & !delWL) newCast = newCast.toString() + chess960OldCast.charAt(i);
 				if (chess960OldCast.charAt(i) == 'k' & !delBS) newCast = newCast.toString() + chess960OldCast.charAt(i);
 				if (chess960OldCast.charAt(i) == 'q' & !delBL) newCast = newCast.toString() + chess960OldCast.charAt(i);
+//				if (Character.isUpperCase(cast) && Character.toUpperCase(wK1) < cast && !delWS) newCast = newCast.toString() + chess960OldCast.charAt(i);
+//				if (Character.isUpperCase(cast) && Character.toUpperCase(wK1) > cast && !delWL) newCast = newCast.toString() + chess960OldCast.charAt(i);
+//				if (Character.isLowerCase(cast) && Character.toLowerCase(bK1) < cast && !delBS) newCast = newCast.toString() + chess960OldCast.charAt(i);
+//				if (Character.isLowerCase(cast) && Character.toLowerCase(bK1) > cast && !delBL) newCast = newCast.toString() + chess960OldCast.charAt(i);
 			}
 			if (newCast.equals(""))
 				newCast = "-";
+
+//			Log.i(TAG, "chess960SetFenCastling(), wK: " + wK + ", wRS: " + wRS+ ", wRL: " + wRL + ", delWS: " + delWS + ", delWL: " + delWL);
+//			Log.i(TAG, "chess960SetFenCastling(), bK: " + bK + ", bRS: " + bRS+ ", bRL: " + bRL + ", delBS: " + delBS + ", delBL: " + delBL);
+//			Log.i(TAG, "chess960SetFenCastling(), move: " + move + ", chess960OldCast: " + chess960OldCast+ ", newCast: " + newCast);
+
 			chess960OldCast = newCast;
 		}
 	}

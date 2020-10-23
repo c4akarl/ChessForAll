@@ -40,6 +40,9 @@ public class ChessLogic
   			chess960.setFen(fen);
         if (history.getChess960Id() != 518 | !chess960.getFen().equals(history.fenStandardPosition))
         	history.setGameTag("FEN", chess960.getFen().toString());
+
+//		Log.i(TAG, "newPosition(), chess960.getFen(): " + chess960.getFen());
+
         CharSequence stat = "0";
         CharSequence message = "";
         pos = new ChessPosition(history.chess960Id);
@@ -84,7 +87,7 @@ public class ChessLogic
 
     	//karl mv --> startMove, if fastMove ends with mv : stat = 7 && switch in MainActivity !!!
 
-//Log.i(TAG, "newPositionFromMove(), mv: " + mv + ",   fen: " + fen);
+//		Log.i(TAG, "newPositionFromMove(), mv: " + mv + ",   fen: " + fen);
 
 //err>>>: at ccc.chess.logic.c4aservice.ChessLogic.newPositionFromMove (ChessLogic.java:119)
 		if (mv.length() < 2)
@@ -141,6 +144,9 @@ public class ChessLogic
     		}
     		else
     		{
+
+//				Log.i(TAG, "newPositionFromMove(), moveLAN, canCast: " + mv + ", " + pos.isChess960Castling);
+
     			if (pos.cpPosition.getToPlay() == 0)
     			{	// white
      				if (pos.chess960CanCastling(history.getStartFen(), fen, pos.cpPosition.getToPlay(), pos.wShortCastC4aLan.subSequence(0, 4)))
@@ -163,6 +169,9 @@ public class ChessLogic
     	if (mv.length() == 2)			
 		{	// fast move
     		fastMove = pos.getFastMove(mv);
+
+//			Log.i(TAG, "mv chess960: " + mv + ", fastMove: " + fastMove + ", pos.isChess960Castling: " + pos.isChess960Castling);
+
     		switch (pos.fast_move)
             {
     	        case 0:     // FAST_MOVE_NO_MOVE
@@ -238,7 +247,13 @@ public class ChessLogic
     			{
     				pos.chess960SetFenCastling(mv);
     				CharSequence tmpFen = pos.cpPosition.getFEN();
+
+//					Log.i(TAG, "1 newPositionFromMove(), mv: " + mv + ", tmpFen: " + tmpFen);
+
      				pos.cpPosition = new Position(pos.chess960SetNewFEN(tmpFen, pos.chess960OldCast).toString());
+
+//					Log.i(TAG, "2 newPositionFromMove(), newFen: " + pos.cpPosition.getFEN());
+
     			}
 	    		CharSequence newFen = pos.cpPosition.getFEN();
 	    		CharSequence moveText = "";
@@ -339,6 +354,10 @@ public class ChessLogic
 			if (pos.fast_move == 3 & stat.equals("2"))
 				setPossileMovesTo(mv, pos.moveList);
 		}
+
+
+//		Log.i(TAG, "newPositionFromMove(), stat: " + stat + ", pos.moveList: " + pos.moveList.size());
+
 		setPositionValues(stat, message);
 		if (pos.isPromotion)
  			p_move = fastMove;
@@ -1124,7 +1143,9 @@ public class ChessLogic
 		p_possibleMoveToList.clear();
 		for (int i = 0; i < moveList.size(); i++)
 		{
-//Log.i(TAG, "setPossileMovesTo(), moveList.all: " + moveList.get(i));
+
+//			Log.i(TAG, "setPossileMovesTo(), moveList.all: " + moveList.get(i));
+
 			if (moveList.get(i).length() == 9)	// castle: e1h1|e1g1
 			{
 				if (moveList.get(i).toString().substring(7, 9).equals(moveTo))
@@ -1148,7 +1169,7 @@ public class ChessLogic
 			}
 		}
 	}
-    
+
     final String TAG = "ChessLogic";
 	int gameStat = 0;
     public ChessPosition pos;
