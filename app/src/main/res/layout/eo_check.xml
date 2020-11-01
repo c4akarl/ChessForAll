@@ -1,3 +1,4 @@
 <CheckBox xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_marginBottom="4dip"
+    android:textSize="@dimen/tv_text_size_14"
     style="@style/c4aCB1" />

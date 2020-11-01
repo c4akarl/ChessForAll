@@ -30,7 +30,6 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
     {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //karl, title: engine name
         setContentView(R.layout.editucioptions);
 
         eo_cancel = findViewById(R.id.eo_cancel);
@@ -74,7 +73,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
                     llv.addView(llh);
                     break;
                 case SPIN:
-                    name.setText(getName(uciOptsList.get(i)) + "(" + getMin(uciOptsList.get(i)) + "-"  + getMax(uciOptsList.get(i)) + "," + getDefault(uciOptsList.get(i)) + ") ");
+                    name.setText(getName(uciOptsList.get(i)) + "(" + getMin(uciOptsList.get(i)) + "-"  + getMax(uciOptsList.get(i)) + ") ");
                     editName.setMinWidth(2000);
                     editName.setBackgroundResource(R.drawable.rectanglegreen);
                     if (getMin(uciOptsList.get(i)).startsWith("-"))

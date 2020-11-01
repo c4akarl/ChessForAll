@@ -105,6 +105,10 @@ public class ChessEngine
 
 				return false;
 			}
+
+//            if (isLogOn)
+//                Log.i(TAG, "readUCIOptions(), s: " + s);
+
             if (s.toString().contains("option name"))
                 uciOptions = uciOptions + s + "\n";
             if (s.toString().contains("option") & s.toString().contains("Ponder"))
@@ -120,8 +124,10 @@ public class ChessEngine
             checkTime = System.currentTimeMillis();
         }
 
-		if (isLogOn)
-			Log.i(TAG, "readUCIOptions(), timeout");
+		if (isLogOn) {
+            Log.i(TAG, "readUCIOptions(), uciOptions: \n" + uciOptions);
+            Log.i(TAG, "readUCIOptions(), timeout");
+        }
 
         return false;
 
@@ -639,6 +645,15 @@ public class ChessEngine
         catch (IOException e) {e.printStackTrace();}
     }
 
+    void setUciNodestime(int nt)
+    {
+        try
+        {
+            writeToProcess("setoption name nodestime value " + nt + "\n");
+        }
+        catch (IOException e) {e.printStackTrace();}
+    }
+
     void setUciPonder(boolean ponder)
     {
         try
@@ -940,10 +955,6 @@ public class ChessEngine
     int uciSkillLevelMin = 1;
     int uciSkillLevelMax = 100;
     int uciStrength = 4000;
-
-    //karl
-//    CharSequence startFen = "";
-//    CharSequence continueFen = "";
 
     public boolean searchAlive = true;
     boolean engineWithMultiPv = false;

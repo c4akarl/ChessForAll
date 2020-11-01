@@ -3,6 +3,7 @@
     <dimen name="v_text_size">28sp</dimen>
     <dimen name="v_text_size_2">14sp</dimen>
     <dimen name="tv_text_size">18sp</dimen>
+    <dimen name="tv_text_size_14">20sp</dimen>
     <dimen name="tv2_text_size">24sp</dimen>
     <dimen name="tv_height">60dp</dimen>
     <dimen name="tv_width">160dp</dimen>
