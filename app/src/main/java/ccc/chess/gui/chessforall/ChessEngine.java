@@ -157,10 +157,12 @@ public class ChessEngine
     public synchronized boolean syncReady()
     {
 
-//Log.i(TAG, "syncReady(), start");
+//        Log.i(TAG, "1 syncReady(), start");
 
         if (process == null)
             return false;
+
+//        Log.i(TAG, "2 syncReady(), start");
 
 		engineState = EngineState.WAIT_READY;
         writeLineToProcess("isready");
@@ -170,9 +172,16 @@ public class ChessEngine
 
         while (checkTime - startTime <= MAX_SYNC_TIME)
         {
+
+//            Log.i(TAG, "3 syncReady(), start");
+
             CharSequence s = readLineFromProcess(1000);
-            if (s.equals("ERROR"))
+            if (s.equals("ERROR")) {
+
+//                Log.i(TAG, "4 syncReady(), start");
+
                 return false;
+            }
             if (s.equals(""))   // null
                 cntSpace++;
             else

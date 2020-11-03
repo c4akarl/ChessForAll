@@ -3,7 +3,9 @@ package ccc.chess.gui.chessforall;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,7 +25,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class EditUciOptions extends Activity implements View.OnTouchListener
+public class EditUciOptions extends Activity implements View.OnTouchListener, TextWatcher
 {
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -44,6 +46,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
         title.setBackgroundResource(R.drawable.rectangleyellow);
         if (uciOptsList != null)
             createViews();
+
     }
 
     public void createViews()
@@ -63,25 +66,30 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
             switch (getType(uciOptsList.get(i))) {
                 case CHECK:
                     checkBox.setText(getName(uciOptsList.get(i)));
-                    if (getDefault(uciOptsList.get(i)).equals("true"))
+                    checkBox.setOnTouchListener(this);
+                    if (getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)).equals("true"))
                         checkBox.setChecked(true);
                     else
                         checkBox.setChecked(false);
                     checkBox.setId(i);
+                    checkBox.setTextColor(getResources().getColor(R.color.text_light));
                     viewList.add(checkBox);
                     llh.addView(checkBox);
                     llv.addView(llh);
                     break;
                 case SPIN:
                     name.setText(getName(uciOptsList.get(i)) + "(" + getMin(uciOptsList.get(i)) + "-"  + getMax(uciOptsList.get(i)) + ") ");
+                    name.setTextColor(getResources().getColor(R.color.text_light));
                     editName.setMinWidth(2000);
                     editName.setBackgroundResource(R.drawable.rectanglegreen);
                     if (getMin(uciOptsList.get(i)).startsWith("-"))
                         editName.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_CLASS_NUMBER);
                     else
                         editName.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editName.setText(getDefault(uciOptsList.get(i)));
+                    editName.setText(getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)));
+                    name.setId(i + NAME_ADD);
                     editName.setId(i);
+                    editName.addTextChangedListener(this);
                     viewList.add(editName);
                     llv.addView(spcHeight);
                     llh.addView(name);
@@ -103,11 +111,14 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
                 case STRING:
                 case COMBO:
                     name.setText(getName(uciOptsList.get(i)) + " ");
+                    name.setTextColor(getResources().getColor(R.color.text_light));
                     editName.setMinWidth(2000);
-                    editName.setText(getDefault(uciOptsList.get(i)));
+                    editName.setText(getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)));
                     if (getType(uciOptsList.get(i)) == Type.COMBO)
                         editName.setOnTouchListener(this);
+                    name.setId(i + NAME_ADD);
                     editName.setId(i);
+                    editName.addTextChangedListener(this);
                     viewList.add(editName);
                     llv.addView(spcHeight);
                     llh.addView(name);
@@ -149,6 +160,17 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
                                 case SPIN:
                                 case STRING:
                                 case COMBO:
+//                                    TextView tv = (TextView) viewList.get(k + NAME_ADD);
+                                    TextView tv;
+                                    try {
+                                        tv = llv.findViewById(k + NAME_ADD);
+                                        if (getDefault(getType(uciOptsList.get(k)), uciOptsList.get(k)).equals(value))
+                                            tv.setTextColor(getResources().getColor(R.color.text_light));
+                                        else
+                                            tv.setTextColor(getResources().getColor(R.color.text_white));
+                                    }
+                                    catch (NullPointerException e) { }
+
                                     EditText et = (EditText) viewList.get(k);
                                     et.setBackgroundResource(R.drawable.rectanglegreen);
                                     et.setText(value);
@@ -159,6 +181,9 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
                                         cb.setChecked(true);
                                     else
                                         cb.setChecked(false);
+                                    String def = getDefault(getType(uciOptsList.get(k)), uciOptsList.get(k));
+                                    if (!def.equals(value))
+                                        cb.setTextColor(getResources().getColor(R.color.text_white));
                                     break;
                                 case BUTTON:
                                     break;
@@ -181,11 +206,11 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
                 case COMBO:
                     EditText et = (EditText) viewList.get(i);
                     et.setBackgroundResource(R.drawable.rectanglegreen);
-                    et.setText(getDefault(uciOptsList.get(i)));
+                    et.setText(getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)));
                     break;
                 case CHECK:
                     CheckBox cb = (CheckBox) viewList.get(i);
-                    if (getDefault(uciOptsList.get(i)).equals("true"))
+                    if (getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)).equals("true"))
                         cb.setChecked(true);
                     else
                         cb.setChecked(false);
@@ -266,15 +291,40 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
                 case COMBO:
                     List<String> lv = getVar(uciOptsList.get(id));
                     EditText etCombo = (EditText) viewList.get(id);
+
                     PopupMenu popup = new PopupMenu(EditUciOptions.this, view);
                     for (int i = 0; i < lv.size(); i++) {
                         popup.getMenu().add(lv.get(i));
                     }
                     popup.setOnMenuItemClickListener(item -> {
                         etCombo.setText(item.getTitle());
+                        TextView tv;
+                        try {
+                            tv = llv.findViewById(id + NAME_ADD);
+                            if (getDefault(getType(uciOptsList.get(id)), uciOptsList.get(id)).equals(item.getTitle()))
+                                tv.setTextColor(getResources().getColor(R.color.text_light));
+                            else
+                                tv.setTextColor(getResources().getColor(R.color.text_white));
+                        }
+                        catch (NullPointerException e) { }
                         return true;
                     });
                     popup.show();
+                    break;
+                case CHECK:
+                    CheckBox cb = (CheckBox) viewList.get(id);
+                    if (cb.isChecked())
+                        cb.setChecked(false);
+                    else
+                        cb.setChecked(true);
+                    String def = getDefault(getType(uciOptsList.get(id)), uciOptsList.get(id));
+                    if (def.equals(String.valueOf(cb.isChecked())))
+                        cb.setTextColor(getResources().getColor(R.color.text_light));
+                    else
+                        cb.setTextColor(getResources().getColor(R.color.text_white));
+
+//                    Log.i(TAG, "onTouch(), id: " + id + ", checked: " + cb.isChecked());
+
                     break;
             }
         }
@@ -287,7 +337,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
 
 //        Log.i(TAG, "getOption(), resId: " + resId + ", view: " + viewList.get(resId) + ", name: " + getName(uciOptsList.get(resId)) + ", type: " + getType(uciOptsList.get(resId)));
 
-        String def = getDefault(uciOptsList.get(resId));
+        String def = getDefault(getType(uciOptsList.get(resId)), uciOptsList.get(resId));
         switch (getType(uciOptsList.get(resId))) {
             case CHECK: {
                 try {
@@ -380,16 +430,27 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
         return Type.STRING;
     }
 
-    public String getDefault(String option)
+    public String getDefault(Type type, String option)
     {
         Boolean getValue = false;
+        String typeString = "";
         String tmp[] = option.split(" ");
         for (int i = 0; i < tmp.length; i++) {
-            if (getValue)
-                return tmp[i];
+            if (getValue) {
+                if (type == Type.STRING) {
+                    if (i == tmp.length -1)
+                        typeString = typeString + tmp[i];
+                    else
+                        typeString = typeString + tmp[i] + " ";
+                }
+                else
+                    return tmp[i];
+            }
             if (tmp[i].equals("default"))
                 getValue = true;
         }
+        if (type == Type.STRING)
+            return typeString;
         return "";
     }
 
@@ -463,9 +524,36 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
         }
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        EditText et;
+        try {et = (EditText) llv.findViewById(getCurrentFocus().getId());}
+        catch (NullPointerException e) {return;}
+        String value = et.getText().toString();
+        TextView tv;
+        try {
+            tv = llv.findViewById(et.getId() + NAME_ADD);
+            if (getDefault(getType(uciOptsList.get(et.getId())), uciOptsList.get(et.getId())).equals(value))
+                tv.setTextColor(getResources().getColor(R.color.text_light));
+            else
+                tv.setTextColor(getResources().getColor(R.color.text_white));
+        }
+        catch (NullPointerException e) { }
+
+//        Log.i(TAG, "afterTextChanged(), et.id: " + et.getId());
+
+    }
+
     final String TAG = "EditUciOptions";
     final String SETOPTION_NAME = "setoption name ";
     final String VALUE = " value ";
+    final int NAME_ADD = 10000;
     Intent returnIntent = new Intent();
     TextView title;
     LinearLayout llv = null;
@@ -479,6 +567,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener
     ArrayList<String> uciOptsList;          // UI options (uciOpts - CfA supported options)
     ArrayList<View> viewList;               // Views from uciOptsList (uciOptsList.size() == viewList.size())!
     String uciSetOptsList;                  // set options (returnIntent --> MainActivity)
+
     public enum Type {
         CHECK,
         SPIN,
