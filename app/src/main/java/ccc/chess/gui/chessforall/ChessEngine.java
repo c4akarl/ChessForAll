@@ -42,6 +42,7 @@ public class ChessEngine
         process = null;
         reader = null;
         writer = null;
+        errorMessage = "";
 
         boolean isInitOk = false;
         engineProcess = processName;
@@ -86,7 +87,9 @@ public class ChessEngine
         long checkTime = startTime;
         isUciPonder = false;
         uciOptions = "";
-        while (checkTime - startTime <= MAX_SYNC_TIME)
+
+//        while (checkTime - startTime <= MAX_ISREADY_TIME)
+        while (checkTime - startTime <= MAX_UCI_TIME)
         {
 			if (Thread.currentThread().isInterrupted())
 			{
@@ -121,13 +124,25 @@ public class ChessEngine
 
                 return true;
             }
+
             checkTime = System.currentTimeMillis();
+
+//            if (s.toString().equals("") && (checkTime - startTime >= MIN_SYNC_TIME)) {
+//                errorMessage = engineProcess + ":  uci error";
+//                if (isLogOn)
+//                    Log.i(TAG, "readUCIOptions(), errorMessage: " + errorMessage);
+//                return false;
+//            }
         }
 
-		if (isLogOn) {
-            Log.i(TAG, "readUCIOptions(), uciOptions: \n" + uciOptions);
-            Log.i(TAG, "readUCIOptions(), timeout");
-        }
+//		if (isLogOn) {
+//            Log.i(TAG, "readUCIOptions(), uciOptions: \n" + uciOptions);
+//            Log.i(TAG, "readUCIOptions(), timeout");
+//        }
+
+        errorMessage = engineProcess + ":  uci error";
+        if (isLogOn)
+            Log.i(TAG, "readUCIOptions(), errorMessage: " + errorMessage);
 
         return false;
 
@@ -168,31 +183,48 @@ public class ChessEngine
         writeLineToProcess("isready");
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
-        int cntSpace = 0;
+//        int cntSpace = 0;
 
-        while (checkTime - startTime <= MAX_SYNC_TIME)
+        while (checkTime - startTime <= MAX_ISREADY_TIME)
         {
 
 //            Log.i(TAG, "3 syncReady(), start");
 
             CharSequence s = readLineFromProcess(1000);
-            if (s.equals("ERROR")) {
 
-//                Log.i(TAG, "4 syncReady(), start");
+//            Log.i(TAG, "4 syncReady(), s: " + s);
+
+            if (s.equals("ERROR")) {
+                if (isLogOn)
+                    Log.i(TAG, "syncReady(), errorMessage: ERROR");
 
                 return false;
             }
-            if (s.equals(""))   // null
-                cntSpace++;
-            else
-                cntSpace = 0;
+
+//            if (s.equals(""))   // null
+//                cntSpace++;
+//            else
+//                cntSpace = 0;
+
             if (s.equals("readyok"))
             {
                 engineState = EngineState.IDLE;
                 return true;
             }
+
             checkTime = System.currentTimeMillis();
+
+//            if (s.toString().equals("") && (checkTime - startTime >= MIN_SYNC_TIME)) {
+//                errorMessage = engineProcess + ":  isready error";
+//                if (isLogOn)
+//                    Log.i(TAG, "syncReady(), errorMessage: " + errorMessage);
+//                return false;
+//            }
         }
+
+        errorMessage = engineProcess + ":  isready error";
+        if (isLogOn)
+            Log.i(TAG, "syncReady(), errorMessage: " + errorMessage);
 
         return false;
 
@@ -204,6 +236,10 @@ public class ChessEngine
             writeLineToProcess("setoption name UCI_Chess960 value true");
         else
             writeLineToProcess("setoption name UCI_Chess960 value false");
+
+        //karl test
+        writeLineToProcess("setoption name WeightsFile value " + testWeightsFile);
+
         writeLineToProcess("ucinewgame");
         return true;
     }
@@ -884,7 +920,7 @@ public class ChessEngine
 
     private void destroyProcess()
     {
-        process.destroy();;
+        process.destroy();
     }
 
     private final void writeToProcess(String data) throws IOException
@@ -909,7 +945,9 @@ public class ChessEngine
     }
 
     final String TAG = "ChessEngine";
-    final long MAX_SYNC_TIME = 2000;
+//    final long MAX_SYNC_TIME = 2000;
+    final long MAX_ISREADY_TIME = 6000;
+    final long MAX_UCI_TIME = 2000;
 
     Context context;
     public int engineNumber = 1;		                    // default engine (Stockfish)
@@ -923,6 +961,7 @@ public class ChessEngine
     String uciFileName = "";			                    // uci file name (for saving in ExternalStorage)
     final String INTERN_ENGINE_NAME_END = " CfA";
     String mesInitProcess = "";
+    String errorMessage = "";
 
     ProcessBuilder processBuilder;
     public Process process;
@@ -1005,5 +1044,8 @@ public class ChessEngine
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
 
     boolean isLogOn;			// LogFile on/off(SharedPreferences)
+
+//    String testWeightsFile = "/storage/emulated/0/Android/data/ccc.chess.engines/files/weightsfiles/256x20-t40-1541.pb.gz";
+    String testWeightsFile = "/storage/emulated/0/Android/data/ccc.chess.engines/files/weightsfiles/11258-128x10-se.pb.gz";
 
 }

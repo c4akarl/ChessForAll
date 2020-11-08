@@ -88,6 +88,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                         editName.setInputType(InputType.TYPE_CLASS_NUMBER);
                     editName.setText(getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)));
                     name.setId(i + NAME_ADD);
+                    name.setOnTouchListener(this);
                     editName.setId(i);
                     editName.addTextChangedListener(this);
                     viewList.add(editName);
@@ -117,6 +118,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                     if (getType(uciOptsList.get(i)) == Type.COMBO)
                         editName.setOnTouchListener(this);
                     name.setId(i + NAME_ADD);
+                    name.setOnTouchListener(this);
                     editName.setId(i);
                     editName.addTextChangedListener(this);
                     viewList.add(editName);
@@ -273,59 +275,73 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
     {
         int id = view.getId();
         if ( event.getAction() == 1) {
+            if (id < NAME_ADD) {
 
-//            Log.i(TAG, "onTouch(), id: " + id + ", name: " + getName(uciOptsList.get(id)) + ", event.getAction(): " + event.getAction());
+//                Log.i(TAG, "onTouch(), id: " + id + ", name: " + getName(uciOptsList.get(id)) + ", event.getAction(): " + event.getAction());
 
-            switch (getType(uciOptsList.get(id))) {
-                case BUTTON:
-                    EditText etBtn = (EditText) viewList.get(id);
-                    if (etBtn.isSelected()) {
-                        etBtn.setBackgroundResource(R.drawable.rectanglegreen);
-                        etBtn.setSelected(false);
-                    }
-                    else {
-                        etBtn.setBackgroundResource(R.drawable.rectanglepink);
-                        etBtn.setSelected(true);
-                    }
-                    break;
-                case COMBO:
-                    List<String> lv = getVar(uciOptsList.get(id));
-                    EditText etCombo = (EditText) viewList.get(id);
-
-                    PopupMenu popup = new PopupMenu(EditUciOptions.this, view);
-                    for (int i = 0; i < lv.size(); i++) {
-                        popup.getMenu().add(lv.get(i));
-                    }
-                    popup.setOnMenuItemClickListener(item -> {
-                        etCombo.setText(item.getTitle());
-                        TextView tv;
-                        try {
-                            tv = llv.findViewById(id + NAME_ADD);
-                            if (getDefault(getType(uciOptsList.get(id)), uciOptsList.get(id)).equals(item.getTitle()))
-                                tv.setTextColor(getResources().getColor(R.color.text_light));
-                            else
-                                tv.setTextColor(getResources().getColor(R.color.text_white));
+                switch (getType(uciOptsList.get(id))) {
+                    case BUTTON:
+                        EditText etBtn = (EditText) viewList.get(id);
+                        if (etBtn.isSelected()) {
+                            etBtn.setBackgroundResource(R.drawable.rectanglegreen);
+                            etBtn.setSelected(false);
+                        } else {
+                            etBtn.setBackgroundResource(R.drawable.rectanglepink);
+                            etBtn.setSelected(true);
                         }
-                        catch (NullPointerException e) { }
-                        return true;
-                    });
-                    popup.show();
-                    break;
-                case CHECK:
-                    CheckBox cb = (CheckBox) viewList.get(id);
-                    if (cb.isChecked())
-                        cb.setChecked(false);
-                    else
-                        cb.setChecked(true);
-                    String def = getDefault(getType(uciOptsList.get(id)), uciOptsList.get(id));
-                    if (def.equals(String.valueOf(cb.isChecked())))
-                        cb.setTextColor(getResources().getColor(R.color.text_light));
-                    else
-                        cb.setTextColor(getResources().getColor(R.color.text_white));
+                        break;
+                    case COMBO:
+                        List<String> lv = getVar(uciOptsList.get(id));
+                        EditText etCombo = (EditText) viewList.get(id);
+
+                        PopupMenu popup = new PopupMenu(EditUciOptions.this, view);
+                        for (int i = 0; i < lv.size(); i++) {
+                            popup.getMenu().add(lv.get(i));
+                        }
+                        popup.setOnMenuItemClickListener(item -> {
+                            etCombo.setText(item.getTitle());
+                            TextView tv;
+                            try {
+                                tv = llv.findViewById(id + NAME_ADD);
+                                if (getDefault(getType(uciOptsList.get(id)), uciOptsList.get(id)).equals(item.getTitle()))
+                                    tv.setTextColor(getResources().getColor(R.color.text_light));
+                                else
+                                    tv.setTextColor(getResources().getColor(R.color.text_white));
+                            } catch (NullPointerException e) { }
+                            return true;
+                        });
+                        popup.show();
+                        break;
+                    case CHECK:
+                        CheckBox cb = (CheckBox) viewList.get(id);
+                        if (cb.isChecked())
+                            cb.setChecked(false);
+                        else
+                            cb.setChecked(true);
+                        String def = getDefault(getType(uciOptsList.get(id)), uciOptsList.get(id));
+                        if (def.equals(String.valueOf(cb.isChecked())))
+                            cb.setTextColor(getResources().getColor(R.color.text_light));
+                        else
+                            cb.setTextColor(getResources().getColor(R.color.text_white));
 
 //                    Log.i(TAG, "onTouch(), id: " + id + ", checked: " + cb.isChecked());
 
-                    break;
+                        break;
+                }
+            }
+            else {
+                int idEt = id -NAME_ADD;
+
+//                Log.i(TAG, "onTouch(), id: " + id + ", name: " + getName(uciOptsList.get(idEt)) + ", event.getAction(): " + event.getAction());
+
+                TextView tv;
+                try {
+                    tv = llv.findViewById(id);
+                    tv.setTextColor(getResources().getColor(R.color.text_light));
+                } catch (NullPointerException e) { }
+                EditText et = (EditText) viewList.get(idEt);
+                et.setBackgroundResource(R.drawable.rectanglegreen);
+                et.setText(getDefault(getType(uciOptsList.get(idEt)), uciOptsList.get(idEt)));
             }
         }
 
