@@ -162,7 +162,6 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                                 case SPIN:
                                 case STRING:
                                 case COMBO:
-//                                    TextView tv = (TextView) viewList.get(k + NAME_ADD);
                                     TextView tv;
                                     try {
                                         tv = llv.findViewById(k + NAME_ADD);

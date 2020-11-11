@@ -2,6 +2,7 @@ package ccc.chess.gui.chessforall;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import ccc.chess.book.BookOptions;
 import ccc.chess.book.C4aBook;

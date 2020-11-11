@@ -672,19 +672,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	}
 
 	public void startEditUciOptions() {
-		if (withUciOptions) {
-			if (!ec.getEngine().uciOptions.equals("")) {
-				editUciOptions.putExtra("uciOpts", ec.getEngine().uciOptions);
-				editUciOptions.putExtra("uciOptsChanged", fileIO.getDataFromUciFile(fileIO.getUciExternalPath(), ec.getEngine().uciFileName));
-				editUciOptions.putExtra("uciEngineName", ec.getEngine().engineName);
-				startActivityForResult(editUciOptions, EDIT_UCI_OPTIONS);
-				stopComputerThinking(true);
-				stopChessClock();
-			} else
-				showDialog(MENU_SELECT_ENGINE_FROM_OEX);
-		}
-		else
-			Toast.makeText(this, getString(R.string.comingSoon), Toast.LENGTH_SHORT).show();
+		if (!ec.getEngine().uciOptions.equals("")) {
+			editUciOptions.putExtra("uciOpts", ec.getEngine().uciOptions);
+			editUciOptions.putExtra("uciOptsChanged", fileIO.getDataFromUciFile(fileIO.getUciExternalPath(), ec.getEngine().uciFileName));
+			editUciOptions.putExtra("uciEngineName", ec.getEngine().engineName);
+			startActivityForResult(editUciOptions, EDIT_UCI_OPTIONS);
+			stopComputerThinking(true);
+			stopChessClock();
+		} else
+			showDialog(MENU_SELECT_ENGINE_FROM_OEX);
 	}
 
 	public void startEditBoard(CharSequence fen, Boolean startOptions) {
@@ -1603,8 +1599,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			List<Integer> actions = new ArrayList<Integer>();
 			arrayAdapter.add(getString(R.string.menu_enginesettings_select));			actions.add(MENU_ENGINE_SELECT);
 			arrayAdapter.add(getString(R.string.menu_enginesettings_playOptions));		actions.add(MENU_ENGINE_SETTINGS);
-			if (withUciOptions)
-				arrayAdapter.add(getString(R.string.menu_enginesettings_uciOptions));		actions.add(MENU_ENGINE_UCI);
+			arrayAdapter.add(getString(R.string.menu_enginesettings_uciOptions));		actions.add(MENU_ENGINE_UCI);
 			arrayAdapter.add(getString(R.string.menu_specialities_engine_autoplay)); 	actions.add(MENU_ENGINE_AUTOPLAY);
 			arrayAdapter.add(getString(R.string.menu_enginesettings_shutdown));   		actions.add(MENU_ENGINE_SHUTDOWN);
 			final List<Integer> finalActions = actions;
@@ -3462,7 +3457,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{	//setting play options and start engine play
 
 //		Log.i(TAG, "startEnginePlay(), gc.fen: " + gc.fen);
-//		Log.i(TAG, "startEnginePlay(), engineState: " + ec.getEngine().engineState);
+//		Log.i(TAG, "startEnginePlay(), newGame: " + newGame + ", engineState: " + ec.getEngine().engineState);
 
 		ec.setPlaySettings(userPrefs, gc.cl.p_color);
 		ec.setStartPlay(gc.getValueFromFen(gc.fen, 2));
@@ -3475,20 +3470,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			case DEAD:
 				if (restartEngine())
 					startEnginePlayIsReady(newGame);
-//				else
-//				{
-//
-////					Log.i(TAG, "startEnginePlay(), restartEngine(): false ");
-//
-//					ec.chessEngineSearching = false;
-//					stopComputerThinking(false);
-//					ec.chessEnginePaused = true;
-//					ec.chessEngineInit = true;
-//					updateCurrentPosition("");
-//					setEnginePausePlayBtn(false, null);
-//					setInfoMessage(getString(R.string.engine_noRespond) + " (8)" + getString(R.string.engine_paused), null, null, false);
-//
-//				}
 				return;
 			default:
 
@@ -3587,6 +3568,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //		Log.i(TAG, "restartEngine(), process: " + ec.getEngine().process);
 
 		setInfoMessage(getString(R.string.engineInit) + " " + runP.getString("run_engineProcess", ""), null, null, false);
+		ec.setStartPlay(gc.getValueFromFen(gc.fen, 2));
 
 		if (ec.getEngine().initProcess(runP.getString("run_engineProcess", "")))
 		{
@@ -3606,7 +3588,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ec.chessEngineInit = true;
 				stopThreads(false);
 				setEnginePausePlayBtn(false, null);
-//				setInfoMessage(getString(R.string.engine_noRespond) + " (startNewGame)", null, null, false);
 				if (!ec.getEngine().errorMessage.equals(""))
 					setInfoMessage(ec.getEngine().errorMessage, null, null, false);
 				else
@@ -3623,7 +3604,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			ec.chessEngineInit = true;
 			stopThreads(false);
 			setEnginePausePlayBtn(false, null);
-//			setInfoMessage(getString(R.string.engine_noRespond) + " (initProcess)", null, null, false);
 			if (!ec.getEngine().errorMessage.equals(""))
 				setInfoMessage(ec.getEngine().errorMessage, null, null, false);
 			else
@@ -3649,15 +3629,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //					ec.getEngine().setUciStrength(userPrefs.getInt("user_options_enginePlay_strength", 100));
 //					ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 0));
 //					ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 24));
-
 //					ec.getEngine().setUciHash(16);
 					ec.getEngine().setUciPonder(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
 //					ec.getEngine().setStartFen(gc.startFen);
 
-					if (withUciOptions) {
-						FileIO f = new FileIO(this);;
-						ec.getEngine().setUciOptsFromFile(f.getDataFromUciFile(f.getUciExternalPath(), ec.getEngine().uciFileName));
-					}
+					FileIO f = new FileIO(this);;
+					ec.getEngine().setUciOptsFromFile(f.getDataFromUciFile(f.getUciExternalPath(), ec.getEngine().uciFileName));
 
 					//karl
 					ec.getEngine().setUciHash(16);
@@ -5670,12 +5647,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		StringBuilder sbMoves = new StringBuilder(100);
 		StringBuilder sbInfo = new StringBuilder(100);
 		CharSequence searchDisplayMoves = null;
-//		CharSequence errorMessage = "";
 
 		long searchStartTimeInfo = 0;		// info != ""
 		int MAX_SEARCH_CANCEL_TIMEOUT = 1500;	// max. search time engine timeout
 
-//		int MAX_SEARCH_TIMEOUT = 180000;		// max. search time engine timeout (3 min: no info message)
 		int MAX_SEARCH_TIMEOUT = 60000;			// max. search time engine timeout (1 min: no info message)
 		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
 
@@ -7605,9 +7580,5 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	// sdk >= 30
 //	boolean fileActions = true;
 	boolean fileActions = false;
-
-	// uci options
-	boolean withUciOptions = true;
-//	boolean withUciOptions = false;
 
 }

@@ -238,7 +238,7 @@ public class ChessEngine
             writeLineToProcess("setoption name UCI_Chess960 value false");
 
         //karl test
-        writeLineToProcess("setoption name WeightsFile value " + testWeightsFile);
+//        writeLineToProcess("setoption name WeightsFile value " + testWeightsFile);
 
         writeLineToProcess("ucinewgame");
         return true;
@@ -945,9 +945,8 @@ public class ChessEngine
     }
 
     final String TAG = "ChessEngine";
-//    final long MAX_SYNC_TIME = 2000;
-    final long MAX_ISREADY_TIME = 6000;
     final long MAX_UCI_TIME = 2000;
+    final long MAX_ISREADY_TIME = 6000;
 
     Context context;
     public int engineNumber = 1;		                    // default engine (Stockfish)
@@ -1046,6 +1045,6 @@ public class ChessEngine
     boolean isLogOn;			// LogFile on/off(SharedPreferences)
 
 //    String testWeightsFile = "/storage/emulated/0/Android/data/ccc.chess.engines/files/weightsfiles/256x20-t40-1541.pb.gz";
-    String testWeightsFile = "/storage/emulated/0/Android/data/ccc.chess.engines/files/weightsfiles/11258-128x10-se.pb.gz";
+//    String testWeightsFile = "/storage/emulated/0/Android/data/ccc.chess.engines/files/weightsfiles/11258-128x10-se.pb.gz";
 
 }
