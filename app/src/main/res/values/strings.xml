@@ -372,5 +372,6 @@
     <string name="engine">Engine</string>
     <string name="menu_left">&gt; &gt; &gt;   Menu</string>
     <string name="menu_right"> Menu   &lt; &lt; &lt;</string>
+    <string name="uciOptionsInfo">UCI-Options Information</string>
 
 </resources>

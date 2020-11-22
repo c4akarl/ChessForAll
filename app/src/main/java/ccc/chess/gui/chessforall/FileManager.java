@@ -2738,7 +2738,9 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			if (pgnOffset == 0 & !dropCreateIdx)
 			{
 				try	{db = SQLiteDatabase.openOrCreateDatabase(fPgnDb, null);}	// create database (file: .pgn-db)
-				catch (SQLiteDiskIOException e) {e.printStackTrace(); runMessage = "EX 99"; db.close(); return null;}
+				// java.lang.NullPointerException:
+//				catch (SQLiteDiskIOException e) {e.printStackTrace(); runMessage = "EX 99"; db.close(); return null;}
+				catch (SQLiteDiskIOException e) {e.printStackTrace(); runMessage = "EX 99"; return null;}
 				catch (SQLiteCantOpenDatabaseException e) {e.printStackTrace(); runMessage = "EX 99"; db.close(); return null;}
 				// 28. Nov. 08:21 in der App-Version 74
 				catch (SQLiteException e) {e.printStackTrace(); runMessage = "EX 99"; db.close(); return null;}

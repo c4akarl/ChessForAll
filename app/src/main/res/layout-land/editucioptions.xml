@@ -43,6 +43,15 @@
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/eo_info"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:onClick="myClickHandler"
+                android:layout_marginTop="@dimen/margin_1"
+                android:layout_weight="20"
+                android:text="Info" />
+
+            <Button
                 android:id="@+id/eo_cancel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

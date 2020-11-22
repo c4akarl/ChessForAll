@@ -15,7 +15,7 @@
     <string name="pieces">RDTAC</string>
     <string name="sendEmail">Enviar email</string>
 
-    <string name="btn_Ok">  Aceptar  </string>
+    <string name="btn_Ok">"OK "</string>
     <string name="btn_Yes">Sí</string>
     <string name="btn_No">No</string>
     <string name="btn_Pgn">PGN</string>
@@ -371,5 +371,6 @@
     <string name="engine">Motor</string>
     <string name="menu_left">Menú</string>
     <string name="menu_right">Menú   &lt; &lt; &lt;</string>
+    <string name="uciOptionsInfo">Información sobre opciones UCI</string>
 
 </resources>

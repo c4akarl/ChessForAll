@@ -103,6 +103,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		tc = new TimeControl();
 
 		getPermissions();
+		setEngineDirectories();
 
 		chess960 = new Chess960();	// needed for "create your own chess position"
 		fileIO = new FileIO(this);
@@ -1986,10 +1987,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			{
 				SharedPreferences.Editor ed = userPrefs.edit();
 				tc.timeControl = chessClockControl;
+				Boolean isPlayDialog = false;
+				if (playDialog != null)
+					isPlayDialog = true;
 				switch (chessClockControl)
 				{
 					case 1: 	// set current time: white
-						if (playDialog.isShowing()) {
+//						if (playDialog.isShowing()) {
+						if (isPlayDialog && playDialog.isShowing()) {
 							dSettingTimeWhite = timeSettingsDialog.getTime();
 							d_btn_time_white.setText(tc.getShowValues(dSettingTimeWhite, false));
 						}
@@ -1999,7 +2004,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						}
 						break;
 					case 2: 	// set current time: black
-						if (playDialog.isShowing()) {
+//						if (playDialog.isShowing()) {
+						if (isPlayDialog && playDialog.isShowing()) {
 							dSettingTimeBlack = timeSettingsDialog.getTime();
 							d_btn_time_black.setText(tc.getShowValues(dSettingTimeBlack, false));
 						}
@@ -4108,8 +4114,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public void playSound(int idx, int loop)
 	{
-		if 	(userPrefs.getBoolean("user_options_gui_enableSounds", true))
-			mSoundPool.play(soundsMap.get(idx), 0.2f, 0.2f, 1, loop, 1.0f);
+		try {
+			if (userPrefs.getBoolean("user_options_gui_enableSounds", true))
+				mSoundPool.play(soundsMap.get(idx), 0.2f, 0.2f, 1, loop, 1.0f);
+		}
+		catch (NullPointerException e) {e.printStackTrace();}
 	}
 
 	public CharSequence getGameInfo()
@@ -5259,7 +5268,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 
 					if (userPrefs.getBoolean("user_options_enginePlay_debugInformation", true)) {
-						if (s.toString().contains("info string")) {
+						// java.lang.StringIndexOutOfBoundsException:
+//						if (s.toString().contains("info string")) {
+						if (s.toString().contains("info string") && s.length() > 14) {
 							engineInfoString = "\n" + s.toString().subSequence(12, s.length() - 1);
 						}
 					}
@@ -7011,6 +7022,25 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			ed.putInt("user_game_chess960Id", gc.cl.p_chess960ID);
 			ed.commit();
 		}
+	}
+
+	public void setEngineDirectories()
+	{
+		String PATH_FILES = String.valueOf(getExternalFilesDir(null));	// 		/storage/emulated/0/Android/data/ccc.chess.gui.chessforall/files
+		String PATH_FILES_ENGINES = PATH_FILES + File.separator + "engines";
+		String PATH_FILES_ENGINES_LOGFILE = PATH_FILES + File.separator + "engines" + File.separator + "logfile";
+		String PATH_FILES_ENGINES_NNUE = PATH_FILES + File.separator + "engines" + File.separator + "nnue";
+		String PATH_FILES_ENGINES_WEIGHTS = PATH_FILES + File.separator + "engines" + File.separator + "weights";
+		File dir = new File(PATH_FILES);
+		if (!dir.exists()) { dir.mkdirs(); }
+		dir = new File(PATH_FILES_ENGINES);
+		if (!dir.exists()) { dir.mkdirs(); }
+		dir = new File(PATH_FILES_ENGINES_LOGFILE);
+		if (!dir.exists()) { dir.mkdirs(); }
+		dir = new File(PATH_FILES_ENGINES_NNUE);
+		if (!dir.exists()) { dir.mkdirs(); }
+		dir = new File(PATH_FILES_ENGINES_WEIGHTS);
+		if (!dir.exists()) { dir.mkdirs(); }
 	}
 
 	public class MyViewListener implements View.OnClickListener

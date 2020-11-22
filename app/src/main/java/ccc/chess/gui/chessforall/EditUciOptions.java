@@ -1,8 +1,14 @@
 package ccc.chess.gui.chessforall;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -12,6 +18,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,6 +26,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -34,6 +44,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.editucioptions);
 
+        eo_info = findViewById(R.id.eo_info);
         eo_cancel = findViewById(R.id.eo_cancel);
         eo_reset = findViewById(R.id.eo_reset);
         eo_ok = findViewById(R.id.eo_ok);
@@ -115,12 +126,20 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                     name.setTextColor(getResources().getColor(R.color.text_light));
                     editName.setMinWidth(2000);
                     editName.setText(getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)));
+                    editName.setSelection(editName.getText().length());
                     if (getType(uciOptsList.get(i)) == Type.COMBO)
                         editName.setOnTouchListener(this);
                     name.setId(i + NAME_ADD);
                     name.setOnTouchListener(this);
                     editName.setId(i);
-                    editName.addTextChangedListener(this);
+                    if (getType(uciOptsList.get(i)) == Type.STRING && getName(uciOptsList.get(i)).toLowerCase().contains("file")) {
+                        editName.setFocusable(false);
+                        editName.setFocusableInTouchMode(false);
+                        editName.setOnTouchListener(this);
+                    }
+                    else {
+                        editName.addTextChangedListener(this);
+                    }
                     viewList.add(editName);
                     llv.addView(spcHeight);
                     llh.addView(name);
@@ -175,6 +194,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                                     EditText et = (EditText) viewList.get(k);
                                     et.setBackgroundResource(R.drawable.rectanglegreen);
                                     et.setText(value);
+                                    et.setSelection(et.getText().length());
                                     break;
                                 case CHECK:
                                     CheckBox cb = (CheckBox) viewList.get(k);
@@ -208,6 +228,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                     EditText et = (EditText) viewList.get(i);
                     et.setBackgroundResource(R.drawable.rectanglegreen);
                     et.setText(getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)));
+                    et.setSelection(et.getText().length());
                     break;
                 case CHECK:
                     CheckBox cb = (CheckBox) viewList.get(i);
@@ -229,6 +250,9 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
     {
         switch (view.getId())
         {
+            case R.id.eo_info:
+                showHtml(R.raw.uci_options_info, R.string.uciOptionsInfo);
+                break;
             case R.id.eo_cancel:
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
@@ -272,11 +296,14 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
     @Override
     public boolean onTouch(View view, MotionEvent event)
     {
+
+//        Log.i(TAG, "1 onTouch(), id: " + view.getId());
+
         int id = view.getId();
         if ( event.getAction() == 1) {
             if (id < NAME_ADD) {
 
-//                Log.i(TAG, "onTouch(), id: " + id + ", name: " + getName(uciOptsList.get(id)) + ", event.getAction(): " + event.getAction());
+//                Log.i(TAG, "2 onTouch(), id: " + id + ", name: " + getName(uciOptsList.get(id)) + ", event.getAction(): " + event.getAction());
 
                 switch (getType(uciOptsList.get(id))) {
                     case BUTTON:
@@ -288,6 +315,9 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                             etBtn.setBackgroundResource(R.drawable.rectanglepink);
                             etBtn.setSelected(true);
                         }
+                        break;
+                    case STRING:    // file action
+                        getFileFromExternalFilesDir(id, getExternalFilesDir(null) + File.separator + "engines");
                         break;
                     case COMBO:
                         List<String> lv = getVar(uciOptsList.get(id));
@@ -392,6 +422,26 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                 catch (NullPointerException e) {Log.i(TAG, "getOption(), error:\n" + e); return "";}
         }
         return "";
+    }
+
+    public void setOption(int resId, String value)
+    {
+        switch (getType(uciOptsList.get(resId))) {
+            case STRING:
+                try {
+                    EditText et = (EditText) viewList.get(resId);
+                    et.setText(value);
+                    et.setSelection(et.getText().length());
+                    TextView tv;
+                    tv = llv.findViewById(resId + NAME_ADD);
+                    if (getDefault(getType(uciOptsList.get(resId)), uciOptsList.get(resId)).equals(value))
+                        tv.setTextColor(getResources().getColor(R.color.text_light));
+                    else
+                        tv.setTextColor(getResources().getColor(R.color.text_white));
+                }
+                catch (NullPointerException e) {Log.i(TAG, "setOption(), error:\n" + e); }
+                break;
+        }
     }
 
     public String checkSpinValue(int id, String val)
@@ -539,8 +589,38 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
         }
     }
 
+    public void getFileFromExternalFilesDir(int viewId, String path) {
+
+//        Log.i(TAG, "getFileFromExternalFilesDir(), uci-name: " + getName(uciOptsList.get(viewId)) + ", path: " + path);
+
+        EditText etView = (EditText) viewList.get(viewId);
+        File f = new File(path);
+        String[] fileA;
+        if(f.isDirectory()) {
+            fileA = f.list();
+            PopupMenu popup = new PopupMenu(EditUciOptions.this, etView);
+            for (int i = 0; i < fileA.length; i++)
+            {
+                popup.getMenu().add(fileA[i]);
+                popup.setOnMenuItemClickListener(item -> {
+                    String fName = item.getTitle().toString();
+                    String fPath = path + File.separator + fName;
+                    File fNew = new File(fPath);
+                    if (fNew.isDirectory())
+                        getFileFromExternalFilesDir(viewId, fPath);
+                    else
+                        setOption(viewId, fPath);
+                    return true;
+                });
+
+            }
+            popup.show();
+        }
+    }
+
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -565,13 +645,37 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
 
     }
 
+    public void showHtml(int resId, int resTitleId)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String prompt = "";
+        try
+        {
+            InputStream inputStream = getResources().openRawResource(resId);
+            byte[] buffer = new byte[inputStream.available()];
+            inputStream.read(buffer);
+            prompt = new String(buffer);
+            inputStream.close();
+        }
+        catch (IOException e) {	e.printStackTrace(); }
+        WebView wv = new WebView(this);
+        builder.setView(wv);
+        wv.loadData(prompt, "text/html; charset=UTF-8", null);
+
+        builder.setTitle(getString(resTitleId));
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     final String TAG = "EditUciOptions";
+    final static int FILE_REQUEST_CODE = 1;
     final String SETOPTION_NAME = "setoption name ";
     final String VALUE = " value ";
     final int NAME_ADD = 10000;
     Intent returnIntent = new Intent();
     TextView title;
     LinearLayout llv = null;
+    Button eo_info = null;
     Button eo_cancel = null;
     Button eo_reset = null;
     Button eo_ok = null;
