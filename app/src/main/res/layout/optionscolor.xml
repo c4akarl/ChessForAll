@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title"
-        android:layout_above="@id/tReset"
+        android:layout_above="@id/btn"
         android:orientation="vertical" >
 
     <RelativeLayout
@@ -308,33 +308,103 @@
             android:onClick="myClickHandler" />
         <View android:id="@+id/div11" style="@style/Divider" android:layout_below="@id/iHighlighting1" />
 
+        <TextView
+            android:id="@+id/tArrowsA"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div11"
+            android:text="@string/colorArrows"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iArrow1"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div11"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tArrowsA"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iArrow2"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div11"
+            android:layout_toRightOf="@id/iArrow1"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iArrow3"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div11"
+            android:layout_toRightOf="@id/iArrow2"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iArrow4"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div11"
+            android:layout_toRightOf="@id/iArrow3"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div12" style="@style/Divider" android:layout_below="@id/iArrow1" />
+
+        <TextView
+            android:id="@+id/tArrowsB"
+            style="@style/c4aTV1"
+            android:layout_below="@id/div12"
+            android:text=""
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/iArrow5"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div12"
+            android:layout_alignLeft="@+id/iFields1"
+            android:layout_toRightOf="@id/tArrowsB"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iArrow6"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div12"
+            android:layout_toRightOf="@id/iArrow5"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iArrow7"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div12"
+            android:layout_toRightOf="@id/iArrow6"
+            android:onClick="myClickHandler" />
+        <TextView
+            android:id="@+id/iArrow8"
+            style="@style/c4aTVColor"
+            android:layout_below="@id/div12"
+            android:layout_toRightOf="@id/iArrow7"
+            android:onClick="myClickHandler" />
+        <View android:id="@+id/div13" style="@style/Divider" android:layout_below="@id/iArrow5" />
+
     </RelativeLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@+id/tReset"
-        style="@style/c4aET1"
-        android:text="@string/colorReset"
-        android:onClick="myClickHandler"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/btn"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rectanglepink"
-        android:layout_marginBottom="20dip"
-        android:layout_marginLeft="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"/>
-
-    <TextView
-        android:id="@+id/tApply"
-        style="@style/c4aET1"
-        android:text="@string/colorApply"
-        android:onClick="myClickHandler"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rectanglegreen"
-        android:layout_marginBottom="20dip"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_marginBottom="@dimen/tv_color_margin_1"
+        android:layout_marginTop="@dimen/tv_color_margin_1"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/tReset"
+            style="@style/c4aTV5"
+            android:onClick="myClickHandler"
+            android:background="@drawable/rectanglepink"
+            android:layout_marginRight="@dimen/tv_color_margin_1"
+            android:text="@string/colorReset" />
+        <TextView
+            android:id="@+id/tApply"
+            style="@style/c4aTV5"
+            android:onClick="myClickHandler"
+            android:background="@drawable/rectanglegreen"
+            android:layout_marginLeft="@dimen/tv_color_margin_1"
+            android:text="@string/colorApply" />
+    </LinearLayout>
 
 </RelativeLayout>

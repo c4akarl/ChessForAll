@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -30,35 +31,44 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         setContentView(R.layout.optionscolor);
 
         colorId = userPrefs.getInt("colorId", 0);
-        title = (TextView) findViewById(R.id.title);
-        eName = (EditText) findViewById(R.id.eName);
+        title = findViewById(R.id.title);
+        eName = findViewById(R.id.eName);
         eName.setHint(getColorHint(colorId));
 
-        iFields1 = (TextView) findViewById(R.id.iFields1);
-        iFields2 = (TextView) findViewById(R.id.iFields2);
-        iPieces1 = (TextView) findViewById(R.id.iPieces1);
-        iPieces2 = (TextView) findViewById(R.id.iPieces2);
-        iFromTo1 = (TextView) findViewById(R.id.iFromTo1);
-        iFromTo2 = (TextView) findViewById(R.id.iFromTo2);
-        iMoveList1 = (TextView) findViewById(R.id.iMoveList1);
-        iMoveList2 = (TextView) findViewById(R.id.iMoveList2);
-        iMoveList3 = (TextView) findViewById(R.id.iMoveList3);
-        iMoveList4 = (TextView) findViewById(R.id.iMoveList4);
-        iEngineList1 = (TextView) findViewById(R.id.iEngineList1);
-        iEngineList2 = (TextView) findViewById(R.id.iEngineList2);
-        iInfo1 = (TextView) findViewById(R.id.iInfo1);
-        iInfo2 = (TextView) findViewById(R.id.iInfo2);
-        iData1 = (TextView) findViewById(R.id.iData1);
-        iData2 = (TextView) findViewById(R.id.iData2);
-        iTime1 = (TextView) findViewById(R.id.iTime1);
-        iTime2 = (TextView) findViewById(R.id.iTime2);
-        iTime3 = (TextView) findViewById(R.id.iTime3);
-        iTime4 = (TextView) findViewById(R.id.iTime4);
-        iHighlighting1 = (TextView) findViewById(R.id.iHighlighting1);
-        iCoordinates1 = (TextView) findViewById(R.id.iCoordinates1);
-        tReset = (TextView) findViewById(R.id.tReset);
+        iFields1 = findViewById(R.id.iFields1);
+        iFields2 = findViewById(R.id.iFields2);
+        iPieces1 = findViewById(R.id.iPieces1);
+        iPieces2 = findViewById(R.id.iPieces2);
+        iFromTo1 = findViewById(R.id.iFromTo1);
+        iFromTo2 = findViewById(R.id.iFromTo2);
+        iCoordinates1 = findViewById(R.id.iCoordinates1);
+        iMoveList1 = findViewById(R.id.iMoveList1);
+        iMoveList2 = findViewById(R.id.iMoveList2);
+        iMoveList3 = findViewById(R.id.iMoveList3);
+        iMoveList4 = findViewById(R.id.iMoveList4);
+        iEngineList1 = findViewById(R.id.iEngineList1);
+        iEngineList2 = findViewById(R.id.iEngineList2);
+        iInfo1 =  findViewById(R.id.iInfo1);
+        iInfo2 = findViewById(R.id.iInfo2);
+        iData1 = findViewById(R.id.iData1);
+        iData2 = findViewById(R.id.iData2);
+        iTime1 = findViewById(R.id.iTime1);
+        iTime2 = findViewById(R.id.iTime2);
+        iTime3 = findViewById(R.id.iTime3);
+        iTime4 = findViewById(R.id.iTime4);
+        iHighlighting1 = findViewById(R.id.iHighlighting1);
+        iArrow1 = findViewById(R.id.iArrow1);
+        iArrow2 = findViewById(R.id.iArrow2);
+        iArrow3 = findViewById(R.id.iArrow3);
+        iArrow4 = findViewById(R.id.iArrow4);
+        iArrow5 = findViewById(R.id.iArrow5);
+        iArrow6 = findViewById(R.id.iArrow6);
+        iArrow7 = findViewById(R.id.iArrow7);
+        iArrow8 = findViewById(R.id.iArrow8);
+
+        tReset =  findViewById(R.id.tReset);
         tReset.setFocusable(false);
-        tApply = (TextView) findViewById(R.id.tApply);
+        tApply =  findViewById(R.id.tApply);
         tApply.setFocusable(false);
 
         initColors(colorId);
@@ -94,6 +104,14 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             case R.id.iTime3: showDialog(null, cv.COLOR_TIME2_BACKGROUND_20, getString(R.string.colorTime) + "(3)"); currentView = iTime3; currentColor = cv.COLOR_TIME2_BACKGROUND_20; break;
             case R.id.iTime4: showDialog(null, cv.COLOR_TIME2_TEXT_21, getString(R.string.colorTime) + "(4)"); currentView = iTime4; currentColor = cv.COLOR_TIME2_TEXT_21; break;
             case R.id.iHighlighting1: showDialog(null, cv.COLOR_HIGHLIGHTING_22, getString(R.string.colorHighlighting)); currentView = iHighlighting1; currentColor = cv.COLOR_HIGHLIGHTING_22; break;
+            case R.id.iArrow1: showDialog(null, cv.COLOR_ARROWS1_23, getString(R.string.colorArrows) + "(1)"); currentView = iArrow1; currentColor = cv.COLOR_ARROWS1_23; break;
+            case R.id.iArrow2: showDialog(null, cv.COLOR_ARROWS2_24, getString(R.string.colorArrows) + "(2)"); currentView = iArrow2; currentColor = cv.COLOR_ARROWS2_24; break;
+            case R.id.iArrow3: showDialog(null, cv.COLOR_ARROWS3_25, getString(R.string.colorArrows) + "(3)"); currentView = iArrow3; currentColor = cv.COLOR_ARROWS3_25; break;
+            case R.id.iArrow4: showDialog(null, cv.COLOR_ARROWS4_26, getString(R.string.colorArrows) + "(4)"); currentView = iArrow4; currentColor = cv.COLOR_ARROWS4_26; break;
+            case R.id.iArrow5: showDialog(null, cv.COLOR_ARROWS5_27, getString(R.string.colorArrows) + "(5)"); currentView = iArrow5; currentColor = cv.COLOR_ARROWS5_27; break;
+            case R.id.iArrow6: showDialog(null, cv.COLOR_ARROWS6_28, getString(R.string.colorArrows) + "(6)"); currentView = iArrow6; currentColor = cv.COLOR_ARROWS6_28; break;
+            case R.id.iArrow7: showDialog(null, cv.COLOR_ARROWS7_29, getString(R.string.colorArrows) + "(7)"); currentView = iArrow7; currentColor = cv.COLOR_ARROWS7_29; break;
+            case R.id.iArrow8: showDialog(null, cv.COLOR_ARROWS8_30, getString(R.string.colorArrows) + "(8)"); currentView = iArrow8; currentColor = cv.COLOR_ARROWS8_30; break;
 
             case R.id.btnMenu:
                 removeDialog(MENU_COLOR_SETTINGS);
@@ -226,6 +244,8 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
     public void onColorChanged(int intColor)
     {
         String hexColor = String.format("#%06X", (0xFFFFFF & intColor));
+        if (alphaSliderEnabled)
+            hexColor = String.format("#%06X", (0xFFFFFFFF & intColor));
         cv.colors[currentColor] = hexColor;
         setTextViewColors(currentView, currentColor);
         setPrefs(colorId);
@@ -266,6 +286,8 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             }
             colors = colors + cv.colors[i] + " ";
         }
+
+        Log.d(TAG, "setPrefs(), colorId: " + colorId + ", colors: " + colors);
 
         SharedPreferences.Editor ed = userPrefs.edit();
         ed.putInt("colorId", colorId);
@@ -370,6 +392,14 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         setTextViewColors(iTime3, cv.COLOR_TIME2_BACKGROUND_20);
         setTextViewColors(iTime4, cv.COLOR_TIME2_TEXT_21);
         setTextViewColors(iHighlighting1, cv.COLOR_HIGHLIGHTING_22);
+        setTextViewColors(iArrow1, cv.COLOR_ARROWS1_23);
+        setTextViewColors(iArrow2, cv.COLOR_ARROWS2_24);
+        setTextViewColors(iArrow3, cv.COLOR_ARROWS3_25);
+        setTextViewColors(iArrow4, cv.COLOR_ARROWS4_26);
+        setTextViewColors(iArrow5, cv.COLOR_ARROWS5_27);
+        setTextViewColors(iArrow6, cv.COLOR_ARROWS6_28);
+        setTextViewColors(iArrow7, cv.COLOR_ARROWS7_29);
+        setTextViewColors(iArrow8, cv.COLOR_ARROWS8_30);
 
     }
 
@@ -403,6 +433,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
     TextView iPieces2 = null;
     TextView iFromTo1 = null;
     TextView iFromTo2 = null;
+    TextView iCoordinates1 = null;
     TextView iMoveList1 = null;
     TextView iMoveList2 = null;
     TextView iMoveList3 = null;
@@ -418,7 +449,14 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
     TextView iTime3 = null;
     TextView iTime4 = null;
     TextView iHighlighting1 = null;
-    TextView iCoordinates1 = null;
+    TextView iArrow1 = null;
+    TextView iArrow2 = null;
+    TextView iArrow3 = null;
+    TextView iArrow4 = null;
+    TextView iArrow5 = null;
+    TextView iArrow6 = null;
+    TextView iArrow7 = null;
+    TextView iArrow8 = null;
 
     TextView tReset = null;
     TextView tApply = null;
@@ -433,6 +471,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
 
     margaritov.preference.colorpicker.ColorPickerDialog dialog;
     private boolean alphaSliderEnabled = false;
+//    private boolean alphaSliderEnabled = true;
 
     TextView title;
 

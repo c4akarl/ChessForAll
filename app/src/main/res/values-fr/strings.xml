@@ -373,5 +373,6 @@
     <string name="menu_left">&gt; &gt; &gt;   Menu</string>
     <string name="menu_right">Menu   &lt; &lt; &lt;</string>
     <string name="uciOptionsInfo">Informations sur les options UCI</string>
+    <string name="colorArrows">Flèches</string>
 
 </resources>
