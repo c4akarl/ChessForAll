@@ -7604,8 +7604,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 
 	//karl --> settings
-	int maxArrows = 6; 		// max display arrows
-//	int maxArrows = 0; 		// max display arrows
+//	int maxArrows = 6; 		// max display arrows
+	int maxArrows = 0; 		// max display arrows
 
 	// sdk >= 30
 //	boolean fileActions = true;
