@@ -66,6 +66,9 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         iArrow7 = findViewById(R.id.iArrow7);
         iArrow8 = findViewById(R.id.iArrow8);
 
+        iArrow3.setVisibility(View.INVISIBLE);
+        iArrow4.setVisibility(View.INVISIBLE);
+
         tReset =  findViewById(R.id.tReset);
         tReset.setFocusable(false);
         tApply =  findViewById(R.id.tApply);
@@ -471,7 +474,6 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
 
     margaritov.preference.colorpicker.ColorPickerDialog dialog;
     private boolean alphaSliderEnabled = false;
-//    private boolean alphaSliderEnabled = true;
 
     TextView title;
 

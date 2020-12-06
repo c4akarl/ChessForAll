@@ -187,7 +187,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		boardView = (BoardView) findViewById(R.id.boardView);
         boardView.setColor();
 		boardView.setOnTouchListener(this);
-		boardView.updateBoardView(gc.fen, gc.isBoardTurn, null, null, null,
+		boardView.updateBoardView(gc.fen, gc.isBoardTurn, BoardView.ARROWS_NONE, null, null, null, null,
 				null,null, false, userPrefs.getBoolean("user_options_gui_BlindMode", false));
 
 		initDrawers();
@@ -1993,7 +1993,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				switch (chessClockControl)
 				{
 					case 1: 	// set current time: white
-//						if (playDialog.isShowing()) {
 						if (isPlayDialog && playDialog.isShowing()) {
 							dSettingTimeWhite = timeSettingsDialog.getTime();
 							d_btn_time_white.setText(tc.getShowValues(dSettingTimeWhite, false));
@@ -2004,7 +2003,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						}
 						break;
 					case 2: 	// set current time: black
-//						if (playDialog.isShowing()) {
 						if (isPlayDialog && playDialog.isShowing()) {
 							dSettingTimeBlack = timeSettingsDialog.getTime();
 							d_btn_time_black.setText(tc.getShowValues(dSettingTimeBlack, false));
@@ -3636,8 +3634,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //					ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 0));
 //					ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 24));
 //					ec.getEngine().setUciHash(16);
+
 					ec.getEngine().setUciPonder(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
-//					ec.getEngine().setStartFen(gc.startFen);
 
 					FileIO f = new FileIO(this);;
 					ec.getEngine().setUciOptsFromFile(f.getDataFromUciFile(f.getUciExternalPath(), ec.getEngine().uciFileName));
@@ -5254,7 +5252,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (cancelTask & ((int) (currentTime - searchStartTimeInfo) > MAX_SEARCH_CANCEL_TIMEOUT))
 						return "NO_RESPOND";
 					if ((int) (currentTime - searchStartTimeInfo) > MAX_SEARCH_TIMEOUT)
-						return "NO_RESPOND";
+						return "TIMEOUT";
 					if (!ec.getEngine().errorMessage.equals("") && (int) (currentTime - searchStartTimeInfo) > MIN_PUBLISH_TIME)
 						return "NO_RESPOND";
 
@@ -5268,10 +5266,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				{
 
 					if (userPrefs.getBoolean("user_options_enginePlay_debugInformation", true)) {
-						// java.lang.StringIndexOutOfBoundsException:
-//						if (s.toString().contains("info string")) {
 						if (s.toString().contains("info string") && s.length() > 14) {
-							engineInfoString = "\n" + s.toString().subSequence(12, s.length() - 1);
+							engineInfoString = engineInfoString + "" + s.toString().subSequence(12, s.length() - 1) + "\n";
 						}
 					}
 					else
@@ -5297,7 +5293,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 								ec.getEngine().statPvScore, ec.getEngine().statIsMate, taskFen);
 						isPV = true;
 					}
-					if (infoShowPv & s.toString().contains("multipv"))
+//					if (infoShowPv & s.toString().contains("multipv"))
+					if (infoShowPv & s.toString().contains("multipv") && !s.toString().contains("bound nodes"))		// !upperbound, !lowerbound
 					{
 						try
 						{
@@ -5329,7 +5326,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //				Log.i(TAG, "searchTask, doInBackground(), isInfo: " + isInfo + ", isPV: " + isPV);
 
-				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isInfo || isPV || s.toString().contains(" mate "))
+//				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isInfo || isPV || s.toString().contains(" mate "))
+				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isPV || s.toString().contains(" mate "))
 				{
 					publishTime = searchStartTimeInfo;
 					publishProgress(ec.getEngine().statPvAction, "" + engineStat + engineMes + engineInfoString, "", searchDisplayMoves);
@@ -5352,6 +5350,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						return tokens[1];						// return "bestmove"
 
 				}
+
+				if (s.toString().contains("ERROR") && s.toString().contains("terminated"))
+					return "NO_RESPOND";
+
 				if (s.toString().contains("error"))
 					ec.getEngine().errorMessage = s.toString();
 
@@ -5382,12 +5384,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		protected void onProgressUpdate(CharSequence... args)
 		{	// called from doInBackground() : publishProgress()
+
+//			Log.i(TAG, "1 onProgressUpdate()");
+
 			CharSequence engineMes = args[1];
 			CharSequence engineStat = args[2];
 			CharSequence displMoves = args[3];
 			if (args[0].toString().equals("99")) {
 
-//				Log.i(TAG, "onProgressUpdate(), info string test: " + engineMes);
+//				Log.i(TAG, "2 onProgressUpdate(), info string test: " + engineMes);
 
 				Toast.makeText(getApplicationContext(), engineMes, Toast.LENGTH_LONG).show();
 			}
@@ -5408,7 +5413,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				return;
 			}
 
-			if (result.equals("NO_RESPOND"))
+			if (result.equals("NO_RESPOND") || result.equals("TIMEOUT"))
 			{
 
 //				Log.i(TAG, "onPostExecute(), messageEngine: " + messageEngine);
@@ -5418,6 +5423,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 				engineAnalysisAutoStop(messageEngine, taskFen, ec.getEngine().statPvBestMove);
 				stopComputerThinking(true);
+				if (result.equals("TIMEOUT"))
+					setInfoMessage(getString(R.string.engine_timeout), null, null, false);
 
 				return;
 			}
@@ -5577,7 +5584,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //					Log.i(TAG, "getInfoPv, statPvIdx: " + statPvIdx + ", infoPv.size(): " + infoPv.size() + ", statPvScore: " + statPvScore + ", statPvMoves: " + statPvMoves);
 
-					searchDisplayMoves = ec.getEngine().getDisplayMoves(ec.getEngine().statPvMoves, maxArrows);
+					searchDisplayMoves = ec.getEngine().getDisplayMoves(ec.getEngine().statPvMoves, userPrefs.getInt("user_options_gui_arrows", OptionsGUI.ARROWS_DEFAULT));
 					bestScore = getBestScore(statPvScore, fen);
 				}
 				CharSequence displayScore = getDisplayScore(statPvScore, fen);
@@ -5661,9 +5668,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		long searchStartTimeInfo = 0;		// info != ""
 		int MAX_SEARCH_CANCEL_TIMEOUT = 1500;	// max. search time engine timeout
-
-		int MAX_SEARCH_TIMEOUT = 60000;			// max. search time engine timeout (1 min: no info message)
-		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
+//		int MAX_SEARCH_TIMEOUT = 60000;			// max. search time engine timeout (1 min: no info message)
+		int MAX_SEARCH_TIMEOUT = 180000;			// max. search time engine timeout (3 min: no info message)
+//		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
+		int MIN_PUBLISH_TIME = 400;				// min. time for publishing
 
 		boolean cancelTask = false;
 
@@ -6391,7 +6399,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							&& gc.cl.p_possibleMoveToList.size() == 0
 							&& !gc.cl.p_stat.equals("9"))
 					{
-						boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, null, gc.cl.p_possibleMoveList, gc.cl.p_possibleMoveToList,
+						boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, BoardView.ARROWS_NONE, null, null, gc.cl.p_possibleMoveList, gc.cl.p_possibleMoveToList,
 								gc.cl.quickMove, gc.move, userPrefs.getBoolean("user_options_gui_Coordinates", false),
 								userPrefs.getBoolean("user_options_gui_BlindMode", false));
 						gc.cl.p_possibleMoveList.clear();
@@ -6974,9 +6982,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //			Log.i(TAG, "3 updateGui(), lastMove: " + lastMove);
 
-			boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, displayArrows, possibleMoves, possibleMovesTo,
+			boardView.updateBoardView(gc.cl.p_fen, gc.isBoardTurn, BoardView.ARROWS_BEST_VARIANT, displayArrows, null, possibleMoves, possibleMovesTo,
 					lastMove, null, userPrefs.getBoolean("user_options_gui_Coordinates", false),
 					userPrefs.getBoolean("user_options_gui_BlindMode", false));
+
 		}
 		if (ec.chessEnginePlayMod != 6)
 		{
@@ -7602,13 +7611,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	boolean isStopAutoPlay = false;
 	int dContinueId = 3; 	// 1 new game, 2 continue, set clock, 3 continue
 
-
 	//karl --> settings
-//	int maxArrows = 6; 		// max display arrows
-	int maxArrows = 0; 		// max display arrows
-
-	// sdk >= 30
-//	boolean fileActions = true;
+//	boolean fileActions = true;		// sdk >= 30
 	boolean fileActions = false;
 
 }

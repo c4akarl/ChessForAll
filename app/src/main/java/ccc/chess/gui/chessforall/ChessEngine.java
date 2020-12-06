@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -88,7 +89,6 @@ public class ChessEngine
         isUciPonder = false;
         uciOptions = "";
 
-//        while (checkTime - startTime <= MAX_ISREADY_TIME)
         while (checkTime - startTime <= MAX_UCI_TIME)
         {
 			if (Thread.currentThread().isInterrupted())
@@ -127,12 +127,6 @@ public class ChessEngine
 
             checkTime = System.currentTimeMillis();
 
-//            if (s.toString().equals("") && (checkTime - startTime >= MIN_SYNC_TIME)) {
-//                errorMessage = engineProcess + ":  uci error";
-//                if (isLogOn)
-//                    Log.i(TAG, "readUCIOptions(), errorMessage: " + errorMessage);
-//                return false;
-//            }
         }
 
 //		if (isLogOn) {
@@ -183,7 +177,6 @@ public class ChessEngine
         writeLineToProcess("isready");
         long startTime = System.currentTimeMillis();
         long checkTime = startTime;
-//        int cntSpace = 0;
 
         while (checkTime - startTime <= MAX_ISREADY_TIME)
         {
@@ -201,11 +194,6 @@ public class ChessEngine
                 return false;
             }
 
-//            if (s.equals(""))   // null
-//                cntSpace++;
-//            else
-//                cntSpace = 0;
-
             if (s.equals("readyok"))
             {
                 engineState = EngineState.IDLE;
@@ -214,12 +202,6 @@ public class ChessEngine
 
             checkTime = System.currentTimeMillis();
 
-//            if (s.toString().equals("") && (checkTime - startTime >= MIN_SYNC_TIME)) {
-//                errorMessage = engineProcess + ":  isready error";
-//                if (isLogOn)
-//                    Log.i(TAG, "syncReady(), errorMessage: " + errorMessage);
-//                return false;
-//            }
         }
 
         errorMessage = engineProcess + ":  isready error";
@@ -475,7 +457,6 @@ public class ChessEngine
     }
 
     public void setIsChess960(boolean chess960) {isChess960 = chess960;}
-//    public void setStartFen(CharSequence fen) {startFen = fen;}
 
     public CharSequence getRandomFirstMove()
     {
@@ -750,12 +731,29 @@ public class ChessEngine
                 if (split[i].startsWith("setoption")) {
                     try
                     {
-                        writeToProcess(split[i] + "\n");
+                        if (isFilePathOK(split[i]))
+                            writeToProcess(split[i] + "\n");
                     }
                     catch (IOException e) {e.printStackTrace();}
                 }
             }
         }
+    }
+
+    Boolean isFilePathOK(String uciOption)
+    {
+        if (uciOption.contains("/files/")) {
+            String[] split = uciOption.split(" ");
+            if (split.length >= 0) {
+                File file = new File(split[split.length -1]);
+                if (!file.exists()) {
+                    if (isLogOn)
+                        Log.i(TAG, "file not exists: " + uciOption);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public final synchronized boolean engineInit() {

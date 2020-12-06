@@ -4,12 +4,14 @@
     <dimen name="v_text_size_2">14sp</dimen>
     <dimen name="tv_text_size">18sp</dimen>
     <dimen name="tv_text_size_14">20sp</dimen>
+    <dimen name="tv_text_size_36">54sp</dimen>
     <dimen name="tv2_text_size">24sp</dimen>
     <dimen name="tv_height">60dp</dimen>
     <dimen name="tv_width">160dp</dimen>
     <dimen name="tv_width_2">240dp</dimen>
     <dimen name="tv_width_3">300dp</dimen>
     <dimen name="title_text_size">22sp</dimen>
+    <dimen name="margin1">2dp</dimen>
     <dimen name="margin_1">20dp</dimen>
     <dimen name="margin_2">40dp</dimen>
     <dimen name="tv_color_size">40dp</dimen>

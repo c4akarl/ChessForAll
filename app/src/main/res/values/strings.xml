@@ -373,6 +373,8 @@
     <string name="menu_left">&gt; &gt; &gt;   Menu</string>
     <string name="menu_right"> Menu   &lt; &lt; &lt;</string>
     <string name="uciOptionsInfo">UCI-Options Information</string>
-    <string name="colorArrows">Arrows</string>
+    <string name="colorArrows">Arrows 1</string>
+    <string name="colorArrows2">Arrows 2</string>
+    <string name="arrows">Arrows</string>
 
 </resources>

@@ -12,8 +12,6 @@ public class ColorValues
     void setColors(int colorId, String colorValues)
     {
         colors = colorValues.split(" ");
-//        int colorCnt = 23;
-//        if (colors.length != colorCnt)
         if (colors.length != COLOR_CNT)
         {
             switch (colorId)
@@ -42,26 +40,19 @@ public class ColorValues
         return Color.parseColor(colors[colorId]);
     }
 
-//    public int getAlphaColor(int colorId, String alpha)
-//    {
-//        String argb = colors[colorId];
-//        argb = argb.replace("#", alpha);
-//        return Color.parseColor(argb);
-//    }
-
     String[] colors = null;
 
     // color default values
     private final static String COLORS_0 = "? #f9f9cc #e2a156 #ffffff #000000 #E1698E #FF0023 #f43619 #efe395 #000000 #1BE91B #b2d9e4 #ced1d6 #000000 #f6d2f4 #000000 " +   // brown
-            "#c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4 #58A50E #F1D907 #E4682E #F1072A #0BDCAB #2196F3 #2250C5 #4412B8";
+            "#c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4 #4412B8 #58A50E #E4682E #2196F3 #23B515 #F4D50B #F3501D #F40657";
     private final static String COLORS_1 = "? #F2E0F2 #9F829E #ffffff #000000 #4FAD52 #12EF0F #EC1855 #DBC39D #121201 #1BE91B #21accf #CCD6E7 #000000 #f6d2f4 #000000 " +   // violet
-            "#c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #EAA7E6 #58A50E #F1D907 #E4682E #F1072A #0BDCAB #2196F3 #2250C5 #4412B8";
+            "#c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #EAA7E6 #4412B8 #58A50E #E4682E #2196F3 #23B515 #F4D50B #F3501D #F40657";
     private final static String COLORS_2 = "? #BDBDB2 #817D74 #ffffff #000000 #e1817e #ea2915 #f43619 #ABAB95 #100F01 #1BE91B #21accf #ced1d6 #000000 #f6d2f4 #000000 " +   // grey
-            "#D5E9D4 #000000 #EBABE8 #000000 #c4f8c0 #000000 #D0AFCE #58A50E #F1D907 #E4682E #F1072A #0BDCAB #2196F3 #2250C5 #4412B8";
+            "#D5E9D4 #000000 #EBABE8 #000000 #c4f8c0 #000000 #D0AFCE #4412B8 #58A50E #E4682E #2196F3 #23B515 #F4D50B #F3501D #F40657";
     private final static String COLORS_3 = "? #EEEEEE #4C5B75 #F4F4F4 #0B0B0B #e1817e #FF230E #000000 #F0F0F0 #000000 #1BE91B #A0A0F0 #F0F0F0 #000000 #F0F0F0 #000000 " +   // blue
-            "#F0F0F0 #000000 #F0F0F0 #000000 #F0F0F0 #000000 #F0B0F0 #58A50E #F1D907 #E4682E #F1072A #0BDCAB #2196F3 #2250C5 #4412B8";
+            "#F0F0F0 #000000 #F0F0F0 #000000 #F0F0F0 #000000 #F0B0F0 #4412B8 #58A50E #E4682E #2196F3 #23B515 #F4D50B #F3501D #F40657";
     private final static String COLORS_4 = "? #f9f9cc #85AB81 #ffffff #000000 #e1817e #ea2915 #f43619 #E5DDA5 #000000 #1BE91B #21accf #ced1d6 #000000 #f6d2f4 #000000 " +   // green
-            "#c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4 #58A50E #F1D907 #E4682E #F1072A #0BDCAB #2196F3 #2250C5 #4412B8";
+            "#c4f8c0 #000000 #f6d2f4 #000000 #c4f8c0 #000000 #f6d2f4 #4412B8 #58A50E #E4682E #2196F3 #23B515 #F4D50B #F3501D #F40657";
 
     final int COLOR_CNT = 31;
     // color id(COLORS_0...4):

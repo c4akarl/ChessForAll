@@ -348,7 +348,7 @@
             android:id="@+id/tArrowsB"
             style="@style/c4aTV1"
             android:layout_below="@id/div12"
-            android:text=""
+            android:text="@string/colorArrows2"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="15dp"
             android:layout_marginRight="50dp"

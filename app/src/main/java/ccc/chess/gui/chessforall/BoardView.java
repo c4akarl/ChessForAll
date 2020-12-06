@@ -83,12 +83,19 @@ public class BoardView extends View
 
     }
 
-    public void updateBoardView(CharSequence fen, boolean boardTurn, ArrayList<CharSequence> displayArrows, ArrayList<CharSequence> possibleMoves,
+    public void updateBoardView(CharSequence fen, boolean boardTurn, int arrowMode, ArrayList<CharSequence> displayArrows, ArrayList<CharSequence> scoreArrows, ArrayList<CharSequence> possibleMoves,
                                 ArrayList<CharSequence> possibleMovesTo, CharSequence lastMove, CharSequence selectedMove, boolean coordinates, boolean blindMode)
     {
+
+//        Log.i(TAG, "updateBoardView(), arrowMode: " + arrowMode + ", displayArrows: " + displayArrows);
+//        if (displayArrows != null)
+//            Log.i(TAG, "updateBoardView(), arrowMode: " + arrowMode + ", displayArrows.size: " + displayArrows.size());
+
         posFen = "";
         isBoardTurn = boardTurn;
+        this.arrowMode = arrowMode;
         this.displayArrows = displayArrows;
+        this.scoreArrows = scoreArrows;
         this.possibleMoves = possibleMoves;
         this.possibleMovesTo = possibleMovesTo;
         this.lastMove = lastMove;
@@ -622,59 +629,93 @@ public class BoardView extends View
                 int size = 80;
                 int star = 0;
 
-                int mode = 0;
 
-                if (mode == 1) {
-                    // Mode-V : one engine, some variations
-                    // only show first move of each variation
-                    // maybe show more moves of the best variation (maybe only answer-move)?
-                    // need the score for each variation, visually show it
 
-                    // ToDo ideas:
-                    // - bigger size for higher score
-                    // - more transparent for lower score
-                    // - different (dominant) colors? (green for best move, yellow second, red third, ...)
-                    //      (maybe than, Mode-M should also use "green for best move" as "next move"?)
 
-                } else if (mode == 2) {
-                    // Mode-E : some engines, one variation each
-                    // difficulty to visually show the score - but how usefull is it?
-                    //    (because many engines can suggest the same move)
+//                int mode = 0;
+//
+//                if (mode == 1) {
+//                    // Mode-V : one engine, some variations
+//                    // only show first move of each variation
+//                    // maybe show more moves of the best variation (maybe only answer-move)?
+//                    // need the score for each variation, visually show it
+//
+//                    // ToDo ideas:
+//                    // - bigger size for higher score
+//                    // - more transparent for lower score
+//                    // - different (dominant) colors? (green for best move, yellow second, red third, ...)
+//                    //      (maybe than, Mode-M should also use "green for best move" as "next move"?)
+//
+//                } else if (mode == 2) {
+//                    // Mode-E : some engines, one variation each
+//                    // difficulty to visually show the score - but how usefull is it?
+//                    //    (because many engines can suggest the same move)
+//
+//                    // ToDo ideas:
+//                    // - all arrows the same size (much smaller, because many engines showing the same move)
+//                    // - more transparent for lower score (difficulty: color => name of engine)
+//
+//                } else {
+//                    // Mode-M : one engine, one variation (show first n moves)
+//
+//                    // ToDo ideas:
+//                    // - var 1) one color for player to move NEXT, other color for other player?
+//                    // - var 2) one color for white player, other color for other player?
+//                    // - variation) maybe dominant color only for first (and maybe second) move and
+//                    //   "decent" colors for other moves?
+//
+//                    // Following example for 6 arrows (maximum), must be adjusted if more (or also less) arrows
+//
+//                    //--- int a = i / 2;
+//                    //--- if (a >= colorAlpha.length)
+//                    //---     a = colorAlpha.length -1;
+//                    int darken=3;
+//                    if (i % 2 > 0) { // player to move next
+//                        //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS2_24, colorAlpha[a]);
+//                        //--- colorStroke = Color.BLACK;
+//                        colorFill = Color.argb(250-20*i, 0x65, 0x9f, 0x46);
+//                        colorStroke = Color.argb(0xFF, 0x65/darken, 0x9f/darken, 0x46/darken);
+//                    } else { // other player
+//                        //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS1_23, colorAlpha[a]);
+//                        //--- colorStroke = Color.BLACK;
+//                        colorFill = Color.argb(250-20*i, 0x4C, 0x45, 0x93);
+//                        colorStroke = Color.argb(0xFF, 0x4C/darken, 0x45/darken, 0x93/darken);
+//                    }
+//                    strokeWidth = 2;
+//                    size = (int)(90 - 15*i);
+//                    star = 100;
+//                }
 
-                    // ToDo ideas:
-                    // - all arrows the same size (much smaller, because many engines showing the same move)
-                    // - more transparent for lower score (difficulty: color => name of engine)
 
-                } else {
-                    // Mode-M : one engine, one variation (show first n moves)
 
-                    // ToDo ideas:
-                    // - var 1) one color for player to move NEXT, other color for other player?
-                    // - var 2) one color for white player, other color for other player?
-                    // - variation) maybe dominant color only for first (and maybe second) move and
-                    //   "decent" colors for other moves?
+                // BCM, Karl
+                switch (arrowMode)
+                {
+                    case BoardView.ARROWS_BEST_VARIANT:
+                        int darken=3;
+//                        if (i % 2 > 0) { // player to move next
+                        if (i % 2 == 0) { // player to move next
+                            //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS2_24, colorAlpha[a]);
+                            //--- colorStroke = Color.BLACK;
+//                            colorFill = Color.argb(250-20*i, 0x65, 0x9f, 0x46);
+                            colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
+                            colorStroke = Color.argb(0xFF, 0x65/darken, 0x9f/darken, 0x46/darken);
+                        } else { // other player
+                            //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS1_23, colorAlpha[a]);
+                            //--- colorStroke = Color.BLACK;
+//                            colorFill = Color.argb(250-20*i, 0x4C, 0x45, 0x93);
+                            colorFill = cv.getColor(cv.COLOR_ARROWS2_24);
+                            colorStroke = Color.argb(0xFF, 0x4C/darken, 0x45/darken, 0x93/darken);
+                        }
+                        strokeWidth = 2;
+                        size = (int)(90 - 15*i);
+                        star = 100;
+                        break;
+                    case BoardView.ARROWS_BEST_MOVES:
 
-                    // Following example for 6 arrows (maximum), must be adjusted if more (or also less) arrows
-
-                    //--- int a = i / 2;
-                    //--- if (a >= colorAlpha.length)
-                    //---     a = colorAlpha.length -1;
-                    int darken=3;
-                    if (i % 2 > 0) { // player to move next
-                        //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS2_24, colorAlpha[a]);
-                        //--- colorStroke = Color.BLACK;
-                        colorFill = Color.argb(250-20*i, 0x65, 0x9f, 0x46);
-                        colorStroke = Color.argb(0xFF, 0x65/darken, 0x9f/darken, 0x46/darken);
-                    } else { // other player
-                        //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS1_23, colorAlpha[a]);
-                        //--- colorStroke = Color.BLACK;
-                        colorFill = Color.argb(250-20*i, 0x4C, 0x45, 0x93);
-                        colorStroke = Color.argb(0xFF, 0x4C/darken, 0x45/darken, 0x93/darken);
-                    }
-                    strokeWidth = 2;
-                    size = (int)(90 - 15*i);
-                    star = 100;
+                        break;
                 }
+
 
                 // DrawArrow: from, to, size, star, colorFill, colorStroke, strokeWidth, SameCount, SameNr
 
@@ -725,7 +766,7 @@ public class BoardView extends View
 
     }
 
-//    final String TAG = "BoardView";
+    final String TAG = "BoardView";
 
     Context context;
     SharedPreferences userPrefs;
@@ -807,7 +848,9 @@ public class BoardView extends View
     private Rect mRect;
     CharSequence posFen = "";
     boolean isBoardTurn;
+    int arrowMode = ARROWS_NONE;
     ArrayList<CharSequence> displayArrows;
+    ArrayList<CharSequence> scoreArrows;
     ArrayList<CharSequence> possibleMoves;
     ArrayList<CharSequence> possibleMovesTo;
     CharSequence lastMove;
@@ -815,11 +858,10 @@ public class BoardView extends View
     boolean isCoordinates;
     boolean isBlindMode = false;
 
-    private String[] colorAlpha = {
-            "#AA",
-            "#88",
-            "#66"
-    };
+    final static int ARROWS_NONE            = 900000;
+    final static int ARROWS_BEST_VARIANT    = 120000;
+    final static int ARROWS_BEST_MOVES      = 240000;
 
     private char[] charFen = new char[64];
+
 }

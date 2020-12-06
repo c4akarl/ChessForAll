@@ -6,7 +6,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -25,6 +27,9 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 
 	public void onCreate(Bundle savedInstanceState) 
 	{
+
+		Log.i(TAG, "onCreate()");
+
         super.onCreate(savedInstanceState);
 		u = new Util();
 		userPrefs = getSharedPreferences("user", 0);
@@ -47,24 +52,33 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 		tvGuPieceName = (TextView) findViewById(R.id.tvGuPieceName);
         getPrefs();
 		tvGuPieceName.setText(getString(R.string.pieceNames) + ": " + getPieceNames(pieceNameId));
-	}
-
-	public void myClickHandler(View view) 				
-    {
-		Intent returnIntent;
-		switch (view.getId()) 
-		{
-		case R.id.btnGuOk:
-			setPrefs();
-        	returnIntent = new Intent();
-       		setResult(RESULT_OK, returnIntent);
-			finish();
-			break;
-		case R.id.tvGuPieceName:
+		tvGuPieceName.setOnClickListener(v -> {
 			removeDialog(MENU_PIECE_NAMES);
 			showDialog(MENU_PIECE_NAMES);
-			break;
-		}
+		});
+		tvMinus = (TextView) findViewById(R.id.tvMinus);
+		tvMinus.setOnClickListener(v -> {
+			arrows--;
+			setArrows();
+		});
+		tvValue = (TextView) findViewById(R.id.tvValue);
+		tvValue.setText(Integer.toString(arrows));
+		tvPlus = (TextView) findViewById(R.id.tvPlus);
+		tvPlus.setOnClickListener(v -> {
+			arrows++;
+			setArrows();
+		});
+		setArrows();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+
+		Log.i(TAG, "onConfigurationChanged()");
+
+		super.onConfigurationChanged(newConfig);
+		setPrefs();
 	}
 
 	@Override
@@ -116,6 +130,39 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 
 	}
 
+	public void myClickHandler(View view)
+	{
+
+//		Log.i(TAG, "myClickHandler(), view.getId(): " + view.getId());
+
+		Intent returnIntent;
+		switch (view.getId())
+		{
+			case R.id.btnGuOk:
+				setPrefs();
+				returnIntent = new Intent();
+				setResult(RESULT_OK, returnIntent);
+				finish();
+				break;
+		}
+	}
+
+	public void setArrows()
+	{
+		tvMinus.setBackgroundResource(R.drawable.rectanglepink);
+		tvPlus.setBackgroundResource(R.drawable.rectanglegreen);
+		if (arrows <= ARROWS_MIN) {
+			arrows = ARROWS_MIN;
+			tvMinus.setBackgroundResource(R.drawable.rectanglegrey);
+		}
+		tvValue.setText(Integer.toString(arrows));
+		if (arrows >= ARROWS_MAX) {
+			arrows = ARROWS_MAX;
+			tvValue.setText(Integer.toString(arrows));
+			tvPlus.setBackgroundResource(R.drawable.rectanglegrey);
+		}
+	}
+
 	@Override
 	public void getCallbackValue(int btnValue)
 	{
@@ -155,6 +202,7 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
        	ed.putBoolean("user_options_gui_Coordinates", cbGuCoordinates.isChecked());
        	ed.putBoolean("user_options_gui_BlindMode", cbGuBlindMode.isChecked());
        	ed.putInt("user_options_gui_PieceNameId", pieceNameId);
+       	ed.putInt("user_options_gui_arrows", arrows);
         ed.commit();
 	}
 
@@ -173,9 +221,10 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 		cbGuCoordinates.setChecked(userPrefs.getBoolean("user_options_gui_Coordinates", false));
 		cbGuBlindMode.setChecked(userPrefs.getBoolean("user_options_gui_BlindMode", false));
 		pieceNameId = userPrefs.getInt("user_options_gui_PieceNameId", pieceNameId);
+		arrows = userPrefs.getInt("user_options_gui_arrows", arrows);
 	}
 
-	final String TAG = "PlaySettings";
+	final String TAG = "OptionsGUI";
 	Util u;
 	SharedPreferences userPrefs;
 	SharedPreferences runPrefs;
@@ -193,7 +242,14 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 	CheckBox cbGuCoordinates;
 	CheckBox cbGuBlindMode;
 	TextView tvGuPieceName;
+	TextView tvMinus;
+	TextView tvValue;
+	TextView tvPlus;
 
 	int pieceNameId = 0;
+	final static int ARROWS_DEFAULT = 6;
+	int ARROWS_MIN = 0;
+	int ARROWS_MAX = 8;
+	int arrows = ARROWS_DEFAULT;
 
 }

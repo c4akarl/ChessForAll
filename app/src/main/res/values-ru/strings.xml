@@ -353,6 +353,8 @@
     <string name="menu_left">&gt; &gt; &gt;   Меню</string>
   <string name="menu_right">Меню   &lt; &lt; &lt;</string>
     <string name="uciOptionsInfo">Информация об опциях UCI</string>
-    <string name="colorArrows">Стрелы</string>
+    <string name="colorArrows">Стрелы 1</string>
+  <string name="colorArrows2">Стрелы 2</string>
+    <string name="arrows">Стрелы</string>
 
 </resources>

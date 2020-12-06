@@ -372,5 +372,7 @@
     <string name="menu_left">&gt; &gt; &gt;   Menü</string>
     <string name="menu_right">" Menü   &lt; &lt; &lt;"</string>
     <string name="uciOptionsInfo">Informationen zu UCI-Optionen</string>
-    <string name="colorArrows">Pfeile</string>
+    <string name="colorArrows">Pfeile 1</string>
+    <string name="colorArrows2">Pfeile 2</string>
+    <string name="arrows">Pfeile</string>
 </resources>
