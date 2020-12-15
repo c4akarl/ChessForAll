@@ -295,7 +295,7 @@
     <string name="fmFileNoWritePermissions">No write permissions:</string>
     <string name="btn_Continue">Continue</string>
     <string name="epPonder">Ponder</string>
-    <string name="engineDisplayedLines">Displayed lines</string>
+    <string name="engineDisplayedLines">Lines</string>
     <string name="engineThinking">Thinking</string>
     <string name="engineError">Engine error</string>
     <string name="epShowBookHints">Show book hints</string>

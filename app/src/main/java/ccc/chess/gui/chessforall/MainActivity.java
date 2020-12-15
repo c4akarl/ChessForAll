@@ -1619,6 +1619,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						showDialog(MENU_SELECT_ENGINE_FROM_OEX);
 						break;
 					case MENU_ENGINE_SETTINGS:
+						stopComputerThinking(false);
 						startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
 						break;
 					case MENU_ENGINE_UCI:
@@ -1673,9 +1674,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					switch (finalActions.get(item))
 					{
 						case MENU_SETTINGS_GUI:
+							stopComputerThinking(false);
 							startActivityForResult(optionsGuiIntent, OPTIONS_GUI_REQUEST_CODE);
 							break;
 						case MENU_SETTINGS_COMPUTER:
+							stopComputerThinking(false);
 							startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
 							break;
 						case MENU_SETTINGS_COLOR:
@@ -2457,6 +2460,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				showDialog(MENU_SETTINGS_DIALOG);
 				break;
 			case R.id.btn_2:	// computer settings
+				stopComputerThinking(false);
 				startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
 				break;
 			case R.id.btn_3:    // auto play
@@ -7194,6 +7198,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					removeDialog(PLAY_DIALOG);
 					break;
 				case R.id.btn_engine_setting:
+					stopComputerThinking(false);
 					startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
 					removeDialog(PLAY_DIALOG);
 					break;

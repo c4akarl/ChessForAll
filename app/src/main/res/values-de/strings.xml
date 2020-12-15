@@ -179,7 +179,7 @@
     <string name="epEngineMessage">Berechnungen anzeigen</string>
     <string name="epRandomFirstMove">Zufälliger erster Zug (weiss)</string>
     <string name="epAutoStartEngine">Engine Autostart</string>
-    <string name="epOpeningBook">Eröffnungs-buch</string>
+    <string name="epOpeningBook">Eröffnungsbuch</string>
     <string name="epBookHint">book.bin</string>
     <string name="epMultiPv">Varianten</string>
     <string name="epPvMoves">Züge</string>
@@ -294,7 +294,7 @@
     <string name="fmFileNoWritePermissions">Keine Schreibrechte:</string>
     <string name="btn_Continue">Weiter</string>
     <string name="epPonder">Vorausberechnung</string>
-    <string name="engineDisplayedLines">Angezeigte Zeilen</string>
+    <string name="engineDisplayedLines">Zeilen</string>
     <string name="engineThinking">Berechnung</string>
     <string name="engineError">Engine-Fehler</string>
     <string name="epShowBookHints">EB-Hinweise</string>

@@ -55,28 +55,66 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:orientation="vertical" >
-
-		<TextView
-			android:id="@+id/tvGuPieceName"
-			style="@style/c4aTV4"
+		<LinearLayout
+			android:id="@+id/llPieces"
 			android:layout_width="wrap_content"
-			android:layout_marginTop="@dimen/margin_1"
-			android:layout_marginLeft="@dimen/margin_1"
-			android:paddingLeft="2dp"
-			android:paddingRight="2dp"
-			android:background="@drawable/rectangleyellow"
-			android:text="@string/pieceNames" />
-
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/margin_1"
+			android:orientation="horizontal" >
+			<TextView
+				android:id="@+id/piecesMinus"
+				style="@style/c4aTV4"
+				android:layout_width="@dimen/btn_size_70"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/margin_1"
+				android:layout_marginLeft="@dimen/margin_1"
+				android:layout_marginRight="0dp"
+				android:paddingTop="0dp"
+				android:paddingBottom="0dp"
+				android:paddingLeft="@dimen/margin_1"
+				android:paddingRight="@dimen/margin_1"
+				android:background="@drawable/rectanglepink"
+				android:textSize="@dimen/tv_text_size_36"
+				android:text="-" />
+			<TextView
+				android:id="@+id/piecesValue"
+				style="@style/c4aTV4"
+				android:layout_width="@dimen/tv_width_160"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/margin_1"
+				android:layout_marginLeft="@dimen/margin1"
+				android:layout_marginRight="@dimen/margin1"
+				android:paddingTop="0dp"
+				android:paddingBottom="0dp"
+				android:paddingLeft="@dimen/margin_1"
+				android:paddingRight="@dimen/margin_1"
+				android:background="@drawable/rectangleyellow"
+				android:textSize="@dimen/tv_text_size_36"
+				android:text="KQRBN" />
+			<TextView
+				android:id="@+id/piecesPlus"
+				style="@style/c4aTV4"
+				android:layout_width="@dimen/btn_size_70"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/margin_1"
+				android:layout_marginLeft="0dp"
+				android:paddingTop="0dp"
+				android:paddingBottom="0dp"
+				android:paddingLeft="@dimen/margin_1"
+				android:paddingRight="@dimen/margin_1"
+				android:background="@drawable/rectanglegreen"
+				android:textSize="@dimen/tv_text_size_36"
+				android:text="+" />
+		</LinearLayout>
 		<LinearLayout
 			android:id="@+id/llArrows"
-			android:layout_below="@id/tvGuPieceName"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="@dimen/margin_1"
 			android:orientation="horizontal" >
 			<TextView
 				style="@style/c4aTV1"
-				android:layout_width="wrap_content"
+				android:layout_width="@dimen/tv_width"
 				android:layout_height="wrap_content"
 				android:paddingTop="0dip"
 				android:paddingLeft="0dip"
@@ -128,58 +166,39 @@
 				android:textSize="@dimen/tv_text_size_36"
 				android:text="+" />
 		</LinearLayout>
-
 		<CheckBox android:id="@+id/cbGuStatusBar"
-			android:layout_below="@id/llArrows"
 			style="@style/c4aCB1"
 			android:text="@string/guStatusBar" />
 		<CheckBox android:id="@+id/cbGuFlipBoard"
-			android:layout_below="@id/cbGuStatusBar"
 			style="@style/c4aCB1"
 			android:text="@string/menu_board_flip" />
 		<CheckBox android:id="@+id/cbGuLastPosition"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuFlipBoard"
 			android:text="@string/guLastPosition" />
 		<CheckBox android:id="@+id/cbGuDisableScreenTimeout"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuLastPosition"
 			android:text="@string/guDisableScreenTimeout" />
-
 		<CheckBox android:id="@+id/cbGuPosibleMoves"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuDisableScreenTimeout"
 			android:text="@string/play_posibleMoves" />
 		<CheckBox android:id="@+id/cbGuQuickMove"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuPosibleMoves"
 			android:text="@string/play_quickMove" />
-
 		<CheckBox android:id="@+id/cbGuGameNavigationBoard"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuQuickMove"
 			android:text="@string/guGameNavigationBoard" />
 		<CheckBox android:id="@+id/cbGuUsePgnDatabase"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuGameNavigationBoard"
 			android:text="@string/guUsePgnDatabase" />
 		<CheckBox android:id="@+id/cbGuEnableSounds"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuUsePgnDatabase"
 			android:text="@string/guEnableSounds" />
 		<CheckBox android:id="@+id/cbGuCoordinates"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuEnableSounds"
 			android:text="@string/guDisplayCoordinates" />
 		<CheckBox android:id="@+id/cbGuBlindMode"
 			style="@style/c4aCB1"
-			android:layout_below="@id/cbGuCoordinates"
 			android:text="@string/guBlindMode" />
-
-
-
-
-
 
 	</LinearLayout>
 

@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,7 +30,7 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 	public void onCreate(Bundle savedInstanceState) 
 	{
 
-		Log.i(TAG, "onCreate()");
+//		Log.i(TAG, "onCreate()");
 
         super.onCreate(savedInstanceState);
 		u = new Util();
@@ -37,6 +39,8 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u.updateFullscreenStatus(this, userPrefs.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.optionsgui);
+		tvTitle = (TextView) findViewById(R.id.title);
+		setTextViewColors(tvTitle, "#ced1d6");
         etGuPlayerName = (EditText) findViewById(R.id.etGuPlayerName);
         cbGuStatusBar = (CheckBox) findViewById(R.id.cbGuStatusBar);
 		cbGuFlipBoard = (CheckBox) findViewById(R.id.cbGuFlipBoard);
@@ -49,86 +53,114 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
         cbGuEnableSounds = (CheckBox) findViewById(R.id.cbGuEnableSounds);
         cbGuCoordinates = (CheckBox) findViewById(R.id.cbGuCoordinates);
 		cbGuBlindMode = (CheckBox) findViewById(R.id.cbGuBlindMode);
-		tvGuPieceName = (TextView) findViewById(R.id.tvGuPieceName);
-        getPrefs();
-		tvGuPieceName.setText(getString(R.string.pieceNames) + ": " + getPieceNames(pieceNameId));
-		tvGuPieceName.setOnClickListener(v -> {
-			removeDialog(MENU_PIECE_NAMES);
-			showDialog(MENU_PIECE_NAMES);
+//		tvGuPieceName = (TextView) findViewById(R.id.tvGuPieceName);
+//		setTextViewColors(tvGuPieceName, "#efe395");
+//        getPrefs();
+//		tvGuPieceName.setText(getString(R.string.pieceNames) + ": " + getPieceNames(pieceNameId));
+//		tvGuPieceName.setOnClickListener(v -> {
+//			removeDialog(MENU_PIECE_NAMES);
+//			showDialog(MENU_PIECE_NAMES);
+//		});
+
+		getPrefs();
+
+		piecesMinus =  findViewById(R.id.piecesMinus);
+		piecesMinus.setOnClickListener(v -> {
+			pieceNameId--;
+			setPieces();
 		});
-		tvMinus = (TextView) findViewById(R.id.tvMinus);
+		piecesValue = findViewById(R.id.piecesValue);
+		piecesValue.setText(getPieceNames(pieceNameId));
+		piecesValue.setOnClickListener(v -> {
+			pieceNameId = PIECES_DEFAULT;
+			setPieces();
+		});
+		piecesPlus = (TextView) findViewById(R.id.piecesPlus);
+		piecesPlus.setOnClickListener(v -> {
+			pieceNameId++;
+			setPieces();
+		});
+		setPieces();
+
+		tvMinus = findViewById(R.id.tvMinus);
 		tvMinus.setOnClickListener(v -> {
 			arrows--;
 			setArrows();
 		});
-		tvValue = (TextView) findViewById(R.id.tvValue);
+		tvValue = findViewById(R.id.tvValue);
 		tvValue.setText(Integer.toString(arrows));
-		tvPlus = (TextView) findViewById(R.id.tvPlus);
+		tvValue.setOnClickListener(v -> {
+			arrows = ARROWS_DEFAULT;
+			setArrows();
+		});
+		tvPlus = findViewById(R.id.tvPlus);
 		tvPlus.setOnClickListener(v -> {
 			arrows++;
 			setArrows();
 		});
 		setArrows();
+
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 
-		Log.i(TAG, "onConfigurationChanged()");
+//		Log.i(TAG, "onConfigurationChanged()");
 
 		super.onConfigurationChanged(newConfig);
 		setPrefs();
 	}
 
-	@Override
-	protected Dialog onCreateDialog(int id)
-	{
-		if (id == MENU_PIECE_NAMES)
-		{
-			final int MENU_ENGLISH 				= 0;
-			final int MENU_LOCAL_LANGUAGE 		= 1;
-			final int MENU_FIGURINE_NOTATION 	= 2;
-			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
-			List<Integer> actions = new ArrayList<Integer>();
-			arrayAdapter.add(getString(R.string.pieceNamesEnglish) 			+ ": " + getPieceNames(0));   actions.add(MENU_ENGLISH);
-			arrayAdapter.add(getString(R.string.pieceNamesLocalLanguage) 	+ ": " + getPieceNames(1));   actions.add(MENU_LOCAL_LANGUAGE);
-			arrayAdapter.add(getString(R.string.pieceNamesFigurineNotation) + ": " + getPieceNames(2));   actions.add(MENU_FIGURINE_NOTATION);
-			final List<Integer> finalActions = actions;
-			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-			builder.setCancelable(true);
-			TextView tv = new TextView(getApplicationContext());
-			tv.setText(R.string.pieceNames);
-			tv.setTextAppearance(this, R.style.c4aDialogTitle);
-			tv.setGravity(Gravity.CENTER_HORIZONTAL);
-			builder.setCustomTitle(tv );
-			builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener()
-			{
-				public void onClick(DialogInterface dialog, int item)
-				{
-					switch (finalActions.get(item))
-					{
-						case MENU_ENGLISH:
-							pieceNameId = 0;
-							break;
-						case MENU_LOCAL_LANGUAGE:
-							pieceNameId = 1;
-							break;
-						case MENU_FIGURINE_NOTATION:
-							pieceNameId = 2;
-							break;
-					}
-					removeDialog(MENU_PIECE_NAMES);
-					tvGuPieceName.setText(getString(R.string.pieceNames) + ": " + getPieceNames(pieceNameId));
-				}
-			});
-			AlertDialog alert = builder.create();
-			return alert;
-		}
-
-		return null;
-
-	}
+//	@Override
+//	protected Dialog onCreateDialog(int id)
+//	{
+//
+//		if (id == MENU_PIECE_NAMES)
+//		{
+//			final int MENU_ENGLISH 				= 0;
+//			final int MENU_LOCAL_LANGUAGE 		= 1;
+//			final int MENU_FIGURINE_NOTATION 	= 2;
+//			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
+//			List<Integer> actions = new ArrayList<Integer>();
+//			arrayAdapter.add(getString(R.string.pieceNamesEnglish) 			+ ": " + (0)getPieceNames);   actions.add(MENU_ENGLISH);
+//			arrayAdapter.add(getString(R.string.pieceNamesLocalLanguage) 	+ ": " + getPieceNames(1));   actions.add(MENU_LOCAL_LANGUAGE);
+//			arrayAdapter.add(getString(R.string.pieceNamesFigurineNotation) + ": " + getPieceNames(2));   actions.add(MENU_FIGURINE_NOTATION);
+//			final List<Integer> finalActions = actions;
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
+//			builder.setCancelable(true);
+//			TextView tv = new TextView(getApplicationContext());
+//			tv.setText(R.string.pieceNames);
+//			tv.setTextAppearance(this, R.style.c4aDialogTitle);
+//			tv.setGravity(Gravity.CENTER_HORIZONTAL);
+//			builder.setCustomTitle(tv );
+//			builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener()
+//			{
+//				public void onClick(DialogInterface dialog, int item)
+//				{
+//					switch (finalActions.get(item))
+//					{
+//						case MENU_ENGLISH:
+//							pieceNameId = 0;
+//							break;
+//						case MENU_LOCAL_LANGUAGE:
+//							pieceNameId = 1;
+//							break;
+//						case MENU_FIGURINE_NOTATION:
+//							pieceNameId = 2;
+//							break;
+//					}
+//					removeDialog(MENU_PIECE_NAMES);
+//					tvGuPieceName.setText(getString(R.string.pieceNames) + ": " + getPieceNames(pieceNameId));
+//				}
+//			});
+//			AlertDialog alert = builder.create();
+//			return alert;
+//		}
+//
+//		return null;
+//
+//	}
 
 	public void myClickHandler(View view)
 	{
@@ -147,20 +179,40 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 		}
 	}
 
+	public void setPieces()
+	{
+		setTextViewColors(piecesMinus, "#f6d2f4");
+		setTextViewColors(piecesPlus, "#c4f8c0");
+		if (pieceNameId <= PIECES_MIN) {
+			pieceNameId = PIECES_MIN;
+			setTextViewColors(piecesMinus, "#767a76");
+		}
+		if (pieceNameId >= PIECES_MAX) {
+			pieceNameId = PIECES_MAX;
+			setTextViewColors(piecesPlus, "#767a76");
+		}
+		piecesValue.setText(getPieceNames(pieceNameId));
+		setTextViewColors(piecesValue, "#efe395");
+	}
+
 	public void setArrows()
 	{
-		tvMinus.setBackgroundResource(R.drawable.rectanglepink);
-		tvPlus.setBackgroundResource(R.drawable.rectanglegreen);
+//		tvMinus.setBackgroundResource(R.drawable.rectanglepink);
+		setTextViewColors(tvMinus, "#f6d2f4");
+//		tvPlus.setBackgroundResource(R.drawable.rectanglegreen);
+		setTextViewColors(tvPlus, "#c4f8c0");
 		if (arrows <= ARROWS_MIN) {
 			arrows = ARROWS_MIN;
-			tvMinus.setBackgroundResource(R.drawable.rectanglegrey);
+//			tvMinus.setBackgroundResource(R.drawable.rectanglegrey);
+			setTextViewColors(tvMinus, "#767a76");
 		}
-		tvValue.setText(Integer.toString(arrows));
 		if (arrows >= ARROWS_MAX) {
 			arrows = ARROWS_MAX;
-			tvValue.setText(Integer.toString(arrows));
-			tvPlus.setBackgroundResource(R.drawable.rectanglegrey);
+//			tvPlus.setBackgroundResource(R.drawable.rectanglegrey);
+			setTextViewColors(tvPlus, "#767a76");
 		}
+		tvValue.setText(Integer.toString(arrows));
+		setTextViewColors(tvValue, "#efe395");
 	}
 
 	@Override
@@ -183,6 +235,15 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 				return "" + ChessHistory.HEX_K + ChessHistory.HEX_Q + ChessHistory.HEX_R + ChessHistory.HEX_B + ChessHistory.HEX_N;
 			default:	// english piece symbol
 				return "KQRBN";
+		}
+	}
+
+	public void setTextViewColors(TextView tv, String color)
+	{
+		if (tv != null) {
+			GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
+			if (tvBackground != null)
+				tvBackground.setColor(Color.parseColor(color));
 		}
 	}
 
@@ -229,6 +290,7 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 	SharedPreferences userPrefs;
 	SharedPreferences runPrefs;
 	final static int MENU_PIECE_NAMES = 100;
+	TextView tvTitle;
 	EditText etGuPlayerName = null;
 	CheckBox cbGuStatusBar;
 	CheckBox cbGuFlipBoard;
@@ -242,14 +304,23 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 	CheckBox cbGuCoordinates;
 	CheckBox cbGuBlindMode;
 	TextView tvGuPieceName;
+
+	TextView piecesMinus;
+	TextView piecesValue;
+	TextView piecesPlus;
+
 	TextView tvMinus;
 	TextView tvValue;
 	TextView tvPlus;
 
-	int pieceNameId = 0;
+	final static int PIECES_DEFAULT = 0;
+	int PIECES_MIN = 0;
+	int PIECES_MAX = 2;
+	int pieceNameId = PIECES_DEFAULT;
+
 	final static int ARROWS_DEFAULT = 6;
 	int ARROWS_MIN = 0;
-	int ARROWS_MAX = 8;
+	int ARROWS_MAX = 6;
 	int arrows = ARROWS_DEFAULT;
 
 }

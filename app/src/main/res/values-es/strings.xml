@@ -295,7 +295,7 @@
     <string name="fmFileNoWritePermissions">Sin permisos de escritura:</string>
     <string name="btn_Continue">Continuar</string>
     <string name="epPonder">Pensar siempre</string>
-    <string name="engineDisplayedLines">Líneas visualizadas</string>
+    <string name="engineDisplayedLines">Líneas</string>
     <string name="engineThinking">"Pensando "</string>
     <string name="engineError">Engine error</string>
     <string name="epShowBookHints">Mostrar las jugadas del Libro</string>

@@ -602,165 +602,113 @@ public class BoardView extends View
         // BCM
         if (displayArrows != null)
         {
+
+//            Log.i(TAG, "onDraw, displayArrows.size: " + displayArrows.size());
+
             // BCM - TEST - SimulSameArrows
 //            int simulSameArrows = 3;
 //            for (int i = 1; i < simulSameArrows && i < displayArrows.size(); i++)
 //                displayArrows.set(i, displayArrows.get(0));
 
-            for (int i = 0; i < displayArrows.size(); i++)
-            {
-                int from = getPosition(displayArrows.get(i).subSequence(0, 2), isBoardTurn);
-                int to = getPosition(displayArrows.get(i).subSequence(2, 4), isBoardTurn);
+            if (displayArrows.size() > 1) {
+                for (int i = 0; i < displayArrows.size(); i++) {
+                    int from = getPosition(displayArrows.get(i).subSequence(0, 2), isBoardTurn);
+                    int to = getPosition(displayArrows.get(i).subSequence(2, 4), isBoardTurn);
 
-                int SameCount = 0;
-                int SameNr = 0;
-                for (int j = 0; j < displayArrows.size(); j++)
-                    if (from == getPosition(displayArrows.get(j).subSequence(0, 2), isBoardTurn) &&
-                            to == getPosition(displayArrows.get(j).subSequence(2, 4), isBoardTurn)) {
-                        SameCount++;
-                        if (j < i)
-                            SameNr++;
+                    int SameCount = 0;
+                    int SameNr = 0;
+                    for (int j = 0; j < displayArrows.size(); j++)
+                        if (from == getPosition(displayArrows.get(j).subSequence(0, 2), isBoardTurn) &&
+                                to == getPosition(displayArrows.get(j).subSequence(2, 4), isBoardTurn)) {
+                            SameCount++;
+                            if (j < i)
+                                SameNr++;
+                        }
+
+                    // Set individual Design (default first)
+                    int colorFill = Color.WHITE;
+                    int colorStroke = Color.BLACK;
+                    int strokeWidth = 2;
+                    int size = 80;
+                    int star = 0;
+
+                    // BCM, Karl
+                    switch (arrowMode) {
+                        case BoardView.ARROWS_BEST_VARIANT:
+                            int darken = 5;
+                            if (i % 2 == 0) { // player to move next
+                                colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
+                            } else { // other player
+                                colorFill = cv.getColor(cv.COLOR_ARROWS2_24);
+                            }
+
+                            strokeWidth = 3;
+
+                            int alpha = 250 - 35 * i;
+
+                            colorFill = Color.argb(alpha, Color.red(colorFill), Color.green(colorFill), Color.blue(colorFill));
+
+                            double darkenF = 1 + (darken - 1) * (alpha / 255.0);
+                            colorStroke = Color.argb(0xFF,
+                                    (int) (Color.red(colorFill) / darkenF),
+                                    (int) (Color.green(colorFill) / darkenF),
+                                    (int) (Color.blue(colorFill) / darkenF));
+
+                            size = (int) (95 - (95 - 20) * i / (displayArrows.size() - 1));
+
+                            star = 100;
+                            break;
+                        case BoardView.ARROWS_BEST_MOVES:
+                            break;
                     }
 
-                // Set individual Design (default first)
-                int colorFill = Color.WHITE;
-                int colorStroke = Color.BLACK;
-                int strokeWidth = 2;
-                int size = 80;
-                int star = 0;
 
+                    // DrawArrow: from, to, size, star, colorFill, colorStroke, strokeWidth, SameCount, SameNr
 
+                    int x0 = ((from % 8) * fieldSize) + fieldSize / 2;
+                    int y0 = ((from / 8) * fieldSize) + fieldSize / 2;
+                    int x1 = ((to % 8) * fieldSize) + fieldSize / 2;
+                    int y1 = ((to / 8) * fieldSize) + fieldSize / 2;
 
+                    float deltaX = x1 - x0;
+                    float deltaY = y1 - y0;
+                    float distance = (float) Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
 
-//                int mode = 0;
-//
-//                if (mode == 1) {
-//                    // Mode-V : one engine, some variations
-//                    // only show first move of each variation
-//                    // maybe show more moves of the best variation (maybe only answer-move)?
-//                    // need the score for each variation, visually show it
-//
-//                    // ToDo ideas:
-//                    // - bigger size for higher score
-//                    // - more transparent for lower score
-//                    // - different (dominant) colors? (green for best move, yellow second, red third, ...)
-//                    //      (maybe than, Mode-M should also use "green for best move" as "next move"?)
-//
-//                } else if (mode == 2) {
-//                    // Mode-E : some engines, one variation each
-//                    // difficulty to visually show the score - but how usefull is it?
-//                    //    (because many engines can suggest the same move)
-//
-//                    // ToDo ideas:
-//                    // - all arrows the same size (much smaller, because many engines showing the same move)
-//                    // - more transparent for lower score (difficulty: color => name of engine)
-//
-//                } else {
-//                    // Mode-M : one engine, one variation (show first n moves)
-//
-//                    // ToDo ideas:
-//                    // - var 1) one color for player to move NEXT, other color for other player?
-//                    // - var 2) one color for white player, other color for other player?
-//                    // - variation) maybe dominant color only for first (and maybe second) move and
-//                    //   "decent" colors for other moves?
-//
-//                    // Following example for 6 arrows (maximum), must be adjusted if more (or also less) arrows
-//
-//                    //--- int a = i / 2;
-//                    //--- if (a >= colorAlpha.length)
-//                    //---     a = colorAlpha.length -1;
-//                    int darken=3;
-//                    if (i % 2 > 0) { // player to move next
-//                        //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS2_24, colorAlpha[a]);
-//                        //--- colorStroke = Color.BLACK;
-//                        colorFill = Color.argb(250-20*i, 0x65, 0x9f, 0x46);
-//                        colorStroke = Color.argb(0xFF, 0x65/darken, 0x9f/darken, 0x46/darken);
-//                    } else { // other player
-//                        //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS1_23, colorAlpha[a]);
-//                        //--- colorStroke = Color.BLACK;
-//                        colorFill = Color.argb(250-20*i, 0x4C, 0x45, 0x93);
-//                        colorStroke = Color.argb(0xFF, 0x4C/darken, 0x45/darken, 0x93/darken);
-//                    }
-//                    strokeWidth = 2;
-//                    size = (int)(90 - 15*i);
-//                    star = 100;
-//                }
+                    float dX = deltaX * fieldSize / distance;
+                    float dY = deltaY * fieldSize / distance;
 
+                    float shift = (float) 1 / 2 - (float) 1 / (SameCount + 1) - (float) SameNr / (SameCount + 1);
+                    x0 += dY * shift * star / 100;
+                    y0 -= dX * shift * star / 100;
+                    x1 += dY * shift;
+                    y1 -= dX * shift;
 
+                    dX *= (float) size / 100 / 8;
+                    dY *= (float) size / 100 / 8;
 
-                // BCM, Karl
-                switch (arrowMode)
-                {
-                    case BoardView.ARROWS_BEST_VARIANT:
-                        int darken=3;
-//                        if (i % 2 > 0) { // player to move next
-                        if (i % 2 == 0) { // player to move next
-                            //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS2_24, colorAlpha[a]);
-                            //--- colorStroke = Color.BLACK;
-//                            colorFill = Color.argb(250-20*i, 0x65, 0x9f, 0x46);
-                            colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
-                            colorStroke = Color.argb(0xFF, 0x65/darken, 0x9f/darken, 0x46/darken);
-                        } else { // other player
-                            //--- colorFill = cv.getAlphaColor(cv.COLOR_ARROWS1_23, colorAlpha[a]);
-                            //--- colorStroke = Color.BLACK;
-//                            colorFill = Color.argb(250-20*i, 0x4C, 0x45, 0x93);
-                            colorFill = cv.getColor(cv.COLOR_ARROWS2_24);
-                            colorStroke = Color.argb(0xFF, 0x4C/darken, 0x45/darken, 0x93/darken);
-                        }
-                        strokeWidth = 2;
-                        size = (int)(90 - 15*i);
-                        star = 100;
-                        break;
-                    case BoardView.ARROWS_BEST_MOVES:
+                    Path path = new Path();
+                    path.setFillType(Path.FillType.EVEN_ODD);
+                    path.moveTo(x0, y0);
+                    path.lineTo(x1 + dY - 4 * dX, y1 - dX - 4 * dY);
+                    path.lineTo(x1 + 4 * dY - 6 * dX, y1 - 4 * dX - 6 * dY);
+                    path.lineTo(x1, y1);
+                    path.lineTo(x1 - 4 * dY - 6 * dX, y1 + 4 * dX - 6 * dY);
+                    path.lineTo(x1 - dY - 4 * dX, y1 + dX - 4 * dY);
+                    path.lineTo(x0, y0);
+                    path.close();
 
-                        break;
+                    mPaint.setStyle(Paint.Style.FILL);
+                    mPaint.setColor(colorFill);
+                    canvas.drawPath(path, mPaint);
+
+                    mPaint.setStyle(Paint.Style.STROKE);
+                    mPaint.setColor(colorStroke);
+                    mPaint.setStrokeWidth(strokeWidth);
+                    mPaint.setAntiAlias(true);
+                    mPaint.setDither(true);
+                    canvas.drawPath(path, mPaint);
+
                 }
-
-
-                // DrawArrow: from, to, size, star, colorFill, colorStroke, strokeWidth, SameCount, SameNr
-
-                int x0 = ((from % 8) * fieldSize) + fieldSize / 2;
-                int y0 = ((from / 8) * fieldSize) + fieldSize / 2;
-                int x1 = ((to % 8) * fieldSize) + fieldSize / 2;
-                int y1 = ((to / 8) * fieldSize) + fieldSize / 2;
-
-                float deltaX = x1 - x0;
-                float deltaY = y1 - y0;
-                float distance = (float)Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
-
-                float dX = deltaX * fieldSize / distance;
-                float dY = deltaY * fieldSize / distance;
-
-                float shift = (float)1/2 - (float)1/(SameCount+1) - (float)SameNr/(SameCount+1);
-                x0 += dY*shift * star/100;
-                y0 -= dX*shift * star/100;
-                x1 += dY*shift;
-                y1 -= dX*shift;
-
-                dX *= (float)size/100 / 8;
-                dY *= (float)size/100 / 8;
-
-                Path path = new Path();
-                path.setFillType(Path.FillType.EVEN_ODD);
-                path.moveTo( x0               , y0               );
-                path.lineTo( x1 +   dY - 4*dX , y1 -   dX - 4*dY );
-                path.lineTo( x1 + 4*dY - 6*dX , y1 - 4*dX - 6*dY );
-                path.lineTo( x1               , y1               );
-                path.lineTo( x1 - 4*dY - 6*dX , y1 + 4*dX - 6*dY );
-                path.lineTo( x1 -   dY - 4*dX , y1 +   dX - 4*dY );
-                path.lineTo( x0               , y0               );
-                path.close();
-
-                mPaint.setStyle(Paint.Style.FILL);
-                mPaint.setColor(colorFill);
-                canvas.drawPath(path, mPaint);
-
-                mPaint.setStyle(Paint.Style.STROKE);
-                mPaint.setColor(colorStroke);
-                mPaint.setStrokeWidth(strokeWidth);
-                mPaint.setAntiAlias(true);
-                mPaint.setDither(true);
-                canvas.drawPath(path, mPaint);
             }
         }
 
