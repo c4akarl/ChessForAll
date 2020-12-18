@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -605,12 +604,7 @@ public class BoardView extends View
 
 //            Log.i(TAG, "onDraw, displayArrows.size: " + displayArrows.size());
 
-            // BCM - TEST - SimulSameArrows
-//            int simulSameArrows = 3;
-//            for (int i = 1; i < simulSameArrows && i < displayArrows.size(); i++)
-//                displayArrows.set(i, displayArrows.get(0));
-
-            if (displayArrows.size() > 1) {
+            if (displayArrows.size() > 0) {
                 for (int i = 0; i < displayArrows.size(); i++) {
                     int from = getPosition(displayArrows.get(i).subSequence(0, 2), isBoardTurn);
                     int to = getPosition(displayArrows.get(i).subSequence(2, 4), isBoardTurn);
@@ -632,10 +626,9 @@ public class BoardView extends View
                     int size = 80;
                     int star = 0;
 
-                    // BCM, Karl
                     switch (arrowMode) {
                         case BoardView.ARROWS_BEST_VARIANT:
-                            int darken = 5;
+
                             if (i % 2 == 0) { // player to move next
                                 colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
                             } else { // other player
@@ -644,19 +637,21 @@ public class BoardView extends View
 
                             strokeWidth = 3;
 
-                            int alpha = 250 - 35 * i;
+                            size = 90;
+                            size = (int) (size - (size - size * 1.5 / displayArrows.size()) * i / (displayArrows.size() - 0.99999999));
+
+                            int alpha = 0xFF * size / 100;
 
                             colorFill = Color.argb(alpha, Color.red(colorFill), Color.green(colorFill), Color.blue(colorFill));
 
-                            double darkenF = 1 + (darken - 1) * (alpha / 255.0);
+                            double darkenF = 1 + 4 * (alpha / 255.0);
                             colorStroke = Color.argb(0xFF,
                                     (int) (Color.red(colorFill) / darkenF),
                                     (int) (Color.green(colorFill) / darkenF),
                                     (int) (Color.blue(colorFill) / darkenF));
 
-                            size = (int) (95 - (95 - 20) * i / (displayArrows.size() - 1));
-
                             star = 100;
+
                             break;
                         case BoardView.ARROWS_BEST_MOVES:
                             break;

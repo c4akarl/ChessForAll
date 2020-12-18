@@ -52,7 +52,7 @@
 					<TextView
 						android:id="@+id/piecesMinus"
 						style="@style/c4aTV4"
-						android:layout_width="@dimen/btn_size_70"
+						android:layout_width="@dimen/btn_size"
 						android:layout_height="wrap_content"
 						android:layout_marginTop="@dimen/margin_1"
 						android:layout_marginLeft="@dimen/margin_1"
@@ -67,8 +67,9 @@
 					<TextView
 						android:id="@+id/piecesValue"
 						style="@style/c4aTV4"
-						android:layout_width="@dimen/tv_width_160"
+						android:layout_width="@dimen/tv_width_4"
 						android:layout_height="wrap_content"
+						android:maxLines="1"
 						android:layout_marginTop="@dimen/margin_1"
 						android:layout_marginLeft="@dimen/margin1"
 						android:layout_marginRight="@dimen/margin1"
@@ -82,7 +83,7 @@
 					<TextView
 						android:id="@+id/piecesPlus"
 						style="@style/c4aTV4"
-						android:layout_width="@dimen/btn_size_70"
+						android:layout_width="@dimen/btn_size"
 						android:layout_height="wrap_content"
 						android:layout_marginTop="@dimen/margin_1"
 						android:layout_marginLeft="0dp"
@@ -111,7 +112,7 @@
 					<TextView
 						android:id="@+id/tvMinus"
 						style="@style/c4aTV4"
-						android:layout_width="@dimen/btn_size_70"
+						android:layout_width="@dimen/btn_size"
 						android:layout_height="wrap_content"
 						android:layout_marginTop="@dimen/margin_1"
 						android:layout_marginLeft="@dimen/margin_1"
@@ -142,7 +143,7 @@
 					<TextView
 						android:id="@+id/tvPlus"
 						style="@style/c4aTV4"
-						android:layout_width="@dimen/btn_size_70"
+						android:layout_width="@dimen/btn_size"
 						android:layout_height="wrap_content"
 						android:layout_marginTop="@dimen/margin_1"
 						android:layout_marginLeft="0dp"

@@ -68,7 +68,7 @@
 				<TextView
 					android:id="@+id/variantsValue"
 					style="@style/c4aTV4"
-					android:layout_width="@dimen/btn_size_70"
+					android:layout_width="@dimen/tv_width"
 					android:layout_height="wrap_content"
 					android:layout_marginLeft="@dimen/margin1"
 					android:layout_marginRight="@dimen/margin1"
@@ -128,7 +128,7 @@
 				<TextView
 					android:id="@+id/movesValue"
 					style="@style/c4aTV4"
-					android:layout_width="@dimen/btn_size_70"
+					android:layout_width="@dimen/tv_width"
 					android:layout_height="wrap_content"
 					android:layout_marginLeft="@dimen/margin1"
 					android:layout_marginRight="@dimen/margin1"
@@ -188,7 +188,7 @@
 				<TextView
 					android:id="@+id/linesValue"
 					style="@style/c4aTV4"
-					android:layout_width="@dimen/btn_size_70"
+					android:layout_width="@dimen/tv_width"
 					android:layout_height="wrap_content"
 					android:layout_marginLeft="@dimen/margin1"
 					android:layout_marginRight="@dimen/margin1"

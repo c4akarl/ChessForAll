@@ -5,15 +5,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -22,11 +16,13 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-//public class OptionsEnginePlay extends Activity implements TextWatcher, Ic4aDialogCallback
 public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 {
 	public void onCreate(Bundle savedInstanceState) 
 	{
+
+//		Log.i(TAG, "onCreate(), variants: " + variants);
+
         super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		u = new Util();
@@ -38,8 +34,12 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 	@Override
 	protected void onResume()
 	{
+
+//		Log.i(TAG, "onResume(), variants: " + variants);
+
 		super.onResume();
 		start();
+
 	}
 
 	protected void start()
@@ -58,12 +58,6 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 		epBook = (ImageView) findViewById(R.id.epBook);
 		bookName = (EditText) findViewById(R.id.tvEpBookName);
 		bookName.setHint(R.string.epBookHint);
-//		multiPv = (EditText) findViewById(R.id.etEpMultiPv);
-//		pvMoves = (EditText) findViewById(R.id.etEpPvMoves);
-//		displayedLines = (EditText) findViewById(R.id.etEpDisplayedLines);
-//		multiPv.addTextChangedListener(this);
-//		pvMoves.addTextChangedListener(this);
-//		displayedLines.addTextChangedListener(this);
 		debugInformation = (CheckBox) findViewById(R.id.debugInformation);
 		logOn = (CheckBox) findViewById(R.id.logOn);
 		getPrefs();
@@ -74,7 +68,6 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 			setVariants();
 		});
 		variantsValue = findViewById(R.id.variantsValue);
-//		variantsValue.setBackgroundResource(R.drawable.rectangleyellow);
 		setTextViewColors(variantsValue, "#efe395");
 		variantsValue.setOnClickListener(v -> {
 			variants = VARIANTS_DEFAULT;
@@ -94,7 +87,6 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 			setMoves();
 		});
 		movesValue = findViewById(R.id.movesValue);
-//		movesValue.setBackgroundResource(R.drawable.rectangleyellow);
 		setTextViewColors(movesValue, "#efe395");
 		movesValue.setOnClickListener(v -> {
 			moves = MOVES_DEFAULT;
@@ -114,7 +106,6 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 			setLines();
 		});
 		linesValue = findViewById(R.id.linesValue);
-//		linesValue.setBackgroundResource(R.drawable.rectangleyellow);
 		setTextViewColors(linesValue, "#efe395");
 		linesValue.setOnClickListener(v -> {
 			lines = LINES_DEFAULT;
@@ -171,7 +162,7 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 
-//		Log.i(TAG, "onConfigurationChanged()");
+//		Log.i(TAG, "onConfigurationChanged(), variants: " + variants);
 
 		super.onConfigurationChanged(newConfig);
 		setPrefs();
@@ -179,20 +170,15 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 
 	public void setVariants()
 	{
-//		variantsValue.setBackgroundResource(R.drawable.rectangleyellow);
 		setTextViewColors(variantsValue, "#efe395");
-//		variantsMinus.setBackgroundResource(R.drawable.rectanglepink);
 		setTextViewColors(variantsMinus, "#f6d2f4");
-//		variantsPlus.setBackgroundResource(R.drawable.rectanglegreen);
 		setTextViewColors(variantsPlus, "#c4f8c0");
 		if (variants <= VARIANTS_MIN) {
 			variants = VARIANTS_MIN;
-//			variantsMinus.setBackgroundResource(R.drawable.rectanglegrey);
 			setTextViewColors(variantsMinus, "#767a76");
 		}
 		if (variants >= VARIANTS_MAX) {
 			variants = VARIANTS_MAX;
-//			variantsPlus.setBackgroundResource(R.drawable.rectanglegrey);
 			setTextViewColors(variantsPlus, "#767a76");
 		}
 		variantsValue.setText(Integer.toString(variants));
@@ -200,20 +186,15 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 
 	public void setMoves()
 	{
-//		movesValue.setBackgroundResource(R.drawable.rectangleyellow);
 		setTextViewColors(movesValue, "#efe395");
-//		movesMinus.setBackgroundResource(R.drawable.rectanglepink);
 		setTextViewColors(movesMinus, "#f6d2f4");
-//		movesPlus.setBackgroundResource(R.drawable.rectanglegreen);
 		setTextViewColors(movesPlus, "#c4f8c0");
 		if (moves <= MOVES_MIN) {
 			moves = MOVES_MIN;
-//			movesMinus.setBackgroundResource(R.drawable.rectanglegrey);
 			setTextViewColors(movesMinus, "#767a76");
 		}
 		if (moves >= MOVES_MAX) {
 			moves = MOVES_MAX;
-//			movesPlus.setBackgroundResource(R.drawable.rectanglegrey);
 			setTextViewColors(movesPlus, "#767a76");
 		}
 		movesValue.setText(Integer.toString(moves));
@@ -221,20 +202,15 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 
 	public void setLines()
 	{
-//		linesValue.setBackgroundResource(R.drawable.rectangleyellow);
 		setTextViewColors(linesValue, "#efe395");
-//		linesMinus.setBackgroundResource(R.drawable.rectanglepink);
 		setTextViewColors(linesMinus, "#f6d2f4");
-//		linesPlus.setBackgroundResource(R.drawable.rectanglegreen);
 		setTextViewColors(linesPlus, "#c4f8c0");
 		if (lines <= LINES_MIN) {
 			lines = LINES_MIN;
-//			linesMinus.setBackgroundResource(R.drawable.rectanglegrey);
 			setTextViewColors(linesMinus, "#767a76");
 		}
 		if (lines >= LINES_MAX) {
 			lines = LINES_MAX;
-//			linesPlus.setBackgroundResource(R.drawable.rectanglegrey);
 			setTextViewColors(linesPlus, "#767a76");
 		}
 		linesValue.setText(Integer.toString(lines));
@@ -283,34 +259,7 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 
 	}
 
-//	@Override
-//	public void afterTextChanged(Editable s)
-//	{
-//		try
-//		{
-//			if (multiPv.hasFocus() == true)
-//			{
-//				if (s.toString().equals("0"))
-//					multiPv.setText("1");
-//				if (Integer.parseInt(s.toString()) > 4)
-//					multiPv.setText("4");
-//			}
-//			if (pvMoves.hasFocus() == true)
-//			{
-//				if (s.toString().equals("0"))
-//					pvMoves.setText("1");
-//				if (Integer.parseInt(s.toString()) > 30)
-//					pvMoves.setText("30");
-//			}
-//		}
-//		catch 	(NumberFormatException e) {	}
-//	}
-//	@Override
-//	public void beforeTextChanged(CharSequence s, int start, int count,	int after) { }
-//	@Override
-//	public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-	public void onActivityResult(int requestCode, int resultCode, Intent data)			
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
 		switch(requestCode)
 	    {
@@ -347,20 +296,9 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
         ed.putBoolean("user_options_enginePlay_OpeningBook", openingBook.isChecked());
         ed.putBoolean("user_options_enginePlay_ShowBookHints", showBookHints.isChecked());
         ed.putString("user_options_enginePlay_OpeningBookName", bookName.getText().toString());
-
-//        int multiPv = PV_MULTI;
-//        try {multiPv = Integer.parseInt(this.multiPv.getText().toString());}
-//        catch 	(NumberFormatException e) {};
-//        ed.putInt("user_options_enginePlay_MultiPv", multiPv);
-//        int pvMoves = PV_MOVES;
-//        try {pvMoves = Integer.parseInt(this.pvMoves.getText().toString());}
-//        catch 	(NumberFormatException e) {};
-//        ed.putInt("user_options_enginePlay_PvMoves", pvMoves);
-//		int lines = DISPLAYED_LINES;
-//		try {lines = Integer.parseInt(this.displayedLines.getText().toString());}
-//		catch 	(NumberFormatException e) {};
-//		ed.putInt("user_options_enginePlay_displayedLines", lines);
-
+		ed.putInt("user_options_enginePlay_MultiPv", variants);
+		ed.putInt("user_options_enginePlay_PvMoves", moves);
+		ed.putInt("user_options_enginePlay_displayedLines", lines);
 		ed.putInt("user_options_enginePlay_strength", progressStrength);
 		ed.putInt("user_options_enginePlay_aggressiveness", progressAggressiveness - 100);
 		ed.putBoolean("user_options_enginePlay_debugInformation", debugInformation.isChecked());
@@ -380,18 +318,16 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 		showBookHints.setChecked(userPrefs.getBoolean("user_options_enginePlay_ShowBookHints", true));
 		bookName.setText(userPrefs.getString("user_options_enginePlay_OpeningBookName", ""));
 		bookName.setSelection(bookName.getText().length());
-
-//		multiPv.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_MultiPv", PV_MULTI)));
-//		pvMoves.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_PvMoves", PV_MOVES)));
-//		displayedLines.setText(Integer.toString(userPrefs.getInt("user_options_enginePlay_displayedLines", DISPLAYED_LINES)));
-
+		variants = userPrefs.getInt("user_options_enginePlay_MultiPv", variants);
+		moves = userPrefs.getInt("user_options_enginePlay_PvMoves", moves);
+		lines = userPrefs.getInt("user_options_enginePlay_displayedLines", lines);
 		progressStrength = userPrefs.getInt("user_options_enginePlay_strength", 100);
 		progressAggressiveness = userPrefs.getInt("user_options_enginePlay_aggressiveness", 0) + 100;
 		debugInformation.setChecked(userPrefs.getBoolean("user_options_enginePlay_debugInformation", false));
 		logOn.setChecked(userPrefs.getBoolean("user_options_enginePlay_logOn", false));
 	}
 
-	final String TAG = "PlaySettings";
+	final String TAG = "OptionsEnginePlay";
 	Util u;
 	FileIO fileIO;
 	final static int LOAD_OPENING_BOOK_REQUEST_CODE = 91;
@@ -433,9 +369,6 @@ public class OptionsEnginePlay extends Activity implements Ic4aDialogCallback
 	CheckBox showBookHints;
 	ImageView epBook = null;
 	EditText bookName = null;
-//	EditText multiPv = null;
-//	EditText pvMoves = null;
-//	EditText displayedLines = null;
 	SeekBar strength;
 	TextView strengthValue;
 	SeekBar aggressiveness;

@@ -5297,7 +5297,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 								ec.getEngine().statPvScore, ec.getEngine().statIsMate, taskFen);
 						isPV = true;
 					}
-//					if (infoShowPv & s.toString().contains("multipv"))
 					if (infoShowPv & s.toString().contains("multipv") && !s.toString().contains("bound nodes"))		// !upperbound, !lowerbound
 					{
 						try
@@ -5330,7 +5329,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //				Log.i(TAG, "searchTask, doInBackground(), isInfo: " + isInfo + ", isPV: " + isPV);
 
-//				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isInfo || isPV || s.toString().contains(" mate "))
 				if (searchStartTimeInfo - publishTime >= MIN_PUBLISH_TIME || isPV || s.toString().contains(" mate "))
 				{
 					publishTime = searchStartTimeInfo;

@@ -218,10 +218,6 @@ public class ChessEngine
             writeLineToProcess("setoption name UCI_Chess960 value true");
         else
             writeLineToProcess("setoption name UCI_Chess960 value false");
-
-        //karl test
-//        writeLineToProcess("setoption name WeightsFile value " + testWeightsFile);
-
         writeLineToProcess("ucinewgame");
         return true;
     }
@@ -1041,8 +1037,5 @@ public class ChessEngine
             17, 17, 18, 18,	18, 18, 18, 18, 18, 19,};
 
     boolean isLogOn;			// LogFile on/off(SharedPreferences)
-
-//    String testWeightsFile = "/storage/emulated/0/Android/data/ccc.chess.engines/files/weightsfiles/256x20-t40-1541.pb.gz";
-//    String testWeightsFile = "/storage/emulated/0/Android/data/ccc.chess.engines/files/weightsfiles/11258-128x10-se.pb.gz";
 
 }

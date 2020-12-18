@@ -290,7 +290,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
             colors = colors + cv.colors[i] + " ";
         }
 
-        Log.d(TAG, "setPrefs(), colorId: " + colorId + ", colors: " + colors);
+//        Log.d(TAG, "setPrefs(), colorId: " + colorId + ", colors: " + colors);
 
         SharedPreferences.Editor ed = userPrefs.edit();
         ed.putInt("colorId", colorId);

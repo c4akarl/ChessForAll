@@ -1,31 +1,22 @@
 package ccc.chess.gui.chessforall;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ccc.chess.logic.c4aservice.ChessHistory;
 
-public class OptionsGUI extends Activity implements Ic4aDialogCallback
-{	//	C4aMain RequestCode: OPTIONS_GUI_REQUEST_CODE
+public class OptionsGUI extends Activity
+{
 
 	public void onCreate(Bundle savedInstanceState) 
 	{
@@ -53,14 +44,6 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
         cbGuEnableSounds = (CheckBox) findViewById(R.id.cbGuEnableSounds);
         cbGuCoordinates = (CheckBox) findViewById(R.id.cbGuCoordinates);
 		cbGuBlindMode = (CheckBox) findViewById(R.id.cbGuBlindMode);
-//		tvGuPieceName = (TextView) findViewById(R.id.tvGuPieceName);
-//		setTextViewColors(tvGuPieceName, "#efe395");
-//        getPrefs();
-//		tvGuPieceName.setText(getString(R.string.pieceNames) + ": " + getPieceNames(pieceNameId));
-//		tvGuPieceName.setOnClickListener(v -> {
-//			removeDialog(MENU_PIECE_NAMES);
-//			showDialog(MENU_PIECE_NAMES);
-//		});
 
 		getPrefs();
 
@@ -112,56 +95,6 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 		setPrefs();
 	}
 
-//	@Override
-//	protected Dialog onCreateDialog(int id)
-//	{
-//
-//		if (id == MENU_PIECE_NAMES)
-//		{
-//			final int MENU_ENGLISH 				= 0;
-//			final int MENU_LOCAL_LANGUAGE 		= 1;
-//			final int MENU_FIGURINE_NOTATION 	= 2;
-//			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
-//			List<Integer> actions = new ArrayList<Integer>();
-//			arrayAdapter.add(getString(R.string.pieceNamesEnglish) 			+ ": " + (0)getPieceNames);   actions.add(MENU_ENGLISH);
-//			arrayAdapter.add(getString(R.string.pieceNamesLocalLanguage) 	+ ": " + getPieceNames(1));   actions.add(MENU_LOCAL_LANGUAGE);
-//			arrayAdapter.add(getString(R.string.pieceNamesFigurineNotation) + ": " + getPieceNames(2));   actions.add(MENU_FIGURINE_NOTATION);
-//			final List<Integer> finalActions = actions;
-//			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-//			builder.setCancelable(true);
-//			TextView tv = new TextView(getApplicationContext());
-//			tv.setText(R.string.pieceNames);
-//			tv.setTextAppearance(this, R.style.c4aDialogTitle);
-//			tv.setGravity(Gravity.CENTER_HORIZONTAL);
-//			builder.setCustomTitle(tv );
-//			builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener()
-//			{
-//				public void onClick(DialogInterface dialog, int item)
-//				{
-//					switch (finalActions.get(item))
-//					{
-//						case MENU_ENGLISH:
-//							pieceNameId = 0;
-//							break;
-//						case MENU_LOCAL_LANGUAGE:
-//							pieceNameId = 1;
-//							break;
-//						case MENU_FIGURINE_NOTATION:
-//							pieceNameId = 2;
-//							break;
-//					}
-//					removeDialog(MENU_PIECE_NAMES);
-//					tvGuPieceName.setText(getString(R.string.pieceNames) + ": " + getPieceNames(pieceNameId));
-//				}
-//			});
-//			AlertDialog alert = builder.create();
-//			return alert;
-//		}
-//
-//		return null;
-//
-//	}
-
 	public void myClickHandler(View view)
 	{
 
@@ -197,28 +130,18 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 
 	public void setArrows()
 	{
-//		tvMinus.setBackgroundResource(R.drawable.rectanglepink);
 		setTextViewColors(tvMinus, "#f6d2f4");
-//		tvPlus.setBackgroundResource(R.drawable.rectanglegreen);
 		setTextViewColors(tvPlus, "#c4f8c0");
 		if (arrows <= ARROWS_MIN) {
 			arrows = ARROWS_MIN;
-//			tvMinus.setBackgroundResource(R.drawable.rectanglegrey);
 			setTextViewColors(tvMinus, "#767a76");
 		}
 		if (arrows >= ARROWS_MAX) {
 			arrows = ARROWS_MAX;
-//			tvPlus.setBackgroundResource(R.drawable.rectanglegrey);
 			setTextViewColors(tvPlus, "#767a76");
 		}
 		tvValue.setText(Integer.toString(arrows));
 		setTextViewColors(tvValue, "#efe395");
-	}
-
-	@Override
-	public void getCallbackValue(int btnValue)
-	{
-
 	}
 
 	public String getPieceNames(int pieceNameId)
@@ -289,7 +212,6 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 	Util u;
 	SharedPreferences userPrefs;
 	SharedPreferences runPrefs;
-	final static int MENU_PIECE_NAMES = 100;
 	TextView tvTitle;
 	EditText etGuPlayerName = null;
 	CheckBox cbGuStatusBar;
@@ -303,7 +225,6 @@ public class OptionsGUI extends Activity implements Ic4aDialogCallback
 	CheckBox cbGuEnableSounds;
 	CheckBox cbGuCoordinates;
 	CheckBox cbGuBlindMode;
-	TextView tvGuPieceName;
 
 	TextView piecesMinus;
 	TextView piecesValue;

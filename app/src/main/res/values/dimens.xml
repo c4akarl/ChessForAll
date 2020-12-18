@@ -10,7 +10,7 @@
     <dimen name="tv_width">80dp</dimen>
     <dimen name="tv_width_2">120dp</dimen>
     <dimen name="tv_width_3">150dp</dimen>
-    <dimen name="tv_width_160">160dp</dimen>
+    <dimen name="tv_width_4">200dp</dimen>
     <dimen name="title_text_size">22sp</dimen>
     <dimen name="margin1">1dp</dimen>
     <dimen name="margin_1">10dp</dimen>
