@@ -110,6 +110,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		startGui();
 
+//		float fontScale = getResources().getConfiguration().fontScale;
+//		Log.i(TAG, "onCreate(), fontScale: " + fontScale + ", fontSize: " + fontSize);
+
     }
 
 	//	GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI		GUI
@@ -154,18 +157,28 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		msgShort = (TextView) findViewById(R.id.msgShort);
 		msgShort.setOnTouchListener(this);
+		//karl
+		msgShort.setTextSize(fontSize);
+
 		msgShort2 = (TextView) findViewById(R.id.msgShort2);
 		msgShort2.setOnTouchListener(this);
+		//karl
+		msgShort2.setTextSize(fontSize);
+
 		scrlMsgMoves = (ScrollView) findViewById(R.id.scrlMsgMoves);
 		scrlMsgMoves.setVerticalFadingEdgeEnabled(false);
 		msgMoves = (TextView) findViewById(R.id.msgMoves);
 		msgMoves.setOnTouchListener(this);
+		//karl
+		msgMoves.setTextSize(fontSize);
 
 		scrlMsgEngine = (ScrollView) findViewById(R.id.scrlMsgEngine);
 		msgEngine = (TextView) findViewById(R.id.msgEngine);
 		msgEngine.setMovementMethod(new ScrollingMovementMethod());
 		msgEngine.setMaxLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
 		msgEngine.setLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
+		//karl
+		msgEngine.setTextSize(fontSize);
 
 		btn_1 = (ImageView) findViewById(R.id.btn_1);
 		registerForContextMenu(btn_1);
@@ -7617,5 +7630,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	//karl --> settings
 //	boolean fileActions = true;		// sdk >= 30
 	boolean fileActions = false;
+
+	//karl test fontSize
+	long fontSizeSmall 	= 10L;
+	long fontSizeMedium = 14L;
+	long fontSizeLarge 	= 18L;
+	long fontSizeLarger = 22L;
+	long fontSize 		= fontSizeMedium;
 
 }
