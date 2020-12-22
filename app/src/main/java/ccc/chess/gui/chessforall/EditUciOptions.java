@@ -3,12 +3,7 @@ package ccc.chess.gui.chessforall;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -583,8 +578,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
         if (name.startsWith("uci_")) {
             return false;
         } else {
-            String[] ignored = { "hash", "ponder", "multipv",
-                    "gaviotatbpath", "syzygypath" };
+            String[] ignored = { "hash", "ponder", "multipv" };
             return !Arrays.asList(ignored).contains(name);
         }
     }

@@ -2,7 +2,6 @@ package ccc.chess.gui.chessforall;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import ccc.chess.book.BookOptions;
 import ccc.chess.book.C4aBook;
@@ -60,12 +59,12 @@ public class EngineControl
 			switch (chessEnginePlayMod)
 	        {
 	        	case 1:
-	        		chessEnginePlayerWhite = userP.getString("user_options_gui_playerName", "Me");
+	        		chessEnginePlayerWhite = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
 	        		chessEnginePlayerBlack = en_1.engineName;
 	        		break;
 	        	case 2:
 	        		chessEnginePlayerWhite = en_1.engineName;
-	        		chessEnginePlayerBlack = userP.getString("user_options_gui_playerName", "Me");
+					chessEnginePlayerBlack = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
 	        		break;
 	        	case 3:	
 	        		chessEnginePlayerWhite = en_1.engineName;
@@ -109,12 +108,11 @@ public class EngineControl
 
     }
 
-//	final String TAG = "EngineControl";
-	private Context context;
-	private SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
+	private final Context context;
+	private final SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
 	ChessEngine en_1;
 	C4aBook book;
-	private BookOptions bookOptions = new BookOptions();
+	private final BookOptions bookOptions = new BookOptions();
 	int engineNumber = 1;					// for controlling ChessEngines: en_1 | en_2
 	boolean twoEngines = false;				// true if two different engines(b/w)
 	boolean makeMove = false;				// engine makes first move

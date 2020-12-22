@@ -344,7 +344,7 @@
     <string name="analysisFinished">Движок закончил анализ.</string>
     <string name="debugInformation">Информация об отладке</string>
     <string name="app_editUciOptions">Изменить параметры UCI</string>
-    <string name="menu_enginesettings_uciOptions">UCI-Опции</string>
+    <string name="menu_enginesettings_uciOptions">Варианты двигателя</string>
     <string name="position">должность</string>
   <string name="timePosition">должность</string>
     <string name="engineInit">Механизм инициализации:</string>
@@ -356,5 +356,16 @@
     <string name="colorArrows">Стрелы 1</string>
   <string name="colorArrows2">Стрелы 2</string>
     <string name="arrows">Стрелы</string>
+    <string name="engineSettings">Настройки двигателя</string>
+  <string name="appearance">вид</string>
+  <string name="timeClock">Время, Часы</string>
+  <string name="openingBook">Книга дебютов</string>
+  <string name="other">разное</string>
+    <string name="small">Небольшой</string>
+  <string name="medium">Средняя</string>
+  <string name="large">Большой</string>
+  <string name="larger">Больше</string>
+    <string name="setEngineStrength">Сила игры двигателя</string>
+    <string name="chess960NotSupprted">Этот движок не поддерживает Chess960!</string>
 
 </resources>

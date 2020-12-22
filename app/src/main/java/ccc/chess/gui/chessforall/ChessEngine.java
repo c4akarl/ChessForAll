@@ -112,6 +112,30 @@ public class ChessEngine
 //            if (isLogOn)
 //                Log.i(TAG, "readUCIOptions(), s: " + s);
 
+            if (s.toString().startsWith("option name UCI_Elo")) {
+                int eloMin = 0;
+                int eloMax = 0;
+                String[] split = s.toString().split(" ");
+                if (split.length >= 0) {
+                    for (int i = 0; i < split.length; i++) {
+                        try{
+                            int num = Integer.parseInt(split[i]);
+                            if (split[i -1].equals("min"))
+                                eloMin = num;
+                            if (split[i -1].equals("max"))
+                                eloMax = num;
+                        }
+                        catch (NumberFormatException e) {  }
+                    }
+                }
+                if (eloMin != 0 && eloMax != 0) {
+                    SharedPreferences.Editor ed = userPrefs.edit();
+                    ed.putInt("uci_elo_min", eloMin);
+                    ed.putInt("uci_elo_max", eloMax);
+                    ed.apply();
+                }
+            }
+
             if (s.toString().contains("option name"))
                 uciOptions = uciOptions + s + "\n";
             if (s.toString().contains("option") & s.toString().contains("Ponder"))
@@ -212,12 +236,25 @@ public class ChessEngine
 
     }
 
+    public void setElo(Boolean withElo, int elo)
+    {
+        if (uciOptions.contains("UCI_LimitStrength"))
+            writeLineToProcess("setoption name UCI_LimitStrength value " + withElo);
+        if (uciOptions.contains("UCI_Elo"))
+            writeLineToProcess("setoption name UCI_Elo value " + elo);
+        if (withElo && uciOptions.contains("UCI_Elo")) {
+            engineNameElo = " (" + elo + ")";
+        }
+        else {
+            engineNameElo = "";
+        }
+        engineName = uciEngineName + engineNameElo;
+    }
+
     public boolean newGame()
     {
-        if (isChess960)
-            writeLineToProcess("setoption name UCI_Chess960 value true");
-        else
-            writeLineToProcess("setoption name UCI_Chess960 value false");
+        if (uciOptions.contains("UCI_Chess960"))
+            writeLineToProcess("setoption name UCI_Chess960 value " + isChess960);
         writeLineToProcess("ucinewgame");
         return true;
     }
@@ -254,11 +291,25 @@ public class ChessEngine
         {
             if (isInfinite)
 			{
+                if (uciOptions.contains("UCI_AnalyseMode"))
+                    writeLineToProcess("setoption name UCI_AnalyseMode value true");
+
+                setElo(false, uciEloMax);
+
 				engineState = EngineState.ANALYZE;
 				goStr = goStr + " infinite ";                                // search until the "stop" command
 			}
             else
             {
+                if (uciOptions.contains("UCI_AnalyseMode"))
+                    writeLineToProcess("setoption name UCI_AnalyseMode value false");
+
+                //karl TEST
+                if (withUciElo)
+                    setElo(true, uciElo);
+                else
+                    setElo(false, uciEloMax);
+
                 if (movesTime > 0)
                     goStr = goStr + " movetime  " + movesTime;			// movetime
                 else
@@ -598,8 +649,12 @@ public class ChessEngine
     private void setChessEngineName(String uciIdName)
     {
         engineName = uciIdName.substring(8, uciIdName.length());
-        if (uciIdName.startsWith("White(1): id name "))
+        uciEngineName = uciIdName.substring(8, uciIdName.length());
+        if (uciIdName.startsWith("White(1): id name ")) {
             engineName = uciIdName.substring(18, uciIdName.length());
+            uciEngineName = uciIdName.substring(18, uciIdName.length());
+        }
+        engineName = uciEngineName + engineNameElo;
     }
 
     public boolean getSearchAlive() {return searchAlive;}
@@ -622,6 +677,9 @@ public class ChessEngine
             {
                 uciEloMin = Integer.parseInt(min);
                 uciEloMax = Integer.parseInt(max);
+
+                Log.i(TAG,  "setUciEloValues(), uciEloMin: " + uciEloMin + ", uciEloMax: " + uciEloMax);
+
             }
             catch 	(NumberFormatException e) { }
         }
@@ -653,7 +711,8 @@ public class ChessEngine
     {
         try
         {
-            writeToProcess("setoption name MultiPV value " + multiPV + "\n");
+            if (uciOptions.contains("MultiPV"))
+                writeToProcess("setoption name MultiPV value " + multiPV + "\n");
         }
         catch (IOException e) {e.printStackTrace();}
     }
@@ -662,16 +721,8 @@ public class ChessEngine
     {
         try
         {
-            writeToProcess("setoption name Hash value " + hash + "\n");
-        }
-        catch (IOException e) {e.printStackTrace();}
-    }
-
-    void setUciNodestime(int nt)
-    {
-        try
-        {
-            writeToProcess("setoption name nodestime value " + nt + "\n");
+            if (uciOptions.contains("Hash"))
+                writeToProcess("setoption name Hash value " + hash + "\n");
         }
         catch (IOException e) {e.printStackTrace();}
     }
@@ -680,41 +731,8 @@ public class ChessEngine
     {
         try
         {
-            writeToProcess("setoption name Ponder value " + ponder + "\n");
-        }
-        catch (IOException e) {e.printStackTrace();}
-    }
-
-    void setUciStrength(int userStrength)
-    {
-        if (!isUciStrength)
-            return;
-        int eloBase = uciEloMax - uciEloMin;
-        int skillStrength = uciEloMin + ((eloBase / 100) * userStrength);
-        int skillLevel = (uciSkillLevelMax * userStrength) / 100;
-
-        try
-        {
-            if (isUciEloOption)
-            {
-                writeToProcess("setoption name UCI_LimitStrength value true\n");
-                writeToProcess("setoption name UCI_Elo value " + skillStrength + "\n");
-                uciStrength = skillStrength;
-            }
-            if (isUciSkillOption)
-            {
-                writeToProcess("setoption name Skill Level value " + skillLevel + "\n");	// stockfish
-                uciStrength = skillLevel;
-            }
-        }
-        catch (IOException e) {e.printStackTrace();}
-    }
-
-    void setUciContempt(int contempt)
-    {
-        try
-        {
-            writeToProcess("setoption name Contempt value " + contempt + "\n");
+            if (uciOptions.contains("Ponder"))
+                writeToProcess("setoption name Ponder value " + ponder + "\n");
         }
         catch (IOException e) {e.printStackTrace();}
     }
@@ -946,7 +964,9 @@ public class ChessEngine
     public int engineNumber = 1;		                    // default engine (Stockfish)
     private static final String ENGINE_TYPE = "UCI";		//> ChessEngine type: CE(Chess Engines)
     SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
-    String engineName = "";				                    // the uci engine name
+    String uciEngineName = "";				                // the uci engine name
+    String engineName = "";				                    // engine name (displayed)
+    String engineNameElo = "";				                // elo if engine strength < max
     public CharSequence engineNameStrength = "";	        // native engine name + strength
     String engineProcess = "";			                    // the compiled engine process name (file name)
     String oexPackage = "";			                        // oex package name
@@ -991,11 +1011,12 @@ public class ChessEngine
     boolean isUciEloOption = false;
     boolean isUciSkillOption = false;
     boolean isUciPonder = false;
-    int uciEloMin = 1200;
-    int uciEloMax = 4000;
+    Boolean withUciElo;
+    int uciElo = 2800;
+    int uciEloMin = 800;
+    int uciEloMax = 3000;
     int uciSkillLevelMin = 1;
     int uciSkillLevelMax = 100;
-    int uciStrength = 4000;
 
     public boolean searchAlive = true;
     boolean engineWithMultiPv = false;

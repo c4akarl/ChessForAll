@@ -23,15 +23,18 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.text.ClipboardManager;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.LeadingMarginSpan;
@@ -53,6 +56,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +74,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -109,9 +114,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		fileIO = new FileIO(this);
 
 		startGui();
-
-//		float fontScale = getResources().getConfiguration().fontScale;
-//		Log.i(TAG, "onCreate(), fontScale: " + fontScale + ", fontSize: " + fontSize);
 
     }
 
@@ -157,28 +159,24 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		msgShort = (TextView) findViewById(R.id.msgShort);
 		msgShort.setOnTouchListener(this);
-		//karl
-		msgShort.setTextSize(fontSize);
+		msgShort.setTextSize(userPrefs.getInt("user_options_gui_fontSize", Settings.FONTSIZE_MEDIUM));
 
 		msgShort2 = (TextView) findViewById(R.id.msgShort2);
 		msgShort2.setOnTouchListener(this);
-		//karl
-		msgShort2.setTextSize(fontSize);
+		msgShort2.setTextSize(userPrefs.getInt("user_options_gui_fontSize", Settings.FONTSIZE_MEDIUM));
 
 		scrlMsgMoves = (ScrollView) findViewById(R.id.scrlMsgMoves);
 		scrlMsgMoves.setVerticalFadingEdgeEnabled(false);
 		msgMoves = (TextView) findViewById(R.id.msgMoves);
 		msgMoves.setOnTouchListener(this);
-		//karl
-		msgMoves.setTextSize(fontSize);
+		msgMoves.setTextSize(userPrefs.getInt("user_options_gui_fontSize", Settings.FONTSIZE_MEDIUM));
 
 		scrlMsgEngine = (ScrollView) findViewById(R.id.scrlMsgEngine);
 		msgEngine = (TextView) findViewById(R.id.msgEngine);
 		msgEngine.setMovementMethod(new ScrollingMovementMethod());
-		msgEngine.setMaxLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
-		msgEngine.setLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
-		//karl
-		msgEngine.setTextSize(fontSize);
+		msgEngine.setMaxLines(userPrefs.getInt("user_options_enginePlay_displayedLines", Settings.LINES_DEFAULT));
+		msgEngine.setLines(userPrefs.getInt("user_options_enginePlay_displayedLines", Settings.LINES_DEFAULT));
+		msgEngine.setTextSize(userPrefs.getInt("user_options_gui_fontSize", Settings.FONTSIZE_MEDIUM));
 
 		btn_1 = (ImageView) findViewById(R.id.btn_1);
 		registerForContextMenu(btn_1);
@@ -210,9 +208,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		gameDataIntent = new Intent(this, ChessGameData.class);
 		notationIntent = new Intent(this, ChessNotation.class);
 		moveTextIntent = new Intent(this, ChessMoveText.class);
-		optionsGuiIntent = new Intent(this, OptionsGUI.class);
 		optionsTimeControlIntent = new Intent(this, OptionsTimeControl.class);
-		optionsEnginePlayIntent = new Intent(this, OptionsEnginePlay.class);
+		optionsSettingsIntent = new Intent(this, Settings.class);
 		optionsColorIntent = new Intent(this, OptionsColor.class);
 		editChessBoardIntent = new Intent(this, EditChessBoard.class);
 		editUciOptions = new Intent(this, EditUciOptions.class);
@@ -334,13 +331,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final int MENU_MANUAL  		= 6;
 
 	final int MENU_NEW_GAME     = 10;
-	final int MENU_GAME_MODE    = 11;
-	final int MENU_GAME_RESIGN  = 12;
-	final int MENU_GAME_DRAW    = 13;
-	final int MENU_COMMENTS    	= 14;
-	final int MENU_NAG      	= 15;
-	final int MENU_GAME_DATA  	= 16;
-	final int MENU_PGN_DATA    	= 17;
+	final int MENU_UCI_ELO     	= 11;
+	final int MENU_TIME     	= 12;
+	final int MENU_GAME_MODE    = 13;
+	final int MENU_GAME_RESIGN  = 14;
+	final int MENU_GAME_DRAW    = 15;
+	final int MENU_COMMENTS    	= 16;
+	final int MENU_NAG      	= 17;
+	final int MENU_GAME_DATA  	= 18;
+	final int MENU_PGN_DATA    	= 19;
 
 	private void initDrawers()
 	{
@@ -373,6 +372,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		final DrawerItem[] rightItems = new DrawerItem[]
 		{
 			new DrawerItem(MENU_NEW_GAME, R.string.menu_new_game),
+			new DrawerItem(MENU_UCI_ELO, R.string.setEngineStrength),
+			new DrawerItem(MENU_TIME, R.string.timeClock),
 			new DrawerItem(MENU_GAME_MODE, R.string.app_optionsPlay),
 			new DrawerItem(MENU_GAME_RESIGN, R.string.enginePlayerResign),
 			new DrawerItem(MENU_GAME_DRAW, R.string.enginePlayerDraw),
@@ -440,8 +441,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				showDialog(MENU_ENGINES_DIALOG);
 				break;
 			case MENU_SETTINGS:
-				removeDialog(MENU_SETTINGS_DIALOG);
-				showDialog(MENU_SETTINGS_DIALOG);
+				stopComputerThinking(false);
+				startActivityForResult(optionsSettingsIntent, OPTIONS_SETTINGS);
 				break;
 			case MENU_INFO:
 				removeDialog(MENU_ABOUT_DIALOG);
@@ -477,6 +478,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					removeDialog(PLAY_DIALOG);
 					showDialog(PLAY_DIALOG);
 				}
+				break;
+			case MENU_UCI_ELO:
+				removeDialog(UCI_ELO_DIALOG);
+				showDialog(UCI_ELO_DIALOG);
+				break;
+			case MENU_TIME:
+				stopSearchAndContinue(EngineState.STOP_IDLE, "");
+				startActivityForResult(optionsTimeControlIntent, OPTIONS_TIME_CONTROL_REQUEST_CODE);
 				break;
 			case MENU_GAME_MODE:
 				removeDialog(PLAY_DIALOG);
@@ -689,7 +698,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		if (!ec.getEngine().uciOptions.equals("")) {
 			editUciOptions.putExtra("uciOpts", ec.getEngine().uciOptions);
 			editUciOptions.putExtra("uciOptsChanged", fileIO.getDataFromUciFile(fileIO.getUciExternalPath(), ec.getEngine().uciFileName));
-			editUciOptions.putExtra("uciEngineName", ec.getEngine().engineName);
+			editUciOptions.putExtra("uciEngineName", ec.getEngine().uciEngineName);
 			startActivityForResult(editUciOptions, EDIT_UCI_OPTIONS);
 			stopComputerThinking(true);
 			stopChessClock();
@@ -918,10 +927,17 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		return storagePermission == PermissionState.GRANTED;
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.O)
 	@Override
     protected Dialog onCreateDialog(int id)
 	{
 		activDialog = id;
+		if (id == C4A_DIALOG)
+		{
+			c4aDialog = new C4aDialog(this, this, getString(R.string.dgTitleDialog),
+					"", getString(R.string.btn_Ok), "", msgC4aDialog, 0, "");
+			return c4aDialog;
+		}
 		if (id == C4A_NEW_DIALOG)
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1252,9 +1268,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_btn_engine_select.setOnClickListener(myViewListener);
 			if (ec.getEngine().engineName.equals(""))
 				d_btn_engine_select.setText(R.string.engine);
-			else 	d_btn_engine_select.setText(ec.getEngine().engineName);
-			d_btn_engine_setting = playDialog.findViewById(R.id.btn_engine_setting);
-			d_btn_engine_setting.setOnClickListener(myViewListener);
+			else 	d_btn_engine_select.setText(ec.getEngine().uciEngineName);
+			d_btn_settings = playDialog.findViewById(R.id.btn_settings);
+			d_btn_settings.setOnClickListener(myViewListener);
 			d_btn_engine_uci_options = playDialog.findViewById(R.id.btn_engine_uci_options);
 			d_btn_engine_uci_options.setOnClickListener(myViewListener);
 
@@ -1338,6 +1354,81 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 			AlertDialog alert = builder.create();
 			alert.setCancelable(true);
+			return alert;
+		}
+
+		if (id == UCI_ELO_DIALOG)
+		{
+			elo = userPrefs.getInt("uci_elo", 2800);
+			if (elo < eloMin)
+				elo = eloMin;
+			if (elo > eloMax)
+				elo = eloMax;
+			Dialog dialog = new Dialog(this);
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			dialog.setContentView(R.layout.dialog_set_uci_elo);
+			eloSeekBar = dialog.findViewById(R.id.eloSeekBar);
+			eloSeekBar.setMax(eloMax);
+			eloSeekBar.setProgress(elo);
+
+			eloSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {}
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {}
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					if (fromUser) {
+						elo = progress;
+						if(elo < eloMin) {
+							seekBar.setProgress(eloMin);
+							elo = eloMin;
+						}
+						eloValue.setText(Integer.toString(elo));
+					}
+				}
+			});
+			eloValue = dialog.findViewById(R.id.eloValue);
+			eloValue.setText(Integer.toString(elo));
+			eloValue.addTextChangedListener(new TextWatcher() {
+				public void afterTextChanged(Editable s) {
+					if (!s.toString().equals("")) {
+						int e = (Integer.parseInt(s.toString()));
+						if (e < eloMin) {
+							e = eloMin;
+						}
+						if (e > eloMax) {
+							e = eloMax;
+						}
+						elo = e;
+						eloSeekBar.setProgress(e);
+					}
+				}
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+				public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			});
+			eloInfo = dialog.findViewById(R.id.eloInfo);
+			String info = "( " + eloMin + " - " + eloMax + " )";
+			eloInfo.setText(info);
+			btn_cancel = dialog.findViewById(R.id.btn_cancel);
+			btn_cancel.setOnClickListener(v -> {
+				removeDialog(UCI_ELO_DIALOG);
+			});
+			btn_ok = dialog.findViewById(R.id.btn_ok);
+			btn_ok.setOnClickListener(v -> {
+				SharedPreferences.Editor ed = userPrefs.edit();
+				ed.putInt("uci_elo", elo);
+				ed.apply();
+				removeDialog(UCI_ELO_DIALOG);
+			});
+			return dialog;
+		}
+
+		if (id == MOVE_NOTIFICATION_DIALOG)
+		{
+			AlertDialog.Builder builder = new AlertDialog.Builder(this)
+					.setMessage(gc.cl.p_moveText);
+			AlertDialog alert = builder.create();
 			return alert;
 		}
 
@@ -1603,16 +1694,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (id == MENU_ENGINES_DIALOG)
 		{
-
 			final int MENU_ENGINE_SELECT 		= 0;
-			final int MENU_ENGINE_SETTINGS 		= 1;
-			final int MENU_ENGINE_UCI 			= 2;
-			final int MENU_ENGINE_AUTOPLAY 		= 3;
-			final int MENU_ENGINE_SHUTDOWN 		= 4;
+			final int MENU_ENGINE_UCI 			= 1;
+			final int MENU_ENGINE_AUTOPLAY 		= 2;
+			final int MENU_ENGINE_SHUTDOWN 		= 3;
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
 			List<Integer> actions = new ArrayList<Integer>();
 			arrayAdapter.add(getString(R.string.menu_enginesettings_select));			actions.add(MENU_ENGINE_SELECT);
-			arrayAdapter.add(getString(R.string.menu_enginesettings_playOptions));		actions.add(MENU_ENGINE_SETTINGS);
 			arrayAdapter.add(getString(R.string.menu_enginesettings_uciOptions));		actions.add(MENU_ENGINE_UCI);
 			arrayAdapter.add(getString(R.string.menu_specialities_engine_autoplay)); 	actions.add(MENU_ENGINE_AUTOPLAY);
 			arrayAdapter.add(getString(R.string.menu_enginesettings_shutdown));   		actions.add(MENU_ENGINE_SHUTDOWN);
@@ -1631,10 +1719,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						removeDialog(MENU_SELECT_ENGINE_FROM_OEX);
 						showDialog(MENU_SELECT_ENGINE_FROM_OEX);
 						break;
-					case MENU_ENGINE_SETTINGS:
-						stopComputerThinking(false);
-						startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
-						break;
 					case MENU_ENGINE_UCI:
 						startEditUciOptions();
 						break;
@@ -1644,88 +1728,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					case MENU_ENGINE_SHUTDOWN:
 						stopAllEnginesAndInit();
 						break;
-				}
-			});
-			AlertDialog alert = builder.create();
-			return alert;
-		}
-
-		if (id == MENU_SETTINGS_DIALOG)
-		{
-			final int MENU_SETTINGS_GUI     		= 0;
-			final int MENU_SETTINGS_COMPUTER		= 1;
-			final int MENU_SETTINGS_COLOR			= 2;
-			final int MENU_SETTINGS_TIME_CONTROL    = 3;
-			final int MENU_SETTINGS_TIMER_AUTOPLAY	= 4;
-			final int MENU_SETTINGS_TIME_WHITE 		= 5;
-			final int MENU_SETTINGS_TIME_BLACK 		= 6;
-			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
-			List<Integer> actions = new ArrayList<Integer>();
-			arrayAdapter.add(getString(R.string.menu_usersettings_gui));     		actions.add(MENU_SETTINGS_GUI);
-			arrayAdapter.add(getString(R.string.menu_enginesettings_playOptions)); 		actions.add(MENU_SETTINGS_COMPUTER);
-			arrayAdapter.add(getString(R.string.menu_colorsettings)); 		actions.add(MENU_SETTINGS_COLOR);
-			arrayAdapter.add(getString(R.string.menu_usersettings_timeControl));   		actions.add(MENU_SETTINGS_TIME_CONTROL);
-			arrayAdapter.add(getString(R.string.menu_usersettings_timerAutoPlay));     	actions.add(MENU_SETTINGS_TIMER_AUTOPLAY);
-			if (ec.chessEnginePlayMod < 4)
-			{
-				arrayAdapter.add(getString(R.string.menu_usersettings_time_white)); 		actions.add(MENU_SETTINGS_TIME_WHITE);
-				arrayAdapter.add(getString(R.string.menu_usersettings_time_black)); 		actions.add(MENU_SETTINGS_TIME_BLACK);
-			}
-			final List<Integer> finalActions = actions;
-			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-			builder.setCancelable(true);
-			TextView tv = new TextView(getApplicationContext());
-			tv.setText(R.string.menu_usersettings);
-			tv.setTextAppearance(this, R.style.c4aDialogTitle);
-			tv.setGravity(Gravity.CENTER_HORIZONTAL);
-			builder.setCustomTitle(tv );
-			builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener()
-			{
-				@Override
-				public void onClick(DialogInterface dialog, int item)
-				{
-					switch (finalActions.get(item))
-					{
-						case MENU_SETTINGS_GUI:
-							stopComputerThinking(false);
-							startActivityForResult(optionsGuiIntent, OPTIONS_GUI_REQUEST_CODE);
-							break;
-						case MENU_SETTINGS_COMPUTER:
-							stopComputerThinking(false);
-							startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
-							break;
-						case MENU_SETTINGS_COLOR:
-							removeDialog(MENU_COLOR_SETTINGS);
-							showDialog(MENU_COLOR_SETTINGS);
-							break;
-						case MENU_SETTINGS_TIME_CONTROL:
-							stopSearchAndContinue(EngineState.STOP_IDLE, "");
-							startActivityForResult(optionsTimeControlIntent, OPTIONS_TIME_CONTROL_REQUEST_CODE);
-							break;
-						case MENU_SETTINGS_TIMER_AUTOPLAY:
-							chessClockMessage = getString(R.string.ccsMessageAutoPlay);
-							chessClockControl = 41;
-							chessClockTimeGame = -1;
-							chessClockTimeBonus = userPrefs.getInt("user_options_timer_autoPlay", 1500);
-							c4aShowDialog(TIME_SETTINGS_DIALOG);
-							break;
-						case MENU_SETTINGS_TIME_WHITE:
-							chessClockMessage = getString(R.string.ccsMessageWhite);
-							chessClockControl = 1;
-							chessClockTimeGame = tc.timeWhite;
-							chessClockTimeBonusSaveWhite = tc.bonusWhite;
-							chessClockTimeBonus = -1;
-							c4aShowDialog(TIME_SETTINGS_DIALOG);
-							break;
-						case MENU_SETTINGS_TIME_BLACK:
-							chessClockMessage = getString(R.string.ccsMessageBlack);
-							chessClockControl = 2;
-							chessClockTimeGame = tc.timeBlack;
-							chessClockTimeBonusSaveBlack = tc.bonusBlack;
-							chessClockTimeBonus = -1;
-							c4aShowDialog(TIME_SETTINGS_DIALOG);
-							break;
-					}
 				}
 			});
 			AlertDialog alert = builder.create();
@@ -2467,14 +2469,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				removeDialog(MENU_BOARD_DIALOG);
 				showDialog(MENU_BOARD_DIALOG);
 				break;
-
 			case R.id.btn_1:    // play options (???)
-				removeDialog(MENU_SETTINGS_DIALOG);
-				showDialog(MENU_SETTINGS_DIALOG);
+				stopComputerThinking(false);
+				startActivityForResult(optionsSettingsIntent, OPTIONS_SETTINGS);
 				break;
 			case R.id.btn_2:	// computer settings
-				stopComputerThinking(false);
-				startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
+				startEditUciOptions();
 				break;
 			case R.id.btn_3:    // auto play
 				startStopAutoPlay();
@@ -2553,23 +2553,27 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //		Log.i(TAG, "2 onActivityResult, requestCode: " + requestCode + ", " + "resultCode: " + resultCode);
 
 		switch(requestCode) {
-			case OPTIONS_ENGINE_PLAY_REQUEST_CODE:
+			case OPTIONS_SETTINGS:
 				if (resultCode == 3) {    // set playOption and play
 
-//					Log.i(TAG, "onActivityResult, OPTIONS_ENGINE_PLAY_REQUEST_CODE" + ", ec.getEngine().engineState: " + ec.getEngine().engineState);
+					msgMoves.setTextSize(userPrefs.getInt("user_options_gui_fontSize", Settings.FONTSIZE_MEDIUM));
+					msgShort.setTextSize(userPrefs.getInt("user_options_gui_fontSize", Settings.FONTSIZE_MEDIUM));
+					msgShort2.setTextSize(userPrefs.getInt("user_options_gui_fontSize", Settings.FONTSIZE_MEDIUM));
+					msgEngine.setTextSize(userPrefs.getInt("user_options_gui_fontSize", Settings.FONTSIZE_MEDIUM));
 
+					initColors();
+					boardView.setColor();
+					updateGui();
 					gc.isGameLoaded = false;
 					msgEngine.setVisibility(TextView.GONE);
 					messageInfo = "";
 					messageEngine = "";
 					messageEngineShort = "";
 					ec.chessEngineAutoRun = false;
-					if (requestCode == OPTIONS_ENGINE_PLAY_REQUEST_CODE) {
-						ec.getEngine().isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
-						ec.setBookOptions();
-						msgEngine.setMaxLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
-						msgEngine.setLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
-					}
+					ec.getEngine().isLogOn = userPrefs.getBoolean("user_options_enginePlay_logOn", false);
+					ec.setBookOptions();
+					msgEngine.setMaxLines(userPrefs.getInt("user_options_enginePlay_displayedLines", Settings.LINES_DEFAULT));
+					msgEngine.setLines(userPrefs.getInt("user_options_enginePlay_displayedLines", Settings.LINES_DEFAULT));
 					switch (ec.chessEnginePlayMod) {
 						case 1:     // white
 						case 2:     // black
@@ -3643,23 +3647,29 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			case 1:	// default engine Stockfish
 				if (initEngine)
 				{
-					ec.getEngine().setUciMultiPV(userPrefs.getInt("user_options_enginePlay_MultiPv", OptionsEnginePlay.PV_MULTI));
+					ec.getEngine().setUciMultiPV(userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT));
 					ec.getEngine().setIsChess960(gc.isChess960);
-
-					//karl
-//					ec.getEngine().setUciStrength(userPrefs.getInt("user_options_enginePlay_strength", 100));
-//					ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 0));
-//					ec.getEngine().setUciContempt(userPrefs.getInt("user_options_enginePlay_aggressiveness", 24));
-//					ec.getEngine().setUciHash(16);
-
 					ec.getEngine().setUciPonder(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
 
 					FileIO f = new FileIO(this);;
 					ec.getEngine().setUciOptsFromFile(f.getDataFromUciFile(f.getUciExternalPath(), ec.getEngine().uciFileName));
 
-					//karl
 					ec.getEngine().setUciHash(16);
-					ec.getEngine().setUciNodestime(0);
+					ec.getEngine().withUciElo = false;
+					if (ec.chessEnginePlayMod == 1 || ec.chessEnginePlayMod == 2)
+						ec.getEngine().withUciElo = true;
+
+					ec.getEngine().uciElo = userPrefs.getInt("uci_elo", 2800);
+					if (ec.getEngine().uciElo < ec.getEngine().uciEloMin)
+						ec.getEngine().uciElo = ec.getEngine().uciEloMin;
+					if (ec.getEngine().uciElo > ec.getEngine().uciEloMax)
+						ec.getEngine().uciElo = ec.getEngine().uciEloMax;
+					ec.getEngine().setElo(ec.getEngine().withUciElo, ec.getEngine().uciElo);
+
+//					Log.i(TAG, "2 startNewGame(), uci_elo: " + userPrefs.getInt("uci_elo", 2800) + ", elo: " + ec.getEngine().uciElo);
+//					Log.i(TAG, "2 startNewGame(), uciEloMin: " + ec.getEngine().uciEloMin + ", uciEloMax: " + ec.getEngine().uciEloMax);
+//					Log.i(TAG, "2 startNewGame(), withElo: " + ec.getEngine().withUciElo + ", engineName: " + ec.getEngine().engineName);
+//					Log.i(TAG, "2 startNewGame(), withElo: " + ec.getEngine().withUciElo + ", engineNameElo: " + ec.getEngine().engineNameElo);
 
 					ec.getEngine().newGame();
 
@@ -4322,7 +4332,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			setTextViewColors(msgEngine, cv.COLOR_ENGINE_BACKGROUND_12, cv.COLOR_ENGINE_TEXT_13);
 			if (userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true))
 			{
-				msgEngine.setLines(userPrefs.getInt("user_options_enginePlay_displayedLines", OptionsEnginePlay.DISPLAYED_LINES));
+				msgEngine.setLines(userPrefs.getInt("user_options_enginePlay_displayedLines", Settings.LINES_DEFAULT));
 				msgEngine.setText(messageEngine);
 			}
 			else
@@ -5290,8 +5300,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					else
 						engineInfoString = "";
 
-					isInfo = true;
-					ec.getEngine().parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves", OptionsEnginePlay.PV_MOVES));
+					ec.getEngine().parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves", Settings.MOVES_DEFAULT));
 					int depth = ec.getEngine().statCurrDepth;
 					int selDepth = ec.getEngine().statCurrSelDepth;
 					int moveNumber = ec.getEngine().statCurrMoveNr;
@@ -5314,7 +5323,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					{
 						try
 						{
-							int multiPv = userPrefs.getInt("user_options_enginePlay_MultiPv", OptionsEnginePlay.PV_MULTI);
+							int multiPv = userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT);
 							if (ec.getEngine().statPvIdx == 0)
 								multiPvCnt++;
 							int pvNr = ec.getEngine().statPvIdx +1;
@@ -5590,8 +5599,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //			Log.i(TAG, "getInfoPv, statPvIdx: " + statPvIdx + ", infoPv.size(): " + infoPv.size() + ", statPvScore: " + statPvScore + ", statPvMoves: " + statPvMoves + ", isMate: " + isMate);
 
-			if 	(	infoPv.size() 	== 	userPrefs.getInt("user_options_enginePlay_MultiPv", OptionsEnginePlay.PV_MULTI)
-					& statPvIdx 	< 	userPrefs.getInt("user_options_enginePlay_MultiPv", OptionsEnginePlay.PV_MULTI)
+			if 	(	infoPv.size() 	== 	userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT)
+					& statPvIdx 	< 	userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT)
 					)
 			{
 				infoPv.set(statPvIdx, statPvMoves);
@@ -5599,7 +5608,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //					Log.i(TAG, "getInfoPv, statPvIdx: " + statPvIdx + ", infoPv.size(): " + infoPv.size() + ", statPvScore: " + statPvScore + ", statPvMoves: " + statPvMoves);
 
-					searchDisplayMoves = ec.getEngine().getDisplayMoves(ec.getEngine().statPvMoves, userPrefs.getInt("user_options_gui_arrows", OptionsGUI.ARROWS_DEFAULT));
+					searchDisplayMoves = ec.getEngine().getDisplayMoves(ec.getEngine().statPvMoves, userPrefs.getInt("user_options_gui_arrows", Settings.ARROWS_DEFAULT));
 					bestScore = getBestScore(statPvScore, fen);
 				}
 				CharSequence displayScore = getDisplayScore(statPvScore, fen);
@@ -6152,7 +6161,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
 		infoPv = new ArrayList<CharSequence>();
 		infoMessage = new ArrayList<CharSequence>();
-		for (int i = 0; i < userPrefs.getInt("user_options_enginePlay_MultiPv", OptionsEnginePlay.PV_MULTI); i++)
+		for (int i = 0; i < userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT); i++)
 		{
 			infoPv.add("");
 			infoMessage.add("");
@@ -6311,9 +6320,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				if (!gc.cl.p_fen.equals(""))
 					stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 			}
-
-
-
 		}
 		else
 		{
@@ -7208,9 +7214,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					showDialog(MENU_SELECT_ENGINE_FROM_OEX);
 					removeDialog(PLAY_DIALOG);
 					break;
-				case R.id.btn_engine_setting:
+				case R.id.btn_settings:
 					stopComputerThinking(false);
-					startActivityForResult(optionsEnginePlayIntent, OPTIONS_ENGINE_PLAY_REQUEST_CODE);
+					startActivityForResult(optionsSettingsIntent, OPTIONS_SETTINGS);
 					removeDialog(PLAY_DIALOG);
 					break;
 				case R.id.btn_engine_uci_options:
@@ -7257,8 +7263,21 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						initPosition(true, dChessEnginePlayMod);
 					}
 					if (v.getId() == R.id.btn_chess960) {
-						dNewGame = true;
-						initPosition(false, dChessEnginePlayMod);
+						if (!ec.getEngine().uciOptions.equals("")) {
+							if (ec.getEngine().uciOptions.contains("UCI_Chess960")) {
+								dNewGame = true;
+								initPosition(false, dChessEnginePlayMod);
+							}
+							else {
+								msgC4aDialog = getString(R.string.chess960NotSupprted);
+								showDialog(C4A_DIALOG);
+								break;
+							}
+						}
+						else {
+							showDialog(MENU_SELECT_ENGINE_FROM_OEX);
+							break;
+						}
 					}
 					if (v.getId() == R.id.btn_continue) {
 						dNewGame = false;
@@ -7383,9 +7402,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	Intent gameDataIntent;
 	Intent notationIntent;
 	Intent moveTextIntent;
-	Intent optionsGuiIntent;
 	Intent optionsTimeControlIntent;
-	Intent optionsEnginePlayIntent;
+	Intent optionsSettingsIntent;
 	Intent optionsColorIntent;
 	Intent editChessBoardIntent;
 	Intent editUciOptions;
@@ -7405,7 +7423,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int OPTIONS_GUI_REQUEST_CODE = 14;
 	final static int OPTIONS_ENGINE_AUTO_PLAY_REQUEST_CODE = 15;
 	final static int OPTIONS_TIME_CONTROL_REQUEST_CODE = 18;
-	final static int OPTIONS_ENGINE_PLAY_REQUEST_CODE = 21;
+	final static int OPTIONS_SETTINGS = 21;
 	final static int OPTIONS_COLOR_SETTINGS = 22;
 	final static int EDIT_CHESSBOARD_REQUEST_CODE = 44;
 	final static int ENGINE_SETTING_REQUEST_CODE = 41;
@@ -7414,6 +7432,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	//  dialogs RequestCode
 	final static int PLAY_DIALOG = 100;
+	final static int C4A_DIALOG = 111;
+	String msgC4aDialog = "";
 	final static int MOVE_NOTIFICATION_DIALOG = 110;
 	final static int NO_FILE_ACTIONS_DIALOG = 193;
 	final static int DOWNLOAD_ERROR_DIALOG = 195;
@@ -7425,10 +7445,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int TIME_SETTINGS_DIALOG = 400;
 	final static int QUERY_DIALOG = 600;
 	final static int GAME_ID_DIALOG = 601;
+	final static int UCI_ELO_DIALOG = 610;
 	final static int MENU_BOARD_DIALOG = 701;
 	final static int MENU_EDIT_DIALOG = 703;
 	final static int MENU_ENGINES_DIALOG = 704;
-	final static int MENU_SETTINGS_DIALOG = 705;
 	final static int MENU_ABOUT_DIALOG = 706;
 	final static int MENU_PGN_DIALOG = 730;
 	final static int MENU_CLIPBOARD_DIALOG = 731;
@@ -7597,8 +7617,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	// btn_engines
 	TextView d_btn_engine_select;
-	TextView d_btn_engine_setting;
 	TextView d_btn_engine_uci_options;
+	TextView d_btn_settings;
 
 	// btn_play_a
 	TextView d_btn_white;
@@ -7619,6 +7639,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	TextView btn_rate;
 	TextView btn_no;
 
+	// UCI_ELO_DIALOG
+	int elo = 1600;
+	int eloMin = 800;
+	int eloMax = 3000;
+	public EditText eloValue;
+	public TextView eloInfo;
+	public SeekBar eloSeekBar;
+	TextView btn_cancel;
+	TextView btn_ok;
+
 	boolean dNewGame = false;
 	int dChessEnginePlayMod = 1;
 	int dSettingTimeWhite = 0;
@@ -7630,12 +7660,5 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	//karl --> settings
 //	boolean fileActions = true;		// sdk >= 30
 	boolean fileActions = false;
-
-	//karl test fontSize
-	long fontSizeSmall 	= 10L;
-	long fontSizeMedium = 14L;
-	long fontSizeLarge 	= 18L;
-	long fontSizeLarger = 22L;
-	long fontSize 		= fontSizeMedium;
 
 }

@@ -363,7 +363,7 @@
     <string name="analysisFinished">Die Engine hat die Analyse beendet.</string>
     <string name="debugInformation">Debug-Informationen</string>
     <string name="app_editUciOptions">UCI-Optionen editieren</string>
-    <string name="menu_enginesettings_uciOptions">UCI-Optionen</string>
+    <string name="menu_enginesettings_uciOptions">Engine Optionen</string>
     <string name="position">Position</string>
     <string name="timePosition">Position</string>
     <string name="engineInit">"Initialisierung Engine: "</string>
@@ -375,4 +375,15 @@
     <string name="colorArrows">Pfeile 1</string>
     <string name="colorArrows2">Pfeile 2</string>
     <string name="arrows">Pfeile</string>
+    <string name="engineSettings">Engine-Einstellungen</string>
+    <string name="appearance">Aussehen</string>
+    <string name="timeClock">Zeit, Uhr</string>
+    <string name="openingBook">Eröffnungsbuch</string>
+    <string name="other">Sonstiges</string>
+    <string name="small">Klein</string>
+    <string name="medium">Mittel</string>
+    <string name="large">Groß</string>
+    <string name="larger">Größer</string>
+    <string name="setEngineStrength">Engine-Spielstärke</string>
+    <string name="chess960NotSupprted">Diese Engine unterstützt nicht Chess960!</string>
 </resources>

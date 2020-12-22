@@ -276,15 +276,15 @@
                     android:background="@drawable/rectangleblue"
                     android:text="@string/engine" />
                 <TextView
-                    android:id="@+id/btn_engine_setting"
-                    style="@style/c4aTV5"
-                    android:background="@drawable/rectangleblue"
-                    android:text="@string/menu_usersettings" />
-                <TextView
                     android:id="@+id/btn_engine_uci_options"
                     style="@style/c4aTV5"
                     android:background="@drawable/rectangleblue"
                     android:text="@string/menu_enginesettings_uciOptions" />
+                <TextView
+                    android:id="@+id/btn_settings"
+                    style="@style/c4aTV5"
+                    android:background="@drawable/rectangleblue"
+                    android:text="@string/menu_usersettings" />
             </LinearLayout>
 
             <LinearLayout

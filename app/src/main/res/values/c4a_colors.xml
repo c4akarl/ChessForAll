@@ -25,6 +25,7 @@
 	<color name="text_yellow">#e5e19e</color>
 	<color name="text_pink">#c47f72</color>
 	<color name="text_white">#edebed</color>
+	<color name="text_blue">#82BCEA</color>
 	<color name="fm_load">#4f684d</color>
 	<color name="fm_save">#6b2c2d</color>
 	<color name="dialog_green">#6fac64</color>

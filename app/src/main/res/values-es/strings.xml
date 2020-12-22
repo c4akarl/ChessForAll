@@ -363,7 +363,7 @@
     <string name="analysisFinished">El motor ha terminado el análisis.</string>
     <string name="debugInformation">Información de depuración</string>
     <string name="app_editUciOptions">Editar opciones de UCI</string>
-    <string name="menu_enginesettings_uciOptions">Opciones UCI</string>
+    <string name="menu_enginesettings_uciOptions">Opciones de motor</string>
     <string name="position">Posición</string>
     <string name="timePosition">Posición</string>
     <string name="engineInit">Motor de inicialización:</string>
@@ -375,5 +375,16 @@
     <string name="colorArrows">Flechas 1</string>
     <string name="colorArrows2">Flechas 2</string>
     <string name="arrows">Flechas</string>
+    <string name="engineSettings">Configuración del motor</string>
+    <string name="appearance">Apariencia</string>
+    <string name="timeClock">Tiempo, Reloj</string>
+    <string name="openingBook">Libro de Aperturas</string>
+    <string name="other">Otro</string>
+    <string name="small">Pequeña</string>
+    <string name="medium">Medio</string>
+    <string name="large">Grande</string>
+    <string name="larger">Más grande</string>
+    <string name="setEngineStrength">Fuerza de juego del motor</string>
+    <string name="chess960NotSupprted">¡Este motor no es compatible con Chess960!</string>
 
 </resources>

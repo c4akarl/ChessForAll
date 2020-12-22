@@ -364,7 +364,7 @@
     <string name="analysisFinished">The Engine has finished the analysis.</string>
     <string name="debugInformation">Debug Information</string>
     <string name="app_editUciOptions">Edit UCI-Options</string>
-    <string name="menu_enginesettings_uciOptions">UCI-Options</string>
+    <string name="menu_enginesettings_uciOptions">Engine options</string>
     <string name="position">Position</string>
     <string name="timePosition">Position</string>
     <string name="engineInit">Initialization engine:</string>
@@ -376,5 +376,19 @@
     <string name="colorArrows">Arrows 1</string>
     <string name="colorArrows2">Arrows 2</string>
     <string name="arrows">Arrows</string>
+    <string name="engineSettings">Engine Settings</string>
+    <string name="appearance">Appearance</string>
+    <string name="timeClock">Time, Clock</string>
+    <string name="openingBook">Opening Book</string>
+    <string name="other">Other</string>
+    <string name="small">Small</string>
+    <string name="medium">Medium</string>
+    <string name="large">Large</string>
+    <string name="larger">Larger</string>
+    <string name="charPlus" translatable="false">+</string>
+    <string name="charMinus" translatable="false">-</string>
+    <string name="setEngineStrength">Engine playing strength</string>
+    <string name="elo" translatable="false">Elo:</string>
+    <string name="chess960NotSupprted">This engine does not support Chess960!</string>
 
 </resources>
