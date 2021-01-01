@@ -5,7 +5,7 @@
     <string name="app_chessData">Spieldaten</string>
     <string name="app_chessNotation">Notation</string>
     <string name="app_optionsGUI">Benutzereinstellungen</string>
-    <string name="app_optionsPlay">Spielmodus - Neue Partie</string>
+    <string name="app_optionsPlay">Spielmodus</string>
     <string name="app_optionsEnginePlay">Engine Einstellungen</string>
     <string name="app_optionsTimeControl">Optionen - Zeitsteuerung</string>
     <string name="app_editChessBoard">Schachbrett editieren</string>
@@ -386,4 +386,5 @@
     <string name="larger">Größer</string>
     <string name="setEngineStrength">Engine-Spielstärke</string>
     <string name="chess960NotSupprted">Diese Engine unterstützt nicht Chess960!</string>
+    <string name="timeDelayReplay">Zeitverzögerung (nachspielen)</string>
 </resources>

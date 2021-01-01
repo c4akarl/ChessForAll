@@ -50,31 +50,25 @@ public class EngineControl
 		chessEngineSite = android.os.Build.MODEL;
 		chessEngineRound = "-";
 		if (chessEngineAutoRun)
+			chessEngineRound = 	userP.getInt("user_play_eve_round", 1) + "." + userP.getInt("user_play_eve_gameCounter", 1);
+		switch (chessEnginePlayMod)
 		{
-			chessEngineRound = 	userP.getInt("user_play_eve_round", 1) 
-								+ "." + userP.getInt("user_play_eve_gameCounter", 1);
-		}
-		else
-		{
-			switch (chessEnginePlayMod)
-	        {
-	        	case 1:
-	        		chessEnginePlayerWhite = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
-	        		chessEnginePlayerBlack = en_1.engineName;
-	        		break;
-	        	case 2:
-	        		chessEnginePlayerWhite = en_1.engineName;
-					chessEnginePlayerBlack = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
-	        		break;
-	        	case 3:	
-	        		chessEnginePlayerWhite = en_1.engineName;
-	        		chessEnginePlayerBlack = en_1.engineName;
-	        		break;
-	        	case 4:	
-	        		chessEnginePlayerWhite = white;
-	        		chessEnginePlayerBlack = black;
-	        		break;
-	        }
+			case 1:
+				chessEnginePlayerWhite = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
+				chessEnginePlayerBlack = en_1.engineName;
+				break;
+			case 2:
+				chessEnginePlayerWhite = en_1.engineName;
+				chessEnginePlayerBlack = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
+				break;
+			case 3:
+				chessEnginePlayerWhite = en_1.engineName;
+				chessEnginePlayerBlack = en_1.engineName;
+				break;
+			case 4:
+				chessEnginePlayerWhite = white;
+				chessEnginePlayerBlack = black;
+				break;
 		}
     }
 

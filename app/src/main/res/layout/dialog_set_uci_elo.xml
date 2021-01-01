@@ -68,11 +68,13 @@
         android:layout_marginStart="@dimen/margin_1"
         android:layout_marginEnd="@dimen/margin_1"
         android:layout_marginBottom="@dimen/margin_1"
+        android:weightSum="2"
         android:orientation="horizontal" >
         <TextView
             android:id="@+id/btn_cancel"
             style="@style/c4aTV5"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:layout_marginEnd="@dimen/margin_1"
             android:layout_marginRight="@dimen/margin_1"
@@ -83,7 +85,8 @@
         <TextView
             android:id="@+id/btn_ok"
             style="@style/c4aTV5"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:paddingLeft="@dimen/tv_color_margin_2"
             android:paddingRight="@dimen/tv_color_margin_2"

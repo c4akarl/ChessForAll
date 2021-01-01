@@ -5,7 +5,7 @@
     <string name="app_chessData">Game data</string>
     <string name="app_chessNotation">Notation</string>
     <string name="app_optionsGUI">Options - User settings</string>
-    <string name="app_optionsPlay">Game mode - New game</string>
+    <string name="app_optionsPlay">Game mode</string>
     <string name="app_optionsEnginePlay">Engine Settings</string>
     <string name="app_optionsTimeControl">Options - Time control</string>
     <string name="app_editChessBoard">Edit chessboard</string>
@@ -390,5 +390,6 @@
     <string name="setEngineStrength">Engine playing strength</string>
     <string name="elo" translatable="false">Elo:</string>
     <string name="chess960NotSupprted">This engine does not support Chess960!</string>
+    <string name="timeDelayReplay">Time delay (replay)</string>
 
 </resources>

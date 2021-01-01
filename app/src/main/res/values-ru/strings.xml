@@ -5,7 +5,7 @@
   <string name="app_chessData">Ходы партии</string>
   <string name="app_chessNotation">Нотация</string>
   <string name="app_optionsGUI">Опции - Пользовательские настройки</string>
-  <string name="app_optionsPlay">Игровой режим - Новая игра</string>
+  <string name="app_optionsPlay">Игровой режим</string>
   <string name="app_optionsEnginePlay">Движок Настрока</string>
   <string name="app_optionsTimeControl">Опции - Контроль времени</string>
   <string name="app_editChessBoard">Редактирование доски</string>
@@ -367,5 +367,6 @@
   <string name="larger">Больше</string>
     <string name="setEngineStrength">Сила игры двигателя</string>
     <string name="chess960NotSupprted">Этот движок не поддерживает Chess960!</string>
+    <string name="timeDelayReplay">Задержка по времени (воспроизведение)</string>
 
 </resources>

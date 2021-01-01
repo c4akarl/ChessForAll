@@ -3,7 +3,7 @@
 android:shape="rectangle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-	<solid android:color="@color/tv_background"
+	<solid android:color="#ADE4A7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <corners 	android:bottomRightRadius="4dp" android:bottomLeftRadius="4dp"

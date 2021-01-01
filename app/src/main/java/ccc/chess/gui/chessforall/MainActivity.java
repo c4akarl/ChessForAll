@@ -17,6 +17,7 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
@@ -1241,8 +1242,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 			// btn_menues
 			d_btn_menu_left = playDialog.findViewById(R.id.btn_menu_left);
+			setTextViewColors(d_btn_menu_left, "#EFE395");
 			d_btn_menu_left.setOnClickListener(myViewListener);
 			d_btn_menu_right = playDialog.findViewById(R.id.btn_menu_right);
+			setTextViewColors(d_btn_menu_right, "#EFE395");
 			d_btn_menu_right.setOnClickListener(myViewListener);
 
 			// btn_time
@@ -1260,8 +1263,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				d_btn_time_black.setText(tc.showBlackTime);
 			else
 				d_btn_time_black.setText("");
-			d_btn_time_ok = playDialog.findViewById(R.id.btn_time_ok);
-			d_btn_time_ok.setOnClickListener(myViewListener);
+			btn_elo = playDialog.findViewById(R.id.btn_elo);
+			String elo = getString(R.string.elo) + " " + userPrefs.getInt("uci_elo", 3000);
+			btn_elo.setText(elo);
+			btn_elo.setOnClickListener(myViewListener);
 
 			// btn_engines
 			d_btn_engine_select = playDialog.findViewById(R.id.btn_engine_select);
@@ -1435,18 +1440,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		if (id == MENU_BOARD_DIALOG)
 		{
 			final int MENU_EDIT_BOARD     	= 0;
-			final int MENU_CLIPBOARD    	= 1;
-			final int MENU_COLOR		  	= 2;
-			final int MENU_COORDINATES      = 3;
-			final int MENU_FLIP_BOARD    	= 4;
-			final int MENU_FILE  			= 5;
+			final int MENU_COLOR		  	= 1;
+			final int MENU_COORDINATES      = 2;
+			final int MENU_CLIPBOARD    	= 3;
+			final int MENU_FILE  			= 4;
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
 			List<Integer> actions = new ArrayList<Integer>();
 			arrayAdapter.add(getString(R.string.menu_edit_board));     	actions.add(MENU_EDIT_BOARD);
-			arrayAdapter.add(getString(R.string.menu_board_clipboard)); 			actions.add(MENU_CLIPBOARD);
 			arrayAdapter.add(getString(R.string.menu_board_color_settings)); 	actions.add(MENU_COLOR);
 			arrayAdapter.add(getString(R.string.menu_board_coordinates)); 		actions.add(MENU_COORDINATES);
-			arrayAdapter.add(getString(R.string.menu_board_flip)); 		actions.add(MENU_FLIP_BOARD);
+			arrayAdapter.add(getString(R.string.menu_board_clipboard)); 			actions.add(MENU_CLIPBOARD);
 			arrayAdapter.add(getString(R.string.fmLblFile)); 				actions.add(MENU_FILE);
 			final List<Integer> finalActions = actions;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
@@ -1465,10 +1468,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						case MENU_EDIT_BOARD:
 							startEditBoard(gc.fen, false);
 							break;
-						case MENU_CLIPBOARD:
-							removeDialog(MENU_CLIPBOARD_DIALOG);
-							showDialog(MENU_CLIPBOARD_DIALOG);
-							break;
 						case MENU_COLOR:
 							removeDialog(MENU_COLOR_SETTINGS);
 							showDialog(MENU_COLOR_SETTINGS);
@@ -1482,72 +1481,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							ed.commit();
 							updateGui();
 							break;
-						case MENU_FLIP_BOARD:
-							SharedPreferences.Editor ed2 = userPrefs.edit();
-							if (userPrefs.getBoolean("user_options_gui_FlipBoard", false))
-								ed2.putBoolean("user_options_gui_FlipBoard", false);
-							else
-								ed2.putBoolean("user_options_gui_FlipBoard", true);
-							ed2.commit();
+						case MENU_CLIPBOARD:
+							removeDialog(MENU_CLIPBOARD_DIALOG);
+							showDialog(MENU_CLIPBOARD_DIALOG);
 							break;
 						case MENU_FILE:
 							removeDialog(MENU_PGN_DIALOG);
 							showDialog(MENU_PGN_DIALOG);
-							break;
-					}
-				}
-			});
-			AlertDialog alert = builder.create();
-			return alert;
-		}
-
-		if (id == MENU_EDIT_DIALOG)
-		{
-			final int MENU_EDIT_BOARD     		= 0;
-			final int MENU_EDIT_PGN  			= 1;
-			final int MENU_EDIT_NOTIFICATION    = 2;
-			final int MENU_EDIT_NAG      		= 3;
-			final int MENU_EDIT_NOTATION    	= 4;
-			final int MENU_EDIT_TURN_BOARD    	= 5;
-			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
-			List<Integer> actions = new ArrayList<Integer>();
-			arrayAdapter.add(getString(R.string.menu_edit_board));     		actions.add(MENU_EDIT_BOARD);
-			arrayAdapter.add(getString(R.string.menu_pgn_edit)); 				actions.add(MENU_EDIT_PGN);
-			arrayAdapter.add(getString(R.string.menu_info_moveNotification));  	actions.add(MENU_EDIT_NOTIFICATION);
-			arrayAdapter.add(getString(R.string.menu_info_nag));   	actions.add(MENU_EDIT_NAG);
-			arrayAdapter.add(getString(R.string.menu_info_moveNotation)); 			actions.add(MENU_EDIT_NOTATION);
-			arrayAdapter.add(getString(R.string.menu_info_turnBoard)); 			actions.add(MENU_EDIT_TURN_BOARD);
-			final List<Integer> finalActions = actions;
-			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-			builder.setCancelable(true);
-			TextView tv = new TextView(getApplicationContext());
-			tv.setText(R.string.menu_modes_edit);
-			tv.setTextAppearance(this, R.style.c4aDialogTitle);
-			tv.setGravity(Gravity.CENTER_HORIZONTAL);
-			builder.setCustomTitle(tv );
-			builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener()
-			{
-				public void onClick(DialogInterface dialog, int item)
-				{
-					switch (finalActions.get(item))
-					{
-						case MENU_EDIT_BOARD:
-							startEditBoard(gc.fen, false);
-							break;
-						case MENU_EDIT_PGN:
-							startGameData();
-							break;
-						case MENU_EDIT_NOTIFICATION:
-							startMoveText();
-							break;
-						case MENU_EDIT_NAG:
-							c4aShowDialog(NAG_DIALOG);
-							break;
-						case MENU_EDIT_NOTATION:
-							startNotation(3);
-							break;
-						case MENU_EDIT_TURN_BOARD:
-							startTurnBoard();
 							break;
 					}
 				}
@@ -2049,32 +1989,31 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public void setPlayModBackground(int playmod)
 	{
-        d_btn_white.setBackgroundResource(R.drawable.rectanglewhite);
-        d_btn_black.setBackgroundResource(R.drawable.rectanglewhite);
-        d_btn_engine.setBackgroundResource(R.drawable.rectanglewhite);
-        d_btn_player.setBackgroundResource(R.drawable.rectanglewhite);
-        d_btn_edit.setBackgroundResource(R.drawable.rectanglewhite);
-        d_btn_analysis.setBackgroundResource(R.drawable.rectanglewhite);
-		setTextViewColors(lblPlayerNameB, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+		setTextViewColors(d_btn_white, "#EDEBED");
+		setTextViewColors(d_btn_black, "#EDEBED");
+		setTextViewColors(d_btn_engine, "#EDEBED");
+		setTextViewColors(d_btn_player, "#EDEBED");
+		setTextViewColors(d_btn_edit, "#EDEBED");
+		setTextViewColors(d_btn_analysis, "#EDEBED");
 		switch (playmod)
 		{
 			case 1:
-                d_btn_white.setBackgroundResource(R.drawable.rectanglegreen);
+				setTextViewColors(d_btn_white, "#ADE4A7");
 				break;
 			case 2:
-                d_btn_black.setBackgroundResource(R.drawable.rectanglegreen);
+				setTextViewColors(d_btn_black, "#ADE4A7");
 				break;
 			case 3:
-                d_btn_engine.setBackgroundResource(R.drawable.rectanglegreen);
+				setTextViewColors(d_btn_engine, "#ADE4A7");
 				break;
 			case 4:
-                d_btn_analysis.setBackgroundResource(R.drawable.rectanglegreen);
+				setTextViewColors(d_btn_analysis, "#ADE4A7");
 				break;
 			case 5:
-                d_btn_player.setBackgroundResource(R.drawable.rectanglegreen);
+				setTextViewColors(d_btn_player, "#ADE4A7");
 				break;
 			case 6:
-                d_btn_edit.setBackgroundResource(R.drawable.rectanglegreen);
+				setTextViewColors(d_btn_edit, "#ADE4A7");
 				break;
 		}
 	}
@@ -3087,7 +3026,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			else {
 				if (!fen.equals("")) {
 					ec.getEngine().engineState = EngineState.IDLE;
-					initChessClock();
+					if (dSetClock)
+						initChessClock();
 					startChessClock();
 					setTurnBoard();
 					updateGui();
@@ -3532,7 +3472,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		displayMoves = null;
 		ec.setPlayData(userPrefs, gc.cl.history.getGameTagValue("White"), gc.cl.history.getGameTagValue("Black"));
 		setTagGameData();
-
 		if (ec.getEngine().process == null) {
 			if (!startNewGame(ec.getEngine().engineNumber, false)) {
 				stopChessClock();
@@ -5705,9 +5644,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		boolean isUpdated = false;
 
 	}
+
 	//  end ENGINE-SearchTask
-
-
 
 
 	public void enginePlay(CharSequence result, CharSequence taskFen)
@@ -5900,7 +5838,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 						ec.setPlaySettings(userPrefs, gc.cl.p_color);
 						setTurnBoard();
-						initChessClock();
+						if (dSetClock)
+							initChessClock();
 						startChessClock();
 						updateGui();
 						ec.getEngine().engineState = EngineState.IDLE;
@@ -6251,6 +6190,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
 		tvBackground.setColor(cv.getColor(tvColor));
 		tv.setTextColor(cv.getColor(tvTextColor));
+	}
+	public void setTextViewColors(TextView tv, String color)
+	{
+		if (tv != null) {
+			GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
+			if (tvBackground != null)
+				tvBackground.setColor(Color.parseColor(color));
+		}
 	}
 
     public void setStringsValues()
@@ -7198,15 +7145,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (ec.chessEnginePlayMod <= 3 || ec.chessEnginePlayMod == 5)
 						setTimeWhiteBlack(2);
 					break;
-				case R.id.btn_time_ok:
-					stopChessClock();
-					tc.timeWhite = dSettingTimeWhite;
-					tc.timeBlack = dSettingTimeBlack;
-					tc.setCurrentShowValues(ec.chessEnginePlayMod);
-					startChessClock();
-					if (ec.chessEnginePaused)
-						updateCurrentPosition("");
-					removeDialog(PLAY_DIALOG);
+				case R.id.btn_elo:
+					removeDialog(UCI_ELO_DIALOG);
+					showDialog(UCI_ELO_DIALOG);
 					break;
 
 				// btn_engines
@@ -7257,6 +7198,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				case R.id.btn_chess960:
 				case R.id.btn_continue:
 					removeDialog(PLAY_DIALOG);
+					dSetClock = true;
 					setPlayModPrefs(dChessEnginePlayMod);
 					if (v.getId() == R.id.btn_standard) {
 						dNewGame = true;
@@ -7279,9 +7221,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							break;
 						}
 					}
-					if (v.getId() == R.id.btn_continue) {
-						dNewGame = false;
-					}
+
 					gc.isGameLoaded = false;
 					msgEngine.setVisibility(TextView.GONE);
 					messageInfo 		= "";
@@ -7290,14 +7230,26 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					ec.chessEngineAutoRun = false;
 					ec.chessEnginePaused = false;
 					ec.chessEngineInit = false;
+
 					stopChessClock();
+
+					if (v.getId() == R.id.btn_continue) {
+						dNewGame = false;
+						if (dChessEnginePlayMod == ec.chessEnginePlayMod)
+							dSetClock = false;
+						else
+							dSetClock = true;
+						tc.timeWhite = dSettingTimeWhite;
+						tc.timeBlack = dSettingTimeBlack;
+					}
+
 					switch (dChessEnginePlayMod)
 					{
 						case 1:     // white
 						case 2:     // black
 						case 3:     // engine vs engine
 							if (dNewGame)
-								stopSearchAndRestart(dNewGame, true);
+								stopSearchAndRestart(dNewGame, dSetClock);
 							else
 								stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.cl.p_fen);
 							break;
@@ -7447,7 +7399,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final static int GAME_ID_DIALOG = 601;
 	final static int UCI_ELO_DIALOG = 610;
 	final static int MENU_BOARD_DIALOG = 701;
-	final static int MENU_EDIT_DIALOG = 703;
+//	final static int MENU_EDIT_DIALOG = 703;
 	final static int MENU_ENGINES_DIALOG = 704;
 	final static int MENU_ABOUT_DIALOG = 706;
 	final static int MENU_PGN_DIALOG = 730;
@@ -7613,7 +7565,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	TextView d_btn_time_setting;
 	TextView d_btn_time_white;
 	TextView d_btn_time_black;
-	TextView d_btn_time_ok;
+	TextView btn_elo;
 
 	// btn_engines
 	TextView d_btn_engine_select;
@@ -7650,6 +7602,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	TextView btn_ok;
 
 	boolean dNewGame = false;
+	boolean dSetClock = true;
 	int dChessEnginePlayMod = 1;
 	int dSettingTimeWhite = 0;
 	int dSettingTimeBlack = 0;

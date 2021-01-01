@@ -21,15 +21,15 @@
         android:paddingRight="0dip"
         android:singleLine="true"
         android:gravity="center"
-        android:background="@drawable/rectanglegrey"
-        android:text="@string/menu_usersettings"
-        android:textColor="#000000" />
+        android:background="@color/fm_save"
+        android:textColor="#f1e622"
+        android:text="@string/menu_usersettings" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title"
-        android:layout_above="@id/btnSettingsOk"
+        android:layout_above="@id/llH2"
         android:orientation="vertical" >
         <LinearLayout
             android:layout_width="fill_parent"
@@ -312,14 +312,14 @@
             <TextView
                 android:id="@+id/btn_color_settings"
                 style="@style/c4aTV5"
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_width="fill_parent"
+                android:gravity="center"
                 android:onClick="myClickHandler"
                 android:layout_marginTop="@dimen/margin_1"
                 android:layout_marginStart="@dimen/margin_1"
                 android:paddingLeft="@dimen/tv_color_margin_2"
                 android:paddingRight="@dimen/tv_color_margin_2"
-                android:background="@drawable/rectangleyellow"
+                android:background="@drawable/rectanglegrey"
                 android:textSize="@dimen/v_text_size"
                 android:text="@string/menu_board_color_settings" />
             <LinearLayout
@@ -460,14 +460,14 @@
             <TextView
                 android:id="@+id/btn_time_settings"
                 style="@style/c4aTV5"
-                android:layout_width="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_width="fill_parent"
+                android:gravity="center"
                 android:onClick="myClickHandler"
                 android:layout_marginTop="@dimen/margin_1"
                 android:layout_marginStart="@dimen/margin_1"
                 android:paddingLeft="@dimen/tv_color_margin_2"
                 android:paddingRight="@dimen/tv_color_margin_2"
-                android:background="@drawable/rectangleyellow"
+                android:background="@drawable/rectanglegrey"
                 android:textSize="@dimen/v_text_size"
                 android:text="@string/app_optionsTimeControl" />
 
@@ -558,14 +558,39 @@
 
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/btnSettingsOk"
-        style="@style/c4aImgBtn1"
-        android:src="@drawable/button_ok"
-        android:onClick="myClickHandler"
-        android:layout_marginBottom="6dip"
-        android:layout_centerHorizontal="true"
+    <LinearLayout
+        android:id="@+id/llH2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_1"
+        android:layout_marginEnd="@dimen/margin_1"
         android:layout_alignParentBottom="true"
-        tools:ignore="ContentDescription" />
+        android:weightSum="2"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/btnSettingsCancel"
+            style="@style/c4aTV5"
+            android:onClick="myClickHandler"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginEnd="@dimen/margin_1"
+            android:layout_marginRight="@dimen/margin_1"
+            android:paddingLeft="@dimen/tv_color_margin_2"
+            android:paddingRight="@dimen/tv_color_margin_2"
+            android:background="@drawable/rectanglegrey"
+            android:text="@string/btn_Cancel" />
+        <TextView
+            android:id="@+id/btnSettingsOk"
+            style="@style/c4aTV5"
+            android:onClick="myClickHandler"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="@dimen/tv_color_margin_2"
+            android:paddingRight="@dimen/tv_color_margin_2"
+            android:background="@drawable/rectanglegrey"
+            android:text="@string/btn_Ok" />
+    </LinearLayout>
 
 </RelativeLayout>

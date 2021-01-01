@@ -4,7 +4,7 @@
 	<color name="query_background">#ee000000</color>
 	<color name="dialog_background">#ee242e3b</color>
 	<color name="tv_background">#c4f8c0</color>
-	<color name="tv_background_grey">#6b6b6b</color>
+	<color name="tv_background_grey">#BAB8B8</color>
 	<color name="lv_background">#000000</color>
 	<color name="lv_selected">#427e29</color>
 	<color name="divider_background">#4C4593</color>

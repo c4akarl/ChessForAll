@@ -253,13 +253,13 @@
                     android:textColor="@color/text_white"
                     android:text="0:00" />
                 <TextView
-                    android:id="@+id/btn_time_ok"
+                    android:id="@+id/btn_elo"
                     style="@style/c4aTV5"
                     android:layout_marginTop="@dimen/tv_color_margin_1"
                     android:layout_marginBottom="@dimen/tv_color_margin_1"
                     android:layout_marginRight="@dimen/tv_color_margin_1"
-                    android:background="@drawable/dialoggreen"
-                    android:text="@string/btn_Ok" />
+                    android:background="@drawable/rectangleblue"
+                    android:text="@string/elo" />
             </LinearLayout>
 
             <LinearLayout
@@ -296,14 +296,17 @@
                 <TextView
                     android:id="@+id/btn_white"
                     style="@style/c4aTV5"
+                    android:background="@drawable/rectanglewhite"
                     android:text="@string/play_white" />
                 <TextView
                     android:id="@+id/btn_black"
                     style="@style/c4aTV5"
+                    android:background="@drawable/rectanglewhite"
                     android:text="@string/play_black" />
                 <TextView
                     android:id="@+id/btn_engine"
                     style="@style/c4aTV5"
+                    android:background="@drawable/rectanglewhite"
                     android:text="@string/play_engine" />
             </LinearLayout>
 
@@ -317,14 +320,17 @@
                 <TextView
                     android:id="@+id/btn_player"
                     style="@style/c4aTV5"
+                    android:background="@drawable/rectanglewhite"
                     android:text="@string/play_two_players_flip" />
                 <TextView
                     android:id="@+id/btn_edit"
                     style="@style/c4aTV5"
+                    android:background="@drawable/rectanglewhite"
                     android:text="@string/play_two_players" />
                 <TextView
                     android:id="@+id/btn_analysis"
                     style="@style/c4aTV5"
+                    android:background="@drawable/rectanglewhite"
                     android:text="@string/play_analysis" />
             </LinearLayout>
 

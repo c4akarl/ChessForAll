@@ -39,8 +39,6 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         u = new Util();
         fileIO = new FileIO(this);
         userPrefs = getSharedPreferences("user", 0);
-        title = findViewById(R.id.title);
-        setTextViewColors(title, "#ced1d6");
     }
 
     @Override
@@ -81,7 +79,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
         // Appearance
         btn_color_settings =  findViewById(R.id.btn_color_settings);
-        setTextViewColors(btn_color_settings, "#efe395");
+        setTextViewColors(btn_color_settings, "#BAB8B8");
         cbGuCoordinates =  findViewById(R.id.cbGuCoordinates);
         cbGuPosibleMoves =  findViewById(R.id.cbGuPosibleMoves);
         cbGuQuickMove =  findViewById(R.id.cbGuQuickMove);
@@ -93,7 +91,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
         // Time, Clock
         btn_time_settings =  findViewById(R.id.btn_time_settings);
-        setTextViewColors(btn_time_settings, "#efe395");
+        setTextViewColors(btn_time_settings, "#BAB8B8");
 
         // Opening Book
         openingBook =  findViewById(R.id.cbEpOpeningBook);
@@ -219,6 +217,11 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         });
         textsizePixel = textsizeValue.getTextSize();
         setTextsize();
+
+        btnSettingsCancel = findViewById(R.id.btnSettingsCancel);
+        setTextViewColors(btnSettingsCancel, "#BAB8B8");
+        btnSettingsOk = findViewById(R.id.btnSettingsOk);
+        setTextViewColors(btnSettingsOk, "#BAB8B8");
 
     }
 
@@ -378,6 +381,9 @@ public class Settings  extends Activity implements Ic4aDialogCallback
             Intent returnIntent;
             returnIntent = new Intent();
             setResult(3, returnIntent);
+            finish();
+        }
+        if (id == R.id.btnSettingsCancel) {
             finish();
         }
         if (id == R.id.epBook || id == R.id.tvEpBookName) {
@@ -664,8 +670,6 @@ public class Settings  extends Activity implements Ic4aDialogCallback
     int fontSize = FONTSIZE_MEDIUM;
     float textsizePixel = 0F;
 
-    TextView title;
-
     // Engine Settings
     TextView variantsMinus;
     TextView variantsValue;
@@ -717,5 +721,8 @@ public class Settings  extends Activity implements Ic4aDialogCallback
     CheckBox cbGuUsePgnDatabase;
     CheckBox cbGuLastPosition;
     CheckBox cbGuEnableSounds;
+
+    TextView btnSettingsCancel;
+    TextView btnSettingsOk;
 
 }

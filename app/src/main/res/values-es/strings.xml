@@ -5,7 +5,7 @@
     <string name="app_chessData">Datos de la partida</string>
     <string name="app_chessNotation">Notación</string>
     <string name="app_optionsGUI">Modo de juego - Nuevo juego</string>
-    <string name="app_optionsPlay">Opciones - Jugar una partida</string>
+    <string name="app_optionsPlay">Modo de juego</string>
     <string name="app_optionsEnginePlay">Motor Configuracións</string>
     <string name="app_optionsTimeControl">Opciones - Control del tiempo</string>
     <string name="app_editChessBoard">Editar tablero</string>
@@ -386,5 +386,6 @@
     <string name="larger">Más grande</string>
     <string name="setEngineStrength">Fuerza de juego del motor</string>
     <string name="chess960NotSupprted">¡Este motor no es compatible con Chess960!</string>
+    <string name="timeDelayReplay">Retraso de tiempo (repetición)</string>
 
 </resources>

@@ -20,9 +20,9 @@
 		android:paddingRight="0dip"
 		android:singleLine="true"
 		android:gravity="center"
-		android:background="@drawable/rectangletransparent"
-		android:text="@string/app_optionsTimeControl"
-		android:textColor="#000000" />
+		android:background="@color/fm_save"
+		android:textColor="#f1e622"
+		android:text="@string/app_optionsTimeControl" />
 
 
 	<LinearLayout
@@ -34,7 +34,7 @@
 		<RelativeLayout
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
-			android:layout_weight="6"
+			android:layout_weight="4"
 			android:orientation="vertical" >
 
 			<RadioGroup
@@ -68,61 +68,153 @@
 		<RelativeLayout
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
-			android:layout_weight="4"
+			android:layout_weight="6"
 			android:orientation="vertical" >
 
-			<ImageView
-				android:id="@+id/btnPlayer"
-				style="@style/c4aImgBtn1"
-				android:layout_alignParentLeft="true"
-				android:layout_marginLeft="28dp"
-				android:layout_marginTop="15dip"
-				android:onClick="myClickHandler"
-				android:src="@drawable/player" />
+			<LinearLayout
+				android:id="@+id/llH1"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/margin_1"
+				android:layout_marginStart="@dimen/margin_1"
+				android:layout_marginEnd="@dimen/margin_1"
+				android:weightSum="2"
+				android:orientation="horizontal" >
+				<TextView
+					android:id="@+id/btnPlayer"
+					style="@style/c4aTV5"
+					android:onClick="myClickHandler"
+					android:clickable="true"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:layout_marginEnd="@dimen/margin_1"
+					android:layout_marginRight="@dimen/margin_1"
+					android:layout_marginBottom="0dp"
+					android:background="@drawable/rectanglegrey"
+					android:textSize="@dimen/v_text_size"
+					android:text="@string/menu_query_player" />
+				<TextView
+					android:id="@+id/btnEngine"
+					style="@style/c4aTV5"
+					android:onClick="myClickHandler"
+					android:clickable="true"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:layout_marginBottom="0dp"
+					android:background="@drawable/rectanglegrey"
+					android:textSize="@dimen/v_text_size"
+					android:text="@string/engine" />
+			</LinearLayout>
 
-			<ImageView
-				android:id="@+id/btnEngine"
-				style="@style/c4aImgBtn1"
-				android:layout_marginLeft="102dp"
-				android:layout_marginTop="15dip"
-				android:layout_toRightOf="@id/btnPlayer"
-				android:onClick="myClickHandler"
-				android:src="@drawable/engine" />
+			<LinearLayout
+				android:id="@+id/llH2"
+				android:layout_below="@id/llH1"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/margin_1"
+				android:layout_marginEnd="@dimen/margin_1"
+				android:weightSum="2"
+				android:orientation="horizontal" >
+				<TextView
+					android:id="@+id/tvPlayer"
+					style="@style/c4aTV5"
+					android:onClick="myClickHandler"
+					android:clickable="true"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:layout_marginEnd="@dimen/margin_1"
+					android:layout_marginRight="@dimen/margin_1"
+					android:layout_marginTop="0dp"
+					android:background="@drawable/rectanglegreen"
+					android:textSize="@dimen/v_text_size" />
+				<TextView
+					android:id="@+id/tvEngine"
+					style="@style/c4aTV5"
+					android:onClick="myClickHandler"
+					android:clickable="true"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:layout_marginTop="0dp"
+					android:background="@drawable/rectanglegreen"
+					android:textSize="@dimen/v_text_size" />
+			</LinearLayout>
 
 			<TextView
-				android:id="@+id/tvPlayer"
-				style="@style/c4aET1"
-				android:layout_width="wrap_content"
-				android:layout_height="35dp"
-				android:layout_below="@id/btnPlayer"
-				android:layout_alignParentLeft="true"
-				android:layout_marginLeft="32dp"
+				android:id="@+id/btnTimeDelayReplay"
+				style="@style/c4aTV5"
+				android:layout_below="@id/llH2"
+				android:onClick="myClickHandler"
 				android:clickable="true"
-				android:onClick="myClickHandler" />
-
+				android:layout_width="fill_parent"
+				android:gravity="center"
+				android:layout_marginTop="@dimen/margin_2"
+				android:layout_marginBottom="0dp"
+				android:layout_marginStart="@dimen/margin_1"
+				android:layout_marginLeft="@dimen/margin_1"
+				android:layout_marginEnd="@dimen/margin_1"
+				android:layout_marginRight="@dimen/margin_1"
+				android:background="@drawable/rectanglegrey"
+				android:textSize="@dimen/v_text_size"
+				android:text="@string/timeDelayReplay" />
 			<TextView
-				android:id="@+id/tvEngine"
-				style="@style/c4aET1"
-				android:layout_width="wrap_content"
-				android:layout_height="35dp"
-				android:layout_below="@id/btnEngine"
-				android:layout_alignParentStart="@id/btnEngine"
-				android:layout_marginLeft="-102dp"
-				android:layout_toRightOf="@id/btnEngine"
+				android:id="@+id/tvTimeDelayReplay"
+				style="@style/c4aTV5"
+				android:layout_below="@id/btnTimeDelayReplay"
+				android:onClick="myClickHandler"
 				android:clickable="true"
-				android:onClick="myClickHandler" />
+				android:layout_width="fill_parent"
+				android:gravity="center"
+				android:layout_marginTop="0dp"
+				android:layout_marginStart="@dimen/margin_1"
+				android:layout_marginLeft="@dimen/margin_1"
+				android:layout_marginEnd="@dimen/margin_1"
+				android:layout_marginRight="@dimen/margin_1"
+				android:background="@drawable/rectanglegreen"
+				android:textSize="@dimen/v_text_size" />
 
-			<ImageView
-				android:id="@+id/btnTcOk"
-				style="@style/c4aImgBtn1"
-				android:layout_alignParentLeft="true"
+			<LinearLayout
+				android:id="@+id/llH9"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/margin_1"
+				android:layout_marginStart="@dimen/margin_1"
+				android:layout_marginEnd="@dimen/margin_1"
 				android:layout_alignParentBottom="true"
-				android:layout_marginLeft="112dp"
-				android:layout_marginTop="20dip"
-				android:layout_marginBottom="44dp"
-				android:onClick="myClickHandler"
-				android:src="@drawable/button_ok" />
-
+				android:weightSum="2"
+				android:orientation="horizontal" >
+				<TextView
+					android:id="@+id/btnTcCancel"
+					style="@style/c4aTV5"
+					android:onClick="myClickHandler"
+					android:clickable="true"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:layout_marginEnd="@dimen/margin_1"
+					android:layout_marginRight="@dimen/margin_1"
+					android:paddingLeft="@dimen/tv_color_margin_2"
+					android:paddingRight="@dimen/tv_color_margin_2"
+					android:background="@drawable/rectanglegrey"
+					android:textSize="@dimen/v_text_size"
+					android:text="@string/btn_Cancel" />
+				<TextView
+					android:id="@+id/btnTcOk"
+					style="@style/c4aTV5"
+					android:onClick="myClickHandler"
+					android:clickable="true"
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:gravity="center"
+					android:paddingLeft="@dimen/tv_color_margin_2"
+					android:paddingRight="@dimen/tv_color_margin_2"
+					android:background="@drawable/rectanglegrey"
+					android:textSize="@dimen/v_text_size"
+					android:text="@string/btn_Ok" />
+			</LinearLayout>
 
 		</RelativeLayout>
 
