@@ -568,7 +568,10 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         ed.putString("user_options_enginePlay_OpeningBookName", bookName.getText().toString());
 
         // Other
-        ed.putString("user_options_gui_playerName", etGuPlayerName.getText().toString());
+        if (!etGuPlayerName.getText().toString().equals(""))
+            ed.putString("user_options_gui_playerName", etGuPlayerName.getText().toString());
+        else
+            ed.putString("user_options_gui_playerName", getString(R.string.qPlayer));
         ed.putBoolean("user_options_gui_usePgnDatabase", cbGuUsePgnDatabase.isChecked());
         ed.putBoolean("user_options_gui_LastPosition", cbGuLastPosition.isChecked());
         ed.putBoolean("user_options_gui_enableSounds", cbGuEnableSounds.isChecked());

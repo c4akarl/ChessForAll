@@ -1251,33 +1251,45 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			// btn_time
 			d_btn_time_setting = playDialog.findViewById(R.id.btn_time_setting);
 			d_btn_time_setting.setOnClickListener(myViewListener);
+			u.setTextViewColors(d_btn_time_setting, "#b2d9e4");
 			d_btn_time_white = playDialog.findViewById(R.id.btn_time_white);
 			d_btn_time_white.setOnClickListener(myViewListener);
 			if (ec.chessEnginePlayMod <= 3 || ec.chessEnginePlayMod == 5)
 				d_btn_time_white.setText(tc.showWhiteTime);
 			else
 				d_btn_time_white.setText("");
+			u.setTextViewColors(d_btn_time_white, "#edebed");
 			d_btn_time_black = playDialog.findViewById(R.id.btn_time_black);
 			d_btn_time_black.setOnClickListener(myViewListener);
 			if (ec.chessEnginePlayMod <= 3 || ec.chessEnginePlayMod == 5)
 				d_btn_time_black.setText(tc.showBlackTime);
 			else
 				d_btn_time_black.setText("");
-			btn_elo = playDialog.findViewById(R.id.btn_elo);
+			u.setTextViewColors(d_btn_time_black, "#000000");
+			d_btn_elo = playDialog.findViewById(R.id.btn_elo);
 			String elo = getString(R.string.elo) + " " + userPrefs.getInt("uci_elo", 3000);
-			btn_elo.setText(elo);
-			btn_elo.setOnClickListener(myViewListener);
+			d_btn_elo.setText(elo);
+			d_btn_elo.setOnClickListener(myViewListener);
+			if (ec.getEngine().uciOptions.contains("UCI_Elo"))
+				u.setTextViewColors(d_btn_elo, "#ADE4A7");
+			else
+				u.setTextViewColors(d_btn_elo, "#f6d2f4");
+			if (ec.getEngine().uciOptions.equals(""))
+				u.setTextViewColors(d_btn_elo, "#efe395");
 
 			// btn_engines
 			d_btn_engine_select = playDialog.findViewById(R.id.btn_engine_select);
 			d_btn_engine_select.setOnClickListener(myViewListener);
+			u.setTextViewColors(d_btn_engine_select, "#b2d9e4");
 			if (ec.getEngine().engineName.equals(""))
 				d_btn_engine_select.setText(R.string.engine);
 			else 	d_btn_engine_select.setText(ec.getEngine().uciEngineName);
 			d_btn_settings = playDialog.findViewById(R.id.btn_settings);
 			d_btn_settings.setOnClickListener(myViewListener);
+			u.setTextViewColors(d_btn_settings, "#b2d9e4");
 			d_btn_engine_uci_options = playDialog.findViewById(R.id.btn_engine_uci_options);
 			d_btn_engine_uci_options.setOnClickListener(myViewListener);
+			u.setTextViewColors(d_btn_engine_uci_options, "#b2d9e4");
 
 			// btn_play_a
 			d_btn_white = playDialog.findViewById(R.id.btn_white);
@@ -1395,6 +1407,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			});
 			eloValue = dialog.findViewById(R.id.eloValue);
 			eloValue.setText(Integer.toString(elo));
+			if (ec.getEngine().uciOptions.contains("UCI_Elo"))
+				u.setTextViewColors(eloValue, "#ADE4A7");
+			else
+				u.setTextViewColors(eloValue, "#f6d2f4");
+			if (ec.getEngine().uciOptions.equals(""))
+				u.setTextViewColors(eloValue, "#efe395");
 			eloValue.addTextChangedListener(new TextWatcher() {
 				public void afterTextChanged(Editable s) {
 					if (!s.toString().equals("")) {
@@ -1425,6 +1443,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ed.putInt("uci_elo", elo);
 				ed.apply();
 				removeDialog(UCI_ELO_DIALOG);
+				Boolean isPlayDialog = false;
+				if (playDialog != null)
+					isPlayDialog = true;
+				if (isPlayDialog && playDialog.isShowing()) {
+					d_btn_elo.setText(Integer.toString(elo));
+				}
 			});
 			return dialog;
 		}
@@ -7565,7 +7589,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	TextView d_btn_time_setting;
 	TextView d_btn_time_white;
 	TextView d_btn_time_black;
-	TextView btn_elo;
+	TextView d_btn_elo;
 
 	// btn_engines
 	TextView d_btn_engine_select;

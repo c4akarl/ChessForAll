@@ -368,5 +368,6 @@
     <string name="setEngineStrength">Сила игры двигателя</string>
     <string name="chess960NotSupprted">Этот движок не поддерживает Chess960!</string>
     <string name="timeDelayReplay">Задержка по времени (воспроизведение)</string>
+    <string name="optionSupportInfo">Не все движки поддерживают эту опцию.</string>
 
 </resources>

@@ -2,10 +2,13 @@ package ccc.chess.gui.chessforall;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class Util
 {
@@ -50,6 +53,15 @@ public class Util
         view.getLocationOnScreen(location);
         outRect.offset(location[0], location[1]);
         return outRect.contains(x, y);
+    }
+
+    public void setTextViewColors(TextView tv, String color)
+    {
+        if (tv != null) {
+            GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
+            if (tvBackground != null)
+                tvBackground.setColor(Color.parseColor(color));
+        }
     }
 
     final String TAG = "Util";

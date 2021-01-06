@@ -51,15 +51,18 @@ public class EngineControl
 		chessEngineRound = "-";
 		if (chessEngineAutoRun)
 			chessEngineRound = 	userP.getInt("user_play_eve_round", 1) + "." + userP.getInt("user_play_eve_gameCounter", 1);
+		String playerName = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
+		if (playerName.equals("") || playerName.equals("?"))
+			playerName = context.getString(R.string.qPlayer);
 		switch (chessEnginePlayMod)
 		{
 			case 1:
-				chessEnginePlayerWhite = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
+				chessEnginePlayerWhite = playerName;
 				chessEnginePlayerBlack = en_1.engineName;
 				break;
 			case 2:
 				chessEnginePlayerWhite = en_1.engineName;
-				chessEnginePlayerBlack = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
+				chessEnginePlayerBlack = playerName;
 				break;
 			case 3:
 				chessEnginePlayerWhite = en_1.engineName;

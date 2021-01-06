@@ -2,25 +2,10 @@
 <html><head>
 
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><big style="font-weight: bold;"><big>Chess For All&nbsp; 2.32</big></big>
-<p><em>ChessForAll</em> is a chess program with powerful chess engines and many useful functions.</p>
-<h3>Features</h3>
-<ul>
-<li>Play vs computer</li>
-<li>Two player mode</li>
-<li>Computer vs computer</li>
-<li>Analysis mode</li>
-<li>Edit mode</li><li>Chess960</li><li>PGN support</li>
-<li>Own database (.pgn-db)</li>
-<li>Save, insert, replace and delete a game</li>
-<li>Setup positions</li>
-<li>Clipboard (game or position)</li><li>UCI engines with Open Exchange (OEX) protocol</li>
-<li>Opening book</li>
-<li>Skill level</li>
-<li>Chess clock options</li>
-<li>Portrait/landscape mode</li>
-</ul>
-<h3>Operating hints</h3>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><big style="font-weight: bold;"><big>Chess For All&nbsp; 2.32</big></big><h3>Operating hints</h3>
 <span style="font-style: italic;">Main menu</span>:&nbsp;Wipe&nbsp;from the left edge to the right<br>
 <br>
 <span style="font-style: italic;">Game menu</span>:&nbsp;Wipe from the right edge to the left<br>
@@ -83,40 +68,79 @@ The program uses its own chess database
 when loading/saving, it will be created. The status bar displays the
 current status of the database creation. During this process, the PGN
 file is locked. Other actions can be taken without any problems.<br><br>The use of the PGN database can be deactivated in the settings. In this mode, a game is always appended to the end of the file.
-<h3>UCI engines with Open Exchange (OEX) protocol<br></h3><p>The <span style="font-style: italic;">Rodent</span> and <span style="font-style: italic;">Stockfish</span> engines are integrated into the app. Further engines can be activated in the Play Store with the search "chess engines oex".</p><h3>Opening books</h3>
+<h3>UCI engines with Open Exchange (OEX) protocol<br></h3><p>The <span style="font-style: italic;">Rodent</span> and <span style="font-style: italic;">Stockfish</span>
+engines are integrated into the app. There are apps in the Play Store
+that provide chess engines in OEX format (search: "chess engines oex").
+These engines can then be selected in "Chess For All" and their engine
+settings can be changed.</p><h3>Opening books</h3>
 <p>A small opening book is already integrated in <span style="font-style: italic;">ChessForAll</span>.
 However, external polyglot opening books (.bin) can also be used. The
-management of the opening books is done in the computer game options,
-accessed via: Main menu/Computer or by long press on the field
-Computer calculations.</p>
-<h3>Settings user options</h3>
-<ul>
-<li>Player name</li><li>Piece names</li>
-<li>Full screen display</li>
-<li>Change the site after move</li>
-<li>Show last position (load)</li>
-<li>Disable screen timeout</li><li>Show move options</li><li>Fast move entry</li>
-<li>Game navigation (board)</li>
-<li>Use PGN database</li>
-<li>Sound effects</li>
-<li>Coordinates (1-h, 1-8)</li><li>Blindfold mode</li>
-</ul>
-<h3>Engine settings</h3>
-<ul>
-<li>Automatic start at program opening</li>
-<li>Show calculations</li><li>Ponder</li>
-<li>1st move (white): Random move</li><li>Polyglot opening book: Load external .bin file</li>
+management of the opening books is done in the settings.</p>
+<h3>Settings</h3>Access via the main menu or by long pressing the first button on the left.<br>
+<br>
+<span style="font-style: italic;">Engine settings</span><br>
 
-<li>Activate/deactivate polyglot opening book<br></li>
-<li>Computer calculations: Number of variants, moves and the displayed lines</li>
-<li>Skill level (0...100)</li>
-<li>Aggressiveness (0...100), Passivity (0...-100)</li>
+<ul>
+<li>Variants</li><li>Moves</li>
+<li>Lines</li>
+<li>Arrows</li>
+<li>Show calculations</li>
+<li>Ponder</li><li>1st move (white): random move</li><li>Automatic start at program opening</li>
   <li>Debug Information<br>
   </li>
-
-<li>Log records (engine messages)</li>
+  <li>Log records (engine messages)</li>
+</ul><span style="font-style: italic;">Appearance<br>
+</span>
+<ul>
+  <li>Color settings (dialog call)</li>
+  <li>Piece names</li>
+  <li>Text size</li>
+  <li>Coordinates (a-h, 1-8)</li>
+  <li>Quick move input</li>
+  <li>Full screen display</li>
+  <li>Screen timeout</li>
+  <li>Flip board</li>
+  <li>Game navigation (board)</li>
+  <li>Blindfold mode<br>
+  </li>
 </ul>
-<h3>Developer</h3>
+<span style="font-style: italic;">Time, clock<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
+&nbsp;&nbsp;&nbsp; </span>Clock mode:<span style="font-style: italic;"><br>
+</span>
+<ul>
+  <li>Chess clock&nbsp; <br>
+  </li>
+  <li>Move time</li>
+  <li>Hourglass<span style="font-style: italic;"></span></li>
+  <li>Without clock<span style="font-style: italic;"></span></li>
+</ul>
+&nbsp;&nbsp;&nbsp; Time setting:<br>
+<ul>
+  <li>Player</li>
+  <li>Engine</li>
+  <li>Time delay (replay)<br>
+  </li>
+</ul>
+<span style="font-style: italic;">Opening book<br>
+</span>
+<ul>
+  <li>Opening book activation</li>
+  <li>Show opening book hints</li>
+  <li>Opening book file selection</li>
+</ul>
+<span style="font-style: italic;">Others<br>
+</span>
+<ul>
+  <li>Player name</li>
+  <li>Use PGN database</li>
+  <li>Show last position (load)</li>
+  <li>Sound effects<br>
+  </li>
+</ul>
+<h3>Engine skill level</h3>
+Call from the game menu. An Elo number (800-3000) can be set. Not all engines support this option.<br>
+ <h3>Developer</h3>
 <p><em>ChessForAll</em> is developed by <em>Karl Schreiner</em>.</p>
 <p>Graphic elements by <em>Lars Streblow</em></p><em>Chesspresso</em> (chess logic) by <em>Bernhard Seybold<br></em><br>Engine routines by <em>Peter Österlund</em> and <span style="font-style: italic;">Gerhard Kalab</span><p><em>Rodent </em>is developed by&nbsp;<span style="color: rgb(60, 64, 67); font-family: arial,sans-serif; font-size: 14px; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; background-color: rgb(255, 255, 255); display: inline ! important; float: none; font-style: italic;">Pawel Koziol.</span><span style="font-style: italic;"></span></p><p><em>Stockfish </em>is developed by <span style="font-style: italic;">Tord Romstad, Marco Costalba, Joona Kiiski </span>and<span style="font-style: italic;"> Gary Linscott</span></p><p>The engines are compiled by &nbsp;<span style="font-style: italic;">Bernhard C. März</span>.</p>
 <h3>Translations</h3>

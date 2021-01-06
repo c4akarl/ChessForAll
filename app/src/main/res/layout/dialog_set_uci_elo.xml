@@ -40,6 +40,7 @@
             android:layout_marginStart="@dimen/margin_1"
             android:layout_marginRight="@dimen/margin_1"
             android:layout_marginEnd="5dip"
+            android:background="@drawable/rectanglegreen"
             android:inputType="number" />
     </LinearLayout>
 
@@ -57,9 +58,19 @@
         android:maxLines="1"
         android:layout_marginTop="@dimen/margin_1"
         android:layout_marginStart="@dimen/margin_1"
-        android:layout_marginBottom="@dimen/tv_color_margin_2"
         android:textSize="@dimen/v_text_size"
         android:textColor="@color/text_yellow" />
+
+    <TextView
+        android:id="@+id/Info"
+        style="@style/c4aTV1"
+        android:maxLines="2"
+        android:layout_marginTop="@dimen/margin_1"
+        android:layout_marginStart="@dimen/margin_1"
+        android:layout_marginBottom="@dimen/margin_1"
+        android:textSize="@dimen/tv_text_size_14"
+        android:textColor="@color/text_pink"
+        android:text="@string/optionSupportInfo" />
 
     <LinearLayout
         android:id="@+id/llH2"
