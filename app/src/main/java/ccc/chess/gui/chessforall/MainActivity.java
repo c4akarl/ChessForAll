@@ -1267,15 +1267,21 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				d_btn_time_black.setText("");
 			u.setTextViewColors(d_btn_time_black, "#000000");
 			d_btn_elo = playDialog.findViewById(R.id.btn_elo);
-			String elo = getString(R.string.elo) + " " + userPrefs.getInt("uci_elo", 3000);
-			d_btn_elo.setText(elo);
-			d_btn_elo.setOnClickListener(myViewListener);
-			if (ec.getEngine().uciOptions.contains("UCI_Elo"))
+
+			String showElo = getString(R.string.elo) + " " + userPrefs.getInt("uci_elo", 3000);
+			if (ec.getEngine().uciOptions.contains("UCI_Elo")) {
 				u.setTextViewColors(d_btn_elo, "#ADE4A7");
+				if (ec.getEngine().uciEloMin > + userPrefs.getInt("uci_elo", 3000) || ec.getEngine().uciEloMax < + userPrefs.getInt("uci_elo", 3000))
+					showElo = getString(R.string.elo) + " (" + ec.getEngine().uciEloMin + ")";
+				if (ec.getEngine().uciEloMax < + userPrefs.getInt("uci_elo", 3000))
+					showElo = getString(R.string.elo) + " (" + ec.getEngine().uciEloMax + ")";
+			}
 			else
 				u.setTextViewColors(d_btn_elo, "#f6d2f4");
 			if (ec.getEngine().uciOptions.equals(""))
 				u.setTextViewColors(d_btn_elo, "#efe395");
+			d_btn_elo.setText(showElo);
+			d_btn_elo.setOnClickListener(myViewListener);
 
 			// btn_engines
 			d_btn_engine_select = playDialog.findViewById(R.id.btn_engine_select);
@@ -1376,7 +1382,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (id == UCI_ELO_DIALOG)
 		{
-			elo = userPrefs.getInt("uci_elo", 2800);
+			elo = userPrefs.getInt("uci_elo", ccc.chess.gui.chessforall.ChessEngine.UCI_ELO_STANDARD);
 			if (elo < eloMin)
 				elo = eloMin;
 			if (elo > eloMax)
@@ -1447,7 +1453,18 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				if (playDialog != null)
 					isPlayDialog = true;
 				if (isPlayDialog && playDialog.isShowing()) {
-					d_btn_elo.setText(Integer.toString(elo));
+					String showElo = getString(R.string.elo) + " " + userPrefs.getInt("uci_elo", 3000);
+					if (ec.getEngine().uciOptions.contains("UCI_Elo")) {
+						if (ec.getEngine().uciEloMin > userPrefs.getInt("uci_elo", 3000)) {
+							ec.getEngine().uciElo = ec.getEngine().uciEloMin;
+							showElo = getString(R.string.elo) + " (" + ec.getEngine().uciEloMin + ")";
+						}
+						if (ec.getEngine().uciEloMax < userPrefs.getInt("uci_elo", 3000)) {
+							ec.getEngine().uciElo = ec.getEngine().uciEloMax;
+							showElo = getString(R.string.elo) + " (" + ec.getEngine().uciEloMax + ")";
+						}
+					}
+					d_btn_elo.setText(showElo);
 				}
 			});
 			return dialog;
@@ -3111,7 +3128,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	}
 
 	public void stopAllEngines(boolean isAppEnd)
-	{	//>381 shutdownEngine() and releaseEngineService()
+	{
 		ec.setEngineNumber();
 		if (isAppEnd) {
 			if (ec.getEngine() != null) {
@@ -3622,14 +3639,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (ec.chessEnginePlayMod == 1 || ec.chessEnginePlayMod == 2)
 						ec.getEngine().withUciElo = true;
 
-					ec.getEngine().uciElo = userPrefs.getInt("uci_elo", 2800);
+					ec.getEngine().uciElo = userPrefs.getInt("uci_elo", ccc.chess.gui.chessforall.ChessEngine.UCI_ELO_STANDARD);
 					if (ec.getEngine().uciElo < ec.getEngine().uciEloMin)
 						ec.getEngine().uciElo = ec.getEngine().uciEloMin;
 					if (ec.getEngine().uciElo > ec.getEngine().uciEloMax)
 						ec.getEngine().uciElo = ec.getEngine().uciEloMax;
 					ec.getEngine().setElo(ec.getEngine().withUciElo, ec.getEngine().uciElo);
 
-//					Log.i(TAG, "2 startNewGame(), uci_elo: " + userPrefs.getInt("uci_elo", 2800) + ", elo: " + ec.getEngine().uciElo);
+//					Log.i(TAG, "2 startNewGame(), uci_elo: " + userPrefs.getInt("uci_elo", ccc.chess.gui.chessforall.ChessEngine.UCI_ELO_STANDARD) + ", elo: " + ec.getEngine().uciElo);
 //					Log.i(TAG, "2 startNewGame(), uciEloMin: " + ec.getEngine().uciEloMin + ", uciEloMax: " + ec.getEngine().uciEloMax);
 //					Log.i(TAG, "2 startNewGame(), withElo: " + ec.getEngine().withUciElo + ", engineName: " + ec.getEngine().engineName);
 //					Log.i(TAG, "2 startNewGame(), withElo: " + ec.getEngine().withUciElo + ", engineNameElo: " + ec.getEngine().engineNameElo);
@@ -4285,8 +4302,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					false, false, true, 2, pieceId));
 		}
 
-		// msgEngine
-
 //		Log.i(TAG,"setInfoMessage(), messageEngine: " + messageEngine);
 
 		if (!messageEngine.equals(""))
@@ -4338,8 +4353,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	}
 
 	public void setPlayModeButton(int playMode, CharSequence color, boolean isEnginePaused, boolean isEngineSearching, boolean isBoardTurn)
-	{	// btn_1
+	{
 
+		// btn_1
 //		Log.i(TAG,"1 setPlayModeButton(), playMode: " +playMode + ", color: " +color + ", isEnginePaused: " +isEnginePaused + ", isEngineSearching: " +isEngineSearching + ", isBoardTurn: " +isBoardTurn);
 
 		Bitmap drawBitmap = null;
@@ -5014,7 +5030,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	}
 
 	public void stopThreads(boolean shutDown)
-	{	// stop handler, threads, asyncTasks
+	{
 
 //		Log.i(TAG, "stopThreads(), shutDown: " + shutDown + ", engineState: " + ec.getEngine().engineState);
 
@@ -5113,6 +5129,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 	};
 
+
 	//  ENGINE-SearchTask		ENGINE-SearchTask		ENGINE-SearchTask		ENGINE-SearchTask		ENGINE-SearchTask
 	public class ChessEngineSearchTask extends AsyncTask<CharSequence, CharSequence, CharSequence> 	// engine / player - task
 	{
@@ -5137,7 +5154,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			if 	(		userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true)
 					& 	ec.chessEnginePlayMod != 4 & ec.getEngine().engineState != EngineState.PONDER
 				)
-			{	// using openingBook
+			{
+
+				// using openingBook
 
 //				Log.i(TAG, "searchTask, doInBackground(), book, isGoPonder: " + isGoPonder);
 
@@ -5655,8 +5674,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		long searchStartTimeInfo = 0;		// info != ""
 		int MAX_SEARCH_CANCEL_TIMEOUT = 1500;	// max. search time engine timeout
+
 //		int MAX_SEARCH_TIMEOUT = 60000;			// max. search time engine timeout (1 min: no info message)
 		int MAX_SEARCH_TIMEOUT = 180000;			// max. search time engine timeout (3 min: no info message)
+
 //		int MIN_PUBLISH_TIME = 100;				// min. time for publishing
 		int MIN_PUBLISH_TIME = 400;				// min. time for publishing
 
@@ -5669,7 +5690,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	}
 
-	//  end ENGINE-SearchTask
+	//  end ENGINE-SearchTask	end ENGINE-SearchTask	end ENGINE-SearchTask	end ENGINE-SearchTask	end ENGINE-SearchTask	end ENGINE-SearchTask
 
 
 	public void enginePlay(CharSequence result, CharSequence taskFen)

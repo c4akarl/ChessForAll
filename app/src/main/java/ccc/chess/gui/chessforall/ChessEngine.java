@@ -957,6 +957,7 @@ public class ChessEngine
     }
 
     final String TAG = "ChessEngine";
+    static final int UCI_ELO_STANDARD = 3000;
     final long MAX_UCI_TIME = 2000;
     final long MAX_ISREADY_TIME = 6000;
 
@@ -1012,9 +1013,10 @@ public class ChessEngine
     boolean isUciSkillOption = false;
     boolean isUciPonder = false;
     Boolean withUciElo;
-    int uciElo = 2800;
+
     int uciEloMin = 800;
-    int uciEloMax = 3000;
+    int uciEloMax = UCI_ELO_STANDARD;
+    int uciElo = UCI_ELO_STANDARD;
     int uciSkillLevelMin = 1;
     int uciSkillLevelMax = 100;
 
