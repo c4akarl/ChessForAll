@@ -18,7 +18,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.database.sqlite.SQLiteDiskIOException;
 import android.database.sqlite.SQLiteException;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -26,7 +25,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager.BadTokenException;
@@ -75,7 +73,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
         runP = getSharedPreferences("run", 0);
         userPrefs = getSharedPreferences("user", 0);
         fmPrefs = getSharedPreferences("fm", 0);
-		ce = new ChessEngine(this, 9);
+		ce = new UciEngine(this, 9);
 	}
 
 	@Override
@@ -170,6 +168,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
     public void startPfm()
 	{
 		fileActionCode = getIntent().getExtras().getInt("fileActionCode");
+		initColors();
         fileIO = new FileIO(this);
         pgnDb = new PgnDb();
 		baseDir = fileIO.getExternalDirectory(0);
@@ -214,7 +213,8 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	        lblFile = (TextView) findViewById(R.id.fmLblFile);
 	        etPath = (EditText) findViewById(R.id.fmEtPath);
 			etPath.setText("");
-            setTextViewColors(etPath, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+//            setTextViewColors(etPath, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
+            u.setTextViewColors(etPath, cv, cv.COLOR_DATA_BACKGROUND_16, cv.COLOR_DATA_TEXT_17);
 			etPath.addTextChangedListener(new TextWatcher()
 			{
 				@Override
@@ -2730,7 +2730,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 //					Log.i(TAG, "CreateDatabaseTask(), create pgn-db: " + fPgnDb);
 
 					fPgnDb.createNewFile();
-//				return null;
 				}
 			}
 			catch (IOException e)				{e.printStackTrace(); return null;}
@@ -2738,8 +2737,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			if (pgnOffset == 0 & !dropCreateIdx)
 			{
 				try	{db = SQLiteDatabase.openOrCreateDatabase(fPgnDb, null);}	// create database (file: .pgn-db)
-				// java.lang.NullPointerException:
-//				catch (SQLiteDiskIOException e) {e.printStackTrace(); runMessage = "EX 99"; db.close(); return null;}
 				catch (SQLiteDiskIOException e) {e.printStackTrace(); runMessage = "EX 99"; return null;}
 				catch (SQLiteCantOpenDatabaseException e) {e.printStackTrace(); runMessage = "EX 99"; db.close(); return null;}
 				// 28. Nov. 08:21 in der App-Version 74
@@ -3501,7 +3498,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 								gameMoveStart = 0;
 								pgnDb.closeDb();
 
-//								deleteTmpFiles();
 								deleteTmpFiles(gamePath, gameFile);
 
 								removeDialog(MENU_EDIT_PGN);
@@ -3540,7 +3536,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 							   	}
 							   	setQueryPreferences(gameId);
 
-//							   	deleteTmpFiles();
 								deleteTmpFiles(gamePath, gameFile);
 
 							   	finishAfterLoad(gamePath, gameFile);
@@ -3587,7 +3582,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 							gamePlayerBlack = pgnDb.fCur.getString(pgnDb.fCur.getColumnIndex("Black"));
 							pgnDb.closeDb();
 
-//							deleteTmpFiles();
 							deleteTmpFiles(gamePath, gameFile);
 
 							removeDialog(DELETE_GAME_DIALOG);
@@ -3610,7 +3604,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 				}
 	        }
 
-//			deleteTmpFiles();
 			deleteTmpFiles(gamePath, gameFile);
 
 		}
@@ -4032,13 +4025,6 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 		fmInfo.setText(info);
 	}
 
-    public void setTextViewColors(TextView tv, int tvColor, int tvTextColor)
-    {
-        initColors();
-        GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
-        tvBackground.setColor(cv.getColor(tvColor));
-        tv.setTextColor(cv.getColor(tvTextColor));
-    }
     public void initColors()
     {
         cv = new ColorValues();
@@ -4110,7 +4096,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	FileIO fileIO;
     ColorValues cv;
 	PgnDb pgnDb;
-	ChessEngine ce;
+	UciEngine ce;
 	int db_state = STATE_DB_NO_PGN_ACTION;
 	EditPgnTask editPgnTask = null;
 	CreateDatabaseTask createDatabaseTask = null;

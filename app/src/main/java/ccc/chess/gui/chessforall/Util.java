@@ -55,12 +55,51 @@ public class Util
         return outRect.contains(x, y);
     }
 
+    public String getEngineEloFromC4aElo(int c4aElo, String uciOptions, String engineName, int engineMin, int engineMax)
+    {
+        if (uciOptions.equals(""))
+            return "";
+        if (!uciOptions.contains("UCI_Elo"))
+            return engineName + ": -";
+        String engineTxt = engineName + ":  " + c4aElo;
+        if (engineMin > c4aElo)
+            engineTxt = engineName + ":  " + engineMin;
+        if (engineMax < c4aElo)
+            engineTxt = engineName + ":  " + engineMax;
+        return engineTxt;
+    }
+
+    public void setTextViewColors(TextView tv, ColorValues cv, int color)
+    {
+        GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
+        tvBackground.setColor(cv.getColor(color));
+    }
+
     public void setTextViewColors(TextView tv, String color)
     {
         if (tv != null) {
             GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
             if (tvBackground != null)
                 tvBackground.setColor(Color.parseColor(color));
+        }
+    }
+
+    public void setTextViewColors(TextView tv, String colorBg, String colorTxt)
+    {
+        if (tv != null) {
+            GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
+            if (tvBackground != null)
+                tvBackground.setColor(Color.parseColor(colorBg));
+            tv.setTextColor(Color.parseColor(colorTxt));
+        }
+    }
+
+    public void setTextViewColors(TextView tv, ColorValues cv, int tvColor, int tvTextColor)
+    {
+        if (tv != null && cv != null) {
+            GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
+            tvBackground.setColor(cv.getColor(tvColor));
+            tv.setTextColor(cv.getColor(tvTextColor));
         }
     }
 

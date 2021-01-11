@@ -389,5 +389,6 @@
     <string name="chess960NotSupprted">Ce moteur ne prend pas en charge Chess960!</string>
     <string name="timeDelayReplay">Temporisation (replay)</string>
     <string name="optionSupportInfo">Tous les moteurs ne prennent pas en charge cette option.</string>
+    <string name="add">Ajouter</string>
 
 </resources>

@@ -16,7 +16,7 @@ public class EngineControl
     }
 	private void createEngines()
 	{
-		en_1 = new ChessEngine(context, 1);	// engine number 1
+		en_1 = new UciEngine(context, 1);	// engine number 1
 	}
 	final void setBookOptions()
 	{
@@ -79,7 +79,7 @@ public class EngineControl
 	{	//>361 engine Number: for better controlling multiple ChessEngines in GUI
 		engineNumber = 1;
 	}
-	public ChessEngine getEngine()
+	public UciEngine getEngine()
     {
 		return en_1;
     }
@@ -107,12 +107,13 @@ public class EngineControl
 
 	private final Context context;
 	private final SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
-	ChessEngine en_1;
+	UciEngine en_1;
 	C4aBook book;
 	private final BookOptions bookOptions = new BookOptions();
 	int engineNumber = 1;					// for controlling ChessEngines: en_1 | en_2
 	boolean twoEngines = false;				// true if two different engines(b/w)
 	boolean makeMove = false;				// engine makes first move
+	boolean isUciNewGame = true;			// send "ucinewgame" command
     int chessEnginePlayMod = 1;				// 1 = player vs engine, 2 = engine vs player, 3 = engine vs engine, 4 = engine analysis, 5 = player vs player, 6 = edit
     boolean chessEngineInit = false;
     boolean chessEnginesOpeningBook = false;

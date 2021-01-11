@@ -232,7 +232,7 @@
     <string name="ccsMessageAutoPlay">Automatisches Spiel</string>
     <string name="ccsTime">Zeit</string>
     <string name="ccsBonus">Bonus</string>
-    <string name="ccsH">Std</string>
+    <string name="ccsH">S</string>
     <string name="ccsM">Min</string>
     <string name="ccsS">Sek</string>
     <string name="ccsMs">ms</string>
@@ -388,4 +388,5 @@
     <string name="chess960NotSupprted">Diese Engine unterstützt nicht Chess960!</string>
     <string name="timeDelayReplay">Zeitverzögerung (nachspielen)</string>
     <string name="optionSupportInfo">Diese Option wird nicht von allen Engines unterstützt.</string>
+    <string name="add">Hinzufügen</string>
 </resources>

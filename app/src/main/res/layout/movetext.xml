@@ -12,6 +12,7 @@
 	android:layout_alignParentLeft="true"
 	android:layout_alignParentTop="true"
 	android:layout_marginLeft="0dip"
+	android:layout_marginBottom="@dimen/tv_color_margin_1"
 	android:paddingTop="0dip"
 	android:paddingLeft="0dip"
 	android:paddingRight="0dip"
@@ -21,15 +22,17 @@
 	android:text="@string/app_moveAnnotation"
 	android:textColor="#000000" />
 
-<ImageView
+<TextView
 	android:id="@+id/mtBtnOk"
-	style="@style/c4aImgBtn1"
-	android:src="@drawable/button_ok"
+	style="@style/c4aTV5"
+	android:layout_width="@dimen/tv_width_2"
 	android:onClick="myClickHandler"
-    android:layout_marginTop="10dip"
-    android:layout_marginBottom="7dip"
-    android:layout_centerHorizontal="true"  
-    android:layout_alignParentBottom="true" />
+	android:background="@drawable/rectanglegrey"
+	android:layout_marginTop="@dimen/tv_color_margin_1"
+	android:layout_marginBottom="@dimen/tv_color_margin_1"
+	android:layout_centerHorizontal="true"
+	android:layout_alignParentBottom="true"
+	android:text="@android:string/ok" />
 
 <EditText
 	android:id="@+id/mtEt"

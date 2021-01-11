@@ -12,7 +12,7 @@
 	android:layout_height="wrap_content"
 	android:layout_alignParentLeft="true"
 	android:layout_alignParentTop="true"
-	android:layout_marginBottom="0dp"
+	android:layout_marginBottom="@dimen/tv_color_margin_1"
 	android:layout_marginLeft="0dip"
 	android:paddingTop="0dip"
 	android:paddingLeft="0dip"
@@ -23,63 +23,52 @@
 	android:text="@string/app_optionsPlay"
 	android:textColor="#000000" />
 
-<ImageView
-	android:id="@+id/ntBtnOk"
-	style="@style/c4aImgBtn1"
-	android:src="@drawable/button_ok"
-	android:onClick="myClickHandler"
-    android:layout_marginTop="7dip"
-    android:layout_marginBottom="3dip" 
-    android:layout_marginLeft="10dip" 
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentLeft="true"/>
-<Button
-	android:id="@+id/ntBtnPgn"
-	style="@style/c4aImgBtn1"
-	android:onClick="myClickHandler"
-	android:background="@drawable/rectangleblue"
-    android:layout_marginTop="20dip"
-    android:layout_marginBottom="@dimen/margin_1"
-	android:layout_marginLeft="@dimen/margin_1"
-	android:layout_marginRight="@dimen/margin_1"
-	android:paddingLeft="5dip"
-	android:paddingRight="5dip"
-	android:layout_alignTop="@id/ntBtnOk"
-	android:layout_alignParentBottom="true"
-    android:layout_alignParentRight="true"
-    android:text="@string/btn_Pgn" />
-<Button
-	android:id="@+id/ntBtnMoveText"
-	style="@style/c4aImgBtn1"
-	android:onClick="myClickHandler"
-	android:background="@drawable/rectangleblue"
-    android:layout_marginTop="20dip"
-	android:layout_marginBottom="@dimen/margin_1"
-	android:layout_marginLeft="@dimen/margin_1"
-	android:paddingLeft="5dip"
-	android:paddingRight="5dip"
-	android:layout_alignTop="@id/ntBtnOk"
-    android:layout_alignParentBottom="true"
-    android:layout_toLeftOf="@id/ntBtnPgn"
-    android:text="@string/btn_MoveText" />
-<Button
-	android:id="@+id/ntBtnMove"
-	style="@style/c4aImgBtn1"
-	android:onClick="myClickHandler"
-	android:background="@drawable/rectangleblue"
-    android:layout_marginTop="20dip"
-	android:layout_marginBottom="@dimen/margin_1"
-	android:paddingLeft="5dip"
-	android:paddingRight="5dip"
-	android:layout_alignTop="@id/ntBtnOk"
-    android:layout_alignParentBottom="true"
-    android:layout_toLeftOf="@id/ntBtnMoveText"
-    android:text="@string/btn_Move" />
+	<LinearLayout
+		android:id="@+id/ntLl1"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:weightSum="120"
+		android:layout_marginTop="@dimen/margin_1"
+		android:layout_alignParentBottom="true"
+		android:orientation="horizontal">
+		<TextView
+			android:id="@+id/ntBtnMove"
+			style="@style/c4aTV5"
+			android:layout_width="0dp"
+			android:onClick="myClickHandler"
+			android:background="@drawable/rectangleblue"
+			android:layout_weight="30"
+			android:text="@string/btn_Move" />
+		<TextView
+			android:id="@+id/ntBtnMoveText"
+			style="@style/c4aTV5"
+			android:layout_width="0dp"
+			android:onClick="myClickHandler"
+			android:background="@drawable/rectangleblue"
+			android:layout_weight="30"
+			android:text="@string/btn_MoveText" />
+		<TextView
+			android:id="@+id/ntBtnPgn"
+			style="@style/c4aTV5"
+			android:layout_width="0dp"
+			android:onClick="myClickHandler"
+			android:background="@drawable/rectangleblue"
+			android:layout_weight="30"
+			android:text="@string/btn_Pgn" />
+		<TextView
+			android:id="@+id/ntBtnOk"
+			style="@style/c4aTV5"
+			android:layout_width="0dp"
+			android:onClick="myClickHandler"
+			android:background="@drawable/rectanglegrey"
+			android:layout_weight="30"
+			android:text="@android:string/ok" />
+	</LinearLayout>
 
 <ScrollView
 	android:fillViewport="true"
 	android:layout_below="@id/title"
-	android:layout_above="@id/ntBtnOk"
+	android:layout_above="@id/ntLl1"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"> 
 	<TextView

@@ -21,10 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ChessEngine
+public class UciEngine
 {
-    ChessEngine(Context con, int eNumber)
+    UciEngine(Context con, int eNumber)
     {
+
+//        Log.i(TAG, "ChessEngine(Context)");
+
         this.context = con;
         engineNumber = eNumber;
         processAlive = false;
@@ -88,6 +91,8 @@ public class ChessEngine
         long checkTime = startTime;
         isUciPonder = false;
         uciOptions = "";
+
+//        Log.i(TAG, "readUCIOptions(), uciOptions: ");
 
         while (checkTime - startTime <= MAX_UCI_TIME)
         {
@@ -251,11 +256,12 @@ public class ChessEngine
         engineName = uciEngineName + engineNameElo;
     }
 
-    public boolean newGame()
+    public boolean newGame(Boolean isUciNewGame)
     {
         if (uciOptions.contains("UCI_Chess960"))
             writeLineToProcess("setoption name UCI_Chess960 value " + isChess960);
-        writeLineToProcess("ucinewgame");
+        if (isUciNewGame)
+            writeLineToProcess("ucinewgame");
         return true;
     }
 
@@ -657,7 +663,7 @@ public class ChessEngine
         engineName = uciEngineName + engineNameElo;
     }
 
-    public boolean getSearchAlive() {return searchAlive;}
+//    public boolean getSearchAlive() {return searchAlive;}
 
     void setUciEloValues(String message)
     {
@@ -678,7 +684,8 @@ public class ChessEngine
                 uciEloMin = Integer.parseInt(min);
                 uciEloMax = Integer.parseInt(max);
 
-                Log.i(TAG,  "setUciEloValues(), uciEloMin: " + uciEloMin + ", uciEloMax: " + uciEloMax);
+                if (isLogOn)
+                    Log.i(TAG,  "setUciEloValues(), uciEloMin: " + uciEloMin + ", uciEloMax: " + uciEloMax);
 
             }
             catch 	(NumberFormatException e) { }
@@ -956,7 +963,7 @@ public class ChessEngine
         return line;
     }
 
-    final String TAG = "ChessEngine";
+    final String TAG = "UciEngine";
     static final int UCI_ELO_STANDARD = 3000;
     final long MAX_UCI_TIME = 2000;
     final long MAX_ISREADY_TIME = 6000;

@@ -39,6 +39,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.editucioptions);
 
+        u = new Util();
         eo_info = findViewById(R.id.eo_info);
         eo_cancel = findViewById(R.id.eo_cancel);
         eo_reset = findViewById(R.id.eo_reset);
@@ -49,7 +50,8 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
         uciOptsList = getEditableOptions(uciOpts);
         title = findViewById(R.id.title);
         title.setText(uciEngineName);
-        title.setBackgroundResource(R.drawable.rectangleyellow);
+//        title.setBackgroundResource(R.drawable.rectangleyellow);
+        u.setTextViewColors(title, "#6b2c2d", "#f1e622");
         if (uciOptsList != null)
             createViews();
 
@@ -65,6 +67,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
             llh.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             llh.setOrientation(LinearLayout.HORIZONTAL);
             TextView name = (TextView)getLayoutInflater().inflate(R.layout.eo_string_tv, null);
+            u.setTextViewColors(name, "#000000", "#ffda7b");
             EditText editName = (EditText)getLayoutInflater().inflate(R.layout.eo_string_et, null);
             editName.setBackgroundResource(R.drawable.rectanglegreen);
             CheckBox checkBox = (CheckBox)getLayoutInflater().inflate(R.layout.eo_check, null);
@@ -85,7 +88,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                     break;
                 case SPIN:
                     name.setText(getName(uciOptsList.get(i)) + "(" + getMin(uciOptsList.get(i)) + "-"  + getMax(uciOptsList.get(i)) + ") ");
-                    name.setTextColor(getResources().getColor(R.color.text_light));
+//                    name.setTextColor(getResources().getColor(R.color.text_light));
                     editName.setMinWidth(2000);
                     editName.setBackgroundResource(R.drawable.rectanglegreen);
                     if (getMin(uciOptsList.get(i)).startsWith("-"))
@@ -118,7 +121,8 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                 case STRING:
                 case COMBO:
                     name.setText(getName(uciOptsList.get(i)) + " ");
-                    name.setTextColor(getResources().getColor(R.color.text_light));
+//                    name.setTextColor(getResources().getColor(R.color.text_light));
+//                    u.setTextViewColors(name, "#000000", "#ffda7b");
                     editName.setMinWidth(2000);
                     editName.setText(getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)));
                     editName.setSelection(editName.getText().length());
@@ -662,6 +666,8 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
     }
 
     final String TAG = "EditUciOptions";
+
+    Util u;
     final static int FILE_REQUEST_CODE = 1;
     final String SETOPTION_NAME = "setoption name ";
     final String VALUE = " value ";

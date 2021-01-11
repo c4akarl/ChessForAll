@@ -79,8 +79,11 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		fieldSize = getIntent().getExtras().getInt("fieldSize");
 
 		btnCancel = findViewById(R.id.btnCancel);
+		u.setTextViewColors(btnCancel, "#BAB8B8");
 		btnOk = 	findViewById(R.id.edBtnOk);
+		u.setTextViewColors(btnOk, "#BAB8B8");
 		title = 	findViewById(R.id.title);
+		u.setTextViewColors(title, "#6b2c2d", "#f1e622");
 		message = 	findViewById(R.id.message);
 
 		wKing = 	findViewById(R.id.wKing);
@@ -101,7 +104,7 @@ public class EditChessBoard extends Activity implements Ic4aDialogCallback, Dial
 		color = 	findViewById(R.id.color);
 		options = 	findViewById(R.id.options);
 
-	boardView = 	findViewById(R.id.editBoardView);
+		boardView = 	findViewById(R.id.editBoardView);
 		boardView.setColor();
 		boardView.setOnTouchListener(this);
 		userPrefs.getBoolean("user_options_gui_Coordinates", false);

@@ -32,6 +32,7 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
 
         colorId = userPrefs.getInt("colorId", 0);
         title = findViewById(R.id.title);
+        u.setTextViewColors(title, "#6b2c2d", "#f1e622");
         eName = findViewById(R.id.eName);
         eName.setHint(getColorHint(colorId));
 
@@ -71,8 +72,10 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
 
         tReset =  findViewById(R.id.tReset);
         tReset.setFocusable(false);
+        u.setTextViewColors(tReset, "#BAB8B8", "#000000");
         tApply =  findViewById(R.id.tApply);
         tApply.setFocusable(false);
+        u.setTextViewColors(tApply, "#BAB8B8", "#000000");
 
         initColors(colorId);
         setUi(colorId);
@@ -250,7 +253,8 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
         if (alphaSliderEnabled)
             hexColor = String.format("#%06X", (0xFFFFFFFF & intColor));
         cv.colors[currentColor] = hexColor;
-        setTextViewColors(currentView, currentColor);
+//        setTextViewColors(currentView, currentColor);
+        u.setTextViewColors(currentView, cv, currentColor);
         setPrefs(colorId);
     }
 
@@ -365,44 +369,44 @@ public class OptionsColor extends Activity implements margaritov.preference.colo
 
     protected void setUi(int colorId)
     {
-        if (cv.colors[cv.COLOR_NAME_0].equals("?"))
+        if (cv.colors[ColorValues.COLOR_NAME_0].equals("?"))
         {
             eName.setHint(getColorHint(colorId));
             eName.setText("");
         }
         else
-            eName.setText(cv.colors[cv.COLOR_NAME_0]);
+            eName.setText(cv.colors[ColorValues.COLOR_NAME_0]);
 
-        setTextViewColors(iFields1, cv.COLOR_FIELD_LIGHT_1);
-        setTextViewColors(iFields2, cv.COLOR_FIELD_DARK_2);
-        setTextViewColors(iPieces1, cv.COLOR_PIECE_WHITE_3);
-        setTextViewColors(iPieces2, cv.COLOR_PIECE_BLACK_4);
-        setTextViewColors(iFromTo1, cv.COLOR_FIELD_FROM_5);
-        setTextViewColors(iFromTo2, cv.COLOR_FIELD_TO_6);
-        setTextViewColors(iCoordinates1, cv.COLOR_COORDINATES_7);
-        setTextViewColors(iMoveList1, cv.COLOR_MOVES_BACKGROUND_8);
-        setTextViewColors(iMoveList2, cv.COLOR_MOVES_TEXT_9);
-        setTextViewColors(iMoveList3, cv.COLOR_MOVES_SELECTED_10);
-        setTextViewColors(iMoveList4, cv.COLOR_MOVES_ANOTATION_11);
-        setTextViewColors(iEngineList1, cv.COLOR_ENGINE_BACKGROUND_12);
-        setTextViewColors(iEngineList2, cv.COLOR_ENGINE_TEXT_13);
-        setTextViewColors(iInfo1, cv.COLOR_INFO_BACKGROUND_14);
-        setTextViewColors(iInfo2, cv.COLOR_INFO_TEXT_15);
-        setTextViewColors(iData1, cv.COLOR_DATA_BACKGROUND_16);
-        setTextViewColors(iData2, cv.COLOR_DATA_TEXT_17);
-        setTextViewColors(iTime1, cv.COLOR_TIME_BACKGROUND_18);
-        setTextViewColors(iTime2, cv.COLOR_TIME_TEXT_19);
-        setTextViewColors(iTime3, cv.COLOR_TIME2_BACKGROUND_20);
-        setTextViewColors(iTime4, cv.COLOR_TIME2_TEXT_21);
-        setTextViewColors(iHighlighting1, cv.COLOR_HIGHLIGHTING_22);
-        setTextViewColors(iArrow1, cv.COLOR_ARROWS1_23);
-        setTextViewColors(iArrow2, cv.COLOR_ARROWS2_24);
-        setTextViewColors(iArrow3, cv.COLOR_ARROWS3_25);
-        setTextViewColors(iArrow4, cv.COLOR_ARROWS4_26);
-        setTextViewColors(iArrow5, cv.COLOR_ARROWS5_27);
-        setTextViewColors(iArrow6, cv.COLOR_ARROWS6_28);
-        setTextViewColors(iArrow7, cv.COLOR_ARROWS7_29);
-        setTextViewColors(iArrow8, cv.COLOR_ARROWS8_30);
+        u.setTextViewColors(iFields1, cv, ColorValues.COLOR_FIELD_LIGHT_1);
+        u.setTextViewColors(iFields2, cv, ColorValues.COLOR_FIELD_DARK_2);
+        u.setTextViewColors(iPieces1, cv, ColorValues.COLOR_PIECE_WHITE_3);
+        u.setTextViewColors(iPieces2, cv, ColorValues.COLOR_PIECE_BLACK_4);
+        u.setTextViewColors(iFromTo1, cv, ColorValues.COLOR_FIELD_FROM_5);
+        u.setTextViewColors(iFromTo2, cv, ColorValues.COLOR_FIELD_TO_6);
+        u.setTextViewColors(iCoordinates1, cv, ColorValues.COLOR_COORDINATES_7);
+        u.setTextViewColors(iMoveList1, cv, ColorValues.COLOR_MOVES_BACKGROUND_8);
+        u.setTextViewColors(iMoveList2, cv, ColorValues.COLOR_MOVES_TEXT_9);
+        u.setTextViewColors(iMoveList3, cv, ColorValues.COLOR_MOVES_SELECTED_10);
+        u.setTextViewColors(iMoveList4, cv, ColorValues.COLOR_MOVES_ANOTATION_11);
+        u.setTextViewColors(iEngineList1, cv, ColorValues.COLOR_ENGINE_BACKGROUND_12);
+        u. setTextViewColors(iEngineList2, cv, ColorValues.COLOR_ENGINE_TEXT_13);
+        u.setTextViewColors(iInfo1, cv, ColorValues.COLOR_INFO_BACKGROUND_14);
+        u.setTextViewColors(iInfo2, cv, ColorValues.COLOR_INFO_TEXT_15);
+        u.setTextViewColors(iData1, cv, ColorValues.COLOR_DATA_BACKGROUND_16);
+        u.setTextViewColors(iData2, cv, ColorValues.COLOR_DATA_TEXT_17);
+        u.setTextViewColors(iTime1, cv, ColorValues.COLOR_TIME_BACKGROUND_18);
+        u.setTextViewColors(iTime2, cv, ColorValues.COLOR_TIME_TEXT_19);
+        u.setTextViewColors(iTime3, cv, ColorValues.COLOR_TIME2_BACKGROUND_20);
+        u.setTextViewColors(iTime4, cv, ColorValues.COLOR_TIME2_TEXT_21);
+        u.setTextViewColors(iHighlighting1, cv, ColorValues.COLOR_HIGHLIGHTING_22);
+        u.setTextViewColors(iArrow1, cv, ColorValues.COLOR_ARROWS1_23);
+        u.setTextViewColors(iArrow2, cv, ColorValues.COLOR_ARROWS2_24);
+        u.setTextViewColors(iArrow3, cv, ColorValues.COLOR_ARROWS3_25);
+        u.setTextViewColors(iArrow4, cv, ColorValues.COLOR_ARROWS4_26);
+        u.setTextViewColors(iArrow5, cv, ColorValues.COLOR_ARROWS5_27);
+        u.setTextViewColors(iArrow6, cv, ColorValues.COLOR_ARROWS6_28);
+        u.setTextViewColors(iArrow7, cv, ColorValues.COLOR_ARROWS7_29);
+        u.setTextViewColors(iArrow8, cv, ColorValues.COLOR_ARROWS8_30);
 
     }
 

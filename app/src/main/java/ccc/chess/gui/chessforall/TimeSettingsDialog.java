@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.Window;
 import android.widget.TextView;
 
 import kankan.wheel.widget.ArrayWheelAdapter;
@@ -14,13 +14,13 @@ import kankan.wheel.widget.WheelView;
 public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 {
 
-	public TimeSettingsDialog(Context context, Ic4aDialogCallback callback, String title, String message,  
-				int timeGame, int timeBonus, int movesToGo)
+	public TimeSettingsDialog(Context context, Ic4aDialogCallback callback, String titleNon, String message,
+							  int timeGame, int timeBonus, int movesToGo)
     {
 		super(context);
 		this.context = context;
 		c4aCallback = callback;
-		this.title = title;
+		this.titleNon = titleNon;
 		this.message = message;
 		this.timeGame = timeGame;
 		this.timeBonus = timeBonus;
@@ -45,8 +45,13 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 	protected void onCreate(Bundle savedInstanceState) 
 	{
         super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.chessclocksettingsdialog);
         this.setTitle(message);
+		u = new Util();
+		title = findViewById(R.id.title);
+		title.setText(message);
+		u.setTextViewColors(title, "#6b2c2d", "#f1e622");
         tvTime = (TextView) findViewById(R.id.tvTime);
         tvTimeH = (TextView) findViewById(R.id.tvTimeH);
         tvTimeMin = (TextView) findViewById(R.id.tvTimeMin);
@@ -57,7 +62,7 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
         tvBonusMilSec = (TextView) findViewById(R.id.tvBonusMilSec);
         if (!showTime)
         	tvBonus.setText("");
-        ok = (ImageView) findViewById(R.id.ok);
+        ok = findViewById(R.id.ok);
         ok.setOnClickListener(this);
         setClockValues(timeGame, timeBonus);
         setClock();
@@ -232,11 +237,13 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 	}
 
 //	final String TAG = "ChessClockSettingsDialog";
+	Util u;
 	boolean showMovesToGo = true;
 	boolean showTime = true;
 	boolean showBonus = true;
 	Context context;
 	private final Ic4aDialogCallback c4aCallback;
+	TextView title;
 	TextView tvTime = null;
 	TextView tvTimeH = null;
 	TextView tvTimeMin = null;
@@ -255,8 +262,8 @@ public class TimeSettingsDialog extends Dialog implements View.OnClickListener
 	NumericWheelAdapter bonusSecAdapter;
 	ArrayWheelAdapter<?> bonusMsecAdapter;
 	String msecValues[] = new String[100];
-	ImageView ok = null;
-	String title = null;
+	TextView ok = null;
+	String titleNon = null;	// unused
 	String message = null;
 	int timeGame = 0;
 	int timeGameH = 0;

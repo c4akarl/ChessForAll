@@ -388,5 +388,6 @@
     <string name="chess960NotSupprted">¡Este motor no es compatible con Chess960!</string>
     <string name="timeDelayReplay">Retraso de tiempo (repetición)</string>
     <string name="optionSupportInfo">No todos los motores admiten esta opción.</string>
+    <string name="add">Añadir</string>
 
 </resources>

@@ -9,7 +9,7 @@
         style="@style/c4aTV2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="00dip"
+        android:layout_marginBottom="@dimen/tv_color_margin_1"
         android:layout_marginLeft="0dip"
         android:paddingTop="0dip"
         android:paddingLeft="0dip"

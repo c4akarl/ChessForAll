@@ -1,6 +1,6 @@
 package ccc.chess.gui.chessforall;
 
-import android.util.Log;
+//import android.util.Log;
 
 public class TimeControl
 {
@@ -79,10 +79,11 @@ public class TimeControl
 
 	public void switchChessClock(boolean whiteMoves, long currentTime, int playMod)
     {
-		if (this.whiteMoves & whiteMoves | !this.whiteMoves & !whiteMoves)
-			colorChanged = false;
-		else
-			colorChanged = true;
+//		if (this.whiteMoves & whiteMoves | !this.whiteMoves & !whiteMoves)
+//			colorChanged = false;
+//		else
+//			colorChanged = true;
+		colorChanged = !(this.whiteMoves & whiteMoves || !this.whiteMoves & !whiteMoves);
 
 //Log.i(TAG, "OLD: timeControl: " + timeControl + ", whiteMoves: " + whiteMoves + ", currentTime: " + currentTime + ", startTime: " + startTime);
 //Log.i(TAG, "OLD: timeWhite: " + timeWhite + ", bonusWhite: " + bonusWhite + ", clockIsRunning: " + clockIsRunning);
@@ -142,11 +143,11 @@ public class TimeControl
 	public int getValueFromMilSeconds(int milSeconds, int modus)
     {
 		int h = 0;
-		int m = 0;
-		int s = 0;
+//		int m = 0;
+//		int s = 0;
 		int ms = milSeconds % 1000;
-		s = milSeconds / 1000;
-		m = milSeconds / 60000;
+		int s = milSeconds / 1000;
+		int m = milSeconds / 60000;
 		if (m > 0)
 		{
 			if (m > 59)
@@ -169,14 +170,14 @@ public class TimeControl
 	public String getShowValues(int milSeconds, boolean secOnly)
     {
 		String showTime = "";
-		int h = 0;
-		int m = 0;
-		int s = 0;
-		int ms = 0;
-		ms = getValueFromMilSeconds(milSeconds, 1);
-		s = getValueFromMilSeconds(milSeconds, 2);
-		m = getValueFromMilSeconds(milSeconds, 3);
-		h = getValueFromMilSeconds(milSeconds, 4);
+//		int h = 0;
+//		int m = 0;
+//		int s = 0;
+//		int ms = 0;
+		int ms = getValueFromMilSeconds(milSeconds, 1);
+		int s = getValueFromMilSeconds(milSeconds, 2);
+		int m = getValueFromMilSeconds(milSeconds, 3);
+		int h = getValueFromMilSeconds(milSeconds, 4);
 		if (milSeconds > 0)
 		{
 			if (h != 0)
@@ -223,14 +224,14 @@ public class TimeControl
 	public void setCurrentShowValues(int playMod)
     {	// set the current white/black time on screen
 
-//Log.i(TAG, "OLD time White: " + showModusWhite + ", " + timeWhite + ", " + showWhiteTime);
-//Log.i(TAG, "OLD time Black: " + showModusBlack + ", " + timeBlack + ", " + showBlackTime);
+//Log.i(TAG, "OLD time White: " + showModusWhite + ", " + timeWhite + ", " + showWhiteTime + ", playMod: " + playMod);
+//Log.i(TAG, "OLD time Black: " + showModusBlack + ", " + timeBlack + ", " + showBlackTime + ", playMod: " + playMod);
 
 		int t;
-		int h = 0;
-		int m = 0;
-		int s = 0;
-		int ms = 0;
+		int h;
+		int m;
+		int s;
+		int ms;
 		StringBuilder showH;
 		StringBuilder showM;
 		StringBuilder showS;
@@ -271,12 +272,8 @@ public class TimeControl
 			showH.append(h);
 			showM = new StringBuilder(10);
 			if (m < 10 & showModusWhite == 1)
-			{
 				showM.append("0");
-				showM.append(m);
-			}
-			else
-				showM.append(m);
+			showM.append(m);
 			showS = new StringBuilder(10);
 			if (s < 10 & (showModusWhite == 1 |showModusWhite == 2))
 			{
@@ -284,10 +281,8 @@ public class TimeControl
 					showModusWhite = 3;
 				else
 					showS.append("0");
-				showS.append(s);
 			}
-			else
-				showS.append(s);
+			showS.append(s);
 			showMs = new StringBuilder(10);
 			if (ms < 10)
 				showMs.append("00");
@@ -328,12 +323,8 @@ public class TimeControl
 			showH.append(h);
 			showM = new StringBuilder(10);
 			if (m < 10 & showModusBlack == 1)
-			{
 				showM.append("0");
-				showM.append(m);
-			}
-			else
-				showM.append(m);
+			showM.append(m);
 			showS = new StringBuilder(10);
 			if (s < 10 & (showModusBlack == 1 | showModusBlack == 2))
 			{
@@ -341,10 +332,8 @@ public class TimeControl
 					showModusBlack = 3;
 				else
 					showS.append("0");
-				showS.append(s);
 			}
-			else
-				showS.append(s);
+			showS.append(s);
 			showMs = new StringBuilder(10);
 			if (ms < 10)
 				showMs.append("00");
@@ -361,7 +350,7 @@ public class TimeControl
 			if (showModusBlack == 3)
 				showBlackTime = showS + "." + showMs;
 		}
-		if (timeControl == 4)
+		if (timeControl == 4 || playMod == 6)
 		{
 			showWhiteTime = "";
 			showBlackTime = "";
@@ -372,7 +361,8 @@ public class TimeControl
 
     }
 	
-	final String TAG = "TimeControl";
+//	final String TAG = "TimeControl";
+
 	final int MIN_TIME = 50; 		// add minimum rest time
 	final int showTime1 = 600000; 	// >= 10 minutes
 	final int showTime2 =  10000; 	// >= 10 seconds

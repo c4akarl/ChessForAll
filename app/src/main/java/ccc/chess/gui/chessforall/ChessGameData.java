@@ -51,8 +51,11 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
         	state = getString(R.string.menu_modes_view);
         title = (TextView) findViewById(R.id.title);
         title.setText(getString(R.string.app_chessData) + " (" + state + ")");
-        gdBtnOk = (ImageView) findViewById(R.id.gdBtnOk);
-        gdBtnTags = (ImageView) findViewById(R.id.gdBtnTags);
+		u.setTextViewColors(title, "#6b2c2d", "#f1e622");
+        gdBtnOk = findViewById(R.id.gdBtnOk);
+		u.setTextViewColors(gdBtnOk, "#BAB8B8", "#000000");
+        gdBtnTags = findViewById(R.id.gdBtnTags);
+		u.setTextViewColors(gdBtnTags, "#BAB8B8", "#000000");
         if (_gameStat.equals("2"))
         	gdBtnTags.setVisibility(ImageView.INVISIBLE);
         rl = (RelativeLayout)findViewById(R.id.gdRelativeLayout);
@@ -93,6 +96,7 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 				TextView tv = (TextView)getLayoutInflater().inflate(R.layout.c4atextview, null);
 				EditText et = null;
 				et = (EditText)getLayoutInflater().inflate(R.layout.c4aedittext, null);
+				u.setTextViewColors(et, "#ADE4A7");
 				rPar.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 				rPar.setMargins(4, 4, 4, 4);
 				if (i > 0)	rPar.addRule(RelativeLayout.BELOW, prevId);
@@ -637,8 +641,8 @@ public class ChessGameData extends Activity implements OnTouchListener, OnItemSe
 	
 	RelativeLayout rl = null;
 	TextView title;
-	ImageView gdBtnOk = null;
-	ImageView gdBtnTags = null;
+	TextView gdBtnOk = null;
+	TextView gdBtnTags = null;
 	int      		resultViewId = 0;
 	
 	CharSequence	_gameStat = "";

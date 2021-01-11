@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,6 +13,15 @@
         android:layout_marginTop="0dip"
         android:layout_marginLeft="0dip"
         android:text="@string/setEngineStrength" />
+
+    <TextView
+        android:id="@+id/eloEngine"
+        style="@style/c4aTV1"
+        android:maxLines="1"
+        android:layout_marginTop="@dimen/margin_1"
+        android:layout_marginStart="@dimen/margin_1"
+        android:textSize="@dimen/v_text_size"
+        android:textColor="@color/text_yellow" />
 
     <LinearLayout
         android:id="@+id/llH1"
@@ -62,7 +70,7 @@
         android:textColor="@color/text_yellow" />
 
     <TextView
-        android:id="@+id/Info"
+        android:id="@+id/info"
         style="@style/c4aTV1"
         android:maxLines="2"
         android:layout_marginTop="@dimen/margin_1"

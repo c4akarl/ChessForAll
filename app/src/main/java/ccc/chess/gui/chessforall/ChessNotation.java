@@ -23,6 +23,15 @@ public class ChessNotation extends Activity
 		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.notation);
         title = findViewById(R.id.title);
+		u.setTextViewColors(title, "#6b2c2d", "#f1e622");
+		ntBtnMove = findViewById(R.id.ntBtnMove);
+		u.setTextViewColors(ntBtnMove, "#B2D9E4", "#000000");
+		ntBtnMoveText = findViewById(R.id.ntBtnMoveText);
+		u.setTextViewColors(ntBtnMoveText, "#B2D9E4", "#000000");
+		ntBtnPgn = findViewById(R.id.ntBtnPgn);
+		u.setTextViewColors(ntBtnPgn, "#B2D9E4", "#000000");
+		ntBtnOk = findViewById(R.id.ntBtnOk);
+		u.setTextViewColors(ntBtnOk, "#BAB8B8", "#000000");
         notationText = findViewById(R.id.ntTv);
         switch (Objects.requireNonNull(getIntent().getExtras()).getInt("textValue"))
 		{
@@ -65,6 +74,10 @@ public class ChessNotation extends Activity
 	Util u;
 	SharedPreferences userP;
 	TextView title = null;
+	TextView ntBtnMove = null;
+	TextView ntBtnMoveText = null;
+	TextView ntBtnPgn = null;
+	TextView ntBtnOk = null;
 	TextView notationText = null;
 
 }

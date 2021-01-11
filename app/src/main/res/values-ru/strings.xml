@@ -369,5 +369,6 @@
     <string name="chess960NotSupprted">Этот движок не поддерживает Chess960!</string>
     <string name="timeDelayReplay">Задержка по времени (воспроизведение)</string>
     <string name="optionSupportInfo">Не все движки поддерживают эту опцию.</string>
+    <string name="add">Добавить</string>
 
 </resources>

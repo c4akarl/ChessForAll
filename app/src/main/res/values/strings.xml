@@ -392,5 +392,6 @@
     <string name="chess960NotSupprted">This engine does not support Chess960!</string>
     <string name="timeDelayReplay">Time delay (replay)</string>
     <string name="optionSupportInfo">Not all engines support this option.</string>
+    <string name="add">Add</string>
 
 </resources>

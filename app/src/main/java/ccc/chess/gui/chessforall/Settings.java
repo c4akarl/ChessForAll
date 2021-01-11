@@ -79,7 +79,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
         // Appearance
         btn_color_settings =  findViewById(R.id.btn_color_settings);
-        setTextViewColors(btn_color_settings, "#BAB8B8");
+        u.setTextViewColors(btn_color_settings, "#BAB8B8");
         cbGuCoordinates =  findViewById(R.id.cbGuCoordinates);
         cbGuPosibleMoves =  findViewById(R.id.cbGuPosibleMoves);
         cbGuQuickMove =  findViewById(R.id.cbGuQuickMove);
@@ -91,7 +91,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
         // Time, Clock
         btn_time_settings =  findViewById(R.id.btn_time_settings);
-        setTextViewColors(btn_time_settings, "#BAB8B8");
+        u.setTextViewColors(btn_time_settings, "#BAB8B8");
 
         // Opening Book
         openingBook =  findViewById(R.id.cbEpOpeningBook);
@@ -114,7 +114,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
             setVariants();
         });
         variantsValue = findViewById(R.id.variantsValue);
-        setTextViewColors(variantsValue, "#efe395");
+        u.setTextViewColors(variantsValue, "#efe395");
         variantsValue.setOnClickListener(v -> {
             variants = VARIANTS_DEFAULT;
             setVariants();
@@ -133,7 +133,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
             setMoves();
         });
         movesValue = findViewById(R.id.movesValue);
-        setTextViewColors(movesValue, "#efe395");
+        u.setTextViewColors(movesValue, "#efe395");
         movesValue.setOnClickListener(v -> {
             moves = MOVES_DEFAULT;
             setMoves();
@@ -152,7 +152,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
             setLines();
         });
         linesValue = findViewById(R.id.linesValue);
-        setTextViewColors(linesValue, "#efe395");
+        u.setTextViewColors(linesValue, "#efe395");
         linesValue.setOnClickListener(v -> {
             lines = LINES_DEFAULT;
             setLines();
@@ -219,103 +219,103 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         setTextsize();
 
         btnSettingsCancel = findViewById(R.id.btnSettingsCancel);
-        setTextViewColors(btnSettingsCancel, "#BAB8B8");
+        u.setTextViewColors(btnSettingsCancel, "#BAB8B8");
         btnSettingsOk = findViewById(R.id.btnSettingsOk);
-        setTextViewColors(btnSettingsOk, "#BAB8B8");
+        u.setTextViewColors(btnSettingsOk, "#BAB8B8");
 
     }
 
     public void setVariants()
     {
-        setTextViewColors(variantsValue, "#efe395");
-        setTextViewColors(variantsMinus, "#f6d2f4");
-        setTextViewColors(variantsPlus, "#c4f8c0");
+        u.setTextViewColors(variantsValue, "#efe395");
+        u.setTextViewColors(variantsMinus, "#f6d2f4");
+        u.setTextViewColors(variantsPlus, "#c4f8c0");
         if (variants <= VARIANTS_MIN) {
             variants = VARIANTS_MIN;
-            setTextViewColors(variantsMinus, "#767a76");
+            u.setTextViewColors(variantsMinus, "#767a76");
         }
         if (variants >= VARIANTS_MAX) {
             variants = VARIANTS_MAX;
-            setTextViewColors(variantsPlus, "#767a76");
+            u.setTextViewColors(variantsPlus, "#767a76");
         }
         variantsValue.setText(String.format("%d", variants));
     }
 
     public void setMoves()
     {
-        setTextViewColors(movesValue, "#efe395");
-        setTextViewColors(movesMinus, "#f6d2f4");
-        setTextViewColors(movesPlus, "#c4f8c0");
+        u.setTextViewColors(movesValue, "#efe395");
+        u.setTextViewColors(movesMinus, "#f6d2f4");
+        u.setTextViewColors(movesPlus, "#c4f8c0");
         if (moves <= MOVES_MIN) {
             moves = MOVES_MIN;
-            setTextViewColors(movesMinus, "#767a76");
+            u.setTextViewColors(movesMinus, "#767a76");
         }
         if (moves >= MOVES_MAX) {
             moves = MOVES_MAX;
-            setTextViewColors(movesPlus, "#767a76");
+            u.setTextViewColors(movesPlus, "#767a76");
         }
         movesValue.setText(String.format("%d", moves));
     }
 
     public void setLines()
     {
-        setTextViewColors(linesValue, "#efe395");
-        setTextViewColors(linesMinus, "#f6d2f4");
-        setTextViewColors(linesPlus, "#c4f8c0");
+        u.setTextViewColors(linesValue, "#efe395");
+        u.setTextViewColors(linesMinus, "#f6d2f4");
+        u.setTextViewColors(linesPlus, "#c4f8c0");
         if (lines <= LINES_MIN) {
             lines = LINES_MIN;
-            setTextViewColors(linesMinus, "#767a76");
+            u.setTextViewColors(linesMinus, "#767a76");
         }
         if (lines >= LINES_MAX) {
             lines = LINES_MAX;
-            setTextViewColors(linesPlus, "#767a76");
+            u.setTextViewColors(linesPlus, "#767a76");
         }
         linesValue.setText(String.format("%d", lines));
     }
 
     public void setArrows()
     {
-        setTextViewColors(arrowsMinus, "#f6d2f4");
-        setTextViewColors(arrowsPlus, "#c4f8c0");
+        u.setTextViewColors(arrowsMinus, "#f6d2f4");
+        u.setTextViewColors(arrowsPlus, "#c4f8c0");
         if (arrows <= ARROWS_MIN) {
             arrows = ARROWS_MIN;
-            setTextViewColors(arrowsMinus, "#767a76");
+            u.setTextViewColors(arrowsMinus, "#767a76");
         }
         if (arrows >= ARROWS_MAX) {
             arrows = ARROWS_MAX;
-            setTextViewColors(arrowsPlus, "#767a76");
+            u.setTextViewColors(arrowsPlus, "#767a76");
         }
         arrowsValue.setText(String.format("%d", arrows));
-        setTextViewColors(arrowsValue, "#efe395");
+        u.setTextViewColors(arrowsValue, "#efe395");
     }
 
     public void setPieces()
     {
-        setTextViewColors(piecesMinus, "#f6d2f4");
-        setTextViewColors(piecesPlus, "#c4f8c0");
+        u.setTextViewColors(piecesMinus, "#f6d2f4");
+        u.setTextViewColors(piecesPlus, "#c4f8c0");
         if (pieceNameId <= PIECES_MIN) {
             pieceNameId = PIECES_MIN;
-            setTextViewColors(piecesMinus, "#767a76");
+            u.setTextViewColors(piecesMinus, "#767a76");
         }
         if (pieceNameId >= PIECES_MAX) {
             pieceNameId = PIECES_MAX;
-            setTextViewColors(piecesPlus, "#767a76");
+            u.setTextViewColors(piecesPlus, "#767a76");
         }
         piecesValue.setText(getPieceNames(pieceNameId));
-        setTextViewColors(piecesValue, "#efe395");
+        u.setTextViewColors(piecesValue, "#efe395");
     }
 
     public void setTextsize()
     {
-        setTextViewColors(textsizeMinus, "#f6d2f4");
-        setTextViewColors(textsizePlus, "#c4f8c0");
+        u.setTextViewColors(textsizeMinus, "#f6d2f4");
+        u.setTextViewColors(textsizePlus, "#c4f8c0");
         if (textsizeId <= TEXTSIZE_MIN) {
             textsizeId = TEXTSIZE_MIN;
-            setTextViewColors(textsizeMinus, "#767a76");
+            u.setTextViewColors(textsizeMinus, "#767a76");
         }
         if (textsizeId >= TEXTSIZE_MAX) {
             textsizeId = TEXTSIZE_MAX;
-            setTextViewColors(textsizePlus, "#767a76");
+            u.setTextViewColors(textsizePlus, "#767a76");
         }
         float ts = textsizePixel;
         switch (textsizeId)
@@ -338,7 +338,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
                 break;
         }
         textsizeValue.setText(getTextsizeNames(textsizeId));
-        setTextViewColors(textsizeValue, "#efe395");
+        u.setTextViewColors(textsizeValue, "#efe395");
         textsizeMinus.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
         textsizeValue.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
         textsizePlus.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
@@ -525,14 +525,14 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         return colorName;
     }
 
-    public void setTextViewColors(TextView tv, String color)
-    {
-        if (tv != null) {
-            GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
-            if (tvBackground != null)
-                tvBackground.setColor(Color.parseColor(color));
-        }
-    }
+//    public void setTextViewColors(TextView tv, String color)
+//    {
+//        if (tv != null) {
+//            GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
+//            if (tvBackground != null)
+//                tvBackground.setColor(Color.parseColor(color));
+//        }
+//    }
 
     protected void setPrefs()
     {

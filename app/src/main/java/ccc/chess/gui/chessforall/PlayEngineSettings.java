@@ -40,10 +40,16 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 			currentFile = fmPrefs.getString("fm_extern_save_file", "");
 		}
         getPrefs();
+		title = findViewById(R.id.title);
+		u.setTextViewColors(title, "#6b2c2d", "#f1e622");
         etPePath = (EditText) findViewById(R.id.etPePath);
+		u.setTextViewColors(etPePath, "#ADE4A7", "#000000");
         etPeFile = (EditText) findViewById(R.id.etPeFile);
+		u.setTextViewColors(etPeFile, "#ADE4A7", "#000000");
         etPeRound = (EditText) findViewById(R.id.etPeRound);
+		u.setTextViewColors(etPeRound, "#ADE4A7", "#000000");
         etPeGameCounter = (EditText) findViewById(R.id.etPeGameCounter);
+		u.setTextViewColors(etPeGameCounter, "#ADE4A7", "#000000");
         etPeMessage = (TextView) findViewById(R.id.etPeMessage);
         cbPeAutoSave = (CheckBox) findViewById(R.id.cbPeAutoSave);
         cbPeAutoFlipColor = (CheckBox) findViewById(R.id.cbPeAutoFlipColor);
@@ -228,6 +234,7 @@ public class PlayEngineSettings extends Activity implements Ic4aDialogCallback
 	SharedPreferences fmPrefs;
 	SharedPreferences userPrefs;
 	SharedPreferences runPrefs;
+	TextView title;
 	EditText etPePath = null;
 	EditText etPeFile = null;
 	EditText etPeRound = null;

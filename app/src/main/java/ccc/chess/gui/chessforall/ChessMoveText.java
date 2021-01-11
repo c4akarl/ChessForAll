@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -20,6 +21,8 @@ public class ChessMoveText extends Activity
 		userP = getSharedPreferences("user", 0);
 		u.updateFullscreenStatus(this, userP.getBoolean("user_options_gui_StatusBar", false));
         setContentView(R.layout.movetext);
+		title = findViewById(R.id.title);
+		u.setTextViewColors(title, "#6b2c2d", "#f1e622");
         moveText = findViewById(R.id.mtEt);
         moveText.setText(Objects.requireNonNull(getIntent().getExtras()).getString("move_text"));
         moveText.requestFocus();
@@ -44,5 +47,6 @@ public class ChessMoveText extends Activity
 	SharedPreferences userP;
 	Intent returnIntent = new Intent();
 	EditText moveText;
+	TextView title;
 
 }
