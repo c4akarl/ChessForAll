@@ -202,7 +202,7 @@
     <string name="play_lastPosition">Ultima posicion</string>
     <string name="play_screenTimeout">Tiempo de espera</string>
     <string name="play_audio">Efectos de sonido</string>
-    <string name="play_posibleMoves">Movimientos posibles</string>
+    <string name="play_possibleMoves">Movimientos posibles</string>
     <string name="play_coordinates">Coordenadas</string>
     <string name="play_engineAutostart">automático motor</string>
     <string name="play_openingBook">Libro de apertura</string>

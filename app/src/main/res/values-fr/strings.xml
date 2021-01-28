@@ -203,7 +203,7 @@
     <string name="play_lastPosition">Dernière position</string>
     <string name="play_screenTimeout">Veille de l\'écran</string>
     <string name="play_audio">Effets sonores</string>
-    <string name="play_posibleMoves">Coups éventuels</string>
+    <string name="play_possibleMoves">Coups éventuels</string>
     <string name="play_coordinates">Coordonnées</string>
     <string name="play_engineAutostart">Démarrage automatique du moteur de jeu</string>
     <string name="play_openingBook">Répertoire  de la bibliothèque d \' ouvertures</string>

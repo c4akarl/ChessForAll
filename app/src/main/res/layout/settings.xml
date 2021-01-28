@@ -429,7 +429,7 @@
                 android:text="@string/guDisplayCoordinates" />
             <CheckBox android:id="@+id/cbGuPosibleMoves"
                 style="@style/c4aCB1"
-                android:text="@string/play_posibleMoves" />
+                android:text="@string/play_possibleMoves" />
             <CheckBox android:id="@+id/cbGuQuickMove"
                 style="@style/c4aCB1"
                 android:text="@string/play_quickMove" />

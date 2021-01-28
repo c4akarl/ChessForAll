@@ -202,7 +202,7 @@
     <string name="play_lastPosition">Last position</string>
     <string name="play_screenTimeout">Screen timeout</string>
     <string name="play_audio">Sound effects</string>
-    <string name="play_posibleMoves">Posible moves</string>
+    <string name="play_possibleMoves">Possible moves</string>
     <string name="play_coordinates">Coordinates</string>
     <string name="play_engineAutostart">Engine auto start</string>
     <string name="play_openingBook">Opening book</string>
@@ -211,8 +211,8 @@
     <string name="play_ponder">Ponder</string>
     <string name="play_moveList">Move list</string>
 
-    <string name="play_white">play white</string>
-    <string name="play_black">play black</string>
+    <string name="play_white">Play White</string>
+    <string name="play_black">Play Black</string>
     <string name="play_engine">Computer</string>
     <string name="play_analysis">Analysis</string>
     <string name="play_two_players">Edit</string>

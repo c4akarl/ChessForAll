@@ -193,16 +193,22 @@
             android:id="@+id/chess960_manual"
             style="@style/c4aTV4"
             android:background="@drawable/rectanglewhite"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:text="@string/menu_edit_board_chess960_manual" />
         <TextView
             android:id="@+id/chess960_random"
             style="@style/c4aTV4"
             android:background="@drawable/rectanglewhite"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:text="@string/menu_edit_board_chess960_random" />
         <TextView
             android:id="@+id/chess960_number"
             style="@style/c4aTV4"
             android:background="@drawable/rectanglewhite"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:text="@string/menu_edit_board_chess960_number" />
 
     </LinearLayout>
@@ -217,11 +223,15 @@
             android:id="@+id/to_clipboard"
             style="@style/c4aTV4"
             android:background="@drawable/rectanglewhite"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:text="@string/menu_info_clipboardCopyFen" />
         <TextView
             android:id="@+id/from_clipboard"
             style="@style/c4aTV4"
             android:background="@drawable/rectanglewhite"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:text="@string/menu_info_clipboardPaste" />
     </LinearLayout>
 
@@ -236,16 +246,22 @@
             android:id="@+id/standard"
             style="@style/c4aTV4"
             android:background="@drawable/rectanglewhite"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:text="@string/menu_edit_board_standard" />
         <TextView
             android:id="@+id/current"
             style="@style/c4aTV4"
             android:background="@drawable/rectanglewhite"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:text="@string/menu_edit_board_current" />
         <TextView
             android:id="@+id/clear"
             style="@style/c4aTV4"
             android:background="@drawable/rectanglewhite"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             android:text="@string/menu_edit_board_clear" />
     </LinearLayout>
 

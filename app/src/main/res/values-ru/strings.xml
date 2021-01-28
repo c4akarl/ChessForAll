@@ -184,7 +184,7 @@
   <string name="play_lastPosition">"Последняя позиция "</string>
   <string name="play_screenTimeout">"Тайм-аут экрана "</string>
   <string name="play_audio">"Звуковые эффекты "</string>
-  <string name="play_posibleMoves">Возможные ходы</string>
+  <string name="play_possibleMoves">Возможные ходы</string>
   <string name="play_coordinates">Координаты</string>
   <string name="play_engineAutostart">Автом. запуск движка</string>
   <string name="play_openingBook">Открытие книги</string>

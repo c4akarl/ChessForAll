@@ -73,7 +73,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
         runP = getSharedPreferences("run", 0);
         userPrefs = getSharedPreferences("user", 0);
         fmPrefs = getSharedPreferences("fm", 0);
-		ce = new UciEngine(this, 9);
+//		ce = new UciEngine(this, 9);
 	}
 
 	@Override
@@ -864,29 +864,29 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 			return alert;
 		}
 
-		if (id == ENGINE_INSTALL_DIALOG)
-		{
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			if (etFile == null)
-				return null;
-			builder.setTitle(getString(R.string.menu_enginesettings_install) + ": " + etFile.getText());
-			builder.setMessage(ce.mesInitProcess);
-			builder.setPositiveButton(getString(R.string.btn_Ok), null);
-			builder.setNegativeButton(getString(R.string.menu_enginesettings_select), new DialogInterface.OnClickListener()
-			{
-				public void onClick(DialogInterface dialog, int id)
-				{
-					returnIntent = new Intent();
-					returnIntent.putExtra("filePath", etPath.getText().toString());
-					returnIntent.putExtra("fileName", etFile.getText().toString());
-					setResult(82, returnIntent);
-					finish();
-				}
-			});
-			builder.setCancelable(true);
-			AlertDialog alert = builder.create();
-			return alert;
-		}
+//		if (id == ENGINE_INSTALL_DIALOG)
+//		{
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//			if (etFile == null)
+//				return null;
+//			builder.setTitle(getString(R.string.menu_enginesettings_install) + ": " + etFile.getText());
+//			builder.setMessage(ce.mesInitProcess);
+//			builder.setPositiveButton(getString(R.string.btn_Ok), null);
+//			builder.setNegativeButton(getString(R.string.menu_enginesettings_select), new DialogInterface.OnClickListener()
+//			{
+//				public void onClick(DialogInterface dialog, int id)
+//				{
+//					returnIntent = new Intent();
+//					returnIntent.putExtra("filePath", etPath.getText().toString());
+//					returnIntent.putExtra("fileName", etFile.getText().toString());
+//					setResult(82, returnIntent);
+//					finish();
+//				}
+//			});
+//			builder.setCancelable(true);
+//			AlertDialog alert = builder.create();
+//			return alert;
+//		}
 
 		if (id == ADD_FOLDER_DIALOG)
         {
@@ -4076,7 +4076,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	private static final int MENU_GAME_DIALOG = 23;
 	private static final int MENU_EDIT_PGN = 24;
 	private static final int DELETE_GAME_DIALOG = 26;
-	private static final int ENGINE_INSTALL_DIALOG = 80;
+//	private static final int ENGINE_INSTALL_DIALOG = 80;
 	private static final int COMING_SOON = 91;  // not activated
 	private static final int FILE_LOAD_PROGRESS_DIALOG = 99;
 
@@ -4096,7 +4096,7 @@ public class FileManager extends Activity implements Ic4aDialogCallback, DialogI
 	FileIO fileIO;
     ColorValues cv;
 	PgnDb pgnDb;
-	UciEngine ce;
+//	UciEngine ce;
 	int db_state = STATE_DB_NO_PGN_ACTION;
 	EditPgnTask editPgnTask = null;
 	CreateDatabaseTask createDatabaseTask = null;

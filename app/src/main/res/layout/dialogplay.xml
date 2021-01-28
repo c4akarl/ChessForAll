@@ -144,7 +144,7 @@
                 <CheckBox
                     android:id="@+id/cb_posibleMoves"
                     style="@style/c4aCB2"
-                    android:text="@string/play_posibleMoves" />
+                    android:text="@string/play_possibleMoves" />
                 <CheckBox
                     android:id="@+id/cb_quickMove"
                     style="@style/c4aCB2"

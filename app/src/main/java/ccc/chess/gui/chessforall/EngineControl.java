@@ -3,6 +3,8 @@ package ccc.chess.gui.chessforall;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+
 import ccc.chess.book.BookOptions;
 import ccc.chess.book.C4aBook;
 
@@ -12,12 +14,31 @@ public class EngineControl
     {
 		this.context = context;
 		userPrefs = context.getSharedPreferences("user", 0);
-		createEngines();
+		createEngines(null, null);
     }
-	private void createEngines()
+
+	void createEngines(ArrayList<String> oexEngines, EngineListener engineListener)
 	{
-		en_1 = new UciEngine(context, 1);	// engine number 1
+		if (oexEngines == null) {
+			uciEngines = new UciEngine[1];
+			engineCnt = 1;
+			uciEngines[0] = new UciEngine(context, 0,null, null);
+			ue = uciEngines[0];
+		}
+		else {
+			if (oexEngines != null && engineListener != null) {
+				if (oexEngines.size() > 0) {
+					engineCnt = oexEngines.size();
+					uciEngines = new UciEngine[engineCnt];
+					for (int i = 0; i < engineCnt; i++)
+					{
+						uciEngines[i] = new UciEngine(context, i, oexEngines.get(i), engineListener);
+					}
+				}
+			}
+		}
 	}
+	
 	final void setBookOptions()
 	{
 		book = new C4aBook(context);
@@ -28,7 +49,6 @@ public class EngineControl
 	void setPlaySettings(SharedPreferences userP, CharSequence color)
     {
 		chessEnginePlayMod = userP.getInt("user_play_playMod", 1);
-		twoEngines = false;
 		if (chessEnginePlayMod == 3 | chessEnginePlayMod == 4)	// engine vs engine | analysis
 			chessEngineSearching = true;
 		if 	(		(chessEnginePlayMod == 1 & color.equals("b"))
@@ -38,11 +58,10 @@ public class EngineControl
 			chessEngineSearching = true;
 			chessEnginePaused = false;
 		}
-
     }
+
 	void setPlayData(SharedPreferences userP, String white, String black)
     {
-    	// setting the PGN-Data
 
 //Log.i(TAG, "setPlayData(), white: " + white + ", black: " + black);
 
@@ -58,15 +77,15 @@ public class EngineControl
 		{
 			case 1:
 				chessEnginePlayerWhite = playerName;
-				chessEnginePlayerBlack = en_1.engineName;
+				chessEnginePlayerBlack = getEngine().engineName;
 				break;
 			case 2:
-				chessEnginePlayerWhite = en_1.engineName;
+				chessEnginePlayerWhite = getEngine().engineName;
 				chessEnginePlayerBlack = playerName;
 				break;
 			case 3:
-				chessEnginePlayerWhite = en_1.engineName;
-				chessEnginePlayerBlack = en_1.engineName;
+				chessEnginePlayerWhite = getEngine().engineName;
+				chessEnginePlayerBlack = getEngine().engineName;
 				break;
 			case 4:
 				chessEnginePlayerWhite = white;
@@ -75,13 +94,13 @@ public class EngineControl
 		}
     }
 
-	void setEngineNumber()
-	{	//>361 engine Number: for better controlling multiple ChessEngines in GUI
-		engineNumber = 1;
-	}
 	public UciEngine getEngine()
     {
-		return en_1;
+		//karl multiple engines ?!
+		if (MainActivity.withMultiEngine)
+    		return uciEngines[0];
+		else
+			return ue;
     }
 
 	void setStartPlay(CharSequence color)
@@ -92,12 +111,12 @@ public class EngineControl
 				| 	chessEnginePlayMod == 2 & color.equals("w")
 			)
 		{
-			en_1.startPlay = true;
+			getEngine().startPlay = true;
 			makeMove = true;
 		}
 		else
 		{
-			en_1.startPlay = false;
+			getEngine().startPlay = false;
 			makeMove = false;
 		}
 
@@ -106,12 +125,13 @@ public class EngineControl
     }
 
 	private final Context context;
-	private final SharedPreferences userPrefs;		                    // user preferences(LogFile on/off . . .)
-	UciEngine en_1;
+	private final SharedPreferences userPrefs;		 	// user preferences(LogFile on/off . . .)
+	UciEngine ue;										// single UciEngine 			MainActivity.withMultiEngine = false
+	UciEngine[] uciEngines;								// manage multiple UciEngine	MainActivity.withMultiEngine = true
+	int engineCnt = 1;
+	int searchId = 0;
 	C4aBook book;
 	private final BookOptions bookOptions = new BookOptions();
-	int engineNumber = 1;					// for controlling ChessEngines: en_1 | en_2
-	boolean twoEngines = false;				// true if two different engines(b/w)
 	boolean makeMove = false;				// engine makes first move
 	boolean isUciNewGame = true;			// send "ucinewgame" command
     int chessEnginePlayMod = 1;				// 1 = player vs engine, 2 = engine vs player, 3 = engine vs engine, 4 = engine analysis, 5 = player vs player, 6 = edit
