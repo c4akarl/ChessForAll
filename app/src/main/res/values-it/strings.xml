@@ -35,7 +35,7 @@
     <string name="cl_resultBlack">0-1</string>
     <string name="cl_resultDraw">1/2-1/2</string>
     <string name="cl_gameOver">Fine partita</string>
-    <string name="cl_50MoveRule">Reg. 50 mosse</string>
+    <string name="cl_50MoveRule">Regola 50 mosse</string>
     <string name="cl_position3Times">Tripla ripetizione</string>
     <string name="cl_moveError">Mossa errata</string>
     <string name="cl_moveWhite">Tratto al bianco</string>
@@ -113,7 +113,7 @@
     <string name="menu_edit_fen_color">Colore (b/n)</string>
     <string name="menu_edit_fen_castling">Arrocco</string>
     <string name="menu_edit_fen_ep">En passant</string>
-    <string name="menu_edit_fen_draw50">Patta reg. 50 mosse</string>
+    <string name="menu_edit_fen_draw50">Patta regola 50 mosse</string>
     <string name="menu_edit_fen_movecounter">Contatore mosse</string>
     <string name="menu_edit_board_clear">Svuota</string>
     <string name="menu_edit_board_current">Posiz. corrente</string>
@@ -178,7 +178,7 @@
     
     <string name="epEngineMessage">Mostra calcoli</string>
     <string name="epRandomFirstMove">Prima mossa casuale (bianchi)</string>
-    <string name="epAutoStartEngine">Avvio automatico del motore</string>
+    <string name="epAutoStartEngine">Avvio aut. motore</string>
     <string name="epOpeningBook">Libro delle aperture "Polyglot"</string>
     <string name="epBookHint">book.bin</string>
     <string name="epMultiPv">Varianti</string>
@@ -271,7 +271,7 @@
     <string name="clock_stopped">Orologio interrotto</string>
     <string name="play_set_clock">Imposta orologio</string>
     <string name="play_continue">Continua</string>
-    <string name="menu_about_apps">Mie apps</string>
+    <string name="menu_about_apps">Le mie app</string>
     <string name="ccsMessageAutoPlayStopped">Gioco automatico interrotto</string>
     <string name="endOfVariation">Vai alla fine della variazione</string>
     <string name="guGameNavigationBoard">Navigazione partita (scacchiera)</string>
