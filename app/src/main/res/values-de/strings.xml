@@ -119,9 +119,9 @@
     <string name="menu_edit_board_clear">Brett leeren</string>
     <string name="menu_edit_board_current">Aktuelle Stellung</string>
     <string name="menu_edit_board_standard">Standard</string>
-    <string name="menu_edit_board_chess960_manual">Chess960 \neditieren</string>
-    <string name="menu_edit_board_chess960_random">Chess960 \nZufall</string>
-    <string name="menu_edit_board_chess960_number">Chess960 \nNummer</string>
+    <string name="menu_edit_board_chess960_manual">960 Editieren</string>
+    <string name="menu_edit_board_chess960_random">960 Zufall</string>
+    <string name="menu_edit_board_chess960_number">960 Nummer</string>
 
     <string name="menu_info_turnBoard">Brett drehen</string>
     <string name="menu_info_nag">NAG (+, -, =, ...)</string>

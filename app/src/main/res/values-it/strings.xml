@@ -26,7 +26,7 @@
     <string name="inputDialog_color">Seleziona colore:</string>
     <string name="inputDialog_castling">Valore di arrocco</string>
     <string name="inputDialog_enPassant">Valore en passant</string>
-    <string name="inputDialog_draw50">Regola delle 50 mosse</string>
+    <string name="inputDialog_draw50">Regola 50 mosse</string>
     <string name="inputDialog_moveCounter">Contatore mosse</string>
     
     <string name="cl_unknownPiece">Pezzo sconosciuto</string>
@@ -35,7 +35,7 @@
     <string name="cl_resultBlack">0-1</string>
     <string name="cl_resultDraw">1/2-1/2</string>
     <string name="cl_gameOver">Fine partita</string>
-    <string name="cl_50MoveRule">reg. 50 mosse</string>
+    <string name="cl_50MoveRule">Reg. 50 mosse</string>
     <string name="cl_position3Times">Tripla ripetizione</string>
     <string name="cl_moveError">Mossa errata</string>
     <string name="cl_moveWhite">Tratto al bianco</string>
@@ -113,21 +113,21 @@
     <string name="menu_edit_fen_color">Colore (b/n)</string>
     <string name="menu_edit_fen_castling">Arrocco</string>
     <string name="menu_edit_fen_ep">En passant</string>
-    <string name="menu_edit_fen_draw50">Patta regola 50 mosse</string>
+    <string name="menu_edit_fen_draw50">Patta reg. 50 mosse</string>
     <string name="menu_edit_fen_movecounter">Contatore mosse</string>
-    <string name="menu_edit_board_clear">Libera scacchiera</string>
-    <string name="menu_edit_board_current">Posizione corrente</string>
+    <string name="menu_edit_board_clear">Svuota</string>
+    <string name="menu_edit_board_current">Posiz. corrente</string>
     <string name="menu_edit_board_standard">Standard</string>
-    <string name="menu_edit_board_chess960_manual">Chess960 \nmanual</string>
-    <string name="menu_edit_board_chess960_random">Chess960 \nrandom</string>
-    <string name="menu_edit_board_chess960_number">Chess960 \nnumber</string>
+    <string name="menu_edit_board_chess960_manual">960 manuale</string>
+    <string name="menu_edit_board_chess960_random">960 casuale</string>
+    <string name="menu_edit_board_chess960_number">960 ID</string>
 
     <string name="menu_info_turnBoard">Ruota scacchiera</string>
     <string name="menu_info_nag">NAG (+, -, =, ...)</string>
     <string name="menu_info_moveNotification">Annotazioni mossa</string>
     <string name="menu_info_moveNotation">Notazione PGN</string>
-    <string name="menu_info_clipboardCopyPgn">Copia gioco negli appunti</string>
-    <string name="menu_info_clipboardCopyFen">Copia posizione negli appunti</string>
+    <string name="menu_info_clipboardCopyPgn">Copia gioco</string>
+    <string name="menu_info_clipboardCopyFen">Copia posizione</string>
     <string name="menu_info_clipboardPaste">Incolla dagli appunti</string>
     
     <string name="menu_query">Interroga - Cerca una partita</string>
@@ -171,7 +171,7 @@
     <string name="guPlayerName">Nome giocatore</string>
     <string name="guStatusBar">Scermo intero</string>
     <string name="guLastPosition">Ultima posizione</string>
-    <string name="guDisableScreenTimeout">Disattivazione schermo</string>
+    <string name="guDisableScreenTimeout">Sospendi schermo</string>
     <string name="guUsePgnDatabase">Database PGN</string>
     <string name="guEnableSounds">Effetti sonori</string>
     <string name="guDisplayCoordinates">Coordinate (a-h, 1-8)</string>
@@ -185,7 +185,7 @@
     <string name="epPvMoves">Mosse</string>
     <string name="epStrength">Livello di difficoltà</string>
     <string name="epAggressivness">Aggressività</string>
-    <string name="epLogging">Generazione Log</string>
+    <string name="epLogging">Genera Log</string>
     
     <string name="tcGameClock">Tempo partita</string>
     <string name="tcMoveTime">Tempo mossa</string>
@@ -200,15 +200,15 @@
 
     <string name="play_fullScreen">Schermo intero</string>
     <string name="play_lastPosition">Ultima posizione</string>
-    <string name="play_screenTimeout">Disattivazione schermo</string>
+    <string name="play_screenTimeout">Sospendi schermo</string>
     <string name="play_audio">Effetti sonori</string>
     <string name="play_possibleMoves">Mosse possibili</string>
     <string name="play_coordinates">Coordinate</string>
-    <string name="play_engineAutostart">Avvio automatico del motore</string>
+    <string name="play_engineAutostart">Avvio aut. motore</string>
     <string name="play_openingBook">Libro delle aperture</string>
-    <string name="play_openingBookHints">Mostra suggerimenti dal libro</string>
+    <string name="play_openingBookHints">Suggerimenti</string>
     <string name="play_thinking">Mostra i calcoli</string>
-    <string name="play_ponder">Sto riflettendo</string>
+    <string name="play_ponder">Esec. speculativa</string>
     <string name="play_moveList">Lista mosse</string>
 
     <string name="play_white">Usa i bianchi</string>
@@ -260,7 +260,7 @@
     <string name="qVariation">Variazione</string>
     <string name="qNoResults">Nessun Risultato!</string>
     <string name="whatsNew">Novità</string>
-    <string name="engine_searching">Ricerca del motore</string>
+    <string name="engine_searching">Attendere il motore</string>
     <string name="menu_board_flip">Ruota scacchiera</string>
     <string name="menu_board_clipboard">Appunti</string>
     <string name="menu_board_coordinates">Coordinate</string>
@@ -294,7 +294,7 @@
     <string name="fmAddFile">Nuovo file</string>
     <string name="fmFileNoWritePermissions">Non si hanno i permessi di scrittura:</string>
     <string name="btn_Continue">Continua</string>
-    <string name="epPonder">Sto riflettendo...</string>
+    <string name="epPonder">Esecuzione speculativa</string>
     <string name="engineDisplayedLines">Linee</string>
     <string name="engineThinking">Mostra i calcoli</string>
     <string name="engineError">Errore del motore</string>
@@ -305,19 +305,19 @@
     <string name="menu_colorsettings_grey">Grigio</string>
     <string name="menu_colorsettings_blue">Blu</string>
     <string name="menu_colorsettings_green">Verde</string>
-    <string name="colorFields">campi</string>
-    <string name="colorPieces">pezzi</string>
-    <string name="colorFromTo">da/a</string>
+    <string name="colorFields">Case</string>
+    <string name="colorPieces">Pezzi</string>
+    <string name="colorFromTo">Da/a</string>
     <string name="colorLastMove">ultima mossa</string>
-    <string name="colorMoveList">lista mosse</string>
-    <string name="colorEngineList">lista motore</string>
-    <string name="colorInfo">info</string>
-    <string name="colorData">data</string>
-    <string name="colorTime">tempo</string>
-    <string name="colorHighlighting">evidenziazioni</string>
-    <string name="colorReset">ripristina</string>
-    <string name="colorCoordinates">coordinate</string>
-    <string name="colorApply">applica</string>
+    <string name="colorMoveList">Lista mosse</string>
+    <string name="colorEngineList">Lista motore</string>
+    <string name="colorInfo">Info</string>
+    <string name="colorData">Data</string>
+    <string name="colorTime">Tempo</string>
+    <string name="colorHighlighting">Evidenziazioni</string>
+    <string name="colorReset">Ripristina</string>
+    <string name="colorCoordinates">Coordinate</string>
+    <string name="colorApply">Applica</string>
     <string name="menu_show_list">Mostra lista (s/n)</string>
     <string name="menu_title">Menu</string>
     <string name="pause_delay">ritardo</string>
@@ -359,12 +359,12 @@
     <string name="play_blindMode">Scacchi alla cieca</string>
     <string name="play_pgnDb">PGN-DB</string>
 	<string name="chess960" translatable="false">Chess 960</string>
-    <string name="play_quickMove">Mosse veloci</string>
+    <string name="play_quickMove">Mosse rapide</string>
     <string name="noFileActions">A causa dei notevoli cambiamenti nella gestione dei file, nessuna azione sui file è attualmente possibile per i dispositivi con Android 11 e superiori. \nLo sviluppatore chiede comprensione.</string>
     <string name="analysisFinished">Il motore ha terminato l\'analisi.</string>
-    <string name="debugInformation">Informazioni di debug</string>
+    <string name="debugInformation">Info debug</string>
     <string name="app_editUciOptions">Modifica opzioni UCI</string>
-    <string name="menu_enginesettings_uciOptions">Impostazioni motore</string>
+    <string name="menu_enginesettings_uciOptions">Opz. motore</string>
     <string name="position">Posizione</string>
     <string name="timePosition">Posizione</string>
     <string name="engineInit">Inizializzazione motore:</string>
@@ -384,10 +384,10 @@
     <string name="small">Piccolo</string>
     <string name="medium">Medio</string>
     <string name="large">Grande</string>
-    <string name="larger">Grandissimo</string>
+    <string name="larger">Più grande</string>
     <string name="charPlus" translatable="false">+</string>
     <string name="charMinus" translatable="false">-</string>
-    <string name="setEngineStrength">Forza motore scacchistico</string>
+    <string name="setEngineStrength">Livello di difficoltà</string>
     <string name="elo" translatable="false">Elo:</string>
     <string name="chess960NotSupprted">Questo motore non supporta Chess960!</string>
     <string name="timeDelayReplay">Tempo di ritardo (risposta)</string>

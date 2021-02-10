@@ -118,9 +118,9 @@
     <string name="menu_edit_board_clear">Clear board</string>
     <string name="menu_edit_board_current">Current position</string>
     <string name="menu_edit_board_standard">Standard</string>
-    <string name="menu_edit_board_chess960_manual">Chess960 \nmanual</string>
-    <string name="menu_edit_board_chess960_random">Chess960 \nrandom</string>
-    <string name="menu_edit_board_chess960_number">Chess960 \nnumber</string>
+    <string name="menu_edit_board_chess960_manual">960 Manual</string>
+    <string name="menu_edit_board_chess960_random">960 Random</string>
+    <string name="menu_edit_board_chess960_number">960 Number</string>
 
     <string name="menu_info_turnBoard">Turn board</string>
     <string name="menu_info_nag">NAG (+, -, =, ...)</string>

@@ -119,9 +119,9 @@
     <string name="menu_edit_board_clear">Vider l\'echiquier</string>
     <string name="menu_edit_board_current">Position actuelle</string>
     <string name="menu_edit_board_standard">Standard</string>
-    <string name="menu_edit_board_chess960_manual">Chess960 \nmanuelle</string>
-    <string name="menu_edit_board_chess960_random">Chess960 \naléatoire</string>
-    <string name="menu_edit_board_chess960_number">Chess960 \nnombre</string>
+    <string name="menu_edit_board_chess960_manual">960 Manuelle</string>
+    <string name="menu_edit_board_chess960_random">960 Aléatoire</string>
+    <string name="menu_edit_board_chess960_number">960 Nombre</string>
 
     <string name="menu_info_turnBoard">tournez échiquier</string>
     <string name="menu_info_nag">NAG (+, -, =  . . .)</string>

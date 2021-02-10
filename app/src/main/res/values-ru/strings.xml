@@ -110,9 +110,9 @@
   <string name="menu_edit_board_clear">Очистить доску</string>
   <string name="menu_edit_board_current">Текущая позиция</string>
   <string name="menu_edit_board_standard">Стандарт</string>
-  <string name="menu_edit_board_chess960_manual">Chess960 \nправила</string>
-  <string name="menu_edit_board_chess960_random">Chess960 \nслучайный</string>
-  <string name="menu_edit_board_chess960_number">Chess960 \nчисла</string>
+  <string name="menu_edit_board_chess960_manual">960 правила</string>
+  <string name="menu_edit_board_chess960_random">960 случайный</string>
+  <string name="menu_edit_board_chess960_number">960 числа</string>
   <string name="menu_info_turnBoard">Повернуть доску</string>
   <string name="menu_info_nag">NAG (+, -, =, ...)</string>
   <string name="menu_info_moveNotification">Запись хода</string>
