@@ -1193,10 +1193,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 			// cb0
 			d_cb_debugInformation = playDialog.findViewById(R.id.cb_debugInformation);
-			d_cb_debugInformation.setChecked(userPrefs.getBoolean("user_options_enginePlay_debugInformation", true));
+			d_cb_debugInformation.setChecked(userPrefs.getBoolean("user_options_enginePlay_debugInformation", false));
 			d_cb_debugInformation.setOnClickListener(myViewListener);
 			d_cb_logging = playDialog.findViewById(R.id.cb_logging);
-			d_cb_logging.setChecked(userPrefs.getBoolean("user_options_enginePlay_logOn", true));
+			d_cb_logging.setChecked(userPrefs.getBoolean("user_options_enginePlay_logOn", false));
 			d_cb_logging.setOnClickListener(myViewListener);
 			// cb1
 			d_cb_screenTimeout = playDialog.findViewById(R.id.cb_screenTimeout);
@@ -1207,14 +1207,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_cb_engineAutostart.setOnClickListener(myViewListener);
 			// cb2
 			d_cb_fullScreen = playDialog.findViewById(R.id.cb_fullScreen);
-			d_cb_fullScreen.setChecked(userPrefs.getBoolean("user_options_gui_StatusBar", true));
+			d_cb_fullScreen.setChecked(userPrefs.getBoolean("user_options_gui_StatusBar", false));
 			d_cb_fullScreen.setOnClickListener(myViewListener);
 			d_cb_boardFlip = playDialog.findViewById(R.id.cb_boardFlip);
-			d_cb_boardFlip.setChecked(userPrefs.getBoolean("user_options_gui_FlipBoard", true));
+			d_cb_boardFlip.setChecked(userPrefs.getBoolean("user_options_gui_FlipBoard", false));
 			d_cb_boardFlip.setOnClickListener(myViewListener);
 			// cb3
 			d_cb_lastPosition = playDialog.findViewById(R.id.cb_lastPosition);
-			d_cb_lastPosition.setChecked(userPrefs.getBoolean("user_options_gui_LastPosition", true));
+			d_cb_lastPosition.setChecked(userPrefs.getBoolean("user_options_gui_LastPosition", false));
 			d_cb_lastPosition.setOnClickListener(myViewListener);
 			d_cb_pgnDb = playDialog.findViewById(R.id.cb_pgnDb);
 			d_cb_pgnDb.setChecked(userPrefs.getBoolean("user_options_gui_usePgnDatabase", true));
@@ -1955,10 +1955,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						if (ec.chessEnginePaused)
 							restartEngine();
 						else {
-							if (ec.getEngine().engineSearching())
-								stopSearchAndRestart(false, true);
-							else
-								startPlay(true, true);
+
+//							Log.i(TAG, "MENU_SELECT_ENGINE_FROM_OEX, no engine, ec.getEngine().engineSearching(): " + ec.getEngine().engineSearching());
+
+//							if (ec.getEngine().engineSearching())
+//								stopSearchAndRestart(false, true);
+//							else
+//								startPlay(true, true);
+							stopSearchAndRestart(false, true);
+
 						}
 					});
 				builder.setOnCancelListener(dialog ->
@@ -4076,7 +4081,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public boolean getIsEndPosition()
 	{
-		return userPrefs.getBoolean("user_options_gui_LastPosition", true);
+		return userPrefs.getBoolean("user_options_gui_LastPosition", false);
 	}
 
 	public void setToClipboard(CharSequence text)
@@ -5501,7 +5506,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				if (tokens[0].equals("info"))
 				{
 
-					if (userPrefs.getBoolean("user_options_enginePlay_debugInformation", true)) {
+					if (userPrefs.getBoolean("user_options_enginePlay_debugInformation", false)) {
 						if (s.toString().contains("info string") && s.length() > 14) {
 							engineInfoString = engineInfoString + "" + s.toString().subSequence(12, s.length() - 1) + "\n";
 						}
