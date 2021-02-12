@@ -370,5 +370,16 @@
     <string name="timeDelayReplay">Задержка по времени (воспроизведение)</string>
     <string name="optionSupportInfo">Не все движки поддерживают эту опцию.</string>
     <string name="add">Добавить</string>
+    <string name="app_computerMatch">Компьютерный матч</string>
+  <string name="engineWhite">Двигатель Белый</string>
+  <string name="engineBlack">Двигатель Черный</string>
+  <string name="options">Опции</string>
+    <string name="changeColor">Сменить цвет</string>
+  <string name="result">Результат</string>
+  <string name="startContinue">Начать / Продолжить</string>
+    <string name="engineVsEngine">Двигатель / Двигатель</string>
+    <string name="analysisOptions">Варианты анализа</string>
+  <string name="multipleEngines">Несколько двигателей</string>
+    <string name="none">[ никто ]</string>
 
 </resources>

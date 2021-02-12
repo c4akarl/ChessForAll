@@ -318,7 +318,7 @@
     <string name="colorHighlighting">mise en évidence</string>
     <string name="colorReset">"Réinitialiser "</string>
     <string name="colorCoordinates">coordonnées</string>
-    <string name="colorApply">appliquer</string>
+    <string name="colorApply">Appliquer</string>
     <string name="menu_show_list">Afficher la liste (o/n)</string>
     <string name="menu_title">Menu</string>
     <string name="pause_delay">retard</string>
@@ -390,5 +390,16 @@
     <string name="timeDelayReplay">Temporisation (replay)</string>
     <string name="optionSupportInfo">Tous les moteurs ne prennent pas en charge cette option.</string>
     <string name="add">Ajouter</string>
+    <string name="app_computerMatch">Match d\'ordinateur</string>
+    <string name="engineWhite">Moteur Blanc</string>
+    <string name="engineBlack">Moteur Noir</string>
+    <string name="options">Options</string>
+    <string name="changeColor">Changer de couleur</string>
+    <string name="result">Résultat</string>
+    <string name="startContinue">Démarrer /Ccontinuer</string>
+    <string name="engineVsEngine">Moteur / Moteur</string>
+    <string name="analysisOptions">Options d\'analyse</string>
+    <string name="multipleEngines">Moteurs multiples</string>
+    <string name="none">[ rien ]</string>
 
 </resources>

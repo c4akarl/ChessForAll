@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dip"
+    android:paddingLeft="8dip"
+    android:paddingRight="8dip"
+    android:paddingBottom="8dip"
+    android:background="@drawable/background_c4a_2" >
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/c4aTV2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dip"
+        android:paddingTop="0dip"
+        android:paddingLeft="0dip"
+        android:paddingRight="0dip"
+        android:singleLine="true"
+        android:gravity="center"
+        android:background="@drawable/rectangletransparent"
+        android:text="@string/app_computerMatch"
+        android:textColor="#000000" />
+
+    <LinearLayout
+        android:id="@+id/actions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/tv_color_margin_1"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/btn_cancel"
+            style="@style/c4aTV5"
+            android:layout_width="wrap_content"
+            android:onClick="myClickHandler"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingLeft="@dimen/tv_color_margin_2"
+            android:paddingRight="@dimen/tv_color_margin_2"
+            android:background="@drawable/rectanglegrey"
+            android:text="@string/btn_Cancel" />
+        <TextView
+            android:id="@+id/btn_start_continue"
+            style="@style/c4aTV5"
+            android:onClick="myClickHandler"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="@dimen/tv_color_margin_2"
+            android:paddingRight="@dimen/tv_color_margin_2"
+            android:background="@drawable/rectanglegrey"
+            android:text="@string/startContinue" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/gdScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_above="@id/actions" >
+
+        <RelativeLayout android:id="@+id/rl1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <CheckBox
+                android:id="@+id/cb_engineVsEngine"
+                style="@style/c4aCB1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/engineVsEngine" />
+
+            <LinearLayout
+                android:id="@+id/ew"
+                android:layout_below="@id/cb_engineVsEngine"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/tv_color_margin_1"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:weightSum="3"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/btn_engine_white"
+                    style="@style/c4aTV5"
+                    android:onClick="myClickHandler"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/tv_color_margin_1"
+                    android:layout_marginBottom="@dimen/tv_color_margin_1"
+                    android:layout_marginStart="@dimen/tv_color_margin_1"
+                    android:background="@drawable/rectanglegrey"
+                    android:text="@string/engineWhite" />
+                <TextView
+                    android:id="@+id/engine_white_name"
+                    style="@style/c4aTV1"
+                    android:onClick="myClickHandler"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_marginStart="@dimen/tv_color_margin_1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/eb"
+                android:layout_below="@id/ew"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/tv_color_margin_1"
+                android:layout_marginBottom="@dimen/tv_color_margin_1"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:weightSum="3"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/btn_engine_black"
+                    style="@style/c4aTV5"
+                    android:onClick="myClickHandler"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/tv_color_margin_1"
+                    android:layout_marginBottom="@dimen/tv_color_margin_1"
+                    android:layout_marginStart="@dimen/tv_color_margin_1"
+                    android:background="@drawable/rectanglegrey"
+                    android:text="@string/engineBlack" />
+                <TextView
+                    android:id="@+id/engine_black_name"
+                    style="@style/c4aTV1"
+                    android:onClick="myClickHandler"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_marginStart="@dimen/tv_color_margin_1" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_games"
+                android:layout_below="@id/eb"
+                style="@style/c4aTV1"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/qGameId" />
+            <EditText
+                android:id="@+id/et_games"
+                style="@style/c4aET1"
+                android:layout_below="@id/eb"
+                android:layout_alignTop="@id/tv_games"
+                android:layout_toEndOf="@id/tv_games"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:onClick="myClickHandler"
+                android:inputType="number"
+                android:maxLength="3"
+                android:layout_width="40dip" />
+            <TextView
+                android:id="@+id/tv_result"
+                android:layout_below="@id/eb"
+                style="@style/c4aTV1"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:layout_toEndOf="@id/et_games" />
+
+            <TextView
+                android:id="@+id/tv_event"
+                android:layout_below="@id/tv_games"
+                style="@style/c4aTV1"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/qEvent" />
+            <EditText
+                android:id="@+id/et_event"
+                style="@style/c4aET1"
+                android:layout_below="@id/tv_games"
+                android:onClick="myClickHandler"
+                android:layout_alignTop="@id/tv_event"
+                android:layout_toEndOf="@id/tv_event"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:layout_width="fill_parent" />
+
+            <TextView
+                android:id="@+id/tv_site"
+                android:layout_below="@id/tv_event"
+                style="@style/c4aTV1"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/qSite" />
+            <EditText
+                android:id="@+id/et_site"
+                android:layout_below="@id/tv_event"
+                style="@style/c4aET1"
+                android:onClick="myClickHandler"
+                android:layout_alignTop="@id/tv_site"
+                android:layout_toEndOf="@id/tv_site"
+                android:layout_width="fill_parent" />
+
+            <CheckBox
+                android:id="@+id/cb_currentGame"
+                android:layout_below="@id/tv_site"
+                style="@style/c4aCB1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/peAutoCurrentGame" />
+
+            <CheckBox
+                android:id="@+id/cb_changeColor"
+                android:layout_below="@id/cb_currentGame"
+                style="@style/c4aCB1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/changeColor" />
+
+            <CheckBox
+                android:id="@+id/cb_saveGames"
+                android:layout_below="@id/cb_changeColor"
+                style="@style/c4aCB1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/menu_pgn_save" />
+
+            <TextView
+                android:id="@+id/tv_path"
+                style="@style/c4aTV1"
+                android:layout_below="@id/cb_saveGames"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/fmLblPath" />
+            <HorizontalScrollView
+                android:id="@+id/scroll_path"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cb_saveGames"
+                android:layout_alignTop="@id/tv_path"
+                android:layout_toEndOf="@id/tv_path"
+                android:layout_toStartOf="@id/btn_pgn" >
+                <TextView
+                    android:id="@+id/et_path"
+                    style="@style/c4aET1"
+                    android:maxLines = "1"
+                    android:onClick="myClickHandler"
+                    android:gravity="end" />
+            </HorizontalScrollView>
+
+            <ImageView
+                android:id="@+id/btn_pgn"
+                style="@style/c4aImgBtn1"
+                android:src="@drawable/pgn"
+                android:onClick="myClickHandler"
+                android:layout_alignTop="@id/scroll_path"
+                android:layout_below="@id/cb_saveGames"
+                android:layout_alignParentEnd="true"/>
+
+            <TextView
+                android:id="@+id/tv_file"
+                style="@style/c4aTV1"
+                android:layout_below="@id/tv_path"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/fmLblFile" />
+            <TextView
+                android:id="@+id/et_file"
+                style="@style/c4aET1"
+                android:onClick="myClickHandler"
+                android:clickable="false"
+                android:focusable="false"
+                android:layout_below="@id/tv_path"
+                android:layout_alignTop="@id/tv_file"
+                android:layout_toEndOf="@id/tv_file"
+                android:layout_toStartOf="@id/btn_pgn"
+                android:layout_width="fill_parent" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

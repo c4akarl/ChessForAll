@@ -358,7 +358,6 @@
     <string name="play_boardNavi">Navigazione scacchiera</string>
     <string name="play_blindMode">Scacchi alla cieca</string>
     <string name="play_pgnDb">PGN-DB</string>
-	<string name="chess960" translatable="false">Chess 960</string>
     <string name="play_quickMove">Mosse rapide</string>
     <string name="noFileActions">A causa dei notevoli cambiamenti nella gestione dei file, nessuna azione sui file è attualmente possibile per i dispositivi con Android 11 e superiori. \nLo sviluppatore chiede comprensione.</string>
     <string name="analysisFinished">Il motore ha terminato l\'analisi.</string>
@@ -385,13 +384,21 @@
     <string name="medium">Medio</string>
     <string name="large">Grande</string>
     <string name="larger">Più grande</string>
-    <string name="charPlus" translatable="false">+</string>
-    <string name="charMinus" translatable="false">-</string>
     <string name="setEngineStrength">Livello di difficoltà</string>
-    <string name="elo" translatable="false">Elo:</string>
     <string name="chess960NotSupprted">Questo motore non supporta Chess960!</string>
     <string name="timeDelayReplay">Tempo di ritardo (risposta)</string>
     <string name="optionSupportInfo">Non tutti i motori supportano questa opzione.</string>
     <string name="add">Aggiungi</string>
+    <string name="app_computerMatch">Computer Match</string>
+    <string name="engineWhite">Motore Bianco</string>
+    <string name="engineBlack">Motore Nero</string>
+    <string name="options">Opzioni</string>
+    <string name="changeColor">Cambia colore</string>
+    <string name="result">Risultato</string>
+    <string name="startContinue">Avvia / Continua</string>
+    <string name="engineVsEngine">Motore / Motore</string>
+    <string name="analysisOptions">Opzioni di analisi</string>
+    <string name="multipleEngines">Più Motori</string>
+    <string name="none">[ nessuno ]</string>
 
 </resources>

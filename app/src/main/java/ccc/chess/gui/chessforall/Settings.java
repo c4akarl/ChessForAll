@@ -6,8 +6,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -372,10 +370,13 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         }
     }
 
-    @SuppressWarnings("deprecation")
+//    @SuppressWarnings("deprecation")
     public void myClickHandler(View view)
     {	// ClickHandler	(ButtonEvents)
         int id = view.getId();
+
+//        Log.i(TAG, "myClickHandler(), id: " + id);
+
         if (id == R.id.btnSettingsOk) {
             setPrefs();
             Intent returnIntent;
@@ -524,15 +525,6 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         }
         return colorName;
     }
-
-//    public void setTextViewColors(TextView tv, String color)
-//    {
-//        if (tv != null) {
-//            GradientDrawable tvBackground = (GradientDrawable) tv.getBackground();
-//            if (tvBackground != null)
-//                tvBackground.setColor(Color.parseColor(color));
-//        }
-//    }
 
     protected void setPrefs()
     {

@@ -2483,7 +2483,7 @@ public class ChessHistory
     CharSequence resultMessage;	
     int gamePos = -1;
     char gameColor = 'l';
-    public final CharSequence fenStandardPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    public final static CharSequence fenStandardPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 	public static char HEX_K = '\u2654';
 	public static char HEX_Q = '\u2655';
 	public static char HEX_R = '\u2656';

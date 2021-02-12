@@ -17,6 +17,8 @@ import android.view.WindowManager;
 
 import java.util.ArrayList;
 
+import ccc.chess.logic.c4aservice.ChessHistory;
+
 public class BoardView extends View
 {
     public BoardView(Context context, AttributeSet attrs)
@@ -86,9 +88,12 @@ public class BoardView extends View
                                 ArrayList<CharSequence> possibleMovesTo, CharSequence lastMove, CharSequence selectedMove, boolean coordinates, boolean blindMode)
     {
 
+//        Log.i(TAG, "updateBoardView(), fen: " + fen);
+
+        if (fen.equals(""))
+            fen = ChessHistory.fenStandardPosition;
+
 //        Log.i(TAG, "updateBoardView(), arrowMode: " + arrowMode + ", displayArrows: " + displayArrows);
-//        if (displayArrows != null)
-//            Log.i(TAG, "updateBoardView(), arrowMode: " + arrowMode + ", displayArrows.size: " + displayArrows.size());
 
         posFen = "";
         isBoardTurn = boardTurn;
@@ -290,7 +295,6 @@ public class BoardView extends View
     protected void onDraw(Canvas canvas)
     {
         super.onDraw(canvas);
-//Log.d(TAG, "onDraw()");
         boolean isBlack = true;
         int boardPos = 0;   // 0 . . . 63
         int lastMoveFrom = -1;
@@ -656,7 +660,6 @@ public class BoardView extends View
                         case BoardView.ARROWS_BEST_MOVES:
                             break;
                     }
-
 
                     // DrawArrow: from, to, size, star, colorFill, colorStroke, strokeWidth, SameCount, SameNr
 

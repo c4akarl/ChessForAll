@@ -243,7 +243,7 @@
     <string name="qeTitle">Abfrage - Veranstaltung, Ort</string>
     <string name="qoTitle">Abfrage - ECO, Eröffnung</string>
     <string name="qgGameId">Partie-ID</string>
-    <string name="qGameId">Partie</string>
+    <string name="qGameId">Partien</string>
     <string name="qGameIdOrder">Reihenfolge</string>
     <string name="qCurrentId">Aktuelle Partie</string>
     <string name="qMaxItems">Max. Einträge</string>
@@ -316,7 +316,7 @@
     <string name="colorHighlighting">hervorheben</string>
     <string name="colorReset">Zurücksetzen</string>
     <string name="colorCoordinates">Koordinaten</string>
-    <string name="colorApply">anwenden</string>
+    <string name="colorApply">Anwenden</string>
     <string name="menu_show_list">Liste anzeigen (j /n)</string>
     <string name="menu_title">Menü</string>
     <string name="pause_delay">Verzögerung</string>
@@ -389,4 +389,15 @@
     <string name="timeDelayReplay">Zeitverzögerung (nachspielen)</string>
     <string name="optionSupportInfo">Diese Option wird nicht von allen Engines unterstützt.</string>
     <string name="add">Hinzufügen</string>
+    <string name="app_computerMatch">Computer Match</string>
+    <string name="engineWhite">Engine Weiss</string>
+    <string name="engineBlack">Engine Schwarz</string>
+    <string name="options">Optionen</string>
+    <string name="changeColor">Farbe wechseln</string>
+    <string name="result">Ergebnis</string>
+    <string name="startContinue">Start / Fortsetzen</string>
+    <string name="engineVsEngine">Engine / Engine</string>
+    <string name="analysisOptions">Analyse-Optionen</string>
+    <string name="multipleEngines">Mehrere Engines</string>
+    <string name="none">[ keine ]</string>
 </resources>

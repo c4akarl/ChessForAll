@@ -317,7 +317,7 @@
     <string name="colorHighlighting">highlighting</string>
     <string name="colorReset">reset</string>
     <string name="colorCoordinates">coordinates</string>
-    <string name="colorApply">apply</string>
+    <string name="colorApply">Apply</string>
     <string name="menu_show_list">Show list (y/n)</string>
     <string name="menu_title">Menu</string>
     <string name="pause_delay">delay</string>
@@ -393,5 +393,16 @@
     <string name="timeDelayReplay">Time delay (replay)</string>
     <string name="optionSupportInfo">Not all engines support this option.</string>
     <string name="add">Add</string>
+    <string name="app_computerMatch">Computer Match</string>
+    <string name="engineWhite">Engine White</string>
+    <string name="options">Options</string>
+    <string name="engineBlack">Engine Black</string>
+    <string name="changeColor">Change color</string>
+    <string name="result">Result</string>
+    <string name="startContinue">Start / Continue</string>
+    <string name="engineVsEngine">Engine / Engine</string>
+    <string name="analysisOptions">Analysis Options</string>
+    <string name="multipleEngines">Multiple Engines</string>
+    <string name="none">[ none ]</string>
 
 </resources>

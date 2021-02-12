@@ -48,9 +48,13 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
         uciOptsChanged = getIntent().getExtras().getString("uciOptsChanged");
         uciEngineName = getIntent().getExtras().getString("uciEngineName");
         uciOptsList = getEditableOptions(uciOpts);
+
+        Log.i(TAG, "onCreate(), uciEngineName: " + uciEngineName);
+        Log.i(TAG, "onCreate(), uciOpts: \n" + uciOpts);
+        Log.i(TAG, "onCreate(), uciOptsChanged: \n" + uciOptsChanged);
+
         title = findViewById(R.id.title);
         title.setText(uciEngineName);
-//        title.setBackgroundResource(R.drawable.rectangleyellow);
         u.setTextViewColors(title, "#6b2c2d", "#f1e622");
         if (uciOptsList != null)
             createViews();
@@ -88,7 +92,6 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                     break;
                 case SPIN:
                     name.setText(getName(uciOptsList.get(i)) + "(" + getMin(uciOptsList.get(i)) + "-"  + getMax(uciOptsList.get(i)) + ") ");
-//                    name.setTextColor(getResources().getColor(R.color.text_light));
                     editName.setMinWidth(2000);
                     editName.setBackgroundResource(R.drawable.rectanglegreen);
                     if (getMin(uciOptsList.get(i)).startsWith("-"))
@@ -121,8 +124,6 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                 case STRING:
                 case COMBO:
                     name.setText(getName(uciOptsList.get(i)) + " ");
-//                    name.setTextColor(getResources().getColor(R.color.text_light));
-//                    u.setTextViewColors(name, "#000000", "#ffda7b");
                     editName.setMinWidth(2000);
                     editName.setText(getDefault(getType(uciOptsList.get(i)), uciOptsList.get(i)));
                     editName.setSelection(editName.getText().length());
@@ -617,8 +618,7 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    }
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) { }

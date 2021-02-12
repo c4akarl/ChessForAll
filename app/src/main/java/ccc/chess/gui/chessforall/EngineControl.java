@@ -2,43 +2,29 @@ package ccc.chess.gui.chessforall;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import java.util.ArrayList;
+//import android.util.Log;
 
 import ccc.chess.book.BookOptions;
 import ccc.chess.book.C4aBook;
 
 public class EngineControl 
 {
-	EngineControl(Context context)
-    {
+	EngineControl(Context context){
 		this.context = context;
 		userPrefs = context.getSharedPreferences("user", 0);
-		createEngines(null, null);
+		createEngines();
     }
 
-	void createEngines(ArrayList<String> oexEngines, EngineListener engineListener)
-	{
-		if (oexEngines == null) {
-			uciEngines = new UciEngine[1];
-			engineCnt = 1;
-			uciEngines[0] = new UciEngine(context, 0,null, null);
-			ue = uciEngines[0];
-		}
-		else {
-			if (oexEngines != null && engineListener != null) {
-				if (oexEngines.size() > 0) {
-					engineCnt = oexEngines.size();
-					uciEngines = new UciEngine[engineCnt];
-					for (int i = 0; i < engineCnt; i++)
-					{
-						uciEngines[i] = new UciEngine(context, i, oexEngines.get(i), engineListener);
-					}
-				}
-			}
-		}
+	void createEngines() {
+		uciEngines = new UciEngine[1];
+		uciEnginesMessage = new String[1];
+		engineCnt = 1;
+		uciEngines[0] = new UciEngine(context, 0,null, null);
+		uciEnginesMessage[0] = "";
+		setCurrentEngineId(0);
+		ue = uciEngines[0];
 	}
-	
+
 	final void setBookOptions()
 	{
 		book = new C4aBook(context);
@@ -63,7 +49,7 @@ public class EngineControl
 	void setPlayData(SharedPreferences userP, String white, String black)
     {
 
-//Log.i(TAG, "setPlayData(), white: " + white + ", black: " + black);
+//		Log.i(TAG, "setPlayData(), white: " + white + ", black: " + black);
 
 		chessEngineEvent = "Android " + android.os.Build.VERSION.RELEASE;
 		chessEngineSite = android.os.Build.MODEL;
@@ -84,8 +70,15 @@ public class EngineControl
 				chessEnginePlayerBlack = playerName;
 				break;
 			case 3:
-				chessEnginePlayerWhite = getEngine().engineName;
-				chessEnginePlayerBlack = getEngine().engineName;
+				if (engineCnt == 1) {
+					chessEnginePlayerWhite = getEngine().engineName;
+					chessEnginePlayerBlack = getEngine().engineName;
+				}
+				else
+				{
+					chessEnginePlayerWhite = uciEngines[0].engineName;
+					chessEnginePlayerBlack = uciEngines[1].engineName;
+				}
 				break;
 			case 4:
 				chessEnginePlayerWhite = white;
@@ -94,16 +87,42 @@ public class EngineControl
 		}
     }
 
+    //karl??? ohne ?
 	public UciEngine getEngine()
     {
-		//karl multiple engines ?!
 		if (MainActivity.withMultiEngine)
-    		return uciEngines[0];
+    		return uciEngines[currentEngineId];
 		else
 			return ue;
     }
 
-	void setStartPlay(CharSequence color)
+	void setCurrentEngineId(int engineId)
+	{
+		currentEngineId = engineId;
+	}
+
+	void initEngineMessages()
+	{
+		if (uciEnginesMessage != null) {
+			for (int i = 0; i < engineCnt; i++) {
+				uciEnginesMessage[i] = "";
+			}
+		}
+	}
+
+	boolean enginesRunning()
+	{
+		if (uciEngines != null) {
+			for (int i = 0; i < uciEngines.length; i++) {
+				uciEnginesMessage[i] = "";
+				if (uciEngines[i].engineStop() || uciEngines[i].engineSearching())
+					return true;
+			}
+		}
+		return false;
+	}
+
+	void setStartPlay(int engineId, CharSequence color)
     {
 		if 	(		chessEnginePlayMod == 3
 				|	chessEnginePlayMod == 4
@@ -111,24 +130,30 @@ public class EngineControl
 				| 	chessEnginePlayMod == 2 & color.equals("w")
 			)
 		{
-			getEngine().startPlay = true;
+			uciEngines[engineId].startPlay = true;
 			makeMove = true;
 		}
 		else
 		{
-			getEngine().startPlay = false;
+			uciEngines[engineId].startPlay = false;
 			makeMove = false;
 		}
 
-//		Log.i(TAG, "setStartPlay(), playMod: " + chessEnginePlayMod + ", color: " + color + ", makeMove: " + makeMove);
+//		Log.i(TAG, "setStartPlay(), playMod: " + chessEnginePlayMod + ", engineId: " + engineId + ", color: " + color + ", makeMove: " + makeMove);
 
     }
 
+//	final String TAG = "EngineControl";
 	private final Context context;
 	private final SharedPreferences userPrefs;		 	// user preferences(LogFile on/off . . .)
 	UciEngine ue;										// single UciEngine 			MainActivity.withMultiEngine = false
 	UciEngine[] uciEngines;								// manage multiple UciEngine	MainActivity.withMultiEngine = true
+	String[] uciEnginesMessage;							// engine messages from EngineListener
 	int engineCnt = 1;
+	public int currentEngineId = 0;                     // current engineId, idx from uciEngines, return from getEngine()
+	public int analysisEngineId = 0;                    // analysis engineId, for making move !
+	public int analysisEngineCnt = 0;                   // analysis engineId counter, for making move !
+	public String analysisEngineBestMove = "";          // analysis engineId best move, for making move !
 	int searchId = 0;
 	C4aBook book;
 	private final BookOptions bookOptions = new BookOptions();
