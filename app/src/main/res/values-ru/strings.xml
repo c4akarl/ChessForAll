@@ -347,7 +347,7 @@
     <string name="menu_enginesettings_uciOptions">Варианты двигателя</string>
     <string name="position">должность</string>
   <string name="timePosition">должность</string>
-    <string name="engineInit">Механизм инициализации:</string>
+    <string name="engineInit">Инициализация двигателя</string>
     <string name="clock">Часы</string>
     <string name="engine">Двигатель</string>
     <string name="menu_left">&gt; &gt; &gt;   Меню</string>

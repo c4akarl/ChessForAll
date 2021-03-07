@@ -136,38 +136,43 @@ public class Chess960
     public CharSequence setCastling(CharSequence baseLine)
     {	// not activated, set: castling = "KQkq"; changed: 20201024
     	CharSequence castling = "-";
-    	String standard = "rnbqkbnr";
-    	boolean isStandard = true;
-    	CharSequence lineL = "abcdefgh";
-    	CharSequence lineU = "ABCDEFGH";
-    	int posR1 = -1;
-    	int posR2 = -1;
-//    	if (baseLine.charAt(4) != 'k')
-    	if (!baseLine.toString().equals(standard))
-    		isStandard = false;
-    	if (isStandard)
-    		castling = "KQkq";
-    	else
-    	{
-	    	if (baseLine.length() == 8)
-	    	{
-		    	for (int i = 0; i < baseLine.length(); i++)	
-		        {	
-		    		if (baseLine.charAt(i) == 'r')
-		    		{
-		    			if (posR1 == -1)
-		    				posR1 = i;
-		    			else
-		    				posR2 = i;
-		    		}
-		        }
-		    	if (posR1 != -1 & posR2 != -1) {
-		    		//karl!!!
-//					castling = "" + lineU.charAt(posR1) + lineU.charAt(posR2) + lineL.charAt(posR1) + lineL.charAt(posR2);
-					castling = "" + lineU.charAt(posR2) + lineU.charAt(posR1) + lineL.charAt(posR2) + lineL.charAt(posR1);
-				}
-	    	}
-    	}
+
+
+    	//karl DON'T REMOVE   !!!
+		//karl, Shredder-FEN, funktioniert nicht, Anpassung erforderlich
+//    	String standard = "rnbqkbnr";
+//    	boolean isStandard = true;
+//    	CharSequence lineL = "abcdefgh";
+//    	CharSequence lineU = "ABCDEFGH";
+//    	int posR1 = -1;
+//    	int posR2 = -1;
+//    	if (!baseLine.toString().equals(standard))
+//    		isStandard = false;
+//    	if (isStandard)
+//    		castling = "KQkq";
+//    	else
+//    	{
+//	    	if (baseLine.length() == 8)
+//	    	{
+//		    	for (int i = 0; i < baseLine.length(); i++)
+//		        {
+//		    		if (baseLine.charAt(i) == 'r')
+//		    		{
+//		    			if (posR1 == -1)
+//		    				posR1 = i;
+//		    			else
+//		    				posR2 = i;
+//		    		}
+//		        }
+//		    	if (posR1 != -1 & posR2 != -1) {
+//		    		//karl!!!
+////					castling = "" + lineU.charAt(posR1) + lineU.charAt(posR2) + lineL.charAt(posR1) + lineL.charAt(posR2);
+//					castling = "" + lineU.charAt(posR2) + lineU.charAt(posR1) + lineL.charAt(posR2) + lineL.charAt(posR1);
+//				}
+//	    	}
+//    	}
+
+
     	//karl, Shredder-FEN not supported in Chesspesso !?
     	castling = "KQkq";
 

@@ -606,10 +606,15 @@ public class BoardView extends View
         if (displayArrows != null)
         {
 
-//            Log.i(TAG, "onDraw, displayArrows.size: " + displayArrows.size());
+//            Log.i(TAG, "onDraw, displayArrows.size: " + displayArrows.size() + ", arrowMode: " + arrowMode);
+//            Log.i(TAG, "onDraw, scoreArrows.size: " + scoreArrows.size());
 
             if (displayArrows.size() > 0) {
                 for (int i = 0; i < displayArrows.size(); i++) {
+
+                    if (displayArrows.get(i).length() != 4)
+                        return;
+
                     int from = getPosition(displayArrows.get(i).subSequence(0, 2), isBoardTurn);
                     int to = getPosition(displayArrows.get(i).subSequence(2, 4), isBoardTurn);
 
@@ -657,7 +662,18 @@ public class BoardView extends View
                             star = 100;
 
                             break;
+                        case BoardView.ARROWS_BOOK:
+                            colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
+                            if (scoreArrows.size() > 0) {
+                                int score = Integer.parseInt(scoreArrows.get(i).toString());
+
+//                                Log.i(TAG, "onDraw, i: " + i + ", score: " + score);
+
+                                //BCM + scoreArrows
+                            }
+                            break;
                         case BoardView.ARROWS_BEST_MOVES:
+
                             break;
                     }
 
@@ -804,9 +820,10 @@ public class BoardView extends View
     boolean isCoordinates;
     boolean isBlindMode = false;
 
-    final static int ARROWS_NONE            = 900000;
-    final static int ARROWS_BEST_VARIANT    = 120000;
-    final static int ARROWS_BEST_MOVES      = 240000;
+    final static int ARROWS_NONE            = 120000;
+    final static int ARROWS_BEST_VARIANT    = 120001;
+    final static int ARROWS_BEST_MOVES      = 120002;
+    final static int ARROWS_BOOK            = 120003;
 
     private char[] charFen = new char[64];
 

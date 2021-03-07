@@ -205,7 +205,7 @@
 			android:textIsSelectable="true"
 			android:layout_width="fill_parent"
 			android:scrollbars = "vertical"
-			android:maxLines = "4"
+			android:maxLines = "9"
 			android:includeFontPadding="true"
 			android:paddingLeft="2dip"
 			android:paddingRight="2dip"

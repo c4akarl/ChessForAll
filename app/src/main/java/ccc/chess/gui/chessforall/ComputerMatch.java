@@ -53,27 +53,46 @@ public class ComputerMatch extends Activity {
 
         title = findViewById(R.id.title);
         u.setTextViewColors(title, "#6b2c2d", "#f1e622");
+        btn_engine_white = findViewById(R.id.btn_engine_white);
+        btn_engine_black = findViewById(R.id.btn_engine_black);
         cb_engineVsEngine = findViewById(R.id.cb_engineVsEngine);
         cb_engineVsEngine.setChecked(engineVsEngine);
+        if (engineVsEngine) {
+            cb_engineVsEngine.setText(R.string.engineVsEngine);
+            btn_engine_white.setText(R.string.engineWhite);
+            btn_engine_black.setText(R.string.engineBlack);
+        }
+        else {
+            cb_engineVsEngine.setText(runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
+            btn_engine_white.setText(R.string.engine);
+            btn_engine_black.setText("");
+        }
         cb_engineVsEngine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    engineVsEngine = true;
+                    cb_engineVsEngine.setText(R.string.engineVsEngine);
                     String[] txtSplit = MainActivity.OEX_DEFAULT_ENGINES_MATCH.split("\\|");
                     white = userPrefs.getString("user_play_eve_white", txtSplit[0]);
                     black = userPrefs.getString("user_play_eve_black", txtSplit[1]);
-                    engineVsEngine = true;
+                    btn_engine_white.setText(R.string.engineWhite);
+                    btn_engine_black.setText(R.string.engineBlack);
                 }
                 else
                 {
+                    engineVsEngine = false;
+                    cb_engineVsEngine.setText(runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
                     white = runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE);
                     black = "";
-                    engineVsEngine = false;
+                    btn_engine_white.setText(R.string.engine);
+                    btn_engine_black.setText("");
                 }
                 engine_white_name.setText(white);
                 engine_black_name.setText(black);
             }
         });
+
         engine_white_name = findViewById(R.id.engine_white_name);
         engine_white_name.setText(white);
         engine_black_name = findViewById(R.id.engine_black_name);
@@ -111,9 +130,11 @@ public class ComputerMatch extends Activity {
                 showDialog(MENU_SELECT_ENGINE_FROM_OEX);
                 break;
             case R.id.btn_engine_black:
-                engineId = 1;
-                currEngine = black;
-                showDialog(MENU_SELECT_ENGINE_FROM_OEX);
+                if (engineVsEngine) {
+                    engineId = 1;
+                    currEngine = black;
+                    showDialog(MENU_SELECT_ENGINE_FROM_OEX);
+                }
                 break;
             case R.id.engine_white_name:
                 startEditUciOptions(engine_white_name.getText().toString());
@@ -377,6 +398,8 @@ public class ComputerMatch extends Activity {
 
     TextView title;
     CheckBox cb_engineVsEngine;
+    TextView btn_engine_white;
+    TextView btn_engine_black;
     TextView engine_white_name;
     TextView engine_black_name;
     EditText et_games;

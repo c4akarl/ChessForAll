@@ -641,7 +641,8 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
     final static int LINES_DEFAULT = 4;
     int LINES_MIN = 1;
-    int LINES_MAX = 9;
+    int LINES_MAX = 16;
+    final static int LINES_MAX_PORTRAIT = 9;
     int lines = LINES_DEFAULT;
 
     final static int ARROWS_DEFAULT = 6;

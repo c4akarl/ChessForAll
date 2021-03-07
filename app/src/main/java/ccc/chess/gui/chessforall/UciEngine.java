@@ -43,7 +43,7 @@ public class UciEngine
 
     }
 
-    public boolean initProcess(String processName)
+    public void initProcess(String processName)
     {
 
 //Log.i(TAG, "1 initProcess(), processName: " + processName);
@@ -54,23 +54,10 @@ public class UciEngine
         reader = null;
         writer = null;
         errorMessage = "";
-
-        boolean isInitOk = false;
         engineProcess = processName;
-
-        //NEW ENGINE
-        if (MainActivity.withMultiEngine)
-            startEngine();
-        else {
-            if (startNewProcess(true))
-                isInitOk = true;
-            else
-                engineProcess = "";
-        }
+        startEngine();
 
 //		Log.i(TAG, "2 initProcess(), processName: " + processName + ", isInitOk: " +isInitOk);
-
-        return isInitOk;
 
     }
 
@@ -78,7 +65,7 @@ public class UciEngine
     {
         infoPv = new ArrayList<>();
         infoMessage = new ArrayList<>();
-        for (int i = 0; i < userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT); i++)
+        for (int i = 0; i < multiPV; i++)
         {
             infoPv.add("");
             infoMessage.add("");
@@ -292,84 +279,24 @@ public class UciEngine
             writeLineToProcess("ucinewgame");
     }
 
-//    public boolean applyPonderhit(String currMove, String currFen)
     public boolean applyPonderhit(String currMove, String currFen)
     {
 
-//        Log.i(TAG, "applyPonderhit(), uciEngineName: " + uciEngineName + ", engineState: " + engineState + ", ponderMove: " + ponderMove + ", currMove: " + currMove);
+        Log.i(TAG, engineName + ": applyPonderhit(), uciEngineName: " + uciEngineName + ", engineState: " + engineState + ", ponderMove: " + ponderMove + ", currMove: " + currMove);
 
         if (engineState == EngineState.PONDER && !ponderMove.equals("") && currMove.equals(ponderMove)) {
+
+//            Log.i(TAG, engineName + ": applyPonderhit(), currMove: " + currMove + ", currFen: " + currFen);
+
             ponderMove = "";
             ponderFen = currFen;
+            searchRequest.fen = currFen;
             engineState = EngineState.SEARCH;
             writeLineToProcess("ponderhit");
             return false;
         }
         else
             return true;
-    }
-
-    public void startSearch(CharSequence searchFen, CharSequence startFen, int wTime, int bTime, int wInc, int bInc,
-                            int movesTime, int movesToGo, boolean isInfinite, boolean isGoPonder, int mate)
-    {
-
-//        Log.i(TAG, "startSearch(), fen: " + startFen + "\nmoves: " + moves + ", isGoPonder: " + isGoPonder);
-
-        CharSequence fen = searchFen;
-
-        if (isChess960)
-            fen = convertCastlingRight(fen, startFen);
-
-        String posStr = "";
-        posStr = posStr + "position fen ";								// position(FEN)
-        posStr = posStr + fen;
-
-        writeLineToProcess(posStr);										// writeLineToProcess
-        String goStr = "";
-        goStr = goStr + "go ";
-		engineState = EngineState.SEARCH;
-        if (isGoPonder)
-		{
-			engineState = EngineState.PONDER;
-			goStr = goStr + " ponder ";
-		}
-        // go
-        if (mate > 0)
-            goStr = goStr + " mate " + mate;	                        // mate
-        else
-        {
-            if (isInfinite)
-			{
-//                if (uciOptions.contains("UCI_AnalyseMode"))
-                    writeLineToProcess("setoption name UCI_AnalyseMode value true");
-
-                setElo(false, uciEloMax);
-
-				engineState = EngineState.ANALYZE;
-				goStr = goStr + " infinite ";                                // search until the "stop" command
-			}
-            else
-            {
-                if (uciOptions.contains("UCI_AnalyseMode"))
-                    writeLineToProcess("setoption name UCI_AnalyseMode value false");
-
-                if (withUciElo)
-                    setElo(true, uciElo);
-                else
-                    setElo(false, uciEloMax);
-
-                if (movesTime > 0)
-                    goStr = goStr + " movetime  " + movesTime;			// movetime
-                else
-                {
-                    goStr = goStr + " wtime " + wTime + " btime " + bTime;	// wtime + btime + winc + binc + movestogo
-                    goStr = goStr + " winc " + wInc + " binc " + bInc;
-                    if (movesToGo > 0)
-                        goStr = goStr + " movestogo " + movesToGo;
-                }
-            }
-        }
-        writeLineToProcess(goStr);										// writeLineToProcess
     }
 
     public final void parseInfoCmd(CharSequence[] tokens, int infoPvMoveMax)
@@ -403,8 +330,10 @@ public class UciEngine
                 {
                         infoHasPvValues = true;
                         statPv.clear();
-                        //karl
-                        if (!ponderMove.equals(""))
+
+//                        Log.i(TAG,  engineName + ": parseInfoCmd(), engineId: " + engineId + ", engineState: " + engineState + ", ponderMove: " + ponderMove + ", tokens[i]: " + tokens[i]);
+
+                        if (!ponderMove.equals("") && engineState == EngineState.PONDER)
                             statPv.add(ponderMove);
                         while (i < nTokens)
                             statPv.add(tokens[i++]);
@@ -420,8 +349,7 @@ public class UciEngine
                 }
                 if (is.equals("cp")) {
                     statPvScore = Integer.parseInt(tokens[i++].toString());
-                    //karl
-                    if (MainActivity.withMultiEngine && engineState == EngineState.PONDER)
+                    if (engineState == EngineState.PONDER)
                         statPvScore = statPvScore * -1;
                 }
                 if (statPvIdx == 0)
@@ -449,7 +377,7 @@ public class UciEngine
             {
                 statPvMoves = getMoves(statPv, infoPvMoveMax);
 
-//                Log.i(TAG,  "parseInfoCmd(), moves: " + statPvMoves);
+//                Log.i(TAG,  engineName + ": parseInfoCmd(), moves: " + statPvMoves + ",   engineState: " + engineState);
 
             }
         }
@@ -586,59 +514,6 @@ public class UciEngine
         writeLineToProcess("quit");
         processAlive = false;
 
-        //karl!!! remove OK?
-//        if (engineMonitor != null) {
-//            engineMonitor.interrupt();
-//            engineMonitor = null;
-//        }
-
-    }
-
-    public boolean  startNewProcess(boolean fromFile)
-    {
-
-        if (isLogOn)
-            Log.i(TAG,  "startNewProcess(), engine process started: " + engineProcess);
-
-        mesInitProcess = "";
-        processAlive = false;
-
-        processAlive = startProcess();
-
-        if (processAlive)
-        {
-
-            if (isLogOn)
-                Log.i(TAG,  "startNewProcess(), engine process started: " + engineProcess + ", processAlive: " + processAlive);
-
-			engineState = EngineState.READ_OPTIONS;
-            writeLineToProcess("uci");
-
-            //karl ???
-            processAlive = readUCIOptions();
-
-            if (fromFile & processAlive)
-            {
-                if (engineState == EngineState.READ_OPTIONS)
-                    engineState = EngineState.IDLE;
-                mesInitProcess = mesInitProcess + "uciok" + "\n";
-            }
-        }
-        if (!processAlive)
-        {
-
-            if (isLogOn)
-                Log.i(TAG,  "startNewProcess(), start error, engine process: " + engineProcess);
-
-            if (fromFile)
-            {
-                mesInitProcess = mesInitProcess + engineProcess + ": " + context.getString(R.string.engineNoRespond) + "\n";
-                mesInitProcess = mesInitProcess + "\n" + engineProcess + " "  + context.getString(R.string.engineNotInstalled);
-            }
-        }
-        if (processAlive & fromFile)
-            mesInitProcess = mesInitProcess + "\n" + engineProcess + " "  + context.getString(R.string.engineInstalled);
-        return processAlive;
     }
 
     public void writeLineToProcess(String data)
@@ -781,6 +656,7 @@ public class UciEngine
         {
             if (uciOptions.contains("MultiPV"))
                 writeToProcess("setoption name MultiPV value " + multiPV + "\n");
+            this.multiPV = multiPV;
         }
         catch (IOException e) {e.printStackTrace();}
     }
@@ -829,8 +705,10 @@ public class UciEngine
             if (split.length >= 0) {
                 File file = new File(split[split.length -1]);
                 if (!file.exists()) {
+
                     if (isLogOn)
                         Log.i(TAG, "file not exists: " + uciOption);
+
                     return false;
                 }
             }
@@ -996,7 +874,6 @@ public class UciEngine
         if (writer != null)
         {
             if (isLogOn)
-//                Log.i(TAG, "C4A: " + data);
                 Log.i(TAG, "C4A->" + engineName + ": " + data);
             writer.write(data);
             writer.flush();
@@ -1036,8 +913,6 @@ public class UciEngine
     private void monitorLoop() {
 
         while (true) {
-
-//            int timeout = getReadTimeout();     //karl ok ?!
 
 //            Log.i(TAG,  "1 monitorLoop(), engineId: " + engineId + ", timeout: " + timeout);
 
@@ -1081,6 +956,8 @@ public class UciEngine
 
     private synchronized void processEngineOutput(String s) {
 
+//        Log.i(TAG,  "processEngineOutput(), engineState: " + engineState + ", s: " + s);
+
         if (Thread.currentThread().isInterrupted())
             return;
 
@@ -1104,7 +981,7 @@ public class UciEngine
             setUciEloValues(s);
 
             if (isLogOn)
-                Log.i(TAG,  "setUciEloValues(), uciEloMin: " + uciEloMin + ", uciEloMax: " + uciEloMax);
+                Log.i(TAG,  engineName + ": uciEloMin: " + uciEloMin + ", uciEloMax: " + uciEloMax);
 
         }
 
@@ -1149,13 +1026,10 @@ public class UciEngine
             case ANALYZE:
             case BOOK:{
 
-//                Log.i(TAG,  "processEngineOutput(), SEARCH, PONDER, ANALYZE");
+//                Log.i(TAG,  "processEngineOutput(), SEARCH, PONDER, ANALYZE, bestMove: " + bestMove);
+//                Log.i(TAG,  engineName + ": processEngineOutput(), engineState: " + engineState + ", bestMove: " + bestMove + ", ponderMv: " + ponderMv + ", tokens[0]: " + tokens[0]);
 
                 if (!bestMove.equals("")) {
-                    if (engineState != EngineState.BOOK) {
-                        String engineMessage = "" + engineStat + engineMes + engineInfoString;
-                        notifyGUI(searchRequest.engineId, searchRequest.searchId, engineMessage, searchDisplayMoves.toString());
-                    }
                     if (engineState == EngineState.SEARCH) {
                         ponderMove = ponderMv;
                     }
@@ -1194,16 +1068,17 @@ public class UciEngine
                         {
                             try
                             {
-                                int multiPv = userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT);
                                 if (statPvIdx == 0)
                                     multiPvCnt++;
                                 int pvNr = statPvIdx +1;
-                                if 	(multiPv == pvNr)
+                                if 	(multiPV == pvNr)
                                     isPV = true;
 
 //							Log.i(TAG, "ec.getEngine().statPvIdx: " + ec.getEngine().statPvIdx);
 
                                 engineMes = getInfoPv(statPvIdx, statPvMoves, statPvScore, statIsMate, searchRequest.fen);
+
+//                                Log.i(TAG,  engineName + ": processEngineOutput(), engineState: " + engineState + ", isPV: " + isPV + ", engineMes: " + engineMes);
 
                             }
                             catch (NullPointerException e) {e.printStackTrace(); engineMes = "";}
@@ -1220,7 +1095,7 @@ public class UciEngine
 
                     }
 
-//				Log.i(TAG, "searchTask, doInBackground(), isInfo: " + isInfo + ", isPV: " + isPV);
+//                    Log.i(TAG,  engineName + ": processEngineOutput(), engineState: " + engineState + ", isPV: " + isPV + ", engineMes: " + engineMes);
 
                     if (!engineStat.equals("") && (isPV || s.contains(" mate ")))
                     {
@@ -1253,7 +1128,7 @@ public class UciEngine
                     else
                         listener.notifyStop(searchRequest.engineId, searchRequest.searchId, engineState, searchRequest.fen, bestMove);
                     if (engineState != EngineState.STOP_MULTI_ENGINES_RESTART)
-                    engineState = EngineState.IDLE;
+                        engineState = EngineState.IDLE;
 
                 }
 
@@ -1262,28 +1137,18 @@ public class UciEngine
             default: {
 
                 if (isLogOn)
-                    Log.i(TAG,  "processEngineOutput(), engineState ??? : " + engineState);
+                    Log.i(TAG,  engineName + ": processEngineOutput(), engineState ??? : " + engineState);
 
                 break;
             }
         }
     }
 
-    //karl???
-//    private synchronized int getReadTimeout() {
-//        boolean needGuiUpdate = (searchRequest != null);
-//        int timeout = 2000000000;
-//        if (needGuiUpdate) {
-//            long now = System.currentTimeMillis();
-//            timeout = (int)(lastGUIUpdate + guiUpdateInterval - now + 1);
-//            timeout = Math.max(1, Math.min(1000, timeout));
-//        }
-//        return timeout;
-//    }
-
     private synchronized void notifyGUI(int engineId, int id, String engineMessage, String searchDisplayMoves) {
 
         long now = System.currentTimeMillis();
+
+//        Log.i(TAG, engineName + ": notifyGUI(), now: " + now + ", lastGUIUpdate: " + lastGUIUpdate + ", guiUpdateInterval: " + guiUpdateInterval);
 
         if (now < lastGUIUpdate + guiUpdateInterval)
             return;
@@ -1315,10 +1180,10 @@ public class UciEngine
     {
         sbInfo.setLength(0);
 
-//			Log.i(TAG, "getInfoPv, statPvIdx: " + statPvIdx + ", infoPv.size(): " + infoPv.size() + ", statPvScore: " + statPvScore + ", statPvMoves: " + statPvMoves + ", isMate: " + isMate);
-
-        if 	(	infoPv.size() 	== 	userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT)
-                & statPvIdx 	< 	userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT)
+//        Log.i(TAG, engineName + ": getInfoPv(), statPvIdx: " + statPvIdx + ", infoPv.size(): " + infoPv.size()  + ", multiPV: " + multiPV + ", statPvScore: " + statPvScore + ", statPvMoves: " + statPvMoves + ", fen: " + fen);
+        
+        if 	(	infoPv.size() 	== 	multiPV
+                & statPvIdx 	< 	multiPV
         )
         {
             infoPv.set(statPvIdx, statPvMoves);
@@ -1334,6 +1199,9 @@ public class UciEngine
                 displayScore = "M" + statPvScore;
             sbMoves.setLength(0); sbMoves.append("*"); sbMoves.append((statPvIdx +1)); sbMoves.append("(");
             CharSequence notation = cl.getNotationFromInfoPv(fen, statPvMoves);
+
+//            Log.i(TAG, engineName + ": getInfoPv(), notation: " + notation);
+
             if (notation.equals(""))
                 return "";
             notation = cl.history.getAlgebraicNotation(notation, userPrefs.getInt("user_options_gui_PieceNameId", 0));
@@ -1565,7 +1433,6 @@ public class UciEngine
     String oexFileName = "";			                    // oex file name
     String uciFileName = "";			                    // uci file name (for saving in ExternalStorage)
     final String INTERN_ENGINE_NAME_END = " CfA";
-    String mesInitProcess = "";
     String errorMessage = "";
 
     ProcessBuilder processBuilder;
@@ -1604,6 +1471,7 @@ public class UciEngine
     boolean startPlay = false;
 
     String uciOptions = "";
+    int multiPV = 1;
 
     boolean isUciStrength = false;
     boolean isUciEloOption = false;

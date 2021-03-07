@@ -366,7 +366,7 @@
     <string name="menu_enginesettings_uciOptions">Opciones de motor</string>
     <string name="position">Posición</string>
     <string name="timePosition">Posición</string>
-    <string name="engineInit">Motor de inicialización:</string>
+    <string name="engineInit">Inicialización del motor</string>
     <string name="clock">Reloj</string>
     <string name="engine">Motor</string>
     <string name="menu_left">Menú</string>

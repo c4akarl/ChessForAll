@@ -51,7 +51,6 @@
         <activity android:name=".OptionsColor" android:label="@string/menu_colorsettings" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
         <activity android:name=".Settings" android:label="@string/menu_usersettings" android:windowSoftInputMode="adjustResize|stateHidden" android:configChanges="orientation|screenSize">  </activity>
         <activity android:name=".EditChessBoard" android:label="@string/app_editChessBoard" android:configChanges="orientation|screenSize"> </activity>
-        <activity android:name=".PlayEngineSettings" android:label="@string/app_playEngineSettings" > </activity>
         <activity android:name=".EditUciOptions" android:label="@string/app_editUciOptions" android:windowSoftInputMode="adjustResize|stateHidden"> </activity>
         <activity android:name=".ComputerMatch" android:label="@string/app_computerMatch" > </activity>
         <activity android:name=".AnalysisOptions" android:label="@string/analysisOptions" > </activity>

@@ -2,7 +2,8 @@ package ccc.chess.gui.chessforall;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-//import android.util.Log;
+
+import java.util.ArrayList;
 
 import ccc.chess.book.BookOptions;
 import ccc.chess.book.C4aBook;
@@ -87,13 +88,10 @@ public class EngineControl
 		}
     }
 
-    //karl??? ohne ?
+    //karl??? ohne ? --> uciEngines[currentEngineId]
 	public UciEngine getEngine()
     {
-		if (MainActivity.withMultiEngine)
-    		return uciEngines[currentEngineId];
-		else
-			return ue;
+		return uciEngines[currentEngineId];
     }
 
 	void setCurrentEngineId(int engineId)
@@ -101,11 +99,14 @@ public class EngineControl
 		currentEngineId = engineId;
 	}
 
-	void initEngineMessages()
+	void initEngineMessages(ArrayList<String> engineNames)
 	{
 		if (uciEnginesMessage != null) {
 			for (int i = 0; i < engineCnt; i++) {
-				uciEnginesMessage[i] = "";
+				if (engineNames == null)
+					uciEnginesMessage[i] = "";
+				else
+					uciEnginesMessage[i] = engineNames.get(i);
 			}
 		}
 	}
@@ -115,8 +116,10 @@ public class EngineControl
 		if (uciEngines != null) {
 			for (int i = 0; i < uciEngines.length; i++) {
 				uciEnginesMessage[i] = "";
-				if (uciEngines[i].engineStop() || uciEngines[i].engineSearching())
-					return true;
+				if (uciEngines[i] != null) {
+					if (uciEngines[i].engineStop() || uciEngines[i].engineSearching())
+						return true;
+				}
 			}
 		}
 		return false;
