@@ -31,6 +31,7 @@
         android:layout_below="@id/title"
         android:layout_above="@id/llH2"
         android:orientation="vertical" >
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -104,6 +105,7 @@
                     android:textSize="@dimen/tv_text_size_36"
                     android:text="@string/charPlus" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/llMoves"
                 android:layout_width="wrap_content"
@@ -162,6 +164,7 @@
                     android:textSize="@dimen/tv_text_size_36"
                     android:text="@string/charPlus" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/llLines"
                 android:layout_width="wrap_content"
@@ -219,6 +222,16 @@
                     android:textSize="@dimen/tv_text_size_36"
                     android:text="@string/charPlus" />
             </LinearLayout>
+
+            <TextView
+                style="@style/c4aTV1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_1"
+                android:layout_marginBottom="@dimen/margin_1"
+                android:textColor="@color/dialog_green"
+                android:text="@string/differentValues" />
+
             <LinearLayout
                 android:id="@+id/llArrows"
                 android:layout_width="wrap_content"
@@ -276,6 +289,7 @@
                     android:textSize="@dimen/tv_text_size_36"
                     android:text="@string/charPlus" />
             </LinearLayout>
+
             <CheckBox
                 android:id="@+id/cbEpEngineMessage"
                 style="@style/c4aCB1"

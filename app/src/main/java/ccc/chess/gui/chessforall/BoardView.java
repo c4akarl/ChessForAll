@@ -663,13 +663,19 @@ public class BoardView extends View
 
                             break;
                         case BoardView.ARROWS_BOOK:
-                            colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
+                            colorFill = cv.getColor(cv.COLOR_ARROWS5_27);
                             if (scoreArrows.size() > 0) {
                                 int score = Integer.parseInt(scoreArrows.get(i).toString());
-
-//                                Log.i(TAG, "onDraw, i: " + i + ", score: " + score);
-
-                                //BCM + scoreArrows
+                                size = 15;
+                                size = size + (95-size)*score/100;
+                                strokeWidth = 1;
+                                colorFill = Color.argb(0x80, Color.red(colorFill), Color.green(colorFill), Color.blue(colorFill));
+                                alpha = 0xFF * size / 100;
+                                darkenF = 1 + 4 * (alpha / 255.0);
+                                colorStroke = Color.argb(0xFF,
+                                    (int) (Color.red(colorFill) / darkenF),
+                                    (int) (Color.green(colorFill) / darkenF),
+                                    (int) (Color.blue(colorFill) / darkenF));
                             }
                             break;
                         case BoardView.ARROWS_BEST_MOVES:
@@ -728,7 +734,7 @@ public class BoardView extends View
 
     }
 
-    final String TAG = "BoardView";
+//    final String TAG = "BoardView";
 
     Context context;
     SharedPreferences userPrefs;

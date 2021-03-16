@@ -401,5 +401,6 @@
     <string name="analysisOptions">Options d\'analyse</string>
     <string name="multipleEngines">Moteurs multiples</string>
     <string name="none">[ rien ]</string>
+    <string name="differentValues">En tournant l\'écran, différentes valeurs (variantes, mouvements, lignes) peuvent être définies.</string>
 
 </resources>

@@ -2,6 +2,7 @@ package ccc.chess.gui.chessforall;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
@@ -282,7 +283,7 @@ public class UciEngine
     public boolean applyPonderhit(String currMove, String currFen)
     {
 
-        Log.i(TAG, engineName + ": applyPonderhit(), uciEngineName: " + uciEngineName + ", engineState: " + engineState + ", ponderMove: " + ponderMove + ", currMove: " + currMove);
+//        Log.i(TAG, engineName + ": applyPonderhit(), uciEngineName: " + uciEngineName + ", engineState: " + engineState + ", ponderMove: " + ponderMove + ", currMove: " + currMove);
 
         if (engineState == EngineState.PONDER && !ponderMove.equals("") && currMove.equals(ponderMove)) {
 
@@ -432,67 +433,68 @@ public class UciEngine
         return moves;
     }
 
-    public CharSequence convertCastlingRight(CharSequence fen, CharSequence startFen)	// using for chess960(castle rook's line instead of "QKqk")
-    {
-
-//        Log.i(TAG,  "convertCastlingRight(), startFen: " + startFen);
-//        Log.i(TAG,  "convertCastlingRight(), fen:      " + fen);
-
-        CharSequence convertFen = "";
-        CharSequence startLineBlack = "abcdefgh";
-        CharSequence startLineWhite = "ABCDEFGH";
-        char cast_K = ' ';
-        char cast_Q = ' ';
-        char cast_k = ' ';
-        char cast_q = ' ';
-        CharSequence castling = "";
-        boolean firstRook = true;
-        // start FEN
-        if (startFen.length() > 7)
-        {
-            CharSequence fenBaseLine = startFen.subSequence (0, 8);
-            for (int i = 0; i < 8; i++)
-            {
-                if (fenBaseLine.charAt(i) == 'r')
-                {
-                    if (firstRook)
-                    {
-                        firstRook = false;
-                        cast_Q = startLineWhite.charAt(i);
-                        cast_q = startLineBlack.charAt(i);
-                    }
-                    else
-                    {
-                        cast_K = startLineWhite.charAt(i);
-                        cast_k = startLineBlack.charAt(i);
-                    }
-                }
-            }
-        }
-        // current FEN
-        CharSequence[] tokens = tokenize(fen);
-        for (int i = 0; i < tokens[2].length(); i++)
-        {
-            if (tokens[2].charAt(i) == 'K')
-                castling = castling.toString() + cast_K;
-            if (tokens[2].charAt(i) == 'k')
-                castling = castling.toString() + cast_k;
-            if (tokens[2].charAt(i) == 'Q')
-                castling = castling.toString() + cast_Q;
-            if (tokens[2].charAt(i) == 'q')
-                castling = castling.toString() + cast_q;
-            if (tokens[2].charAt(i) == '-')
-                castling = "-";
-        }
-        tokens[2] = castling;
-        for (CharSequence token : tokens) convertFen = convertFen.toString() + token + " ";
-
-//Log.i(TAG,  "FEN sta: " + startFen);
-//Log.i(TAG,  "FEN fen: " + fen);
-//Log.i(TAG,  "FEN new: " + convertFen);
-
-        return convertFen;
-    }
+    //karl shredder chess960 castling
+//    public CharSequence convertCastlingRight(CharSequence fen, CharSequence startFen)	// using for chess960(castle rook's line instead of "KQkq)
+//    {
+//
+////        Log.i(TAG,  "convertCastlingRight(), startFen: " + startFen);
+////        Log.i(TAG,  "convertCastlingRight(), fen:      " + fen);
+//
+//        CharSequence convertFen = "";
+//        CharSequence startLineBlack = "abcdefgh";
+//        CharSequence startLineWhite = "ABCDEFGH";
+//        char cast_K = ' ';
+//        char cast_Q = ' ';
+//        char cast_k = ' ';
+//        char cast_q = ' ';
+//        CharSequence castling = "";
+//        boolean firstRook = true;
+//        // start FEN
+//        if (startFen.length() > 7)
+//        {
+//            CharSequence fenBaseLine = startFen.subSequence (0, 8);
+//            for (int i = 0; i < 8; i++)
+//            {
+//                if (fenBaseLine.charAt(i) == 'r')
+//                {
+//                    if (firstRook)
+//                    {
+//                        firstRook = false;
+//                        cast_Q = startLineWhite.charAt(i);
+//                        cast_q = startLineBlack.charAt(i);
+//                    }
+//                    else
+//                    {
+//                        cast_K = startLineWhite.charAt(i);
+//                        cast_k = startLineBlack.charAt(i);
+//                    }
+//                }
+//            }
+//        }
+//        // current FEN
+//        CharSequence[] tokens = tokenize(fen);
+//        for (int i = 0; i < tokens[2].length(); i++)
+//        {
+//            if (tokens[2].charAt(i) == 'K')
+//                castling = castling.toString() + cast_K;
+//            if (tokens[2].charAt(i) == 'k')
+//                castling = castling.toString() + cast_k;
+//            if (tokens[2].charAt(i) == 'Q')
+//                castling = castling.toString() + cast_Q;
+//            if (tokens[2].charAt(i) == 'q')
+//                castling = castling.toString() + cast_q;
+//            if (tokens[2].charAt(i) == '-')
+//                castling = "-";
+//        }
+//        tokens[2] = castling;
+//        for (CharSequence token : tokens) convertFen = convertFen.toString() + token + " ";
+//
+////Log.i(TAG,  "FEN sta: " + startFen);
+////Log.i(TAG,  "FEN fen: " + fen);
+////Log.i(TAG,  "FEN new: " + convertFen);
+//
+//        return convertFen;
+//    }
 
     public void setIsChess960(boolean chess960) {isChess960 = chess960;}
 
@@ -1051,8 +1053,10 @@ public class UciEngine
                         }
                         else
                             engineInfoString = "";
-
-                        parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves", Settings.MOVES_DEFAULT));
+                        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                            parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves", Settings.MOVES_DEFAULT));
+                        else
+                            parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves_land", Settings.MOVES_DEFAULT_LAND));
                         engineStat = getInfoStat(statCurrDepth, statCurrSelDepth, statCurrMoveNr, statCurrMoveCnt, statCurrNodes, statCurrMove, searchRequest.fen);
 
 //					Log.i(TAG, "engineStat: " + engineStat);
@@ -1285,6 +1289,7 @@ public class UciEngine
         String fen;             // current fen
         String moves;           // Moves after prevPos (EMPTY)
         String startFen;        // initial fen (for Chess960)
+        int chess960Id;         // 0...959
 
         boolean drawOffer;      // True if other side made draw offer
         boolean isSearch;       // True if regular search or ponder search
@@ -1307,7 +1312,7 @@ public class UciEngine
         String ponderMove;      // Ponder move, or null if not a ponder search
 
         public static SearchRequest searchRequest(int engineId, int id, long now,
-                                                  String fen, String moves, String startFen, String firstMove, String bookMove,
+                                                  String fen, String moves, String startFen, int chess960Id, String firstMove, String bookMove,
                                                   boolean drawOffer, boolean isSearch, boolean isAnalysis,
                                                   int wTime, int bTime, int wInc, int bInc, int movesToGo, int moveTime,
                                                   boolean ponderEnabled, String ponderMove,
@@ -1322,6 +1327,7 @@ public class UciEngine
             sr.fen = fen;
             sr.moves = moves;
             sr.startFen = startFen;
+            sr.chess960Id = chess960Id;
             sr.drawOffer = drawOffer;
             sr.isSearch = isSearch;
             sr.isAnalysis = isAnalysis;
@@ -1353,8 +1359,14 @@ public class UciEngine
         searchRequest = sr;
         startSearchId = sr.searchId;
 
-        if (isChess960)
-            sr.fen = (String) convertCastlingRight(sr.fen, sr.startFen);
+//        Log.i(TAG, "startSearch(), sr.chess960Id: " + sr.chess960Id + ", sr.fen: " + sr.fen);
+
+        cl.newPosition(Integer.toString(sr.chess960Id), sr.fen, "", "", "", "", "", "");
+
+        //karl??? 960; --> KQkq  ? A..G a..g ?
+        //karl shredder chess960 castling;
+//        if (isChess960)
+//            sr.fen = (String) convertCastlingRight(sr.fen, sr.startFen);
 
         if (sr.isAnalysis) {
             if (uciOptions.contains("UCI_AnalyseMode"))

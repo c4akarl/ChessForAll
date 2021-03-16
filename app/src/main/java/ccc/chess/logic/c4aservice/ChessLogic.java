@@ -527,7 +527,10 @@ public class ChessLogic
 
     public CharSequence getNotationFromInfoPv(CharSequence fen, CharSequence pvMoves)		// notation(PGN) from infoPV moves
     {
-//    	Log.i(TAG, "getNotationFromInfoPv, moves: " + pvMoves);
+
+//    	Log.i(TAG, "getNotationFromInfoPv, fen: " + fen);
+//    	Log.i(TAG, "getNotationFromInfoPv, pvMoves: " + pvMoves);
+
     	posPV = new ChessPosition(history.chess960Id);
     	String pgnMoves = "";
     	CharSequence mvPgn = "";
@@ -560,8 +563,15 @@ public class ChessLogic
 					if (!posPV.chess960SAN.equals(""))
 						posPV.isChess960Castling = true;
 				}
-//				Log.i(TAG, "getNotationFromInfoPv, move, posPV.isChess960Castling: " + move + ", " + posPV.isChess960Castling);
+
 				validMove = posPV.validMove(move);
+
+//				if (move.equals("e1g1")) {
+//					Log.i(TAG, "getNotationFromInfoPv, fen: " + fen);
+//					Log.i(TAG, "getNotationFromInfoPv, move: " + move + ", posPV.isChess960: " + posPV.isChess960 + ", isChess960Castling: " + posPV.isChess960Castling + ", validMove: " + validMove);
+//					Log.i(TAG, "getNotationFromInfoPv, posPV.canCastWS: " + posPV.canCastWS + ", posPV.wShortCastC4aLan: " + posPV.wShortCastC4aLan);
+//				}
+
 				if (move.length() >= 4)			
 				{
 		    		if (validMove)

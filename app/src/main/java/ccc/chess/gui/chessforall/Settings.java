@@ -58,6 +58,9 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
         super.onConfigurationChanged(newConfig);
         setPrefs();
+        setVariants(0);
+        setMoves(0);
+        setLines(0);
     }
 
     protected void start() {
@@ -108,60 +111,48 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
         variantsMinus = findViewById(R.id.variantsMinus);
         variantsMinus.setOnClickListener(v -> {
-            variants--;
-            setVariants();
+            setVariants(-1);
         });
         variantsValue = findViewById(R.id.variantsValue);
         u.setTextViewColors(variantsValue, "#efe395");
         variantsValue.setOnClickListener(v -> {
-            variants = VARIANTS_DEFAULT;
-            setVariants();
+            setVariants(99);
         });
-        variantsValue.setText(String.format("%d", variants));
         variantsPlus = findViewById(R.id.variantsPlus);
         variantsPlus.setOnClickListener(v -> {
-            variants++;
-            setVariants();
+            setVariants(1);
         });
-        setVariants();
+        setVariants(0);
 
         movesMinus = findViewById(R.id.movesMinus);
         movesMinus.setOnClickListener(v -> {
-            moves--;
-            setMoves();
+            setMoves(-1);
         });
         movesValue = findViewById(R.id.movesValue);
         u.setTextViewColors(movesValue, "#efe395");
         movesValue.setOnClickListener(v -> {
-            moves = MOVES_DEFAULT;
-            setMoves();
+            setMoves(99);
         });
-        movesValue.setText(String.format("%d", moves));
         movesPlus = findViewById(R.id.movesPlus);
         movesPlus.setOnClickListener(v -> {
-            moves++;
-            setMoves();
+            setMoves(1);
         });
-        setMoves();
+        setMoves(0);
 
         linesMinus = findViewById(R.id.linesMinus);
         linesMinus.setOnClickListener(v -> {
-            lines--;
-            setLines();
+            setLines(-1);
         });
         linesValue = findViewById(R.id.linesValue);
         u.setTextViewColors(linesValue, "#efe395");
         linesValue.setOnClickListener(v -> {
-            lines = LINES_DEFAULT;
-            setLines();
+            setLines(99);
         });
-        linesValue.setText(String.format("%d", lines));
         linesPlus = findViewById(R.id.linesPlus);
         linesPlus.setOnClickListener(v -> {
-            lines++;
-            setLines();
+            setLines(1);
         });
-        setLines();
+        setLines(0);
 
         arrowsMinus = findViewById(R.id.arrowsMinus);
         arrowsMinus.setOnClickListener(v -> {
@@ -223,52 +214,112 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
     }
 
-    public void setVariants()
+    public void setVariants(int val)
     {
         u.setTextViewColors(variantsValue, "#efe395");
         u.setTextViewColors(variantsMinus, "#f6d2f4");
         u.setTextViewColors(variantsPlus, "#c4f8c0");
-        if (variants <= VARIANTS_MIN) {
-            variants = VARIANTS_MIN;
-            u.setTextViewColors(variantsMinus, "#767a76");
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            variants = variants + val;
+            if (val == 99)
+                variants = VARIANTS_DEFAULT;
+            if (variants <= VARIANTS_MIN) {
+                variants = VARIANTS_MIN;
+                u.setTextViewColors(variantsMinus, "#767a76");
+            }
+            if (variants >= VARIANTS_MAX) {
+                variants = VARIANTS_MAX;
+                u.setTextViewColors(variantsPlus, "#767a76");
+            }
+            variantsValue.setText(String.format("%d", variants));
         }
-        if (variants >= VARIANTS_MAX) {
-            variants = VARIANTS_MAX;
-            u.setTextViewColors(variantsPlus, "#767a76");
+        else
+        {
+            variantsLand = variantsLand + val;
+            if (val == 99)
+                variantsLand = VARIANTS_DEFAULT_LAND;
+            if (variantsLand <= VARIANTS_MIN_LAND) {
+                variantsLand = VARIANTS_MIN_LAND;
+                u.setTextViewColors(variantsMinus, "#767a76");
+            }
+            if (variantsLand >= VARIANTS_MAX_LAND) {
+                variantsLand = VARIANTS_MAX_LAND;
+                u.setTextViewColors(variantsPlus, "#767a76");
+            }
+            variantsValue.setText(String.format("%d", variantsLand));
         }
-        variantsValue.setText(String.format("%d", variants));
     }
 
-    public void setMoves()
+    public void setMoves(int val)
     {
         u.setTextViewColors(movesValue, "#efe395");
         u.setTextViewColors(movesMinus, "#f6d2f4");
         u.setTextViewColors(movesPlus, "#c4f8c0");
-        if (moves <= MOVES_MIN) {
-            moves = MOVES_MIN;
-            u.setTextViewColors(movesMinus, "#767a76");
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            moves = moves + val;
+            if (val == 99)
+                moves = MOVES_DEFAULT;
+            if (moves <= MOVES_MIN) {
+                moves = MOVES_MIN;
+                u.setTextViewColors(movesMinus, "#767a76");
+            }
+            if (moves >= MOVES_MAX) {
+                moves = MOVES_MAX;
+                u.setTextViewColors(movesPlus, "#767a76");
+            }
+            movesValue.setText(String.format("%d", moves));
         }
-        if (moves >= MOVES_MAX) {
-            moves = MOVES_MAX;
-            u.setTextViewColors(movesPlus, "#767a76");
+        else
+        {
+            movesLand = movesLand + val;
+            if (val == 99)
+                movesLand = MOVES_DEFAULT_LAND;
+            if (movesLand <= MOVES_MIN_LAND) {
+                movesLand = MOVES_MIN_LAND;
+                u.setTextViewColors(movesMinus, "#767a76");
+            }
+            if (movesLand >= MOVES_MAX_LAND) {
+                movesLand = MOVES_MAX_LAND;
+                u.setTextViewColors(movesPlus, "#767a76");
+            }
+            movesValue.setText(String.format("%d", movesLand));
         }
-        movesValue.setText(String.format("%d", moves));
     }
 
-    public void setLines()
+    public void setLines(int val)
     {
         u.setTextViewColors(linesValue, "#efe395");
         u.setTextViewColors(linesMinus, "#f6d2f4");
         u.setTextViewColors(linesPlus, "#c4f8c0");
-        if (lines <= LINES_MIN) {
-            lines = LINES_MIN;
-            u.setTextViewColors(linesMinus, "#767a76");
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            lines = lines + val;
+            if (val == 99)
+                lines = LINES_DEFAULT;
+            if (lines <= LINES_MIN) {
+                lines = LINES_MIN;
+                u.setTextViewColors(linesMinus, "#767a76");
+            }
+            if (lines >= LINES_MAX) {
+                lines = LINES_MAX;
+                u.setTextViewColors(linesPlus, "#767a76");
+            }
+            linesValue.setText(String.format("%d", lines));
         }
-        if (lines >= LINES_MAX) {
-            lines = LINES_MAX;
-            u.setTextViewColors(linesPlus, "#767a76");
+        else
+        {
+            linesLand = linesLand + val;
+            if (val == 99)
+                linesLand = LINES_DEFAULT_LAND;
+            if (linesLand <= LINES_MIN_LAND) {
+                linesLand = LINES_MIN_LAND;
+                u.setTextViewColors(linesMinus, "#767a76");
+            }
+            if (linesLand >= LINES_MAX_LAND) {
+                linesLand = LINES_MAX_LAND;
+                u.setTextViewColors(linesPlus, "#767a76");
+            }
+            linesValue.setText(String.format("%d", linesLand));
         }
-        linesValue.setText(String.format("%d", lines));
     }
 
     public void setArrows()
@@ -533,6 +584,9 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         ed.putInt("user_options_enginePlay_MultiPv", variants);
         ed.putInt("user_options_enginePlay_PvMoves", moves);
         ed.putInt("user_options_enginePlay_displayedLines", lines);
+        ed.putInt("user_options_enginePlay_MultiPv_land", variantsLand);
+        ed.putInt("user_options_enginePlay_PvMoves_land", movesLand);
+        ed.putInt("user_options_enginePlay_displayedLines_land", linesLand);
         ed.putInt("user_options_gui_arrows", arrows);
         ed.putBoolean("user_options_enginePlay_EngineMessage", engineMessage.isChecked());
         ed.putBoolean("user_options_enginePlay_Ponder", ponder.isChecked());
@@ -578,6 +632,9 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         variants = userPrefs.getInt("user_options_enginePlay_MultiPv", variants);
         moves = userPrefs.getInt("user_options_enginePlay_PvMoves", moves);
         lines = userPrefs.getInt("user_options_enginePlay_displayedLines", lines);
+        variantsLand = userPrefs.getInt("user_options_enginePlay_MultiPv_land", variantsLand);
+        movesLand = userPrefs.getInt("user_options_enginePlay_PvMoves_land", movesLand);
+        linesLand = userPrefs.getInt("user_options_enginePlay_displayedLines_land", linesLand);
         arrows = userPrefs.getInt("user_options_gui_arrows", arrows);
         engineMessage.setChecked(userPrefs.getBoolean("user_options_enginePlay_EngineMessage", true));
         ponder.setChecked(userPrefs.getBoolean("user_options_enginePlay_Ponder", false));
@@ -633,17 +690,28 @@ public class Settings  extends Activity implements Ic4aDialogCallback
     int VARIANTS_MIN = 1;
     int VARIANTS_MAX = 4;
     int variants = VARIANTS_DEFAULT;
+    final static int VARIANTS_DEFAULT_LAND = 2;
+    int VARIANTS_MIN_LAND = 1;
+    int VARIANTS_MAX_LAND = 4;
+    int variantsLand = VARIANTS_DEFAULT_LAND;
 
     final static int MOVES_DEFAULT = 16;
     int MOVES_MIN = 1;
     int MOVES_MAX = 30;
     int moves = MOVES_DEFAULT;
+    final static int MOVES_DEFAULT_LAND = 24;
+    int MOVES_MIN_LAND = 1;
+    int MOVES_MAX_LAND = 30;
+    int movesLand = MOVES_DEFAULT_LAND;
 
     final static int LINES_DEFAULT = 4;
     int LINES_MIN = 1;
-    int LINES_MAX = 16;
-    final static int LINES_MAX_PORTRAIT = 9;
+    int LINES_MAX = 9;
     int lines = LINES_DEFAULT;
+    final static int LINES_DEFAULT_LAND = 9;
+    int LINES_MIN_LAND = 1;
+    int LINES_MAX_LAND = 16;
+    int linesLand = LINES_DEFAULT_LAND;
 
     final static int ARROWS_DEFAULT = 6;
     int ARROWS_MIN = 0;

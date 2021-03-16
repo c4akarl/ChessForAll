@@ -974,8 +974,10 @@ public class ChessPosition
 			if (tmpList[2].contains("k")) canCastBS = true;
 			if (tmpList[2].contains("q")) canCastBL = true;
 		}
+
 //		Log.i(TAG, "chess960SetCanCast(), fen: " + fen);
 //		Log.i(TAG, "canCastWS, canCastWL, canCastBL, : " + canCastWS +  ", " + canCastWL + ", " + canCastBS + ", " + canCastBL);
+
 	}
 	
 	final String TAG = "ChessPosition";

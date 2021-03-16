@@ -400,5 +400,6 @@
     <string name="analysisOptions">Opciones de análisis</string>
     <string name="multipleEngines">Múltiples motores</string>
     <string name="none">[ ninguno ]</string>
+    <string name="differentValues">Al girar la pantalla, se pueden configurar diferentes valores (variantes, movimientos, líneas).</string>
 
 </resources>

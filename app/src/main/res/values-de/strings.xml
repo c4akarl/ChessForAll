@@ -400,4 +400,5 @@
     <string name="analysisOptions">Analyse-Optionen</string>
     <string name="multipleEngines">Mehrere Engines</string>
     <string name="none">[ keine ]</string>
+    <string name="differentValues">Durch drehen des Bildschirms können unterschiedliche Werte (Varianten, Züge, Zeilen) gesetzt werden.</string>
 </resources>

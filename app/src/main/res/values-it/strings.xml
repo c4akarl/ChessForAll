@@ -400,5 +400,6 @@
     <string name="analysisOptions">Opzioni di analisi</string>
     <string name="multipleEngines">Più Motori</string>
     <string name="none">[ nessuno ]</string>
+    <string name="differentValues">Ruotando lo schermo è possibile impostare diversi valori (varianti, mosse, linee).</string>
 
 </resources>
