@@ -401,5 +401,9 @@
     <string name="multipleEngines">Múltiples motores</string>
     <string name="none">[ ninguno ]</string>
     <string name="differentValues">Al girar la pantalla, se pueden configurar diferentes valores (variantes, movimientos, líneas).</string>
+    <string name="match">Competencia</string>
+    <string name="matchEnd">Fin de la competición</string>
+    <string name="endOrContinueMatch">¿Finalizar o continuar Computer Match?</string>
+    <string name="finishGame">Finalizar juego</string>
 
 </resources>

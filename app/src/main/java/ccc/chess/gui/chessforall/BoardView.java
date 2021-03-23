@@ -29,7 +29,7 @@ public class BoardView extends View
         if (Math.min(display.getWidth(), display.getHeight()) / 100 > STROKE_SIZE)
             STROKE_SIZE = Math.min(display.getWidth(), display.getHeight()) / 100;
 
-//Log.d(TAG, "BoardView(), STROKE_SIZE: " + STROKE_SIZE);
+//        Log.d(TAG, "BoardView(), STROKE_SIZE: " + STROKE_SIZE);
 
     }
 
@@ -39,6 +39,7 @@ public class BoardView extends View
         initColors();
         initPieces();
     }
+
     private void initPieces()
     {
         mPaint = new Paint();
@@ -139,7 +140,7 @@ public class BoardView extends View
             }
         }
 
-//Log.d(TAG, "posFen: " + posFen + "\nisBoardTurn: " + isBoardTurn + ", lastMove: " + lastMove);
+//        Log.d(TAG, "posFen: " + posFen + "\nisBoardTurn: " + isBoardTurn + ", lastMove: " + lastMove);
 
         if (posFen.length() == 64)
         {
@@ -190,7 +191,7 @@ public class BoardView extends View
         int posX = x / fieldSize;
         int posY = y / fieldSize;
 
-//Log.i(TAG, "getPositionFromTouch(), posX: " + posX + ", posY: " + posY);
+//        Log.i(TAG, "getPositionFromTouch(), posX: " + posX + ", posY: " + posY);
 
         return posX + (posY * 8);
     }
@@ -286,7 +287,7 @@ public class BoardView extends View
         fieldSize = getSqSizeW(boardSize);
         textSize = fieldSize / 3;
 
-//Log.d(TAG, "onMeasure(), BoardView, width: " + width + ", height: " + height + ", boardSize: " + boardSize + ", fieldSize: " + fieldSize);
+//        Log.d(TAG, "onMeasure(), BoardView, width: " + width + ", height: " + height + ", boardSize: " + boardSize + ", fieldSize: " + fieldSize);
 
         setMeasuredDimension(boardSize, boardSize);
     }
@@ -311,7 +312,7 @@ public class BoardView extends View
             }
         }
 
-//Log.d(TAG, "onDraw(), lastMove: " + lastMove);
+//        Log.d(TAG, "onDraw(), lastMove: " + lastMove);
 
         // 1. draw field, coordinates . . .
         for (int y = 0; y < 8; y++)
@@ -331,7 +332,7 @@ public class BoardView extends View
                     mPaint.setColor(cv.getColor(cv.COLOR_FIELD_DARK_2));
                 canvas.drawRect(mRect, mPaint);
 
-//Log.d(TAG, "fenMes, boardPos: " + boardPos + ", Char: " + posFen.charAt(boardPos));
+//                Log.d(TAG, "fenMes, boardPos: " + boardPos + ", Char: " + posFen.charAt(boardPos));
 
                 if (!isBlindMode)
                 {
@@ -397,7 +398,7 @@ public class BoardView extends View
 							for (int i = 0; i < possibleMoves.size(); i++)
 							{
 
-//Log.i(TAG, "updatePosibleMoves: " + possibleMoves.get(i));
+//                                Log.i(TAG, "updatePosibleMoves: " + possibleMoves.get(i));
 
 								if (possibleMoves.get(i).length() == 4)
 								{
@@ -422,7 +423,7 @@ public class BoardView extends View
 							for (int i = 0; i < possibleMovesTo.size(); i++)
 							{
 
-//Log.i(TAG, "updatePosibleMoves: " + possibleMovesTo.get(i));
+//                                Log.i(TAG, "updatePosibleMoves: " + possibleMovesTo.get(i));
 
 								if (possibleMovesTo.get(i).length() >= 4)
 								{
@@ -540,7 +541,7 @@ public class BoardView extends View
 				if (lastMoveTo == boardPos)
 				{
 
-//Log.i(TAG, "onDraw, lastMoveTo: " + lastMoveTo + ", boardPos: " + boardPos);
+//                    Log.i(TAG, "onDraw, lastMoveTo: " + lastMoveTo + ", boardPos: " + boardPos);
 
 					mPaint.setColor(Color.TRANSPARENT);
 					mPaint.setStyle(Paint.Style.FILL);
@@ -557,7 +558,7 @@ public class BoardView extends View
 					{
 						int selectedFieldPos = getPosition(possibleMoves.get(0).subSequence(0, 2), isBoardTurn);
 
-//Log.i(TAG, "onDraw, from lastMove: " + lastMove + ", selectedFieldPos: " + selectedFieldPos);
+//                        Log.i(TAG, "onDraw, from lastMove: " + lastMove + ", selectedFieldPos: " + selectedFieldPos);
 
 						if (selectedFieldPos == boardPos)
 						{
@@ -580,7 +581,7 @@ public class BoardView extends View
 						{
 							int selectedFieldPos = getPosition(possibleMovesTo.get(0).subSequence(2, 4), isBoardTurn);
 
-//Log.i(TAG, "onDraw, to lastMove: " + lastMove + ", selectedFieldPos: " + selectedFieldPos);
+//                            Log.i(TAG, "onDraw, to lastMove: " + lastMove + ", selectedFieldPos: " + selectedFieldPos);
 
 							if (selectedFieldPos == boardPos)
 							{
@@ -734,7 +735,7 @@ public class BoardView extends View
 
     }
 
-//    final String TAG = "BoardView";
+    final String TAG = "BoardView";
 
     Context context;
     SharedPreferences userPrefs;

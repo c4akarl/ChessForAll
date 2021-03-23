@@ -72,8 +72,7 @@ class FileIO
 				{
 					String path = listExternalDirs[i].getAbsolutePath();
 
-//Log.i(TAG, "1 getExternalDirs(), path:         " + i + " " + path);
-//Log.i(TAG, "1 getExternalDirs(), storageState: " + i + " " + storageState);
+//					Log.i(TAG, "1 getExternalDirs(), path:         " + i + " " + path);
 
 					int indexMountRoot = path.indexOf(ANDROID_DATA);
 					if (indexMountRoot >= 0 && indexMountRoot <= path.length())
@@ -107,7 +106,7 @@ class FileIO
 		for(int i=0; i < dirs.length;i++)
 		{
 
-//Log.i(TAG, "isExternalDir(), dirs[i]: " + dirs[i] + ", path: " + path);
+//			Log.i(TAG, "isExternalDir(), dirs[i]: " + dirs[i] + ", path: " + path);
 
 			if (dirs[i].equals(path))
 				return true;
@@ -140,7 +139,7 @@ class FileIO
 			}
 		}
 
-//Log.i(TAG, "isStorageStateMounted(), file: " + file + ", isMounted:  " + isMounted);
+//		Log.i(TAG, "isStorageStateMounted(), file: " + file + ", isMounted:  " + isMounted);
 
 		return isMounted;
 	}
@@ -172,8 +171,10 @@ class FileIO
 			fileIS.available();
 		} 
 		catch (FileNotFoundException e) {isFile = false;} 		// file not exists! 
-		catch (IOException e) 			{isFile = false;} 		// file not exists! 
-//Log.i(TAG, "fileName, exists?: " + fileName + ", " + isFile);
+		catch (IOException e) 			{isFile = false;} 		// file not exists!
+
+//		Log.i(TAG, "fileName, exists?: " + fileName + ", " + isFile);
+
 		return isFile;
 	}
 
@@ -204,9 +205,10 @@ class FileIO
 		File fDir = new File(targetPath);
 		File fTo = new File(targetPath, fFrom.getName());
 
-//Log.i(TAG, "fFrom: " + fFrom.toString() + ", " + fFrom.exists());
-//Log.i(TAG, "fDir: " + fDir.toString() + ", " + fDir.isDirectory());
-//Log.i(TAG, "fTo: " + fTo.toString() + ", " + fTo.exists())
+//		Log.i(TAG, "fFrom: " + fFrom.toString() + ", " + fFrom.exists());
+//		Log.i(TAG, "fDir: " + fDir.toString() + ", " + fDir.isDirectory());
+//		Log.i(TAG, "fTo: " + fTo.toString() + ", " + fTo.exists())
+
 		if (fFrom.exists() & fDir.isDirectory())
 		{
 			if (!fTo.exists())
@@ -288,7 +290,7 @@ class FileIO
 						if (f.isDirectory() & !f.isHidden())
 						{
 
-//Log.i(TAG, "File: " + path + tmpA[i] + ", allDirectory: " + allDirectory);
+//							Log.i(TAG, "File: " + path + tmpA[i] + ", allDirectory: " + allDirectory);
 
 							isPgnFile = false;
 							if (allDirectory)
@@ -380,7 +382,7 @@ class FileIO
 	public String dataFromFile(String path, String file, String lastGame, int gameControl, long offest)
     {
 
-//Log.i(TAG, "dataFromFile(), gameControl: " + gameControl);
+//		Log.i(TAG, "dataFromFile(), gameControl: " + gameControl);
 
 		String pgnData = "";
 		String previousGame = "";
@@ -408,7 +410,10 @@ class FileIO
 		} 
 		catch (FileNotFoundException e1) {e1.printStackTrace();	printData(gameControl, lastGame, pgnData, pgnStat, offest, -1); return "";}
 		catch (IOException e) {e.printStackTrace(); printData(gameControl, lastGame, pgnData, pgnStat, offest, -1); return "";}	
-		
+
+		if (fileLength == 0)
+			return "";
+
 		switch (gameControl)
         {
         	case 0: 	startSkip = offest; 						break;	// next
@@ -615,7 +620,7 @@ class FileIO
 				while((readString = buf.readLine())!= null)
 				{
 
-//Log.i(TAG, readString);
+//					Log.i(TAG, readString);
 
 					txt = txt + readString + "\n";
 				}
@@ -716,7 +721,6 @@ class FileIO
 		} 
 		catch (FileNotFoundException e) 	{e.printStackTrace();} 
 		catch (IOException e)				{e.printStackTrace();}
-//20180501, at ccc.chess.gui.chessforall.FileIO.dataToFile: (FileIO.java:596)java.lang.NullPointerException:
 		catch (NullPointerException e)		{e.printStackTrace();}
     }
 

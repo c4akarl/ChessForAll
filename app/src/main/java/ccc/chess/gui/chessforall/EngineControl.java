@@ -3,7 +3,7 @@ package ccc.chess.gui.chessforall;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 import ccc.chess.book.BookOptions;
 import ccc.chess.book.C4aBook;
@@ -52,11 +52,13 @@ public class EngineControl
 
 //		Log.i(TAG, "setPlayData(), white: " + white + ", black: " + black);
 
-		chessEngineEvent = "Android " + android.os.Build.VERSION.RELEASE;
-		chessEngineSite = android.os.Build.MODEL;
-		chessEngineRound = "-";
-		if (chessEngineAutoRun)
-			chessEngineRound = 	userP.getInt("user_play_eve_round", 1) + "." + userP.getInt("user_play_eve_gameCounter", 1);
+		if (!chessEngineMatch)
+		{
+			chessEngineEvent = "Android " + android.os.Build.VERSION.RELEASE;
+			chessEngineSite = android.os.Build.MODEL;
+			chessEngineRound = "-";
+		}
+
 		String playerName = userP.getString("user_options_gui_playerName", context.getString(R.string.qPlayer));
 		if (playerName.equals("") || playerName.equals("?"))
 			playerName = context.getString(R.string.qPlayer);
@@ -88,7 +90,6 @@ public class EngineControl
 		}
     }
 
-    //karl??? ohne ? --> uciEngines[currentEngineId]
 	public UciEngine getEngine()
     {
 		return uciEngines[currentEngineId];
@@ -99,14 +100,12 @@ public class EngineControl
 		currentEngineId = engineId;
 	}
 
-	void initEngineMessages(ArrayList<String> engineNames)
+//	void initEngineMessages(ArrayList<String> engineNames)
+	void initEngineMessages()
 	{
 		if (uciEnginesMessage != null) {
 			for (int i = 0; i < engineCnt; i++) {
-				if (engineNames == null)
-					uciEnginesMessage[i] = "";
-				else
-					uciEnginesMessage[i] = engineNames.get(i);
+				uciEnginesMessage[i] = "";
 			}
 		}
 	}
@@ -117,7 +116,9 @@ public class EngineControl
 			for (int i = 0; i < uciEngines.length; i++) {
 				uciEnginesMessage[i] = "";
 				if (uciEngines[i] != null) {
-					if (uciEngines[i].engineStop() || uciEngines[i].engineSearching())
+
+//					if (uciEngines[i].engineStop() || uciEngines[i].engineSearching())
+					if (uciEngines[i].engineSearching())
 						return true;
 				}
 			}
@@ -153,6 +154,7 @@ public class EngineControl
 	UciEngine[] uciEngines;								// manage multiple UciEngine	MainActivity.withMultiEngine = true
 	String[] uciEnginesMessage;							// engine messages from EngineListener
 	int engineCnt = 1;
+//	int engineRestartCnt = 0;
 	public int currentEngineId = 0;                     // current engineId, idx from uciEngines, return from getEngine()
 	public int analysisEngineId = 0;                    // analysis engineId, for making move !
 	public int analysisEngineCnt = 0;                   // analysis engineId counter, for making move !
@@ -168,7 +170,7 @@ public class EngineControl
     boolean chessEngineSearching = false;
     boolean chessEnginePaused = false;
     boolean chessEngineProblem = false;
-    boolean chessEngineAutoRun = false;
+    boolean chessEngineMatch = false;
     boolean chessEngineAnalysis = false;
     CharSequence chessEnginePlayerWhite = "Me";
     CharSequence chessEnginePlayerBlack = "";

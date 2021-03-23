@@ -69,7 +69,9 @@ public class ChessHistory
     			return;
     		}
     		int idxEnd = getNextMoveIdxFromVariation(getMoveIdx(), chessMove);
+
 //    		Log.i(TAG, "getMoveIdx(), idxEndVariation, moveIsLastInVariation: " + getMoveIdx() + ", " + idxEnd + ", " + moveIsLastInVariation);
+
     		if (isNewBranche)
     		{
     	        int insertIdx = newBrancheMoveIdx;
@@ -93,7 +95,9 @@ public class ChessHistory
     			
     			setMoveIdx(insertIdx +1);
     		    setNextMoveHistory(0);
+
 //    			Log.i(TAG, "getMoveIdx(): " + getMoveIdx());
+
     		}
     		else
     		{
@@ -184,7 +188,9 @@ public class ChessHistory
     	    		{
     	    			if (chessMove.getVal(moveHistory.get(i), 12).equals("9"))
     	    			{
+
 //    	    				Log.i(TAG, "prev. idx: " + i);
+
     	    				hasPrevVar = true;
     	    			}
     	    		}
@@ -201,34 +207,43 @@ public class ChessHistory
     	}
     	catch (IndexOutOfBoundsException e) {e.printStackTrace(); moveHistory = (ArrayList<CharSequence>)moveHistoryCopy.clone(); return;}
     }
-    public void printMoveHistory()	// TEST only
-    {
-    	if (moveHistory.size() != 0)
-    	{
-//	    	Log.i(TAG, "MoveHistory(Idx, Control, Rank, Variant, Fields, Pgn, Fen):\n");
 
-	    	for (int i = 0; i < moveHistory.size(); i++)
-	        {
-	    		Log.i(TAG, 	i + " "
-	    				+	chessMove.getVal(moveHistory.get(i), 12) + " "
-	    				+	chessMove.getVal(moveHistory.get(i), 1) + " "
-	    				+	chessMove.getVal(moveHistory.get(i), 2) + " "
-	    				+	chessMove.getVal(moveHistory.get(i), 3) + " "
-	    				+	chessMove.getVal(moveHistory.get(i), 4) + " "
-	    				+	chessMove.getVal(moveHistory.get(i), 5) + " ");
-//	    		Log.i(TAG, 	"   >>> baseFen: "
-//	    				+	chessMove.getVal(moveHistory.get(i), 10));
-	        }
 
-//	    	Log.i(TAG, "moveIdx: " + getMoveIdx());
-//	    	Log.i(TAG, "moveIdx   , baseFEN: " + getMoveIdx() + ", " + chessMove.getVal(moveHistory.get(getMoveIdx()), 10));
-    	}
-    }
+	// TEST only
+//    public void printMoveHistory()
+//    {
+//    	if (moveHistory.size() != 0)
+//    	{
+//
+////	    	Log.i(TAG, "MoveHistory(Idx, Control, Rank, Variant, Fields, Pgn, Fen):\n");
+//
+//	    	for (int i = 0; i < moveHistory.size(); i++)
+//	        {
+//	    		Log.i(TAG, 	i + " "
+//	    				+	chessMove.getVal(moveHistory.get(i), 12) + " "
+//	    				+	chessMove.getVal(moveHistory.get(i), 1) + " "
+//	    				+	chessMove.getVal(moveHistory.get(i), 2) + " "
+//	    				+	chessMove.getVal(moveHistory.get(i), 3) + " "
+//	    				+	chessMove.getVal(moveHistory.get(i), 4) + " "
+//	    				+	chessMove.getVal(moveHistory.get(i), 5) + " ");
+//
+////	    		Log.i(TAG, 	"   >>> baseFen: "
+////	    				+	chessMove.getVal(moveHistory.get(i), 10));
+//
+//	        }
+//
+////	    	Log.i(TAG, "moveIdx: " + getMoveIdx());
+////	    	Log.i(TAG, "moveIdx   , baseFEN: " + getMoveIdx() + ", " + chessMove.getVal(moveHistory.get(getMoveIdx()), 10));
+//
+//    	}
+//    }
 
     public CharSequence getPreviousValueFromMoveHistory(int idx, CharSequence rank, CharSequence variant, CharSequence control)
     {
     	CharSequence previousValue = "";
+
 //    	Log.i(TAG, "idx, rank, variant, control: " + idx + ", " + rank + ", " + variant + ", " + control);
+
     	idx--;
     	if (idx >= 0)
     	{
@@ -251,13 +266,17 @@ public class ChessHistory
 		    			)
 					{
 		    			previousValue = moveHistory.get(i);
+
 //		    			Log.i(TAG, "prev. idx: " + i);
+
 		    			break;
 					}
 		        }
     		}
     	}
+
 //    	Log.i(TAG, "previousValue(SPACE): " + previousValue);
+
     	return previousValue;
     }
     public CharSequence getBaseFenForNewVariation(int idx, CharSequence newRank, CharSequence newVariant)
@@ -382,7 +401,9 @@ public class ChessHistory
 	    				break;
 	    			if (newChessMove != null & chessMove.getVal(moveHistory.get(i), 12).equals("1"))	// new branch!
 	    			{
+
 //		    			Log.i(TAG, "moveHistory, i: " + moveHistory.get(i) + ">" + i  + "<");
+
 	    				if (!isFirstMove)
 	    					break;
 	    				isFirstMove = false;
@@ -394,8 +415,6 @@ public class ChessHistory
 						}
 		    			if (!isNewBranche)
 	    				{
-// java.lang.IndexOutOfBoundsException:  App-Version 73 | 20. Nov. 09:49 in der App-Version 74
-//							if (moveHistory.size() >= i +1)
 							if (moveHistory.size() -1 >= i +1)
 							{
 								try
@@ -467,7 +486,9 @@ public class ChessHistory
 					    					newBrancheMoveIdx = i +1;
 					    					newBrancheV = "1";
 					    				}
+
 //					    				Log.i(TAG, "idx, newBrancheMoveIdx: " + i + ", " + newBrancheMoveIdx);
+
 					    				if (isFirst)
 					    				{
 						    				cntRank++;
@@ -476,7 +497,9 @@ public class ChessHistory
 					    				else
 					    					newBrancheR = varRank;
 					    				newBrancheFen = chessMove.getVal(moveHistory.get(currentMoveIdx), 5);
+
 //					    		        Log.i(TAG, "hasVariations, newBrancheMoveIdx: " + hasVariations + ", " + newBrancheMoveIdx);
+
 					    		        break;
 				    				}
 				    				else
@@ -563,7 +586,9 @@ public class ChessHistory
     public int getMoveHistorySize() {return moveHistory.size();}
     public void setGameTag(String tagName, String tagValue)
     {
+
 //    	Log.i(TAG, "tagName, tagValue: " + tagName + " >" + tagValue + "<");
+
     	if (tagValue.equals(""))
     		return;
     	String newGameTags = "";
@@ -571,7 +596,9 @@ public class ChessHistory
     	String[] txtSplit = gameTags.toString().split("\n");
 		for(int i = 0; i < txtSplit.length; i++)
 	    {
+
 //			Log.i(TAG, "txtSplit[i]: " + txtSplit[i]);
+
 			if (txtSplit[i].contains("\b"))
 			{
 				String[] txtTags = txtSplit[i].split("\b");
@@ -587,12 +614,16 @@ public class ChessHistory
 		if (!isTag)
 			newGameTags = newGameTags + tagName + "\b" + tagValue + "\n";
 		gameTags = newGameTags;
+
 //		Log.i(TAG, "gameTags: \n" + gameTags);
+
     }
     public String getGameTagValue(String tagName)
     {
+
 //    	Log.i(TAG, "get(), tagName: " + tagName);
 //    	Log.i(TAG, "gameTags: " + gameTags);
+
     	String tagValue = "";
     	String[] txtSplit = gameTags.toString().split("\n");
 		for(int i = 0; i < txtSplit.length; i++)
@@ -603,7 +634,9 @@ public class ChessHistory
 				if (txtTags.length > 1 & txtTags[0].equals(tagName))
 				{
 					tagValue = txtTags[1];
+
 //					Log.i(TAG, "get(), tagName, tagValue: " + txtTags[0] + ", " + tagValue);
+
 					break;
 				}
 			}
@@ -618,7 +651,9 @@ public class ChessHistory
 	    {
 			if (txtSplit[i].contains("\b"))
 			{
+
 //				Log.i(TAG, "txtSplit[i]: " + txtSplit[i]);
+
 				String[] txtTags = txtSplit[i].split("\b");
 				String tagName = "";
 				String tagValue = "";
@@ -648,12 +683,15 @@ public class ChessHistory
     public CharSequence createGameNotationFromHistory(int moveIdx, boolean isOutputMoveText, boolean isResult,
     							boolean rankOnly, boolean lastSixMoves, boolean isSpaceAfterNumber, int nagControl, int pieceNameId)
     {	// nagControl: 0 = none, 1 = variable name(e.g. $11), 2 nag symbol (e.g.: =)
+
 //Log.i(TAG, "1a createGameNotationFromHistory(), isOutputMoveText: " + isOutputMoveText);
 //Log.i(TAG, "1a createGameNotationFromHistory(), moveIdx: " + moveIdx + ", isResult: " + isResult);
 
 		if (moveIdx == MOVE_HISTORY_MAX_60000 & sbNotation.length() != 0 & moveHistorySize == moveHistory.size())
 			return sbNotation;
+
 //Log.i(TAG, "1b createGameNotationFromHistory(), moveHistorySize: " + moveHistorySize + ", moveHistory.size(): " + moveHistory.size());
+
     	sbNotation.setLength(0);
         boolean isFirstMove = true;
         boolean isNewVariation = false;
@@ -714,7 +752,9 @@ public class ChessHistory
 	        		cmPrev.setMoveFromHistory(moveHistory.get(i -1));
 	        	if (i < moveIdx)
 	        		cmNext.setMoveFromHistory(moveHistory.get(i +1));
+
 //	        	Log.i(TAG, "move, C, R, V: " + cm.getPgn() + ", " + cm.getControl() + ", " + cm.getRank() + ", " + cm.getVariant());
+
 	        	if (!rankOnly & cm.getControl().equals("0") & !cm.getRank().equals(rank))	// new variation
 	        	{
 	        		cntIndent++;
@@ -798,7 +838,9 @@ public class ChessHistory
 			            }
 			            else
 			            {
+
 //			            	Log.i(TAG, "rankOnly: " + rankOnly + ", " + cm.getRank() + ", " + cmPrev.getControl());
+
 			            	if (isNewVariation | isEndVariation | isFirstMove | isMoveText | rankOnly & cmPrev.getControl().equals("0"))
 			            	{
 			            		if (!isMoveText)
@@ -855,14 +897,18 @@ public class ChessHistory
 				    	        }
 			            	}
 			            }
+
 //			            if (!moveText.equals("") | !nagText.equals(""))		// TEST  only
 //			            {
 //					     Log.i(TAG, "nagText, moveText, nagControl, isOutputMoveText: <" + nagText + "><" + moveText 
 //					    		 + "><" + nagControl + "><" + isOutputMoveText + ">");
 //			            }
+
 			            if (!moveText.equals("") & isOutputMoveText)
 			            {
+
 //			            	Log.i(TAG, "move text: " + cm.getTxt());
+
 			            	sbNotation.append(" {");
 			            	sbNotation.append(moveText);
 			            	sbNotation.append("}");
@@ -887,11 +933,16 @@ public class ChessHistory
         	else
         		sbNotation.append(pgnIndent);
         	sbNotation.append(getGameTagValue("Result"));
-//Log.i(TAG, "2 createGameNotationFromHistory(), Result: " + getGameTagValue("Result"));
+
+//			Log.i(TAG, "2 createGameNotationFromHistory(), Result: " + getGameTagValue("Result"));
+
         }
+
 //        if (!isOutputMoveText)
-//		Log.i(TAG, "sbNotation: \n" + sbNotation);
-//Log.i(TAG, "2 createGameNotationFromHistory()");
+//			Log.i(TAG, "sbNotation: \n" + sbNotation);
+//
+//		Log.i(TAG, "2 createGameNotationFromHistory()");
+
 		moveHistorySize = moveHistory.size();
         return sbNotation.toString();
     }
@@ -939,7 +990,9 @@ public class ChessHistory
     {
     	if (pgn.equals(""))
     		return;
+
 //    	Log.i(TAG, "setGameData, pgn: " + pgn);
+
 		pgn = pgn.toString().replace(GAME_RESULT_DRAW3, GAME_RESULT_DRAW1);
     	boolean isTagSection = true;
 	    setPgnData(pgn);
@@ -949,6 +1002,7 @@ public class ChessHistory
 	    gameTags = "";
 	    for(int i = 0; i < pgnSplit.length; i++)
 	    {
+
 //	    	Log.i(TAG, "line: >" + pgnSplit[i] + "<");
 	    	
 	    	for (int j = 0; j < pgnSplit[i].length(); j++)
@@ -985,7 +1039,9 @@ public class ChessHistory
 		try
 		{
 			int startValues = lineValue.indexOf('"') +1;
+
 //			Log.i(TAG, "lineValue, startValues: " + lineValue + ", " + startValues);
+
 			if (startValues > 1 & startValues < lineValue.length())
 			{
 				for (int i = startValues; i < lineValue.length(); i++)
@@ -1009,7 +1065,9 @@ public class ChessHistory
 		catch (IndexOutOfBoundsException e) {e.printStackTrace(); tagValue = "";}
 		if (tagValue.equals(""))
 			tagValue = getInitValueFromTag(tagName);
+
 //		Log.i(TAG, "tagName, tagValue: " + tagName + ", " + tagValue);
+
 		gameTags = gameTags + tagName + "\b" + tagValue + "\n";
         if (!nextTag.equals(""))
         	setGameTags(nextTag);
@@ -1065,9 +1123,13 @@ public class ChessHistory
     	    {
     			if (txtSplit[i].contains("\b"))
     			{
+
 //    				Log.i(TAG, "txtSplit[i]: " + txtSplit[i]);
+
     				String[] txtTags = txtSplit[i].split("\b");
+
 //    				Log.i(TAG, "txtTags[0], tagName: " + txtTags[0] + ", " + tagName[0]);
+
     				boolean tagOk = true;
     				if (txtTags[0].equals(tagName[0]))
     				{
@@ -1136,7 +1198,9 @@ public class ChessHistory
     	ChessMove cm = new ChessMove(moveHistory.get(getMoveIdx()));
     	CharSequence oldMoveText = cm.getTxt();
     	CharSequence[] txtSplit = oldMoveText.toString().split(" ");
+
 //    	Log.i(TAG, "oldMoveText, moveText, txtSplit.length: " + oldMoveText + ", " + moveText + ", " + txtSplit.length);
+
     	if (oldMoveText.toString().startsWith("$"))
     	{
     		if (moveText.toString().startsWith("$"))
@@ -1163,7 +1227,9 @@ public class ChessHistory
 				moveText = moveText.toString() + " " + oldMoveText;
     	}
     	cm.setTxt(moveText.toString());
+
 //    	Log.i(TAG, "new moveText: " + moveText);
+
     	moveHistory.set(getMoveIdx(), cm.getMoveHistory());
     }
     public void setNextMoveHistory(int keyState)
@@ -1174,7 +1240,9 @@ public class ChessHistory
         moveIsFirstInVariation = false;		
         moveIsLastInVariation = false;	
         int idx = getMoveIdx();
+
 //        Log.i(TAG, "MoveIdx, moveHistory, keyState: " + idx + ", " + moveHistory.size() + ", " + keyState);
+
         int lastIdx = 0;
         ChessMove cm;		// current move in moveHistory
         ChessMove cmPrev;	// previous move in moveHistory	
@@ -1380,7 +1448,9 @@ public class ChessHistory
         			moveIsLastInVariation = true;
         	}
         }
+
 //        Log.i(TAG, "setNextMoveHistory, MoveIdx: " + idx);
+
         if (keyState == 3)
         {
 	        if (idx == 0 | idx == 1)
@@ -1414,7 +1484,9 @@ public class ChessHistory
        		moveIsFirstInVariation = true;	
         	moveIsLastInVariation = true;
         }
+
 //        Log.i(TAG, "isGameEnd, moveIsFirstInVariation, moveIsLastInVariation: " + isGameEnd + ", " + moveIsFirstInVariation + ", " + moveIsLastInVariation);
+
     }
     public void setChess960Id(int id) {chess960Id = id;}
 
@@ -1625,8 +1697,10 @@ public class ChessHistory
     }
     public ArrayList<CharSequence> getVariationsFromMoveHistory()
     {
+
 //    	Log.i(TAG, "getVariationsFromMoveHistory");
 //    	printMoveHistory();
+
     	ArrayList<CharSequence> variList = new ArrayList<CharSequence>();
     	StringBuilder sb = new StringBuilder(30);
     	boolean nextIsVariationStart = true;
@@ -1640,7 +1714,8 @@ public class ChessHistory
     		cmPrev.setMoveFromHistory(moveHistory.get(idx -1));
     		cmNext.setMoveFromHistory(moveHistory.get(idx +1));
 
-//Log.i(TAG, "getVariationsFromMoveHistory(), cmPrev.getControl(): " + cmPrev.getControl() + ", cmNext.getControl(): " + cmNext.getControl());
+//			Log.i(TAG, "getVariationsFromMoveHistory(), cmPrev.getControl(): " + cmPrev.getControl() + ", cmNext.getControl(): " + cmNext.getControl());
+
 			if (cmPrev.getControl().equals("0") | cmNext.getControl().equals("9"))
 				return variList;
 
@@ -1659,7 +1734,9 @@ public class ChessHistory
 					cmPrev.setMoveFromHistory(moveHistory.get(idx -1));
     		}
     	}
-//Log.i(TAG, "CRV, pgn, idx: " + cm.getControl() + cm.getRank() + cm.getVariant() + " " + cm.getPgn() + " " + idx);
+
+//		Log.i(TAG, "CRV, pgn, idx: " + cm.getControl() + cm.getRank() + cm.getVariant() + " " + cm.getPgn() + " " + idx);
+
     	CharSequence color = "";
     	CharSequence number = "";
     	CharSequence movePgn = "";
@@ -1756,9 +1833,11 @@ public class ChessHistory
 		                if (compareFen.equals(compareFen2))
 		                {
 		                    cntFen++;
-//Log.i(TAG, "idx, pgn, cntFen: " + i + ", " + cm.getVal(moveHistory.get(i), 4) + ", " + cntFen);
-//Log.i(TAG, "compareFen : " + i + ", " + compareFen);
-//Log.i(TAG, "compareFen2: " + i + ", " + compareFen2);
+
+//							Log.i(TAG, "idx, pgn, cntFen: " + i + ", " + cm.getVal(moveHistory.get(i), 4) + ", " + cntFen);
+//							Log.i(TAG, "compareFen : " + i + ", " + compareFen);
+//							Log.i(TAG, "compareFen2: " + i + ", " + compareFen2);
+
 		                }
 	            	}
             	}
@@ -1772,19 +1851,25 @@ public class ChessHistory
         catch (IndexOutOfBoundsException e)
         {
         	cntFen = 0;
+
 //        	Log.i(TAG, "fen: " + fen);
+
         }
         return cntFen;
     }
     
     public void parseGameNotation(CharSequence gameNotation)	// !?!
     {	// parse: PGN move section
+
 //    	Log.i(TAG, "GameNotation:\n" + gameNotation);
+
     	parseInit(gameNotation);	// create: CharSequence[] pTokens
     	parseAddToMoveList(moveList.size());		// start variation: R0, V0 	(pMoveControl = 0)
 		for(int i = 0; i < pTokens.length; i++)
         {
-//Log.i(TAG, "pTokens[i]: " + ">" + pTokens[i] + "<");
+
+//			Log.i(TAG, "pTokens[i]: " + ">" + pTokens[i] + "<");
+
 			if (pTokens[i].contains("0-0"))
 				pTokens[i] = pTokens[i].replace("0", "O");
 			if (pTokens[i].contains("e.p."))
@@ -1794,22 +1879,30 @@ public class ChessHistory
 			{
 				pErrorMessage = stringValues.get(23) + " [H1]\n" + pErrorMessage; // cl_notationError
 				gameText = pErrorMessage;
-//Log.i(TAG, "pErrorMessage, pIsEnd, pTokens.length: " + pErrorMessage + ", " + pIsEnd + ", " + pTokens.length);
+
+//				Log.i(TAG, "pErrorMessage, pIsEnd, pTokens.length: " + pErrorMessage + ", " + pIsEnd + ", " + pTokens.length);
 //				Log.i(TAG, "pErrorMessage: " + pErrorMessage + ", pIsEnd: " + pIsEnd + ", pTokens[i]: " + pTokens[i]);
+
 				break;
 			}
         }
 		if (pCountVariationStart != pCountVariationEnd)
 		{
+
 //			Log.i(TAG, "pCountVariationStart, pCountVariationEnd: " + pCountVariationStart + ", " + pCountVariationEnd);
+
 			if (pErrorMessage.toString().equals(""))
 			{
 				pErrorMessage = stringValues.get(23) + " [H2]\n" + stringValues.get(24);	// cl_notationError, cl_variationError
 				gameText = pErrorMessage;
+
 //				Log.i(TAG, "pErrorMessage(diff var): " + pErrorMessage);
+
 			}
 		}
+
 //			Log.i(TAG, "parseGameNotation(), pMoveR: " + pMoveR + ", pMoveV: " + pMoveV);
+
 		if (pMoveR == 0 & pMoveV == 0)
 			parseSetVariationEndToMoveList();		// end variation: R0, V0 	(pMoveControl = 9)
 		else
@@ -1818,14 +1911,18 @@ public class ChessHistory
 			{
 				pErrorMessage = stringValues.get(23) + " [H3]\n" + stringValues.get(24);
 				gameText = pErrorMessage;
+
 //				Log.i(TAG, "pErrorMessage(end error): " + pErrorMessage);
+
 			}
 		}
     }
     public void parseToken(CharSequence tok)	// parsing a token
     {
     	CharSequence token = tok;
+
 //    	Log.i(TAG, "token, length: >" + token + "< " + token.length());
+
     	pMoveControl = -1;											// unknown error
 		if 	(		token.toString().equals(GAME_RESULT_NONE) 		// *	
 				| 	token.toString().equals(GAME_RESULT_WHITE)		// 1-0 	
@@ -1849,7 +1946,9 @@ public class ChessHistory
     				pMoveComment = pMoveComment.toString() + " " + token;
     			else
     			{
+
 //    				Log.i(TAG, "1. token with }: >" + token + "<");
+
     				if (token.toString().endsWith("}") | token.toString().endsWith(")"))
     				{
     					int min = 0;
@@ -1864,7 +1963,9 @@ public class ChessHistory
  						    }
     					}
     					pMoveComment = pMoveComment.toString() + " " + token.subSequence(0, token.length() - (min +1));
+
 //    					Log.i(TAG, "1. token with }: >" + token + "< >" + pMoveComment + "<");
+
     					if (!pMoveComment.toString().equals(""))
     						parseSetCommentToMoveList(moveList.size() -1, pMoveComment);
     					for (int i = 0; i < min; i++)
@@ -1880,9 +1981,11 @@ public class ChessHistory
     				}
     				pIsComment = false;
     			}
+
 //    			Log.i(TAG, "pMoveComment: " + pMoveComment);
+
     		}
-    		else											//
+    		else
     		{
     			boolean isVariationEnd = false;
 				boolean isParseMoveError = false;
@@ -1955,11 +2058,15 @@ public class ChessHistory
 	    				}
 	    				else
 	    				{
+
 //	    					Log.i(TAG, "2. token with }: >" + token + "<");
+
 	    					if (tmpToken.toString().endsWith("}"))
 	        				{
 	    						pMoveComment = tmpToken.subSequence(0, tmpToken.length() -1);
+
 //	    						Log.i(TAG, "2. token with }: >" + tmpToken + "< >" + pMoveComment + "<");
+
 	    						parseSetCommentToMoveList(moveList.size() -1, pMoveComment);
 	        					pIsComment = false;
 	        				}
@@ -1977,7 +2084,9 @@ public class ChessHistory
 	     						    }
 	    							tmpToken = tmpToken.subSequence(0, tmpToken.length() - (cntVarEnd +1));
 	        						pMoveComment = tmpToken;
+
 //	        						Log.i(TAG, "3. token with }: >" + tmpToken + "< >" + pMoveComment + "<");
+
 	                				parseSetCommentToMoveList(moveList.size() -1, pMoveComment);
 	                				pIsComment = false;
 	        						for (int i = 0; i < cntVarEnd; i++)
@@ -2000,7 +2109,9 @@ public class ChessHistory
     				// parse move section
     				if (!token.equals(""))
     				{
+
 //    					Log.i(TAG, "start parse move section: " + token);
+
     					if (token.toString().contains("!"))
     						token = token.toString().replace("!", "");
     					if (token.toString().contains("?"))
@@ -2069,7 +2180,9 @@ public class ChessHistory
     						}
     						if (isParseMoveError)
 	    					{
-//Log.i(TAG, "isParseMoveError: " + token + ", pMoveControl: " + pMoveControl + ", isGameEnd: " + isGameEnd + ", pIsEnd: " + pIsEnd);
+
+//								Log.i(TAG, "isParseMoveError: " + token + ", pMoveControl: " + pMoveControl + ", isGameEnd: " + isGameEnd + ", pIsEnd: " + pIsEnd);
+
 								if (isGameEnd & pIsEnd)
 									pErrorMessage = "";
 								else
@@ -2094,7 +2207,9 @@ public class ChessHistory
 
     public void parseAddToMoveList(int idx)	
     {
+
 //    	Log.i(TAG, "parseAddToMoveList, idx, pMoveControl: " + idx + ", " + pMoveControl);
+
     	if (pMoveControl >= 0 & pMoveControl < 10)
     	{
 			sbMoveValues.setLength(0);
@@ -2106,7 +2221,9 @@ public class ChessHistory
 				sbMoveValues.append(pMoveColor);	sbMoveValues.append("\b");
 			sbMoveValues.append(pMoveComment);		sbMoveValues.append("\b");
 			moveList.add(idx, sbMoveValues.toString());
+
 //			Log.i(TAG, "idx, move: " + idx + ", " + moveList.get(idx));
+
 			if (pMoveControl == 1 & !pMovePgn.toString().equals(""))
 				parseSetNextColor();
     	}
@@ -2114,7 +2231,9 @@ public class ChessHistory
 
     public void parseSetCommentToMoveList(int idx, CharSequence comment)	// commentToken (update "moveList")
     {
+
 //    	Log.i(TAG, "parseSetCommentToMoveList, idx, comment: " + idx + ", " + comment);
+
     	CharSequence moveTmp = moveList.get(idx).toString();
     	if (chessMove.getVal(moveTmp, 6).toString().startsWith("$"))
     		comment = chessMove.getVal(moveTmp, 6).toString() + " " + comment;
@@ -2162,7 +2281,9 @@ public class ChessHistory
         	if (pTokens.length < 1)
         		pIsEnd = true;
         }
+
 //        Log.i(TAG, "pIsEnd, pTokens.length: " + pIsEnd + ", " + pTokens.length);
+
     }
 
     public void parseInitMove()	// initialize parsing move
@@ -2199,12 +2320,16 @@ public class ChessHistory
 
     public int parseGetLastVariantFromRank(int rank)	
     {
+
 //    	Log.i(TAG, "rank, moveList.size(): " + rank + ", " + moveList.size());
+
     	if (moveList.size() > 0)
     	{
 	    	for(int i = moveList.size() -1; i > 0; i--)
 	        {
+
 //	    		Log.i(TAG, "R, V: " + i + ", " + chessMove.getRank() + ", " + chessMove.getVariant());
+
 	    		chessMove.setMoveFromMoveList(moveList.get(i).toString());
 	    		if (chessMove.getRank().equals(Integer.toString(rank)))
 	    			return Integer.parseInt((String) chessMove.getVariant());
@@ -2254,7 +2379,9 @@ public class ChessHistory
 			pMovePgn = checkMove;
 			parseAddToMoveList(moveList.size());	// start variation (pMoveControl = 1)
     	}
+
 //    	Log.i(TAG, "parseMove: >" + checkMove + "< " + isMoveError);
+
     	return isMoveError;
     }
 
@@ -2276,7 +2403,9 @@ public class ChessHistory
     public CharSequence parseGetMoveFromDigitToken(CharSequence digitToken) // move after digit(move number)?	
     {
     	CharSequence mv = "";
+
 //    	Log.i(TAG, "parseIsDigit: " + digitToken);
+
 		pMoveColor = "l";
 		if (digitToken.toString().contains(".."))
 			pMoveColor = "d";
@@ -2294,11 +2423,15 @@ public class ChessHistory
 					tmp = digitToken.charAt(i) + tmp.toString();
 				else
 					break;
+
 //				Log.i(TAG, "tmp: " + tmp);
+
 	        }
 			mv = tmp;
 		}
+
 //		Log.i(TAG, "parseMove: " + mv);
+
     	return mv;
     }
 

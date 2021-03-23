@@ -401,4 +401,8 @@
     <string name="multipleEngines">Mehrere Engines</string>
     <string name="none">[ keine ]</string>
     <string name="differentValues">Durch drehen des Bildschirms können unterschiedliche Werte (Varianten, Züge, Zeilen) gesetzt werden.</string>
+    <string name="match">Wettkampf</string>
+    <string name="matchEnd">Wettkampfende</string>
+    <string name="endOrContinueMatch">Computer Match beenden oder fortsetzen?</string>
+    <string name="finishGame">Spiel beenden</string>
 </resources>

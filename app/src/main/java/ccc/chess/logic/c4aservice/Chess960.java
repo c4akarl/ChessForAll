@@ -29,10 +29,14 @@ public class Chess960
     	// creating bishopId from id - kingId
     	if ((chess960ID - kingId) >= 0)
     		bishopId = chess960ID - kingId;
+
 //    	Log.d(TAG, "kingId, bishopId: " + kingId + ", " + bishopId);
+
     	// creating bishopPieces from Bishop's table 
     	bishopPieces = bishopData[bishopId];
+
 //    	Log.d(TAG, "kingPieces, bishopPieces: " + kingPieces + ", " + bishopPieces);
+
     	CharSequence newPos = "";
     	int cnt = 0;
     	for (int i = 0; i < 8; i++)		
@@ -45,7 +49,9 @@ public class Chess960
     			cnt++;
     		}
         }
+
 //    	Log.d(TAG, "chess960ID, ChessPos: " + id + ", " + newPos);
+
     	if (newPos.length() == 8)
     	{	// creating FEN from chess960 base line
     		setStat(1);

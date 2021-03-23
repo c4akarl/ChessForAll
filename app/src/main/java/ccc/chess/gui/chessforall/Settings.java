@@ -670,7 +670,7 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
     }
 
-//    final String TAG = "Settings";
+    final String TAG = "Settings";
     Util u;
     FileIO fileIO;
     final static int LOAD_OPENING_BOOK_REQUEST_CODE = 91;

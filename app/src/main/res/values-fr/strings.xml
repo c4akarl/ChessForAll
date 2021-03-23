@@ -402,5 +402,9 @@
     <string name="multipleEngines">Moteurs multiples</string>
     <string name="none">[ rien ]</string>
     <string name="differentValues">En tournant l\'écran, différentes valeurs (variantes, mouvements, lignes) peuvent être définies.</string>
+    <string name="match">Concurrence</string>
+    <string name="matchEnd">Fin du match</string>
+    <string name="endOrContinueMatch">Terminer ou continuer Computer Match?</string>
+    <string name="finishGame">Terminer le jeu</string>
 
 </resources>

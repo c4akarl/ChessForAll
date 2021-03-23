@@ -405,5 +405,9 @@
     <string name="multipleEngines">Multiple Engines</string>
     <string name="none">[ none ]</string>
     <string name="differentValues">By rotating the screen, different values (variants, moves, lines) can be set.</string>
+    <string name="match">Match</string>
+    <string name="matchEnd">Match end</string>
+    <string name="endOrContinueMatch">End or continue computer match?</string>
+    <string name="finishGame">Finish game</string>
 
 </resources>

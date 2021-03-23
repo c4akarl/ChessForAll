@@ -19,7 +19,9 @@ public class ChessPosition
 
 	public void setPosition(CharSequence posFen)				
     {
+
 //		Log.i(TAG, "start setPosition(), fen: " + posFen);
+
 		if (posFen.equals(""))
 			return;
 		if (isChess960)
@@ -27,7 +29,9 @@ public class ChessPosition
 		else
 			fen = posFen;
 		fast_move = 0;
+
 //		Log.i(TAG, "next setPosition(), fen: " + fen);
+
 		fen = ((String) fen).replace("  ", " ");
     	try 
     	{
@@ -46,7 +50,9 @@ public class ChessPosition
 		lanCastMove = "";
 		for (int i = 0; i < moveList.size(); i++)
 		{
+
 //			Log.i(TAG, "validMove(), move, moveList: " + ">" + move + "<, >" + moveList.get(i) + "<");
+
 			if (moveList.get(i).toString().length() == 9)
 				lanCastMove = moveList.get(i).toString().substring(5, 9);
 			if (move.length() == 4 & moveList.get(i).toString().substring(0, 4).equals(move.toString()))
@@ -63,7 +69,9 @@ public class ChessPosition
 			if (move.length() == 5 & moveList.get(i).toString().equals(move.toString()))
 				return true;
 		}
+
 //		Log.i(TAG, "validMove(): false");
+
 		return false;
     }
 
@@ -294,8 +302,10 @@ public class ChessPosition
 			        {
 						if (pos.getStone(i) == stone)
 						{
+
 	//						Log.i(TAG, "sanMove, from, to, fromSqi, toSqi, promo: " 
 	//								+ sanMove + ", " + from + ", " + to + ", " + i + ", " + toSqi + ", " + promoPiece);
+
 							if (from.length() == 1)
 							{
 								if (cpFields[i].toString().contains(from))
@@ -313,10 +323,14 @@ public class ChessPosition
 
 		public CharSequence getMoveFromSAN(CharSequence fen, CharSequence sanMove)
     {	// SAN = PGN-move; return: LAN
-//Log.i(TAG, sanMove + ", " + fen);
+
+		//Log.i(TAG, sanMove + ", " + fen);
+
 		if (isChess960)
 			fen = chess960GetFEN(fen);
-//Log.i(TAG, "getMoveFromSAN(), isChess960: " + isChess960 + ", sanMove: " + sanMove);
+
+		//Log.i(TAG, "getMoveFromSAN(), isChess960: " + isChess960 + ", sanMove: " + sanMove);
+
     	try {cpPgnPosition = new Position(fen.toString(), true);}
     	catch (IllegalArgumentException e) {e.printStackTrace(); return "";}
     	setMoveNumber(fen);
@@ -334,7 +348,9 @@ public class ChessPosition
     				lanMove = bLongCastC4aLan.subSequence(0, 4).toString();
     			doChess960Castling(cpPgnPosition, lanMove);
    				chess960SetFenCastling(lanMove);
-//Log.i(TAG, "getMoveFromSAN(), isChess960: " + isChess960 + ", lanMove: " + lanMove);
+
+				//Log.i(TAG, "getMoveFromSAN(), isChess960: " + isChess960 + ", lanMove: " + lanMove);
+
     			return lanMove;	
     		}
     	}
@@ -343,7 +359,9 @@ public class ChessPosition
     	CharSequence lan = getNewMove(fen, sanMove);
     	if (!lan.equals(""))
 		{
-//Log.i(TAG, "NEW, sanMove: " + sanMove + ", lanMove: " + lanMove);
+
+//			Log.i(TAG, "NEW, sanMove: " + sanMove + ", lanMove: " + lanMove);
+
 			return lan;
 		}
     	else
@@ -367,12 +385,16 @@ public class ChessPosition
         {
 			if (sanMove.toString().equals(sanMoves[i]))
 			{
+
 //				Log.i(TAG, "sanMove, moves[i]: " + sanMove + ", " + moves[i]);
+
 				try {cpPgnPosition.doMove(moves[i]);} 
 				catch (IllegalMoveException e) { e.printStackTrace(); return "";}
 				posSanMove = cpPgnPosition.getLastMove().getSAN();
 				lanMove = Move.getString(moves[i]);
-//Log.i(TAG, "OLD, sanMove, lanMove, moves[i]: " + sanMove + ", " + lanMove + ", " + moves[i]);
+
+//				Log.i(TAG, "OLD, sanMove, lanMove, moves[i]: " + sanMove + ", " + lanMove + ", " + moves[i]);
+
 				if (lanMove.startsWith("O"))
 					lanMove = getCastlingLAN(fen, lanMove);
 				lanMove = lanMove.replace("-", "");
@@ -384,7 +406,9 @@ public class ChessPosition
 
 				if (isChess960)
     				chess960SetFenCastling(lanMove);
-//Log.i(TAG, "OLD, sanMove: " + sanMove + ", lanMove: " + lanMove);
+
+//				Log.i(TAG, "OLD, sanMove: " + sanMove + ", lanMove: " + lanMove);
+
 				return lanMove;								// move lan (g1f3)
 			}
 			if (tmpSanMove.equals(sanMoves[i]))
@@ -415,7 +439,9 @@ public class ChessPosition
 
 	public String getLanMoveFromSanMove(CharSequence fen, String[] possibleSanMoves, CharSequence sanMove)
 	{
-//Log.i(TAG, "1 getLanMoveFromSanMove(), sanMove: " + sanMove + "\nfen: " + fen);
+
+//		Log.i(TAG, "1 getLanMoveFromSanMove(), sanMove: " + sanMove + "\nfen: " + fen);
+
 		String lanMove = "";
 		if (possibleSanMoves != null)
 		{
@@ -429,7 +455,9 @@ public class ChessPosition
 		{
 			lanMove = getMoveFromSAN(fen, sanMove).toString();
 		}
-//Log.i(TAG, "2 getLanMoveFromSanMove(), sanMove: " + sanMove + ", lanMove: " + lanMove + ", posSanMove: " + posSanMove);
+
+//		Log.i(TAG, "2 getLanMoveFromSanMove(), sanMove: " + sanMove + ", lanMove: " + lanMove + ", posSanMove: " + posSanMove);
+
 		return lanMove;
 	}
 
@@ -446,13 +474,17 @@ public class ChessPosition
 	    		if (!Character.isUpperCase(sanMove.charAt(0)))
 	    		{
 	    			isMultiplePawnMoves = true;
+
 //	    			Log.i(TAG, "isMultiplePawnMoves, sanMove:    " + sanMove);
+
 	    		}
 	    	}
     	}
     	if (shortMoves != null & !isMultiplePawnMoves)
     	{
+
 //    		Log.i(TAG, "shortMoves.size(): " + shortMoves.size());
+
     		boolean isMoveOk = true;
 	    	for (int i = 0; i < shortMoves.size(); i++)
 	        {
@@ -463,7 +495,9 @@ public class ChessPosition
 	    		if (isMoveOk)
 	    		{
 	    			posSanMove = cpPgnPosition.getLastMove().getSAN();
-//Log.i(TAG, "getShortMovesFromSAN(), sanMove: " + sanMove + ", shortMoves: " + shortMoves.get(i) + ", posSanMove: " + posSanMove);
+
+//					Log.i(TAG, "getShortMovesFromSAN(), sanMove: " + sanMove + ", shortMoves: " + shortMoves.get(i) + ", posSanMove: " + posSanMove);
+
 		    		if (!isLanNotation & !sanMove.equals(posSanMove))
 		    		{
 		    			String tmp = posSanMove;
@@ -488,7 +522,9 @@ public class ChessPosition
 					lanMove = lanMove.replace("x", "");
 					if (isChess960)
 	    				chess960SetFenCastling(lanMove);
-//Log.i(TAG, "NEW, sanMove, posSanMove, lanMove, shortMoves.get(i): " + sanMove + ", " + posSanMove + ", " + lanMove + ", " + shortMoves.get(i));
+
+//					Log.i(TAG, "NEW, sanMove, posSanMove, lanMove, shortMoves.get(i): " + sanMove + ", " + posSanMove + ", " + lanMove + ", " + shortMoves.get(i));
+
 					return lanMove;		
 	    		}
 	    		else
@@ -537,13 +573,17 @@ public class ChessPosition
 				if (!isChess960) castMove = "e8a8|e8c8"; else castMove = "e8a8|e8a8";	// !!! set Chess960 fields !!!
 			}
 		}
+
 //		Log.i(TAG, "moveCastling, castMove, lanCastMove: " + moveCastling + ", " + castMove + ", " + lanCastMove);
+
 		return castMove;
 	}
 	
 	public CharSequence getFastMove(CharSequence mv1)	
 	{	// fastMove return: "": multiple moves toField; listFrom: multiple moves fromField; fastMove: only one move(fast move)
+
 //		Log.i(TAG, "getFastMove(), mv1: " + mv1);
+
 		CharSequence fastMove = "";
 		CharSequence listFrom = "";
 		CharSequence prevMove = "";
@@ -632,7 +672,9 @@ public class ChessPosition
 		}
 		if (isPromo & (cntFrom == 1 | cntTo == 1))
 			isPromotion = true;
+
 //		Log.i(TAG, "fastMove, cntFrom, cntTo, isPromo, isPromotion: " + fastMove + ", " + cntFrom + ", " + cntTo + ", " + isPromo + ", " + isPromotion);
+
 		if(isPromotion)
 		{
 			fast_move = FAST_MOVE_PROMOTION_TO;
@@ -750,7 +792,9 @@ public class ChessPosition
 	//	Chess960 castling methods
 	public void chess960SetValues(int chess960ID)				
     {
+
 //		Log.i(TAG, "chess960SetValues(), chess960ID: " + chess960ID);
+
 		wK = "";
 		bK = "";
 		wRS = "";
@@ -795,8 +839,10 @@ public class ChessPosition
 			wLongCastC4aLan = "" + wK + wRL + "|" + wK + wRL;
 			bShortCastC4aLan = "" + bK + bRS + "|" + bK + bRS;
 			bLongCastC4aLan = "" + bK + bRL + "|" + bK + bRL;
+
 //			Log.i(TAG, "wShortCastC4aLan, wLongCastC4aLan: " + wShortCastC4aLan + ", " + wLongCastC4aLan);
 //			Log.i(TAG, "bShortCastC4aLan, bLongCastC4aLan: " + bShortCastC4aLan + ", " + bLongCastC4aLan);
+
 //		}
     }
 
@@ -862,7 +908,9 @@ public class ChessPosition
 		sqiHigh = kFrom;
 		if (kTo < kFrom) sqiLow = kTo;
 		if (kTo > kFrom) sqiHigh = kTo;
+
 //		Log.i(TAG, "sqiLow, sqiHigh: " + sqiLow + ", " + sqiHigh);
+
 		cpCastPosition.setStone(kFrom, 0);
 		for (int i = sqiLow; i <= sqiHigh; i++)
         {
@@ -899,7 +947,9 @@ public class ChessPosition
 		{
 			chess960FEN = "" + tmpList[0] + " " + tmpList[1] + " " + oldCast + " " + tmpList[3] + " " + tmpList[4] + " " + tmpList[5];
 		}
+
 //		Log.i(TAG, "chess960FEN: " + chess960FEN);
+
 		return chess960FEN;
 	}
 
@@ -932,9 +982,11 @@ public class ChessPosition
 				delBS = true;
 			if (move.subSequence(0, 2).equals(bRL) | move.subSequence(2, 4).equals(bRL))
 				delBL = true;
+
 			//karl, Shredder-FEN not supported in Chesspresso ?!
 //			char wK1 = wK.charAt(0);
 //			char bK1 = bK.charAt(0);
+
 			for (int i = 0; i < chess960OldCast.length(); i++)
 			{
 //				char cast = chess960OldCast.charAt(i);

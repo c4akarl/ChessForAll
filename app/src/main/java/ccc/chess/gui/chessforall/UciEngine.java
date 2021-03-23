@@ -909,7 +909,8 @@ public class UciEngine
         }
     }
 
-    private final static long guiUpdateInterval = 200;
+//    private final static long guiUpdateInterval = 200;
+    private final static long guiUpdateInterval = 400;
     private long lastGUIUpdate = 0;
 
     private void monitorLoop() {

@@ -58,12 +58,21 @@
             android:text="@string/startContinue" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_info"
+        style="@style/c4aTV1"
+        android:layout_above="@id/actions"
+        android:layout_alignParentStart="true"
+        android:maxLines="2"
+        android:layout_marginStart="@dimen/tv_color_margin_1"
+        android:text="Engine\nMatch" />
+
     <ScrollView
         android:id="@+id/gdScrollView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_above="@id/actions" >
+        android:layout_above="@id/tv_info" >
 
         <RelativeLayout android:id="@+id/rl1"
             android:layout_width="fill_parent"
@@ -145,67 +154,9 @@
                     android:layout_marginStart="@dimen/tv_color_margin_1" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_games"
-                android:layout_below="@id/eb"
-                style="@style/c4aTV1"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/tv_color_margin_1"
-                android:text="@string/qGameId" />
-            <EditText
-                android:id="@+id/et_games"
-                style="@style/c4aET1"
-                android:layout_below="@id/eb"
-                android:layout_alignTop="@id/tv_games"
-                android:layout_toEndOf="@id/tv_games"
-                android:layout_marginStart="@dimen/tv_color_margin_1"
-                android:onClick="myClickHandler"
-                android:inputType="number"
-                android:maxLength="3"
-                android:layout_width="40dip" />
-            <TextView
-                android:id="@+id/tv_result"
-                android:layout_below="@id/eb"
-                style="@style/c4aTV1"
-                android:layout_marginStart="@dimen/tv_color_margin_1"
-                android:layout_toEndOf="@id/et_games" />
-
-            <TextView
-                android:id="@+id/tv_event"
-                android:layout_below="@id/tv_games"
-                style="@style/c4aTV1"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/tv_color_margin_1"
-                android:text="@string/qEvent" />
-            <EditText
-                android:id="@+id/et_event"
-                style="@style/c4aET1"
-                android:layout_below="@id/tv_games"
-                android:onClick="myClickHandler"
-                android:layout_alignTop="@id/tv_event"
-                android:layout_toEndOf="@id/tv_event"
-                android:layout_marginStart="@dimen/tv_color_margin_1"
-                android:layout_width="fill_parent" />
-
-            <TextView
-                android:id="@+id/tv_site"
-                android:layout_below="@id/tv_event"
-                style="@style/c4aTV1"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="@dimen/tv_color_margin_1"
-                android:text="@string/qSite" />
-            <EditText
-                android:id="@+id/et_site"
-                android:layout_below="@id/tv_event"
-                style="@style/c4aET1"
-                android:onClick="myClickHandler"
-                android:layout_alignTop="@id/tv_site"
-                android:layout_toEndOf="@id/tv_site"
-                android:layout_width="fill_parent" />
-
             <CheckBox
                 android:id="@+id/cb_currentGame"
-                android:layout_below="@id/tv_site"
+                android:layout_below="@id/eb"
                 style="@style/c4aCB1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -237,20 +188,24 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="@dimen/tv_color_margin_1"
                 android:text="@string/fmLblPath" />
+
             <HorizontalScrollView
                 android:id="@+id/scroll_path"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/cb_saveGames"
                 android:layout_alignTop="@id/tv_path"
-                android:layout_toEndOf="@id/tv_path"
-                android:layout_toStartOf="@id/btn_pgn" >
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="9dp"
+                android:layout_toStartOf="@id/btn_pgn"
+                android:layout_toEndOf="@id/tv_path">
+
                 <TextView
                     android:id="@+id/et_path"
                     style="@style/c4aET1"
-                    android:maxLines = "1"
-                    android:onClick="myClickHandler"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:maxLines="1"
+                    android:onClick="myClickHandler" />
             </HorizontalScrollView>
 
             <ImageView
@@ -272,6 +227,7 @@
             <TextView
                 android:id="@+id/et_file"
                 style="@style/c4aET1"
+                android:layout_width="fill_parent"
                 android:onClick="myClickHandler"
                 android:clickable="false"
                 android:focusable="false"
@@ -279,7 +235,79 @@
                 android:layout_alignTop="@id/tv_file"
                 android:layout_toEndOf="@id/tv_file"
                 android:layout_toStartOf="@id/btn_pgn"
+                 />
+
+            <TextView
+                android:id="@+id/tv_event"
+                android:layout_below="@id/tv_file"
+                style="@style/c4aTV1"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/qEvent" />
+            <EditText
+                android:id="@+id/et_event"
+                style="@style/c4aET1"
+                android:layout_below="@id/tv_file"
+                android:onClick="myClickHandler"
+                android:layout_alignTop="@id/tv_event"
+                android:layout_toEndOf="@id/tv_event"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
                 android:layout_width="fill_parent" />
+
+            <TextView
+                android:id="@+id/tv_site"
+                android:layout_below="@id/tv_event"
+                style="@style/c4aTV1"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/qSite" />
+            <EditText
+                android:id="@+id/et_site"
+                android:layout_below="@id/tv_event"
+                style="@style/c4aET1"
+                android:onClick="myClickHandler"
+                android:layout_alignTop="@id/tv_site"
+                android:layout_toEndOf="@id/tv_site"
+                android:layout_width="fill_parent" />
+
+
+            <TextView
+                android:id="@+id/tv_round"
+                android:layout_below="@id/tv_site"
+                style="@style/c4aTV1"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/peRound" />
+            <EditText
+                android:id="@+id/et_round"
+                style="@style/c4aET1"
+                android:layout_below="@id/tv_site"
+                android:layout_toEndOf="@id/tv_round"
+                android:layout_alignTop="@id/tv_round"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:onClick="myClickHandler"
+                android:inputType="number"
+                android:maxLength="3"
+                android:layout_width="40dip" />
+
+            <TextView
+                android:id="@+id/tv_games"
+                android:layout_below="@id/tv_site"
+                style="@style/c4aTV1"
+                android:layout_toEndOf="@id/et_round"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:text="@string/qGameId" />
+            <EditText
+                android:id="@+id/et_games"
+                style="@style/c4aET1"
+                android:layout_below="@id/tv_site"
+                android:layout_alignTop="@id/tv_games"
+                android:layout_toEndOf="@id/tv_games"
+                android:layout_marginStart="@dimen/tv_color_margin_1"
+                android:onClick="myClickHandler"
+                android:inputType="number"
+                android:maxLength="3"
+                android:layout_width="40dip" />
 
         </RelativeLayout>
 
