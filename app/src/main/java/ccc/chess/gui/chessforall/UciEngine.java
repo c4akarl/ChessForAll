@@ -718,10 +718,6 @@ public class UciEngine
         return true;
     }
 
-    public final synchronized boolean engineStop() {
-        return engineState.toString().startsWith("STOP");
-    }
-
     public final synchronized boolean engineSearching() {
         switch (engineState) {
             case SEARCH:
@@ -909,6 +905,7 @@ public class UciEngine
         }
     }
 
+//    private final static long guiUpdateInterval = 100;
 //    private final static long guiUpdateInterval = 200;
     private final static long guiUpdateInterval = 400;
     private long lastGUIUpdate = 0;
@@ -1058,7 +1055,7 @@ public class UciEngine
                             parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves", Settings.MOVES_DEFAULT));
                         else
                             parseInfoCmd(tokens, userPrefs.getInt("user_options_enginePlay_PvMoves_land", Settings.MOVES_DEFAULT_LAND));
-                        engineStat = getInfoStat(statCurrDepth, statCurrSelDepth, statCurrMoveNr, statCurrMoveCnt, statCurrNodes, statCurrMove, searchRequest.fen);
+                        engineStat = getInfoStat(statCurrDepth, statCurrMoveNr, statCurrNodes, statCurrNps, statCurrMove, searchRequest.fen);
 
 //					Log.i(TAG, "engineStat: " + engineStat);
 
@@ -1102,7 +1099,12 @@ public class UciEngine
 
 //                    Log.i(TAG,  engineName + ": processEngineOutput(), engineState: " + engineState + ", isPV: " + isPV + ", engineMes: " + engineMes);
 
-                    if (!engineStat.equals("") && (isPV || s.contains(" mate ")))
+                    boolean isUpdate = false;
+                    long now = System.currentTimeMillis();
+                    if (now >= lastGUIUpdate + guiUpdateInterval)
+                        isUpdate = true;
+
+                    if (!engineStat.equals("") && (isUpdate || isPV || s.contains(" mate ")))
                     {
                         String engineMessage = "" + engineStat + engineMes + engineInfoString;
                         notifyGUI(searchRequest.engineId, searchRequest.searchId, engineMessage,  searchDisplayMoves.toString());
@@ -1164,7 +1166,7 @@ public class UciEngine
 
     }
 
-    CharSequence getInfoStat(int depth, int selDepth, int moveNumber, int moveNumberCnt, int nodes, CharSequence move, CharSequence fen)
+    CharSequence getInfoStat(int depth, int moveNumber, int nodes, int nps, CharSequence move, CharSequence fen)
     {
         CharSequence infoStat;
         if (engineState != EngineState.PONDER)
@@ -1174,10 +1176,12 @@ public class UciEngine
         CharSequence notation = cl.getNotationFromInfoPv(fen, move);
         notation = cl.history.getAlgebraicNotation(notation, userPrefs.getInt("user_options_gui_PieceNameId", 0));
         int nodesK = nodes / 1000;
-        String moveInfo = "";
-        if (moveNumberCnt > 0)
-            moveInfo = + moveNumber + "(" + moveNumberCnt + "): ";
-        infoStat = infoStat + ":  " + moveInfo + notation + "  d:" + depth + "/" + selDepth + "  n:" + nodesK + "k\n";
+        int nodesM = nodes / 1000000;
+        int npsK = nps / 1000;
+        if (nodesM >= 1)
+            infoStat = infoStat + ": " + notation + " d:" + depth + "/" + moveNumber + " n:" + nodesM + "M" + " nps:" + npsK + "K\n";
+        else
+            infoStat = infoStat + ": " + notation + " d:" + depth + "/" + moveNumber + " n:" + nodesK + "K" + " nps:" + npsK + "K\n";
         return infoStat;
     }
 

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -375,7 +374,7 @@ public class ComputerMatch extends Activity {
         }
         games = 10;
         round = 0;
-        matchId = userPrefs.getInt("user_play_eve_matchId", 0);
+        matchId = userPrefs.getInt("user_play_eve_matchId", 1);
         event = eventDefault;
         site = siteDefault;
         currentGame = userPrefs.getBoolean("user_play_eve_autoCurrentGame", false);
@@ -402,7 +401,7 @@ public class ComputerMatch extends Activity {
         round = Integer.parseInt (et_round.getText().toString());
         ed.putInt("user_play_eve_round", round);
         if (round == 0) {
-            matchId = userPrefs.getInt("user_play_eve_matchId", 0) +1;
+            matchId = userPrefs.getInt("user_play_eve_matchId", 1) +1;
             matchResult = "0-0";
             ed.putInt("user_play_eve_matchId", matchId);
         }
@@ -433,7 +432,7 @@ public class ComputerMatch extends Activity {
             return white + "\n" + getString(R.string.result) + ": " + matchResult;
     }
 
-    final String TAG = "ComputerMatch";
+//    final String TAG = "ComputerMatch";
     final static int ENGINE_AUTOPLAY_REQUEST_CODE = 50;
     final static int EDIT_UCI_OPTIONS = 51;
 
