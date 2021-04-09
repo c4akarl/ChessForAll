@@ -1438,6 +1438,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_btn_black.setOnClickListener(myViewListener);
 			d_btn_engine = playDialog.findViewById(R.id.btn_engine);
 			if (userPrefs.getBoolean("user_play_eve_engineVsEngine", true) && withMultiEngineMatch)
+//			if (userPrefs.getBoolean("user_play_eve_engineVsEngine", true))
 				d_btn_engine.setText(getString(R.string.play_engine) + " (2)");
 			else
 				d_btn_engine.setText(getString(R.string.play_engine) + " (1)");
@@ -1858,11 +1859,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			final int MENU_ENGINE_SELECT 		= 0;
 			final int MENU_ENGINE_UCI 			= 1;
-			final int MENU_ENGINE_SHUTDOWN 		= 3;
+//			final int MENU_ENGINE_MATCH			= 2;
+			final int MENU_ENGINE_SHUTDOWN 		= 9;
 			ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.drawer_list_item);
 			List<Integer> actions = new ArrayList<Integer>();
 			arrayAdapter.add(getString(R.string.menu_enginesettings_select));			actions.add(MENU_ENGINE_SELECT);
 			arrayAdapter.add(getString(R.string.menu_enginesettings_uciOptions));		actions.add(MENU_ENGINE_UCI);
+//			arrayAdapter.add(getString(R.string.app_computerMatch));					actions.add(MENU_ENGINE_MATCH);
 			arrayAdapter.add(getString(R.string.menu_enginesettings_shutdown));   		actions.add(MENU_ENGINE_SHUTDOWN);
 			final List<Integer> finalActions = actions;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
@@ -1882,6 +1885,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					case MENU_ENGINE_UCI:
 						startEditUciOptions(runP.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
 						break;
+//					case MENU_ENGINE_MATCH:
+////						ec.chessEnginePlayMod = 3;
+//						setPlayModBackground(dChessEnginePlayMod);
+//						stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
+//						restartPlayDialog = true;
+//						startActivityForResult(computerMatch, COMPUTER_MATCH);
+//						break;
 					case MENU_ENGINE_SHUTDOWN:
 						stopAllEnginesAndInit();
 						break;
@@ -3917,6 +3927,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 
 		boolean isSingleEngine =  ec.chessEnginePlayMod < 3 || ec.chessEnginePlayMod > 4 || (!withMultiEngineMatch && ec.chessEnginePlayMod == 3) || (!withMultiEngineAnalyse && ec.chessEnginePlayMod == 4);
+//		boolean isSingleEngine =  ec.chessEnginePlayMod < 3 || ec.chessEnginePlayMod > 4 || (!withMultiEngineAnalyse && ec.chessEnginePlayMod == 4);
 		if (isSingleEngine)
 			engineNames = getEngineList(runP.getString("run_engineProcess", OEX_DEFAULT_ENGINE_SINGLE));
 		else {

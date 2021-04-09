@@ -665,8 +665,16 @@ public class BoardView extends View
                             break;
                         case BoardView.ARROWS_BOOK:
                             colorFill = cv.getColor(cv.COLOR_ARROWS5_27);
-                            if (scoreArrows.size() > 0) {
-                                int score = Integer.parseInt(scoreArrows.get(i).toString());
+
+//                            if (scoreArrows.size() > 0) {
+                            if (scoreArrows.size() > 0 && i < scoreArrows.size()) {
+//                                int score = Integer.parseInt(scoreArrows.get(i).toString());
+                                int score = 0;
+                                try {
+                                    score = Integer.parseInt(scoreArrows.get(i).toString());
+                                }
+                                catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {  };
+
                                 size = 15;
                                 size = size + (95-size)*score/100;
                                 strokeWidth = 1;
