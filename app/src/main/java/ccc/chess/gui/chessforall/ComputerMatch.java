@@ -325,6 +325,9 @@ public class ComputerMatch extends Activity {
         if (fileIO.fileExists(path, file)) {
             String fileData = fileIO.dataFromFile(path, file, "[Event ", 9, 0L);    // last game
 
+            round = 0;
+            games = 10;
+
             if (fileData.equals(""))
                 return;
 

@@ -894,6 +894,9 @@ public class UciEngine
 
         if (startProcess()) {
             Thread engineMonitor = new Thread(this::monitorLoop);
+
+            engineMonitor.setPriority(Thread.MIN_PRIORITY);
+
             engineMonitor.start();
             writeLineToProcess("uci");
             engineState = EngineState.READ_OPTIONS;
@@ -911,6 +914,9 @@ public class UciEngine
     private long lastGUIUpdate = 0;
 
     private void monitorLoop() {
+
+//        android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
 
         while (true) {
 
