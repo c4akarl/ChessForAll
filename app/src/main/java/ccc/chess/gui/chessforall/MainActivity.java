@@ -212,6 +212,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		initDrawers();
 
+		starterIntent = getIntent();
 		fileManagerIntent = new Intent(this, FileManager.class);
 		gameDataIntent = new Intent(this, ChessGameData.class);
 		notationIntent = new Intent(this, ChessNotation.class);
@@ -576,13 +577,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //		Log.i(TAG, "onDestroy()");
 
-    	isAppEnd = true;
-    	stopTimeHandler(true);
-    	setInfoMessage("onDestroy", "", "");
-    	updateCurrentPosition("");
-    	setRunMoveHistory();
-    	setRunPrefs();
-     	wakeLock.release();
+		if (!isAppEnd) {
+			isAppEnd = true;
+			stopTimeHandler(true);
+			setInfoMessage("onDestroy", "", "");
+			updateCurrentPosition("");
+			setRunMoveHistory();
+			setRunPrefs();
+			wakeLock.release();
+		}
 
     	super.onDestroy();
 
@@ -728,8 +731,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //            Log.i(TAG, "2 startEditUciOptions(), engine.startProcess() OK !");
 
-			engine.writeLineToProcess("uci");
 			engine.engineState = UciEngine.EngineState.READ_OPTIONS;
+			engine.writeLineToProcess("uci");
 			engine.processAlive = engine.readUCIOptions();
 			if (engine.processAlive && !engine.uciOptions.equals("")) {
 
@@ -851,17 +854,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			switch (fileActionCode) 										// Load | Save | Delete
 			{
-				case 1: 														// Load
-					startActivityForResult(fileManagerIntent, fileActionCode);	// start FileManager - Activity(no GUI)
-					break;
-				case 2: 														// Save
+				case SAVE_GAME_REQUEST_CODE:
 					startSaveFile(gc.cl.history.createPgnFromHistory(1));		// saveFile(using class: FileIO)
 					break;
-				case 7: 														// Save(old game), Load(new game)
-				case 71: 														// Save(old game, MateAnalysis OK), Load(new game)
-				case 72: 														// Save(old game, MateAnalysis ERROR), Load(new game)
+				case SAVE_LOAD_GAME_REQUEST_CODE: 								// Save(old game), Load(new game)
+				case SAVE_OK_LOAD_GAME_REQUEST_CODE: 							// Save(old game, MateAnalysis OK), Load(new game)
+				case SAVE_ERROR_LOAD_GAME_REQUEST_CODE: 						// Save(old game, MateAnalysis ERROR), Load(new game)
+				case LOAD_GAME_REQUEST_CODE: 									// Load
 				default:
-					startActivityForResult(fileManagerIntent, fileActionCode);	// start FileManager - Activity(no GUI)
+					startActivityForResult(fileManagerIntent, fileActionCode);	// start FileManager
 					break;
 			}
 		}
@@ -911,11 +912,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		startActivityForResult(notationIntent, NOTATION_REQUEST_CODE);
 	}
 
-	public void startSaveGame(int displayActivity)
-	{
-		startFileManager(SAVE_GAME_REQUEST_CODE, displayActivity, 0);
-	}
-
 	public void setMatchValues()	// match (engine vs engine)
 	{
 		gc.cl.history.setGameTag("MatchId", Integer.toString(userPrefs.getInt("user_play_eve_matchId", 1)));
@@ -926,8 +922,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		String currentResult = userPrefs.getString("user_play_eve_result", "0-0");
 		currentResult = currentResult.replace("1/2", ".5");
+		currentResult = currentResult.replace("\u00BD", ".5");
+		currentResult = currentResult.replace("Â", "");
 		String[] currentSplit = currentResult.split("-");
 		String newResult = gc.cl.history.getGameTagValue("Result");
+		if (newResult.equals("*"))
+			newResult = "1/2-1/2";
 		newResult = newResult.replace("1/2", ".5");
 		String[] newSplit = newResult.split("-");
 		double wNewResult = Double.parseDouble(newSplit[0]);
@@ -945,10 +945,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				wResult = wResult + wNewResult;
 				bResult = bResult + bNewResult;
 			}
-			String newMatchResult = Double.toString(wResult) + "-" + Double.toString(bResult);
-			newMatchResult = newMatchResult.replace("0.5", "1/2");
+			String wResultString = Double.toString(wResult);
+			String bResultString = Double.toString(bResult);
+			if (wResultString.equals("0.5"))
+				wResultString = wResultString.replace("0.5", "\u00BD");
+			if (bResultString.equals("0.5"))
+				bResultString = bResultString.replace("0.5", "\u00BD");
+			String newMatchResult = wResultString + "-" + bResultString;
+			newMatchResult = newMatchResult.replace(".5", "\u00BD");
 			newMatchResult = newMatchResult.replace(".0", "");
-			newMatchResult = newMatchResult.replace(".5", "1/2");
+			newMatchResult = newMatchResult.replace("Â", "");
 
 //			Log.i(TAG, "setMatchValues(), newMatchResult: " + newMatchResult + ", gc.isBoardTurn: " + gc.isBoardTurn);
 
@@ -1437,20 +1443,17 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_btn_black = playDialog.findViewById(R.id.btn_black);
 			d_btn_black.setOnClickListener(myViewListener);
 			d_btn_engine = playDialog.findViewById(R.id.btn_engine);
-//			if (userPrefs.getBoolean("user_play_eve_engineVsEngine", true) && withMultiEngineMatch)
 			if (userPrefs.getBoolean("user_play_eve_engineVsEngine", true))
 				d_btn_engine.setText(getString(R.string.play_engine) + " (2)");
 			else
 				d_btn_engine.setText(getString(R.string.play_engine) + " (1)");
 			d_btn_engine.setOnClickListener(myViewListener);
 			d_btn_engine.setOnLongClickListener(arg0 -> {
-//				if (withMultiEngineMatch) {
-					dChessEnginePlayMod = 3;
-					setPlayModBackground(dChessEnginePlayMod);
-					stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
-					restartPlayDialog = true;
-					startActivityForResult(computerMatch, COMPUTER_MATCH);
-//				}
+				dChessEnginePlayMod = 3;
+				setPlayModBackground(dChessEnginePlayMod);
+				stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
+				restartPlayDialog = true;
+				startActivityForResult(computerMatch, COMPUTER_MATCH);
 				return true;
 			});
 
@@ -1752,7 +1755,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							startFileManager(LOAD_GAME_REQUEST_CODE, 1, 0);
 							break;
 						case MENU_PGN_SAVE:
-							startSaveGame(1);
+							startFileManager(SAVE_GAME_REQUEST_CODE, 1, 0);
 							break;
 						case MENU_PGN_DOWNLOAD:
 							startPgnDownload();
@@ -1886,7 +1889,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						startEditUciOptions(runP.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
 						break;
 					case MENU_ENGINE_MATCH:
-//						ec.chessEnginePlayMod = 3;
 						setPlayModBackground(dChessEnginePlayMod);
 						stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
 						restartPlayDialog = true;
@@ -2110,6 +2112,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						SharedPreferences.Editor edR = runP.edit();
 						edR.putString("run_engineProcess", items.get(item));
 						edR.commit();
+						SharedPreferences.Editor ed = userPrefs.edit();
+						ed.putBoolean("user_play_eve_engineVsEngine", false);
+						ed.apply();
 						if (restartPlayDialog) {
 							dRestartEngine = true;
 							showDialog(PLAY_DIALOG);
@@ -2232,11 +2237,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 			if (btnValue == 2)	// finish game
 			{
-				ec.chessEngineRound = userPrefs.getInt("user_play_eve_round", 0)	+ "." + userPrefs.getInt("user_play_eve_round", 0);
-				gc.cl.history.setGameTag("Round", ec.chessEngineRound.toString());
-				SharedPreferences.Editor ed = userPrefs.edit();
-				ed.putInt("user_play_eve_games", userPrefs.getInt("user_play_eve_round", 0));
-				ed.apply();
+				ec.chessEngineMatchFinishGame = true;
+				updateGui();
+			}
+			if (btnValue == 3)	// continue game
+			{
+
 			}
 		}
 	}
@@ -2979,9 +2985,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						gc.startPgn = gc.cl.history.createPgnFromHistory(1);
 						gc.startMoveIdx = gc.cl.history.getMoveIdx();
 						if (userPrefs.getBoolean("user_play_eve_autoCurrentGame", false)) {
-							setRunMoveHistory();
-							setTagDate();    // current date
+							if (userPrefs.getInt("user_play_eve_round", 0) == 0) {
+								ed.putString("user_play_eve_fen", (String) gc.cl.p_fen);
+							}
 						}
+						else
+							ed.putString("user_play_eve_fen", "");
+						ed.apply();
 						startEngineMatch();
 					}
 				}
@@ -3191,17 +3201,25 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			edR.putString("run_engineListMatch", userPrefs.getString("user_play_eve_white", "") + "|" + userPrefs.getString("user_play_eve_black", ""));
 			if((gameRound%2) == 0 && userPrefs.getBoolean("user_play_eve_autoFlipColor", true))
 				edR.putString("run_engineListMatch", userPrefs.getString("user_play_eve_black", "") + "|" + userPrefs.getString("user_play_eve_white", ""));
+			else {
+				if (gc.isChess960)
+					initPosition(false);
+			}
 			edR.apply();
 		}
 
 //		Log.i(TAG, "startEngineAutoplay(), file: " + gc.filePath + gc.fileName + ", gameRound: " + gameRound + "; games: " + games);
 
-		if (gameRound <= games) {
+		if (gameRound <= games && !ec.chessEngineMatchFinishGame) {
 			ed.putInt("user_play_eve_round", gameRound);
 			ed.apply();
 			ec.chessEngineRound = gameRound	+ "." + games;
 			ec.chessEngineEvent = userPrefs.getString("user_play_eve_event", "?");
 			ec.chessEngineSite = userPrefs.getString("user_play_eve_site", "?");
+			if (!userPrefs.getString("user_play_eve_fen", "").equals(""))
+				ec.chessEngineFen = userPrefs.getString("user_play_eve_fen", "");
+			else
+				ec.chessEngineFen = "";
 			cntChess960 = 0;
 			nextGameEngineAutoPlay();
 		}
@@ -3210,10 +3228,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			stopSearchAndContinue(EngineState.STOP_IDLE, "", true);
 			stopChessClock();
 			ec.chessEngineMatch = false;
+			ec.chessEngineMatchFinishGame = false;
 			edR.putBoolean("run_chessEngineAutoRun", false);
 			edR.apply();
 			setMatchResultToElo();
-			playSound(3, 0);
+			if (!ec.chessEngineMatch)
+				playSound(3, 0);
 
 //			Log.i(TAG, "startEngineAutoplay(), end of match");
 
@@ -3222,7 +3242,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			if (userPrefs.getBoolean("user_play_eve_engineVsEngine", true)) {
 				engineMatch = userPrefs.getString("user_play_eve_white", "") + " / " + userPrefs.getString("user_play_eve_black", "");
 			}
-			setInfoMessage(null, engineMatch + "\n" + getEngineMatchMessage() + "\n" + getString(R.string.matchEnd), null);
+			String matchId = "M" + userPrefs.getInt("user_play_eve_matchId", 1);
+			if (ec.chessEngineMatchFinishGame)
+				matchId = "E M" + userPrefs.getInt("user_play_eve_matchId", 1);
+			String gameId = "#" + userPrefs.getInt("user_play_eve_round", 0) + "(" + userPrefs.getInt("user_play_eve_games", 4) + ")";
+			String engineData = "..." + userPrefs.getString("user_play_eve_file", "") + ", " + matchId + ", " + gameId;
+			String engineResult = getString(R.string.result) + ": " + userPrefs.getString("user_play_eve_result", "0-0");
+			setInfoMessage(null, engineMatch + "\n" + engineData + "\n" + engineResult + "\n" + getString(R.string.matchEnd) , null);
 
 		}
 	}
@@ -3244,11 +3270,23 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 		else
 		{
-			gc.isGameOver = false;
-			gc.cl.history.setGameTag("Result", "*");
-			gc.cl.moveHistoryPrefs = moveHistoryP.getString("run_moveHistory", "");
-			getGameData(gc.fileBase, gc.filePath, gc.fileName, gc.startPgn, true, false, gc.startMoveIdx, true);
-			stopSearchAndRestart(false, true);
+			String fen = userPrefs.getString("user_play_eve_fen", "");
+
+//			Log.i(TAG, "nextGameEngineAutoPlay(), fen: " + fen);
+
+			gc.cl.newPosition("518", fen, "", "", "", "", "", "");
+			if (gc.cl.p_stat.equals("1")) {
+				gc.isGameOver = false;
+				gc.isGameUpdated = true;
+				gc.fen = gc.cl.p_fen;
+				if (gc.cl.p_chess960ID == 518)
+					gc.isChess960 = false;
+				else
+					gc.isChess960 = true;
+				setInfoMessage("", "", "");
+				updateGui();
+				stopSearchAndRestart(false, true);
+			}
 		}
 	}
 
@@ -3368,6 +3406,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //		Log.i(TAG, "stopSearchAndContinue(), ec.currentEngineId: " + ec.currentEngineId + ", ec.engineCnt: " + ec.engineCnt + ", stopAll: " + stopAll);
 //		Log.i(TAG, "stopSearchAndContinue(), engineState: " + engineState + ", fen: " + fen);
 
+		continueFen = "";
+
 		if (!fen.equals(""))
 			ec.initEngineMessages();
 
@@ -3389,7 +3429,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						else
 						{
 							if (engineState == EngineState.STOP_QUIT)
-								ec.uciEngines[i].shutDown();
+								shutDownEngine(i);
 						}
 					}
 				}
@@ -3419,6 +3459,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 			else {
 				if (!fen.equals("")) {
+
+//					Log.i(TAG, "1 IDLE, stopSearchAndContinue(), engineName: " + ec.uciEngines[ec.currentEngineId].engineName + "(" + ec.currentEngineId + ") ");
+
 					ec.uciEngines[ec.currentEngineId].engineState = EngineState.IDLE;
 					if (dSetClock)
 						initChessClock(tc, userPrefs.getInt("user_options_timeControl", 1), ec.chessEnginePlayMod);
@@ -3482,6 +3525,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			if (ec.uciEngines[ec.currentEngineId].engineSearching())
 				stopSearchAndContinue(EngineState.STOP_IDLE, "", true);
 			else {
+
+//				Log.i(TAG, "2 IDLE, stopComputerThinking(), engineName: " + ec.uciEngines[ec.currentEngineId].engineName + "(" + ec.currentEngineId + ") ");
+
 				ec.uciEngines[ec.currentEngineId].engineState = EngineState.IDLE;
 				setEnginePausePlayBtn(false, null);
 			}
@@ -3493,16 +3539,36 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
 		if (ec.uciEngines != null) {
 			if (ec.engineCnt == 1 && ec.uciEngines[ec.currentEngineId].engineState != EngineState.DEAD)
-				ec.uciEngines[ec.currentEngineId].shutDown();
+				shutDownEngine(ec.currentEngineId);
 			else {
 				if (ec.engineCnt > 0) {
 					for (int i = 0; i < ec.engineCnt; i++) {
 						if (ec.uciEngines[i] != null && ec.uciEngines[i].engineState != EngineState.DEAD)
-							ec.uciEngines[i].shutDown();
+							shutDownEngine(i);
 					}
 				}
 			}
 		}
+	}
+
+	public void shutDownEngine(int engineId)
+	{
+		if (ec.uciEngines[engineId] != null) {
+
+//			Log.i(TAG,  "1a shutDownEngine(), engineId: " + engineId + ", ec.uciEngines[engineId].engineMonitor: " + ec.uciEngines[engineId].engineMonitor);
+//			Log.i(TAG,  "1b shutDownEngine(), engineId: " + engineId + ", ec.uciEngines[engineId].process: " + ec.uciEngines[engineId].process);
+//			Log.i(TAG,  "1c shutDownEngine(), engineId: " + engineId + ", ec.uciEngines[engineId].reader: " + ec.uciEngines[engineId].reader);
+
+			ec.uciEngines[engineId].shutDown();
+			ec.uciEngines[engineId].engineName = "";
+
+			if (ec.uciEngines[engineId].process != null) {
+				ec.uciEngines[engineId].process.destroy();
+				ec.uciEngines[engineId].process = null;
+			}
+
+		}
+
 	}
 
 	public void getGameData(CharSequence fileBase, CharSequence filePath, CharSequence fileName,
@@ -3926,8 +3992,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		}
 
-//		boolean isSingleEngine =  ec.chessEnginePlayMod < 3 || ec.chessEnginePlayMod > 4 || (!withMultiEngineMatch && ec.chessEnginePlayMod == 3) || (!withMultiEngineAnalyse && ec.chessEnginePlayMod == 4);
 		boolean isSingleEngine =  ec.chessEnginePlayMod < 3 || ec.chessEnginePlayMod > 4 || (!withMultiEngineAnalyse && ec.chessEnginePlayMod == 4);
+		if (runP.getString("run_engineProcess", OEX_DEFAULT_ENGINE_SINGLE).equals(OEX_OLD_STOCKFISH)) {
+			SharedPreferences.Editor edR = runP.edit();
+			edR.putString("run_engineProcess", OEX_DEFAULT_STOCKFISH);
+			edR.commit();
+		}
 		if (isSingleEngine)
 			engineNames = getEngineList(runP.getString("run_engineProcess", OEX_DEFAULT_ENGINE_SINGLE));
 		else {
@@ -3989,39 +4059,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						ec.uciEngines[i].stopSearch(EngineState.STOP_MULTI_ENGINES_RESTART);
 						return;
 					} else
-						ec.uciEngines[i].shutDown();
+						shutDownEngine(i);
 					restartEngine();
 					return;
 				}
 			}
 		}
 
-	}
-
-	public String getEngineMatchNames()
-	{
-		String e0 = "";
-		String e1 = "";
-		if (ec.uciEngines == null)
-			return "";
-		else {
-			for (int i = 0; i < ec.engineCnt; i++) {
-				if (ec.uciEngines[i] != null) {
-					if (i == 0)
-						e0 = ec.uciEngines[i].uciEngineName;
-					if (i == 1)
-						e1 = ec.uciEngines[i].uciEngineName;
-				}
-			}
-		}
-		if (!e1.equals("")) {
-			if ((userPrefs.getInt("user_play_eve_round", 0) % 2 == 0))
-				return e1 + " / " + e0;
-			else
-				return e0 + " / " + e1;
-		}
-		else
-			return e0;
 	}
 
 	public synchronized ArrayList<String> getEngineList(String runPrefKey)
@@ -4162,8 +4206,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public CharSequence getEngineMatchMessage()
 	{
-		String matchId = "#" + userPrefs.getInt("user_play_eve_matchId", 1);
-		String games = "" + userPrefs.getInt("user_play_eve_round", 0) + "(" + userPrefs.getInt("user_play_eve_games", 4) + ")";
+		String matchId = "M" + userPrefs.getInt("user_play_eve_matchId", 1);
+		if (ec.chessEngineMatchFinishGame)
+			matchId = "E M" + userPrefs.getInt("user_play_eve_matchId", 1);
+		String games = "#" + userPrefs.getInt("user_play_eve_round", 0) + "(" + userPrefs.getInt("user_play_eve_games", 4) + ")";
 		String result = getString(R.string.result) + ": " + userPrefs.getString("user_play_eve_result", "0-0");
 		return matchId + ", " + games + ", " + result;
 	}
@@ -4441,6 +4487,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		else
 			tc.startChessClock(false, System.currentTimeMillis(), ec.chessEnginePlayMod);
 		engineControlTime = System.currentTimeMillis();
+		engineMatchControlTime = 0;
 		handlerChessClock.removeCallbacks(mUpdateChessClock);
 		handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
 		if (ec.chessEnginePlayMod == 5) {
@@ -4611,13 +4658,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	public void setInfoMessage(CharSequence info, CharSequence engineMsg, CharSequence moveNotification)
 	{
 
-//		Log.i(TAG, "3 getGameOverMessage(), ec.chessEnginePaused: " + ec.chessEnginePaused);
-
 		if ((gc.isGameOver | gc.cl.p_variationEnd))
 			info = getGameOverMessage();
 
 //		Log.i(TAG,"setInfoMessage()");
+
 //    	Log.i(TAG,"setInfoMessage()info: " + info + ", gc.isGameOver: " + gc.isGameOver + ", gc.cl.p_variationEnd: " + gc.cl.p_variationEnd);
+
 //    	Log.i(TAG,"setInfoMessage(), engineMsg: " + engineMsg);
 //    	Log.i(TAG,"engine: " + engine + ", pause_messageEngine:\n" + pause_messageEngine);
 //    	Log.i(TAG,"move notification: " + moveNotification);
@@ -5571,6 +5618,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		gc.cl.history.setGameTag("Round", ec.chessEngineRound.toString());
 		gc.cl.history.setGameTag("White", ec.chessEnginePlayerWhite.toString());
 		gc.cl.history.setGameTag("Black", ec.chessEnginePlayerBlack.toString());
+		if (!ec.chessEngineFen.toString().equals(""))
+			gc.cl.history.setGameTag("FEN", ec.chessEngineFen.toString());
 		updateCurrentPosition("");
 	}
 
@@ -5658,6 +5707,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		{
 			if (tc.clockIsRunning)
 			{
+
 				if (gc.isGameOver | gc.cl.p_variationEnd)
 				{
 					tc.stopChessClock(System.currentTimeMillis(), ec.chessEnginePlayMod);
@@ -5736,8 +5786,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		if (!ec.chessEngineMatch)
 		{
-			if (userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true) & ec.chessEnginesOpeningBook)
+			if (userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true) & ec.chessEnginesOpeningBook) {
+
+//				Log.i(TAG, "startSearchThread(), ec.chessEngineMatch: " + ec.chessEngineMatch + ", ec.chessEnginesOpeningBook: " + ec.chessEnginesOpeningBook);
+
 				setInfoMessage(getString(R.string.engine_openingBook), "", null);
+			}
 		}
 		ec.searchId++;
 		long now = System.currentTimeMillis();
@@ -5765,9 +5819,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			case 4:     // no time control
 				break;
 		}
-		//karl!!!???
-//		if (wTime < 1)	wTime = 100;
-//		if (bTime < 1)	bTime = 100;
 		if (wTime < 1)	wTime = 500;
 		if (bTime < 1)	bTime = 500;
 		int elo = ec.uciEngines[engineId].uciElo;
@@ -5784,46 +5835,38 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 		}
 
-		String bookMove = "";
-		if (ec.chessEnginePlayMod == 3)
-			tc.clockIsRunning = true;
+		ec.chessEnginesOpeningBook = false;
+
 		if 	(		userPrefs.getBoolean("user_options_enginePlay_OpeningBook", true)
-				& 	ec.chessEnginePlayMod != 4 & ec.uciEngines[engineId].engineState != EngineState.PONDER
-		)
+				&& 	ec.chessEnginePlayMod != 4
+				&& 	ec.uciEngines[engineId].engineState != EngineState.PONDER
+				&& 	!(ec.chessEngineMatch && userPrefs.getBoolean("user_play_eve_autoCurrentGame", false))
+			)
 		{
-			Move bm = null;
-			try { bm = ec.book.getBookMove(TextIO.readFEN(fen)); }
-			catch (ChessParseError e1) {e1.printStackTrace();}
-			if (bm != null)
+			String bookFen = getBookMoves(fen);
+			if (!bookFen.equals(""))
 			{
-				if (ec.chessEnginePlayMod == 3)
-					tc.clockIsRunning = false;
-				ec.chessEnginesOpeningBook = true;
+				fen = bookFen;
+				if (ec.engineCnt == 2) {
+					if (gc.getValueFromFen(fen, 2).equals("w"))
+						engineId = 0;
+					else
+						engineId = 1;
+				}
+				if (!ec.chessEngineMatch)
+					playSound(1, 0);
 				if (!tc.clockIsRunning & ec.chessEnginePlayMod == 1)
 					startChessClock();
-				bookMove =  bm.toString();
-				if (!bookMove.equals("")) {
+				if (ec.chessEnginePlayMod != 3)
+					ec.chessEnginesOpeningBook = true;
+				setEnginePausePlayBtn(true, null);
+				ec.uciEngines[engineId].engineState = EngineState.IDLE;
+				chessEngineSearch(engineId, fen, "", "");
 
-//					Log.i(TAG, "1 startSearchThread(), bookMove: " + bookMove + ", engineState: " + ec.uciEngines[engineId].engineState);
+				return;
 
-					if (ec.chessEnginePlayMod == 1 || ec.chessEnginePlayMod == 2 || ec.chessEnginePlayMod == 3)
-						ec.uciEngines[engineId].engineState = EngineState.BOOK;
-					handleSearchResult(ec.currentEngineId, fen, bookMove, "");
-
-					return;
-
-				}
 			}
-
-//			Log.i(TAG, "2 startSearchThread(), bookMove: " + bookMove + ", engineState: " + ec.uciEngines[engineId].engineState + ", ec.chessEnginesOpeningBook: " + ec.chessEnginesOpeningBook);
-
-			if (ec.chessEnginesOpeningBook)
-				playSound(1, 0);
-			ec.chessEnginesOpeningBook = false;
-
 		}
-		else
-			ec.chessEnginesOpeningBook = false;
 
 		if (!tc.clockIsRunning | ec.chessEnginePlayMod == 4)
 		{
@@ -5841,13 +5884,52 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		UciEngine.SearchRequest sr = UciEngine.SearchRequest.searchRequest(
 			ec.uciEngines[engineId].engineId, ec.searchId, now,
-			fen, moves, startFen, gc.cl.p_chess960ID, firstMove, bookMove,
+			fen, moves, startFen, gc.cl.p_chess960ID, firstMove, "",
 			drawOffer, isSearch, isAnalyze,
 			wTime, bTime, wInc, bInc, movesToGo, moveTime,
 			isGoPonder, ponderMove,
 			ec.uciEngines[engineId].engineName, elo);
 
 		ec.uciEngines[engineId].startSearch(sr);
+
+	}
+
+	String getBookMoves(String fen) {
+
+		String bookMove;
+		String newFen = "";
+		String loopFen = fen;
+		boolean looping = true;
+
+		while(looping)
+		{
+
+			Move bm = null;
+			try { bm = ec.book.getBookMove(TextIO.readFEN(loopFen));	}
+			catch (ChessParseError e1) { looping = false; }
+			if (bm != null) {
+				bookMove = bm.toString();
+				if (!bookMove.equals("")) {
+					loopFen = (String) chessEngineGui(loopFen, bookMove, false);
+					if (!loopFen.equals("")) {
+						newFen = (String) loopFen;
+					}
+					else
+						looping = false;
+				}
+			}
+			else
+				looping = false;
+
+			if (ec.chessEnginePlayMod != 3)
+				looping = false;
+
+		}
+
+		if (!newFen.equals(""))
+			updateGui();
+
+		return newFen;
 
 	}
 
@@ -5975,7 +6057,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 		}
 	}
 
-	public CharSequence chessEngineGui(CharSequence taskFen, CharSequence bestMove)
+	public CharSequence chessEngineGui(CharSequence taskFen, CharSequence bestMove, boolean isUpdate)
 	{
 
 //		Log.i(TAG, "chessEngineGui(), taskFen: " + taskFen + "    bestMove: " + bestMove);
@@ -5999,12 +6081,15 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			if (ec.chessEnginePlayMod != 3)
 				ec.chessEngineSearching = false;
 			gc.setGameOver(gc.cl.history.getGameTagValue("Result"));
-			updateGui();
+
+			if (isUpdate)
+				updateGui();
+
+			newFen = gc.cl.p_fen;
 
 			if (gc.isGameOver)
 				return "";
 
-			newFen = gc.cl.p_fen;
 			gc.move = "";
 		}
 		else
@@ -6012,13 +6097,38 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			gc.cl.p_fen = "";
 			gc.cl.p_color = "";
 
-			updateGui();
+			if (isUpdate)
+				updateGui();
+
 		}
 
 //		Log.i(TAG, "2 chessEngineGui(), updateGui(), taskFen: " + taskFen + "    gc.cl.p_stat: " + gc.cl.p_stat);
 
 		return newFen;
 	}
+
+	//???
+//	public boolean isAutoDraw(int engineId, CharSequence fen)
+//	{
+//		String moveNo = (String) gc.getValueFromFen(fen, 6);
+//		int moves;
+//		try { moves = Integer.parseInt(moveNo); }
+//		catch 	(NumberFormatException e) { return false; }
+//		if (moves >= 50)
+//		{
+//			if (ec.uciEngines[engineId].bestScoreDrawCnt >= 5)
+//			{
+//
+//				Log.i(TAG, "isAutoDraw(), bestScoreDrawCnt: " + ec.uciEngines[engineId].bestScoreDrawCnt);
+//
+//				ec.uciEngines[engineId].bestScoreDrawCnt = 0;
+//				return true;
+//			}
+//		}
+//		else
+//			ec.uciEngines[engineId].bestScoreDrawCnt = 0;
+//		return false;
+//	}
 
 	public CharSequence getDisplayScore(int score, CharSequence fen)
 	{
@@ -6660,7 +6770,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				setInfoMessage(getString(R.string.cl_gameOver) + " (" + getString(R.string.cl_stealmate) + ")", null, null);
 			if (gc.cl.p_auto_draw)
 				setInfoMessage(getString(R.string.cl_gameOver) + " (" + getString(R.string.cl_draw) + ")", null, null);
-			playSound(3, 0);
+			if (!ec.chessEngineMatch)
+				playSound(3, 0);
 			return true;
 		}
 		else
@@ -6732,13 +6843,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	void handleEngineInitialized(int engineId) {
 		if (gc.isChess960 && !ec.uciEngines[engineId].uciOptions.contains("UCI_Chess960")) {
-//			MainActivity.this.runOnUiThread(() -> updateGui());
-//			MainActivity.this.runOnUiThread(() -> setInfoMessage(getString(R.string.engine_paused), null, null));
 			updateGui();
 			setInfoMessage(getString(R.string.engine_paused), null, null);
 			msgC4aDialog = getString(R.string.chess960NotSupprted) + "\n\nEngine: " + ec.uciEngines[engineId].uciEngineName;
-//			MainActivity.this.runOnUiThread(() -> removeDialog(C4A_DIALOG));
-//			MainActivity.this.runOnUiThread(() -> showDialog(C4A_DIALOG));
 			removeDialog(C4A_DIALOG);
 			showDialog(C4A_DIALOG);
 			return;
@@ -6756,13 +6863,11 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 				if (ec.chessEnginePlayMod == 4) {
 					ec.setPlayData(userPrefs, gc.cl.history.getGameTagValue("White"), gc.cl.history.getGameTagValue("Black"));
-//					MainActivity.this.runOnUiThread(() -> updateGui());
 					updateGui();
 					ec.chessEnginePaused = false;
 					ec.chessEngineInit = false;
 					displayMoves = null;
 					ec.chessEngineSearching = true;
-//					MainActivity.this.runOnUiThread(() -> chessEngineSearch(engineId, gc.fen, "", ""));
 					chessEngineSearch(engineId, gc.fen, "", "");
 				}
 
@@ -6777,8 +6882,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						gc.cl.history.setGameTag("White", ec.chessEnginePlayerWhite.toString());
 						gc.cl.history.setGameTag("Black", ec.chessEnginePlayerBlack.toString());
 						ec.setStartPlay(ec.currentEngineId, gc.getValueFromFen(gc.fen, 2));
-//						MainActivity.this.runOnUiThread(() -> updateGui());
-//						MainActivity.this.runOnUiThread(() -> startEnginePlayIsReady(true));
 						updateGui();
 						startEnginePlayIsReady(true);
 					}
@@ -6803,16 +6906,36 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	void handleSearchResult(int engineId, String fen, String bestmove, String ponderMove) {
 
-//		Log.i(TAG, "1 handleSearchResult(), engineId: " + engineId + ", engineState: " + ec.uciEngines[engineId].engineState + ", fen: " + fen + ", bestmove: " + bestmove + ". ponderMove: " + ponderMove);
+		if (ec.uciEngines[engineId] == null) {
 
-		if (ec.uciEngines[engineId] == null)
+//			Log.i(TAG, "handleSearchResult(), engineId: " + engineId + ", NULL");
+
 			return;
+		}
+
+		continueFen = "";
+
+		ec.uciEngines[engineId].engineState = EngineState.IDLE;
+
+//		Log.i(TAG, "handleSearchResult(), engineId: " + engineId + ", engineState: " + ec.uciEngines[engineId].engineState + ", fen: " + fen + ", bestmove: " + bestmove + ". ponderMove: " + ponderMove);
 
 		setEnginePausePlayBtn(true, null);
 
-		CharSequence newFen = chessEngineGui(fen, bestmove);
+		CharSequence newFen = chessEngineGui(fen, bestmove, true);
 
 //		Log.i(TAG, "2 handleSearchResult(), engineId: " + engineId + ", newFen: " + newFen);
+
+		if (ec.chessEngineMatchError) {
+			newFen = "";
+			gc.isGameOver = true;
+			gc.cl.history.setGameTag("Result", "1/2-1/2");
+		}
+
+		//karl???
+//		if (isAutoDraw(engineId, fen)) {
+//			newFen = "";
+//			gc.cl.p_auto_draw = true;
+//		}
 
 		if (!newFen.equals(""))
 		{
@@ -6829,43 +6952,95 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					ec.chessEngineSearching = true;
 
 //					Log.i(TAG, "handleSearchResult(), bestmove: " + bestmove + ", newFen: " + newFen);
+//					Log.i(TAG, "handleSearchResult(), engineId: " + engineId + ", bestmove: " + bestmove + ", newFen: " + newFen);
 
-					int currenttEngineId = ec.currentEngineId;
-					int nextEngineId = 0;
+					int handleEngineId = ec.currentEngineId;
 					if (ec.currentEngineId == 0)
-						nextEngineId = 1;
-
-					if (ec.uciEngines[engineId].engineState != EngineState.BOOK)
-						playSound(1, 0);
+						ec.setCurrentEngineId(1);
 					else
-						ec.uciEngines[engineId].engineState = EngineState.IDLE;
+						ec.setCurrentEngineId(0);
+					if (ec.engineCnt == 1)
+						ec.setCurrentEngineId(0);
+
+//					Log.i(TAG, "1 handleSearchResult(), ec.currentEngineId: " + ec.currentEngineId + ", newFen: " + newFen);
 
 					if (		userPrefs.getBoolean("user_options_enginePlay_Ponder", false)
-							&& !ponderMove.equals("")
 							&& 	ec.engineCnt == 2)
 					{
-						isGoPonder = true;
-						ec.uciEnginesMessage[currenttEngineId] = "";
-						chessEngineSearch(currenttEngineId, newFen, "", ponderMove);				// "go ponder"
-						ec.setCurrentEngineId(nextEngineId);
-						ec.uciEnginesMessage[nextEngineId] = "";
 
-//						Log.i(TAG, "1 handleSearchResult(), --> applyPonderhit() ???");
-
-						if (ec.uciEngines[nextEngineId].applyPonderhit(bestmove, newFen.toString())) {     // "ponderhit"
-
-//							Log.i(TAG, "2 handleSearchResult(), !applyPonderhit() --> stopSearchAndContinue()");
-
-							stopSearchAndContinue(EngineState.STOP_CONTINUE, newFen, false);        // "stop" & "go" (search)
+						if (!ponderMove.equals("")) {
+							isGoPonder = true;
+							ec.uciEnginesMessage[handleEngineId] = "";
+							chessEngineSearch(handleEngineId, newFen, "", ponderMove);                // "go ponder"
 						}
+
+						ec.setCurrentEngineId(ec.currentEngineId);
+						ec.uciEnginesMessage[ec.currentEngineId] = "";
+
+//						Log.i(TAG, "2 handleSearchResult(), --> applyPonderhit() ??? ec.currentEngineId: " + ec.currentEngineId + ", engineState: " + ec.uciEngines[ec.currentEngineId].engineState);
+
+						if (ec.uciEngines[ec.currentEngineId].engineState == EngineState.PONDER)
+						{
+							if (ec.uciEngines[ec.currentEngineId].applyPonderhit(bestmove, newFen.toString())) {     // !"ponderhit"
+
+//								Log.i(TAG, "3 handleSearchResult(), !applyPonderhit() --> stopSearchAndContinue(), ec.currentEngineId: " + ec.currentEngineId + ", engineState: " + ec.uciEngines[ec.currentEngineId].engineState);
+
+								if (ec.uciEngines[ec.currentEngineId].engineSearching()) {
+									continueFen = newFen;
+									ec.uciEngines[ec.currentEngineId].stopSearch(EngineState.STOP_CONTINUE);
+								}
+								else
+								{
+									ec.uciEngines[ec.currentEngineId].engineState = EngineState.IDLE;
+									chessEngineSearch(ec.currentEngineId, newFen, "", "");
+									ec.chessEngineSearching = true;
+								}
+
+							}
+						}
+						else
+						{
+							if (ec.uciEngines[ec.currentEngineId].engineState == EngineState.IDLE) {
+
+//								Log.i(TAG, "4 handleSearchResult(), !PONDER, IDLE, ec.currentEngineId: " + ec.currentEngineId + ", engineState: " + ec.uciEngines[ec.currentEngineId].engineState);
+
+								ec.chessEngineSearching = true;
+								chessEngineSearch(ec.currentEngineId, newFen, "", "");
+							}
+							else {
+
+//								Log.i(TAG, "5 handleSearchResult(), !PONDER, !IDLE, ec.currentEngineId: " + ec.currentEngineId + ", engineState: " + ec.uciEngines[ec.currentEngineId].engineState);
+//								Log.i(TAG, "5 handleSearchResult(), !PONDER, !IDLE, searchRequest.fen: " + ec.uciEngines[ec.currentEngineId].searchRequest.fen + ", gc.cl.p_fen: " + gc.cl.p_fen);
+
+								if (!(ec.uciEngines[ec.currentEngineId].engineState == EngineState.SEARCH && ec.uciEngines[ec.currentEngineId].searchRequest.fen.equals(gc.cl.p_fen))) {
+
+//									Log.i(TAG, "6 handleSearchResult(), fen?, STOP_QUIT: " + ec.currentEngineId + ", engineState: " + ec.uciEngines[ec.currentEngineId].engineState);
+
+									stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
+									setEnginePausePlayBtn(false, null);
+
+								}
+
+							}
+
+						}
+
+						engineControlTime = System.currentTimeMillis();
+						handlerChessClock.removeCallbacks(mUpdateChessClock);
+						handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
+
+						updateGui();
+
+						return;
+
 					}
 					else {
 						isGoPonder = false;
 						if (ec.engineCnt == 2) {
-							ec.setCurrentEngineId(nextEngineId);
-							ec.uciEnginesMessage[currenttEngineId] = "";
-							ec.uciEnginesMessage[nextEngineId] = "";
-							ec.uciEngines[nextEngineId].ponderMove = "";
+							ec.setCurrentEngineId(ec.currentEngineId);
+							ec.uciEnginesMessage[handleEngineId] = "";
+							ec.uciEnginesMessage[ec.currentEngineId] = "";
+							ec.uciEngines[ec.currentEngineId].ponderMove = "";
 						}
 						else
 							ec.setCurrentEngineId(0);
@@ -6878,7 +7053,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				else
 				{
 
-//					Log.i(TAG, "3 handleSearchResult(), --> stopSearchAndContinue()");
+//					Log.i(TAG, "9 handleSearchResult(), GameOver !!!");
 
 					stopSearchAndContinue(EngineState.STOP_IDLE, "", true);
 					ec.chessEnginePaused = true;
@@ -6907,7 +7082,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 			)
 			{
-				playSound(1, 0);
+				if (!ec.chessEngineMatch)
+					playSound(1, 0);
 				enginePlayPonder(newFen);
 
 //				Log.i(TAG, "4 handleSearchResult(), engineId: " + engineId + ", newFen: " + newFen);
@@ -6925,9 +7101,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			engineControlTime = System.currentTimeMillis();
 			handlerChessClock.removeCallbacks(mUpdateChessClock);
 			handlerChessClock.postDelayed(mUpdateChessClock, CLOCK_START);
-			ec.uciEngines[engineId].engineState = EngineState.IDLE;
 
-//			Log.i(TAG, "6 handleSearchResult(), updateGui(), engineId: " + engineId + ", newFen: " + newFen);
+//			Log.i(TAG, "4 IDLE, handleSearchResult(), engineName: " + ec.uciEngines[ec.currentEngineId].engineName + "(" + ec.currentEngineId + ") ");
+
+			ec.uciEngines[engineId].engineState = EngineState.IDLE;
 
 			updateGui();
 
@@ -6938,15 +7115,32 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //				Log.i(TAG, "handleSearchResult(), ec.chessEngineMatch, gameOver: " + gc.isGameOver);
 
-				if (gc.isGameOver
-						| gc.cl.p_variationEnd | gc.cl.p_mate | gc.cl.p_stalemate | gc.cl.p_auto_draw
-				) {
-					setMatchValues();
-					if (userPrefs.getBoolean("user_play_eve_autoSave", true)) {
-						startSaveGame(0);    // >>> onActivityResult(), SAVE_GAME_REQUEST_CODE
+				if (gc.isGameOver | gc.cl.p_variationEnd | gc.cl.p_mate | gc.cl.p_stalemate | gc.cl.p_auto_draw)
+				{
+					updateGui();
+					if (!ec.chessEngineMatchError)
+						setMatchValues();
+					//karl???
+//					if (userPrefs.getBoolean("user_play_eve_autoSave", true)) {
+					if (userPrefs.getBoolean("user_play_eve_autoSave", true) && !ec.chessEngineMatchError) {
+						startFileManager(SAVE_GAME_REQUEST_CODE, 0, 0);
 					}
-					else
-						startEngineMatch();
+					else {
+						if (ec.chessEngineMatchError)
+							nextGameEngineAutoPlay();
+						else
+							startEngineMatch();
+					}
+					ec.chessEngineMatchError = false;
+				}
+				else
+				{
+
+//					Log.i(TAG, "handleSearchResult(), newFen.equals SPACE, engineId: " + engineId + ", fen: " + fen);
+
+					setInfoMessage("move error (2)", null, null);
+					nextGameEngineAutoPlay();
+
 				}
 			}
 			else {
@@ -6972,6 +7166,46 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			return;
 		if (ec.uciEngines[engineId] == null)
 			return;
+
+		//karl?! time 0.00 --> "stop"
+		if (ec.chessEnginePlayMod == 3 && ec.chessEngineMatch)
+		{
+			if (tc.timeWhite > 0 && tc.timeBlack > 0)
+				engineMatchControlTime = System.currentTimeMillis();
+			else
+			{
+				if (System.currentTimeMillis() - engineMatchControlTime >= 5000 && engineMatchControlTime != 0)
+				{
+
+//					Log.i(TAG, "handleEngineMessages(), time = 0.00, --> startActivity(starterIntent), engineId: " + engineId + ", engineState: " + ec.uciEngines[engineId].engineState);
+
+					shutDownEngines();
+
+					isAppEnd = true;
+					stopTimeHandler(true);
+					setInfoMessage("onDestroy", "", "");
+					updateCurrentPosition("");
+					setRunMoveHistory();
+					setRunPrefs();
+
+					finish();
+					startActivity(starterIntent);
+
+					//karl!!! TEST
+//					playSound(2, 3);
+
+					return;
+
+				}
+			}
+		}
+
+		if (uciEnginesMessage[engineId].equals("INFO SPACE")) {
+
+//			Log.i(TAG, "handleEngineMessages(), INFO SPACE, engineId: " + engineId + ", engineState: " + ec.uciEngines[engineId].engineState);
+
+			return;
+		}
 
 		String engineUpdate = "";
 		String engineMes = "";
@@ -7001,7 +7235,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //				Log.i(TAG, "7 getGameOverMessage()");
 
-				playSound(3, 0);
+				if (!ec.chessEngineMatch)
+					playSound(3, 0);
 				setInfoMessage("   " + getGameOverMessage(), engineMes, engineUpdate);
 
 			}
@@ -7019,8 +7254,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //				Log.i(TAG, "handleEngineMessages(), ec.chessEnginesOpeningBook: " + ec.chessEnginesOpeningBook);
 
-				if (!ec.chessEngineMatch)
+				if (!ec.chessEngineMatch) {
+
+//					Log.i(TAG, "handleEngineMessages(), ec.chessEnginesOpeningBook: " + ec.chessEnginesOpeningBook + ", ec.chessEngineMatch: " + ec.chessEngineMatch);
+
 					setInfoMessage(getString(R.string.engine_openingBook), "", engineUpdate);
+				}
 			}
 			else
 			{
@@ -7081,15 +7320,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	void handleStop(int engineId, UciEngine.EngineState engineState, String fen, String bestmove) {
 
+//		Log.i(TAG, "1 handleStop(), engineId: " + engineId + ", engineState: " + engineState + ", fen: " + fen + ", bestmove: " + bestmove);
+//		Log.i(TAG, "handleStop(), engineName: " + ec.uciEngines[ec.currentEngineId].engineName + "(" + engineId + "), engineState: " + engineState + ", fen: " + fen + ", bestmove: " + bestmove);
+
 		if (ec.uciEngines == null)
 			return;
-
-//		Log.i(TAG, "1 handleStop(), engineId: " + engineId + ", engineState: " + engineState + ", fen: " + fen + ", bestmove: " + bestmove);
 
 		switch (engineState) {
 			case STOP_MOVE: {
                 setEnginePausePlayBtn(false, null);
-                chessEngineGui(fen, bestmove);
+                chessEngineGui(fen, bestmove, true);
                 stopChessClock();
                 updateCurrentPosition("");
 			}
@@ -7102,13 +7342,13 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						ec.analysisEngineBestMove = bestmove;
 					if (ec.analysisEngineCnt >= ec.engineCnt) {
 						playSound(1, 0);
-						newFen = chessEngineGui(fen, ec.analysisEngineBestMove);
+						newFen = chessEngineGui(fen, ec.analysisEngineBestMove, true);
 						engineSearchAnalysis(newFen);
 					}
 				}
 				else
 				{
-					newFen = chessEngineGui(fen, bestmove);
+					newFen = chessEngineGui(fen, bestmove, true);
 
 					if (newFen.equals("")) {
 
@@ -7142,28 +7382,16 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 						startChessClock();
 						isGoPonder = false;
-						playSound(1, 0);
+						if (!ec.chessEngineMatch)
+							playSound(1, 0);
 						ec.chessEngineSearching = true;
+
+//						Log.i(TAG, "5 IDLE, handleStop(), engineName: " + ec.uciEngines[ec.currentEngineId].engineName + "(" + ec.currentEngineId + ") ");
+
 						ec.uciEngines[engineId].engineState = EngineState.IDLE;
 
-						if (ec.chessEnginePlayMod == 3 && ec.engineCnt == 2) {
-							int nextEngineId;
-							if (engineId == 0)
-								nextEngineId = 1;
-							else
-								nextEngineId = 0;
-							ec.setCurrentEngineId(nextEngineId);
-							if (ec.uciEngines[nextEngineId].applyPonderhit(bestmove, newFen.toString())) {     // "ponderhit"
+						chessEngineSearch(engineId, newFen, "", "");
 
-//								Log.i(TAG, "4 handleStop(), !applyPonderhit(), engineId: " + engineId + ", nextEngineId: " + nextEngineId);
-
-								stopSearchAndContinue(EngineState.STOP_CONTINUE, newFen, false);        // "stop" & "go" (search)
-							}
-						}
-						else
-						{
-							chessEngineSearch(engineId, newFen, "", "");
-						}
 					}
 				}
 			}
@@ -7179,6 +7407,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
                 startChessClock();
                 updateGui();
                 isGoPonder = false;
+
+//				Log.i(TAG, "6 IDLE, handleStop(), engineName: " + ec.uciEngines[ec.currentEngineId].engineName + "(" + ec.currentEngineId + ") ");
+
 				ec.uciEngines[engineId].engineState = EngineState.IDLE;
                 if ((ec.chessEnginePlayMod == 1 || ec.chessEnginePlayMod == 2) && isPlayerMove(ec.chessEnginePlayMod, gc.getValueFromFen(continueFen, 2)))
                     enginePlayPonder(continueFen);
@@ -7238,7 +7469,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 //				Log.i(TAG, "1 handleStop(), STOP_MULTI_ENGINES_RESTART, engineId: " + engineId);
 
-				ec.uciEngines[engineId].shutDown();
+				shutDownEngine(engineId);
 
 				if (engineId >= ec.engineCnt -1) {
 
@@ -7255,7 +7486,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							ec.uciEngines[i].stopSearch(EngineState.STOP_MULTI_ENGINES_RESTART);
 							return;
 						} else
-							ec.uciEngines[i].shutDown();
+							shutDownEngine(i);
 					}
 				}
 			}
@@ -7311,8 +7542,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			}
 			else
 				showGameCount = "";
-
-
 			if (ec.chessEngineSearching)
 			{
 				if (!ec.chessEnginePaused)
@@ -7515,7 +7744,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	}
 
-	public void initPosition(Boolean isStandard, int playMod)
+	public void initPosition(Boolean isStandard)
 	{
 		Random r;
 		int ir = 518;
@@ -7767,12 +7996,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (v.getId() == R.id.btn_standard) {
 						dNewGame = true;
 						gc.isChess960 = false;
-						initPosition(true, dChessEnginePlayMod);
+						initPosition(true);
 					}
 					if (v.getId() == R.id.btn_chess960) {
 						dNewGame = true;
 						gc.isChess960 = true;
-						initPosition(false, dChessEnginePlayMod);
+						initPosition(false);
 					}
 					gc.isGameLoaded = false;
 					msgEngine.setVisibility(TextView.GONE);
@@ -7880,8 +8109,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	final long CLOCK_DELAY = 500;
 
 	public final static String OEX_DEFAULT_ENGINE_SINGLE = "Rodent IV 0.32 CfA";
-	public final static String OEX_DEFAULT_ENGINES_MATCH = "Rodent IV 0.32 CfA|Stockfish 11 CfA";
-	public final static String OEX_DEFAULT_ENGINES_ANALYSIS = "Rodent IV 0.32 CfA|Stockfish 11 CfA";
+	public final static String OEX_OLD_STOCKFISH = "Stockfish 11 CfA";
+	public final static String OEX_DEFAULT_STOCKFISH = "Stockfish 13 CfA";
+	public final static String OEX_DEFAULT_ENGINES_MATCH = "Rodent IV 0.32 CfA|Stockfish 13 CfA";
+	public final static String OEX_DEFAULT_ENGINES_ANALYSIS = "Rodent IV 0.32 CfA|Stockfish 13 CfA";
 
 	private static final int PERMISSIONS_REQUEST_CODE = 50;
 	private enum PermissionState {
@@ -7932,6 +8163,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	private HashMap<Integer, Integer> soundsMap;
 
 	//	subActivities intents
+	Intent starterIntent;
 	Intent fileManagerIntent;
 	Intent gameDataIntent;
 	Intent notationIntent;
@@ -8056,6 +8288,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	CharSequence scoreMoves = null;
 
 	long engineControlTime = 0;
+	long engineMatchControlTime = 0;
 
 	int cntChess960 = 0;
 
@@ -8094,6 +8327,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	String queryControl = "w";
 	String internEngineName = "";
 	String downloadErrorMessage = "";
+	String prevSearchFen = "";
+	String prevSearchMove = "";
 
 	Bitmap imageHuman = null;
 	Bitmap imageComputer = null;
@@ -8199,9 +8434,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	//karl --> test settings
 //	boolean fileActions = true;		// sdk >= 30
 	boolean fileActions = false;
-
-//	final static boolean withMultiEngineMatch = false;
-//	final static boolean withMultiEngineMatch = true;
 
 	final static boolean withMultiEngineAnalyse = false;
 //	final static boolean withMultiEngineAnalyse = true;

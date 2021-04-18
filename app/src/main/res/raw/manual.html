@@ -7,7 +7,9 @@
 
 
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><big style="font-weight: bold;"><big>Chess For All&nbsp; 2.33</big></big><h3>Operating hints</h3>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><big style="font-weight: bold;"><big>Chess For All&nbsp; 2.36</big></big><h3>Operating hints</h3>
 <span style="font-style: italic;">Main menu</span>:&nbsp;Wipe&nbsp;from the left edge to the right<br>
 <br>
 <span style="font-style: italic;">Game menu</span>:&nbsp;Wipe from the right edge to the left<br>
@@ -69,15 +71,69 @@ The program uses its own chess database
 (file: .pgn-db) to manage games. If there is no chess database file
 when loading/saving, it will be created. The status bar displays the
 current status of the database creation. During this process, the PGN
-file is locked. Other actions can be taken without any problems.<br><br>The use of the PGN database can be deactivated in the settings. In this mode, a game is always appended to the end of the file.
-<h3>UCI engines with Open Exchange (OEX) protocol<br></h3><p>The <span style="font-style: italic;">Rodent</span> and <span style="font-style: italic;">Stockfish</span>
-engines are integrated into the app. There are apps in the Play Store
-that provide chess engines in OEX format (search: "chess engines oex").
-These engines can then be selected in "Chess For All" and their engine
-settings can be changed.</p><h3>Opening books</h3>
+file is locked. Other actions can be taken without any problems.<br><br>The use of the PGN database can be deactivated in the settings. In this mode, a game is always appended to the end of the file.<h3>Opening books</h3>
 <p>A small opening book is already integrated in <span style="font-style: italic;">ChessForAll</span>.
 However, external polyglot opening books (.bin) can also be used. The
 management of the opening books is done in the settings.</p>
+<h3><span style="font-weight: bold;">Chess engines</span><br>
+</h3>
+Call it up via the main menu and select <span style="font-style: italic;">"Chess Engine"</span>. The following functions are available:<br>
+<h3 style="font-weight: normal; font-style: italic;">Select chess engine<br>
+</h3>
+The selection determines the main engine.<br>
+This app only uses UCI engines that are provided with the Open Exchange
+(OEX) protocol. In the Play Store there are apps that provide chess
+engines in OEX format (search: "chess engines oex").<br>
+Two engines, Rodent and Stockfish (ending with "CfA"), are integrated in "Chess for All".<br>
+<h3 style="font-weight: normal;"><span style="font-style: italic;">Engine options</span><br>
+</h3>
+The options specified by the engine developer can be changed for the
+engine selected with "Select Chess Engine". In the change dialog there
+is an "Info" button at the bottom left with a more detailed description
+of the possible activities. The UCI options are saved and activated
+before a new game starts.<br>
+<h3 style="font-weight: normal; font-style: italic;">Computer Match<br>
+</h3>
+With this option, multiple games, both in Single Engine and in Engine versus Engine mode, can run automatically.<br>
+The following functions are available:<br>
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; Select <span style="font-style: italic;">"Engine / Engine"</span> or <span style="font-style: italic;">"Single Engine"</span> (name of the main engine)</li>
+  <li>&nbsp;&nbsp;&nbsp; Engine selection buttons <span style="font-style: italic;">"White", "Black"</span> or <span style="font-style: italic;">"Engine"</span></li>
+  <li>&nbsp;&nbsp;&nbsp; Select <span style="font-style: italic;">"Current game"</span>.
+If this option is not activated, each game will begin with the current
+basic position (Standard or Chess960). If this option is activated,
+each game begins with the current position on the board.</li>
+  <li>&nbsp;&nbsp;&nbsp; Select <span style="font-style: italic;">"Change color"</span>: in the "Engine / Engine" mode, the color (white, black) is changed after each game.</li>
+  <li>&nbsp;&nbsp;&nbsp; Select <span style="font-style: italic;">"Save game"</span>. When activated, each game is saved (path, file)</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Path, File:</span>
+the PGN file manager is called up with the "PGN" button. Here you can
+manage files and also select existing files (continue computer match).</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Event, Site:</span> Editing fields that can be changed.</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Round:</span> games that have already been completed</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Games:</span> maximum number of games. When the last game is over, the match ends automatically.</li>
+  <li>&nbsp;&nbsp;&nbsp; Display of the <span style="font-style: italic;">match data:</span> name of the engines and result</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">"Cancel"</span> button: the process is canceled</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">"Start / Continue"</span> button: a new match is started (round: 0) or an interrupted match is continued.<br>
+  </li>
+</ul>
+After pressing <span style="font-style: italic;">"Start / Continue"</span>,
+the app changes to "automatic match mode" and all important data of the
+match are displayed. No further functions can be called in this state.
+Instead, a <span style="font-style: italic;">Computer Match Dialog</span> appears with the following function keys:<br>
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Cancel: </span>the current game is ended immediately, all data for this game is lost.</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Finish game:</span> the current game is ended and the match is concluded (interrupted).</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Continue:</span> the current match will be continued.<br>
+  </li>
+</ul>
+By closing the app (<span style="font-style: italic;">Back Button</span>) the match is interrupted in such a way that the match is automatically continued again when the app is restarted.<br>
+<br>
+IMPORTANT NOTE<br>
+<br>
+With some devices, certain components (e.g. processor, screen) can be
+stressed. Careful use of the Computer Match functions is required.
+Liability for damage is not accepted.<br>
+
 <h3>Settings</h3>Access via the main menu or by long pressing the first button on the left.<br>
 <br>
 <span style="font-style: italic;">Engine settings</span><br>

@@ -47,7 +47,7 @@ public class UciEngine
     public void initProcess(String processName)
     {
 
-//Log.i(TAG, "1 initProcess(), processName: " + processName);
+//        Log.i(TAG, "1 initProcess(), processName: " + processName);
 
         if (process != null)
             destroyProcess();
@@ -112,8 +112,9 @@ public class UciEngine
 
 				return false;
 			}
-            CharSequence s = readLineFromProcess();
-            if (s.equals("ERROR"))
+            CharSequence s = readLineFromProcess(1);
+
+            if (s == null)
 			{
 
 				if (isLogOn)
@@ -226,11 +227,11 @@ public class UciEngine
 
 //            Log.i(TAG, "3 syncReady(), start");
 
-            CharSequence s = readLineFromProcess();
+            CharSequence s = readLineFromProcess(1);
 
 //            Log.i(TAG, "4 syncReady(), s: " + s);
 
-            if (s.equals("ERROR")) {
+            if (s == null) {
 
                 if (isLogOn)
                     Log.i(TAG, "syncReady(), errorMessage: ERROR");
@@ -240,6 +241,9 @@ public class UciEngine
 
             if (s.equals("readyok"))
             {
+
+//                Log.i(TAG, "1 IDLE, readyok, engineName: " + engineName + "(" + engineId + ") ");
+
                 engineState = EngineState.IDLE;
                 return true;
             }
@@ -314,7 +318,7 @@ public class UciEngine
             {
                 CharSequence is = tokens[i++];
 
-//Log.i(TAG,  "tokens, i: " + i + "(" + (nTokens -1) + "), is: " + is);
+//                Log.i(TAG,  "tokens, i: " + i + "(" + (nTokens -1) + "), is: " + is);
 
                 if (is.equals("depth"))     {statCurrDepth = Integer.parseInt(tokens[i++].toString());}
                 if (is.equals("seldepth"))  {statCurrSelDepth = Integer.parseInt(tokens[i++].toString());}
@@ -521,47 +525,57 @@ public class UciEngine
     public void writeLineToProcess(String data)
     {
 
-//Log.i(TAG,  "data: " + data);
+//        Log.i(TAG,  "data: " + data);
 
         try {writeToProcess(data + "\n");}
         catch (IOException e)
         {
 
-//            Log.i(TAG,  "IOException, writeLineToProcess()");
+//            Log.i(TAG,  "writeLineToProcess(), IOException");
 
             e.printStackTrace();
             engineName = "";
             processAlive = false;
         }
-        if (data.equals("quit"))
-        {
-            engineName = "";
-            if (process != null) {
-                process.destroy();
-                process = null;
-            }
-        }
+
     }
 
-    public String readLineFromProcess()
+    public synchronized String readLineFromProcess(int timeoutMillis)
     {
         String message;
         try{message =  readFromProcess();}
         catch (IOException | NullPointerException e)
         {
 
-//            Log.i(TAG,  "IOException, readLineFromProcess()");
+//            Log.i(TAG,  "0 readLineFromProcess(), IOException");
 
             e.printStackTrace();
             engineName = "";
             processAlive = false;
             process = null;
-            return "ERROR";
+
+            return null;
+
         }
-        //            Log.i(TAG,  "NullPointerException, readLineFromProcess()");
+
+//        Log.i(TAG,  "NullPointerException, readLineFromProcess()");
 
         if (message != null)
         {
+
+            try {
+                if (message.isEmpty()) {
+
+//                    Log.i(TAG, "1 readLineFromProcess(), timeoutMillis: " + timeoutMillis + ", s: " + message);
+
+                    if (timeoutMillis > 0)
+                        wait(timeoutMillis);
+                    else
+                        wait();
+                }
+            }
+            catch (InterruptedException e) { return ""; }
+
             if (message.startsWith("id name ") | message.startsWith("White(1): id name "))
                 setChessEngineName(message);
             if (message.startsWith("option name ") & message.contains("UCI_Elo"))
@@ -578,7 +592,8 @@ public class UciEngine
             }
 
             if (isLogOn)
-                Log.i(TAG,  engineName + ": " + message);
+//                Log.i(TAG,  engineName + ": " + message);
+                Log.i(TAG,  engineName +  "(" + engineId + "): " + message);
 
         }
         else {
@@ -586,7 +601,19 @@ public class UciEngine
 //            if (isLogOn)
 //                Log.i(TAG,  engineName + ": " + message);
 
+            try {
+
+//                Log.i(TAG, "2 readLineFromProcess(), timeoutMillis: " + timeoutMillis + ", s: " + message);
+
+                if (timeoutMillis > 0)
+                    wait(timeoutMillis);
+                else
+                    wait();
+            }
+            catch (InterruptedException e) { return ""; }
+
             message = "";
+
         }
         return message;
     }
@@ -872,7 +899,9 @@ public class UciEngine
         if (writer != null)
         {
             if (isLogOn)
-                Log.i(TAG, "C4A->" + engineName + ": " + data);
+//                Log.i(TAG, "C4A->" + engineName + ": " + data);
+                Log.i(TAG, "C4A->" + engineName  +  "(" + engineId + "): " + data);
+
             writer.write(data);
             writer.flush();
         }
@@ -893,13 +922,13 @@ public class UciEngine
 //        Log.i(TAG,  "1 startEngine(), engineThreadID: " + engineThreadID);
 
         if (startProcess()) {
-            Thread engineMonitor = new Thread(this::monitorLoop);
+            engineState = EngineState.READ_OPTIONS;
+            engineMonitor = new Thread(this::monitorLoop);
 
             engineMonitor.setPriority(Thread.MIN_PRIORITY);
 
             engineMonitor.start();
             writeLineToProcess("uci");
-            engineState = EngineState.READ_OPTIONS;
         }
         else {
 
@@ -908,37 +937,39 @@ public class UciEngine
         }
     }
 
-//    private final static long guiUpdateInterval = 100;
-//    private final static long guiUpdateInterval = 200;
-    private final static long guiUpdateInterval = 400;
-    private long lastGUIUpdate = 0;
-
     private void monitorLoop() {
 
-//        android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+//        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_LOWEST);
 
         while (true) {
 
+            int timeout = getReadTimeout();
+
 //            Log.i(TAG,  "1 monitorLoop(), engineId: " + engineId + ", timeout: " + timeout);
 
-            if (Thread.currentThread().isInterrupted())
+            if (Thread.currentThread().isInterrupted()) {
+                threadInterupted(1);
                 return;
+            }
 
-            String s = readLineFromProcess();
+            String s = readLineFromProcess(timeout);
 
-//            Log.i(TAG,  " monitorLoop(), s: " + s);
+//            Log.i(TAG,  "monitorLoop(), s: " + s);
+//            Log.i(TAG, "monitorLoop(), timeout: " + timeout + ", s: " + s);
 
             long t0 = System.currentTimeMillis();
 
             while (s != null && !s.isEmpty()) {
 
-                if (Thread.currentThread().isInterrupted())
+                if (Thread.currentThread().isInterrupted()) {
+                    threadInterupted(2);
                     return;
+                }
 
                 processEngineOutput(s);
 
-                s = readLineFromProcess();
+                s = readLineFromProcess(1);
 
                 long t1 = System.currentTimeMillis();
                 if (t1 - t0 >= 1000)
@@ -948,32 +979,100 @@ public class UciEngine
 
             }
 
-            if ((s == null) || Thread.currentThread().isInterrupted())
+            if (Thread.currentThread().isInterrupted()) {
+                threadInterupted(3);
                 return;
-
+            }
+            if (s == null) {
+                threadInterupted(11);
+                return;
+            }
             processEngineOutput(s);
 
-            if (Thread.currentThread().isInterrupted())
+            if (Thread.currentThread().isInterrupted()) {
+                threadInterupted(4);
                 return;
+            }
 
         }
 
     }
 
+    private void threadInterupted(int id) {
+
+        if (isLogOn)
+            Log.i(TAG, "threadInterupted(), ID: " + id);
+
+    }
+
+    private synchronized int getReadTimeout() {
+        int timeout;
+        boolean needGuiUpdate = (searchRequest != null && engineSearching());
+        if (needGuiUpdate) {
+            long now = System.currentTimeMillis();
+            timeout = (int)(lastGUIUpdate + guiUpdateInterval - now + 1);
+            timeout = Math.max(1, Math.min(1000, timeout));
+        }
+        else {
+            switch (engineState) {
+                case DEAD:
+                    timeout = 2000000000;   break;
+                case READ_OPTIONS:
+                case WAIT_READY:
+                    timeout = 1;            break;
+                case BOOK:
+                case IDLE:
+                    timeout = 1000;         break;
+                default:
+                    timeout = 100;          break;
+            }
+        }
+        return timeout;
+    }
+
     private synchronized void processEngineOutput(String s) {
 
-//        Log.i(TAG,  "processEngineOutput(), engineState: " + engineState + ", s: " + s);
+//        Log.i(TAG,  "processEngineOutput(), engineName: " + engineName + ", engineId: " + engineId + ", s: " + s);
 
-        if (Thread.currentThread().isInterrupted())
+        if (engineState == EngineState.IDLE && s.contains("bestmove")) {
+
+//            Log.i(TAG, "A processEngineOutput(), engineName: " + engineName + "(" + engineId + "), engineState: " + engineState + ", s: " + s);
+
+            engineState = EngineState.SEARCH;
+
+        }
+
+        if (Thread.currentThread().isInterrupted()) {
+
+//            Log.i(TAG, "B processEngineOutput(), Thread.currentThread().isInterrupted(), engineName: " + engineName + "(" + engineId + "), engineState: " + engineState + ", s: " + s);
+
             return;
+        }
 
         if (engineState == EngineState.IDLE) {
+
+//            Log.i(TAG, "C processEngineOutput(), IDLE, engineName: " + engineName + "(" + engineId + "), engineState: " + engineState + ", s: " + s);
+
             engineInfoString = "";
             return;
         }
 
-        if (s.length() == 0)
+        long nowInfo = System.currentTimeMillis();
+
+        if (s.length() == 0) {
+
+            if (engineSearching() && nowInfo >= lastInfo + 10000) {
+
+//                Log.i(TAG, "D processEngineOutput(), s.length() == 0, >= 10 sec, engineName: " + engineName + "(" + engineId + "), engineState: " + engineState + ", s: " + s);
+
+                notifyGUI(searchRequest.engineId, searchRequest.searchId, "INFO SPACE", searchDisplayMoves.toString());
+                lastInfo = nowInfo;
+            }
+
             return;
+        }
+
+        lastInfo = nowInfo;
 
 //        if (isLogOn)
 //            Log.i(TAG, engineName + ": " + s);
@@ -1017,6 +1116,9 @@ public class UciEngine
                 if ("readyok".equals(s)) {
 
                     engineInfoString = "";
+
+//                    Log.i(TAG, "2 IDLE, processEngineOutput(), WAIT_READY, engineName: " + engineName + "(" + engineId + ") ");
+
                     engineState = EngineState.IDLE;
 
                     if (isLogOn)
@@ -1041,12 +1143,18 @@ public class UciEngine
                     }
                     else
                         ponderMv = "";
-                    if (engineState != EngineState.ANALYZE)
-                        engineState = EngineState.IDLE;
-                    String newFen = searchRequest.fen;
-                    if (!ponderFen.equals(""))
-                        newFen = ponderFen;
-                    listener.notifySearchResult(searchRequest.engineId, searchRequest.searchId, newFen, bestMove, ponderMv);
+
+//                    Log.i(TAG, "processEngineOutput(), engineId: " + engineId + ", engineState: " + engineState + ", sr.fen: " + searchRequest.fen + ", ponderFen: " + ponderFen);
+
+                    String baseFen = searchRequest.fen;
+                    if (!ponderFen.equals("")) {
+                        baseFen = ponderFen;
+                        ponderFen = "";
+                    }
+                    //karl???
+//                    listener.notifySearchResult(searchRequest.engineId, searchRequest.searchId, baseFen, bestMove, ponderMv);
+                    if (engineState == EngineState.SEARCH || engineState == EngineState.ANALYZE)
+                        listener.notifySearchResult(searchRequest.engineId, searchRequest.searchId, baseFen, bestMove, ponderMv);
                 }
                 else {
                     boolean isPV = false;
@@ -1095,6 +1203,7 @@ public class UciEngine
                         {
                             if (statPvIdx == 0) {
                                 bestScore = getBestScore(statPvScore, searchRequest.fen);
+//                                setBestScoreDrawCnt(bestScore);
                             }
                         }
 
@@ -1132,7 +1241,7 @@ public class UciEngine
 
                 if (!bestMove.equals("")) {
 
-//                    Log.i(TAG,  "processEngineOutput(), engineState: " + engineState + ", sr ponderMove: " + searchRequest.ponderMove + ", sr ponderEnabled: " + searchRequest.ponderEnabled);
+//                    Log.i(TAG,  "B processEngineOutput(), engineName: " + engineName + "(" + engineId + "), sr ponderMove: " + searchRequest.ponderMove + ", sr ponderEnabled: " + searchRequest.ponderEnabled);
 
                     String engineMessage = "" + engineStat + engineMes + engineInfoString;
                     notifyGUI(searchRequest.engineId, searchRequest.searchId, engineMessage, searchDisplayMoves.toString());
@@ -1140,6 +1249,10 @@ public class UciEngine
                         listener.notifyStop(searchRequest.engineId, searchRequest.searchId, engineState, searchRequest.fen, searchRequest.ponderMove);
                     else
                         listener.notifyStop(searchRequest.engineId, searchRequest.searchId, engineState, searchRequest.fen, bestMove);
+
+//                    Log.i(TAG, "4 IDLE, processEngineOutput(), STOP_, engineName: " + engineName + "(" + engineId + ") ");
+
+                    //karl???
                     if (engineState != EngineState.STOP_MULTI_ENGINES_RESTART)
                         engineState = EngineState.IDLE;
 
@@ -1208,6 +1321,7 @@ public class UciEngine
 
                 searchDisplayMoves = getDisplayMoves(statPvMoves, userPrefs.getInt("user_options_gui_arrows", Settings.ARROWS_DEFAULT));
                 bestScore = getBestScore(statPvScore, fen);
+//                setBestScoreDrawCnt(bestScore);
             }
             CharSequence displayScore = getDisplayScore(statPvScore, fen);
             if (isMate & statPvScore > 0)
@@ -1256,6 +1370,19 @@ public class UciEngine
 
         return score;
     }
+
+    //karl??? only SEARCH !?
+//    void setBestScoreDrawCnt(int score)
+//    {
+//        int scoreAbs = Math.abs(score);
+//        if (scoreAbs < 10)
+//            bestScoreDrawCnt++;
+//        else
+//            bestScoreDrawCnt = 0;
+//
+////			Log.i(TAG, "getBestScoreDrawCnt(), bestScoreDrawCnt: " + bestScoreDrawCnt);
+//
+//    }
 
     public CharSequence getDisplayScore(int score, CharSequence fen)
     {
@@ -1460,9 +1587,9 @@ public class UciEngine
 
     ProcessBuilder processBuilder;
     public Process process;
-    private BufferedReader reader = null;
-    private BufferedWriter writer = null;
-    private SearchRequest searchRequest = null;
+    public BufferedReader reader = null;
+    public BufferedWriter writer = null;
+    public SearchRequest searchRequest = null;
     private final EngineListener listener;
     String ponderMove = "";
     String ponderFen = "";
@@ -1488,6 +1615,12 @@ public class UciEngine
 		DEAD,                       // engine process has terminated
 	}
 	public EngineState engineState = EngineState.DEAD;
+
+    public Thread engineMonitor;
+    private final static long guiUpdateInterval = 100;
+//    private final static long guiUpdateInterval = 200;
+    private long lastGUIUpdate = 0;
+    private long lastInfo = 0;
 
     boolean processAlive;
     boolean isChess960 = false;
@@ -1539,6 +1672,7 @@ public class UciEngine
     StringBuilder sbInfo = new StringBuilder(100);
     CharSequence searchDisplayMoves = "";
     int bestScore = 0;
+    int bestScoreDrawCnt = 0;
     int multiPvCnt = 0;
 
     final CharSequence[] firstMove =	{	"a2a3", "a2a4", "b2b3", "b2b4",

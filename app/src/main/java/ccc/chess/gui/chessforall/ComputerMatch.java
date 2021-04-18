@@ -327,11 +327,16 @@ public class ComputerMatch extends Activity {
 
             round = 0;
             games = 10;
+            matchResult = "0-0";
 
             if (fileData.equals(""))
                 return;
 
 //            Log.i(TAG, "getFileValues(), fileData:\n" + fileData);
+
+            if (fileData.contains("Â")) {
+                fileData = fileData.replace("Â", "");
+            }
 
             ChessHistory history = new ChessHistory();
             history.setGameData(fileData);
@@ -349,6 +354,15 @@ public class ComputerMatch extends Activity {
             }
             if (!history.getGameTagValue("MatchResult").equals(""))
                 matchResult = history.getGameTagValue("MatchResult");
+            if (!history.getGameTagValue("FEN").equals("")) {
+                fen = history.getGameTagValue("FEN");
+                currentGame = true;
+            }
+            else
+            {
+                fen = "";
+                currentGame = false;
+            }
 
 //            Log.i(TAG, "getFileValues(), event: " + event);
 
@@ -416,6 +430,7 @@ public class ComputerMatch extends Activity {
         ed.putBoolean("user_play_eve_autoSave", cb_saveGames.isChecked());
         ed.putString("user_play_eve_path", et_path.getText().toString());
         ed.putString("user_play_eve_file", et_file.getText().toString());
+        ed.putString("user_play_eve_fen", fen);
         ed.apply();
 
         SharedPreferences.Editor edR = runPrefs.edit();
@@ -473,6 +488,7 @@ public class ComputerMatch extends Activity {
     int round = 1;
     int games = 1;
     String matchResult = "";
+    String fen = "";
 
     TextView title;
     CheckBox cb_engineVsEngine;

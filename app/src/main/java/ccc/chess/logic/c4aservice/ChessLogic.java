@@ -757,7 +757,8 @@ public class ChessLogic
 
     }
 
-    private CharSequence createMoveHistory()	                               	
+//    private CharSequence createMoveHistory()
+    public CharSequence createMoveHistory()
     {	// create move-History from PGN-Data
     	CharSequence errorMessage = "";
     	try 

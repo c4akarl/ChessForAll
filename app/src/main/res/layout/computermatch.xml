@@ -288,7 +288,7 @@
                 android:onClick="myClickHandler"
                 android:inputType="number"
                 android:maxLength="3"
-                android:layout_width="40dip" />
+                android:layout_width="60dip" />
 
             <TextView
                 android:id="@+id/tv_games"
@@ -307,7 +307,7 @@
                 android:onClick="myClickHandler"
                 android:inputType="number"
                 android:maxLength="3"
-                android:layout_width="40dip" />
+                android:layout_width="60dip" />
 
         </RelativeLayout>
 

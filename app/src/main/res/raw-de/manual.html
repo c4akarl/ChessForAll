@@ -7,7 +7,8 @@
 
 
 
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><big style="font-weight: bold;"><big>Chess For All&nbsp; 2.33</big></big><h3>Bedienungshinweise</h3>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><big style="font-weight: bold;"><big>Chess For All&nbsp; 2.36</big></big><h3>Bedienungshinweise</h3>
 <p><em>Hauptmenü</em>: Vom linken Rand nach rechts wischen</p>
 <p><em>Spielmenü</em>: Vom rechten Rand nach links wischen</p>
 <p><em>Brettoptionenmenü</em>: Langes Drücken auf das Schachbrett</p>
@@ -71,19 +72,79 @@ Probleme ausgeführt werden.</p>
 deaktiviert werden. Beim Speichern wird dann eine Partie immer an das
 Dateiende angehängt.<br>
 </p>
-<h3>UCI-Engines mit Open Exchange (OEX) Protokoll<br></h3><p>Die Engines <span style="font-style: italic;">Rodent</span> und <span style="font-style: italic;">Stockfish</span>
-sind in die App integriert. Im Play Store gibt es Apps die
-Schach-Engines im OEX-Format bereitstellen (Suche: "schach engines
-oex"). Diese Engines kann man dann in "Chess For All" auswählen und
-deren Engine-Einstellungen ändern.<br>
-</p><h3>Eröffnungsbücher
+<h3>Eröffnungsbücher
 </h3>
 <p>Ein kleines Eröffnungsbuch ist in <em>ChessForAll </em>bereits
 integriert. Es können jedoch auch externe Polyglot-Eröffnungsbücher
 (.bin) verwendet werden. Die Verwaltung der Eröffnungsbücher erfolgt in
 den Einstellungen. </p>
 
+<h3>Schach-Engines</h3>
+<p><span style="font-weight: normal;">Aufruf über das Hauptmenü und der Auswahl <span style="font-style: italic;">"Schach-Engine"</span>. Folgende Funktionen gibt es:</span></p>
+<h3 style="font-style: italic; font-weight: normal;">Schach-Engine auswählen</h3>
+<span style="font-weight: normal;">Mit der Auswahl wird die Haupt-Engine festgelegt.<br>
+<br>
+Diese App verwendet ausschließlich UCI-Engines die mit dem Open
+Exchange (OEX) Protokoll bereitgestellt werden. Im Play Store gibt es
+Apps die Schach-Engines im OEX-Format bereitstellen (Suche: "schach
+engines oex"). <br>
+Zwei Engines, Rodent und Stockfish (Endung "CfA"), sind in "Chess for All" integriert.</span>
+<h3><span style="font-weight: normal; font-style: italic;">Engine-Optionen</span><br>
+</h3>
+<span style="font-weight: normal;">Für die mit "Schach-Engine
+auswählen" ausgewählte Engine können die vom Engineentwickler
+festgelegten Optionen geändert werden. Im Änderungsdialog gibt es links
+unten eine Taste "Info" mit einer genaueren Beschreibung der möglichen
+Aktivitäten. Die UCI-Optionen werden gespeichert und vor Beginn eines
+neuen Spiels aktiviert.</span>
+<h3><span style="font-weight: normal; font-style: italic;">Computer-Match</span><br>
+</h3>
+<span style="font-weight: normal;">Mit dieser Optionen können mehrere
+Partien, sowohl im Einzel-Engine als auch im Engine gegen Engine Modus,
+automatisch ablaufen. <br>
+<br>
+Folgende Funktionen stehen zur Verfügung:</span> <br>
+<ul>
+  <li><span style="font-weight: normal;">Auswahl <span style="font-style: italic;">"Engine / Engine"</span> oder <span style="font-style: italic;">"Enzel-Engine"</span> (Name der Haupt-Engine) </span></li>
+  <li><span style="font-weight: normal;">Engine Auswahl-Tasten <span style="font-style: italic;">"Weiss"</span>, <span style="font-style: italic;">"Schwarz"</span> bzw. <span style="font-style: italic;">"Engine"</span></span></li>
+  <li><span style="font-weight: normal;">Auswahl <span style="font-style: italic;">"Aktuelle Partie"</span>.
+Ist diese Option nicht aktiviert, wird jede Partie mit der aktuellen
+Grundstellung (Standard oder&nbsp;&nbsp; Chess960) begonnen. Ist diese
+Option aktiviert, beginnt jede Partie, mit der aktuellen Brettstellung.</span></li>
+  <li><span style="font-weight: normal;">Auswahl <span style="font-style: italic;">"Farbe wechseln":</span> im Modus "Engine / Engine" wird nach jeder Partie die Farbe (Weiss, Schwarz) gewechselt.</span></li>
+  <li><span style="font-weight: normal;">Auswahl <span style="font-style: italic;">"Partie speichern"</span>. Bei Aktivierung wird jede Partie gespeichert (Pfad, Datei)</span></li>
+  <li><span style="font-weight: normal;"><span style="font-style: italic;">Pfad, Datei</span>:
+mit der Taste "PGN" wird der PGN-Dateimanager aufgerufen. Hier kann man
+Dateien verwalten und auch vorhanden&nbsp;&nbsp; Dateien auswählen
+(Computer-Match fortsetzen).</span></li>
+  <li><span style="font-weight: normal;"><span style="font-style: italic;">Ereignis, Ort</span>. Editierfelder die geändert werden können.</span></li>
+  <li><span style="font-weight: normal;"><span style="font-style: italic;">Runde:</span> bereits abgeschlossene Partien</span></li>
+  <li><span style="font-weight: normal;"><span style="font-style: italic;">Partien:</span> maximale Anzahl der Partien. Nach Beendigung der letzten Partie wird der Wettkampf automatisch beendet.</span></li>
+  <li><span style="font-weight: normal;">Anzeige der <span style="font-style: italic;">Wettkampfdaten:</span> Name der Engines und Ergebnis</span></li>
+  <li><span style="font-weight: normal;">Taste <span style="font-style: italic;">"Abbrechen":</span> der Vorgang wird abgebrochen</span></li>
+  <li><span style="font-weight: normal;">Taste <span style="font-style: italic;">"Start / Fortsetzen"</span>: ein neuer Wettkampf wird begonnen (Runde: 0) oder ein unterbrochener Wettkampf fortgesetzt.</span><br>
+  </li>
+</ul>
+<span style="font-weight: normal;">Nach Betätigung von <span style="font-style: italic;">"Start / Fortsetzen"</span>
+wechselt die App in den "automatischen Wettkampfmodus" und alle
+wichtigen Daten des Wettkampfes werden angezeigt. In diesem Zustand
+können keine weiteren Funktionen aufgerufen werden. Statt dessen kommt
+ein <span style="font-style: italic;">Computer Match Dialog</span> mit folgenden Funktionstasten:</span><br>
+<ul>
+  <li><span style="font-style: italic;">Abbrechen:</span> die aktuelle Partie wird sofort beendet, alle Daten dieser Partie gehen verloren.</li>
+  <li><span style="font-style: italic;">Spiel beenden: </span>die aktuelle Partie wird beendet, und der Wettkampf abgeschlossen (unterbrochen).</li>
+  <li><span style="font-style: italic;">Weiter:</span> der aktuelle Wettkampf wird fortgesetzt.<br>
+  </li>
+</ul>
+Durch Beendigung der App (<span style="font-style: italic;">Zurück-Taste</span>) wird der Wettkampf so unterbrochen, dass bei einem Neustart der App der Wettkampf wieder automatisch fortgesetzt wird.<br>
+<br>
+<span style="font-style: italic;">WICHTIGER HINWEIS</span><br>
+Bei manchen Geräten kann es zu einer Belastung bestimmter Komponenten
+(z.B. Prozessor, Bildschirm) kommen. Eine behutsame Anwendung der
+Computer-Match Funktionen ist erforderlich. Eine Haftung für Schäden
+wird nicht übernommen.<br>
 <h3>Einstellungen</h3>
+
 Aufruf über das Hauptmenü oder durch langes Drücken der erste Taste links.<br>
 <br>
 <span style="font-style: italic;">Engine-Einstellungen</span><br>

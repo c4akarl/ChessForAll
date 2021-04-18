@@ -3,8 +3,6 @@ package ccc.chess.gui.chessforall;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-//import java.util.ArrayList;
-
 import ccc.chess.book.BookOptions;
 import ccc.chess.book.C4aBook;
 
@@ -100,7 +98,6 @@ public class EngineControl
 		currentEngineId = engineId;
 	}
 
-//	void initEngineMessages(ArrayList<String> engineNames)
 	void initEngineMessages()
 	{
 		if (uciEnginesMessage != null) {
@@ -117,7 +114,6 @@ public class EngineControl
 				uciEnginesMessage[i] = "";
 				if (uciEngines[i] != null) {
 
-//					if (uciEngines[i].engineStop() || uciEngines[i].engineSearching())
 					if (uciEngines[i].engineSearching())
 						return true;
 				}
@@ -154,7 +150,6 @@ public class EngineControl
 	UciEngine[] uciEngines;								// manage multiple UciEngine	MainActivity.withMultiEngine = true
 	String[] uciEnginesMessage;							// engine messages from EngineListener
 	int engineCnt = 1;
-//	int engineRestartCnt = 0;
 	public int currentEngineId = 0;                     // current engineId, idx from uciEngines, return from getEngine()
 	public int analysisEngineId = 0;                    // analysis engineId, for making move !
 	public int analysisEngineCnt = 0;                   // analysis engineId counter, for making move !
@@ -171,11 +166,15 @@ public class EngineControl
     boolean chessEnginePaused = false;
     boolean chessEngineProblem = false;
     boolean chessEngineMatch = false;
+    boolean chessEngineMatchFinishGame = false;
+
+    boolean chessEngineMatchError = false;
     boolean chessEngineAnalysis = false;
     CharSequence chessEnginePlayerWhite = "Me";
     CharSequence chessEnginePlayerBlack = "";
     CharSequence chessEngineEvent = ""; 
     CharSequence chessEngineSite = "";
     CharSequence chessEngineRound = "";
+    CharSequence chessEngineFen = "";
 
 }

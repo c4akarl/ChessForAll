@@ -8,7 +8,8 @@
 
 
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><big style="font-weight: bold;"><big>Chess For All&nbsp; 2.33<br>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><big style="font-weight: bold;"><big>Chess For All&nbsp; 2.36<br>
 </big></big><em></em><h3>Mode d'emploi</h3>
 <p><em>Menu principal</em>: balayez vers la droite
 depuis le
@@ -95,19 +96,75 @@ peuvent être prises sans aucun problème.<br>
 <br>
 L'utilisation de la
 base de données PGN peut être désactivée dans les paramètres. En mode
-sauvegarde, un jeu est toujours ajouté à la fin du fichier.
-<h3>Moteurs UCI avec protocole Open Exchange (OEX)<br>
-</h3>
-<p>Les moteurs <span style="font-style: italic;">Rodent</span> et <span style="font-style: italic;">Stockfish</span>sont
-intégrés dans l'application. Il existe des applications dans le Play
-Store qui fournissent des moteurs d'échecs au format OEX (recherche:
-"moteurs d'échecs oex"). Ces moteurs peuvent ensuite être sélectionnés
-dans "Chess For All" et leurs paramètres de moteur peuvent être
-modifiés.</p>
-<h3>Livres d'ouverture</h3>
+sauvegarde, un jeu est toujours ajouté à la fin du fichier.<h3>Livres d'ouverture</h3>
 <p>Un petit livre d'ouverture est déjà intégré dans <span style="font-style: italic;">ChessForAll</span>.
 Cependant, des livres d'ouverture polyglottes externes (.bin) peuvent
 également être utilisés. La gestion des livres d'ouverture se fait dans les paramètres.</p>
+<h3>Moteurs d'échecs<br>
+</h3>
+Appelez-le via le menu principal et sélectionnez <span style="font-style: italic;">"le moteur d'échecs"</span>. Les fonctions suivantes sont disponibles:<br>
+<h3 style="font-weight: normal; font-style: italic;">Sélectionnez le moteur d'échecs</h3>
+La sélection détermine le moteur principal.<br>
+Cette application utilise uniquement les moteurs UCI fournis avec le
+protocole Open Exchange (OEX). Dans le Play Store, il existe des
+applications qui fournissent des moteurs d'échecs au format OEX
+(recherche: «moteurs d'échecs oex»).<br>
+Deux moteurs, Rodent et Stockfish (se terminant par "CfA"), sont intégrés dans "Chess for All".<br>
+<h3 style="font-weight: normal; font-style: italic;">Options de moteur</h3>
+Les options spécifiées par le développeur du moteur peuvent être
+modifiées pour le moteur sélectionné avec "Select Chess Engine". Dans
+la boîte de dialogue de modification, il y a un bouton "Info" en bas à
+gauche avec une description plus détaillée des activités possibles. Les
+options UCI sont enregistrées et activées avant le début d'une nouvelle
+partie.<br>
+<h3 style="font-weight: normal; font-style: italic;">Match d'ordinateur</h3>
+Avec cette option, plusieurs jeux, à la fois en mode Single Engine et
+en mode Engine versus Engine, peuvent s'exécuter automatiquement.<br>
+Les fonctions suivantes sont disponibles:<br>
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; Sélectionnez <span style="font-style: italic;">"Engine / Engine"</span> ou "Single Engine" (nom du moteur principal)</li>
+  <li>&nbsp;&nbsp;&nbsp; Boutons de sélection du moteur <span style="font-style: italic;">"Blanc", "Noir" </span>ou <span style="font-style: italic;">"Moteur"</span></li>
+  <li>&nbsp;&nbsp;&nbsp; Sélectionnez <span style="font-style: italic;">"Jeu actuel"</span>.
+Si cette option n'est pas activée, chaque partie commencera avec la
+position de base actuelle (Standard ou Chess960). Si cette option est
+activée, chaque partie commence par la position actuelle sur le plateau.</li>
+  <li>&nbsp;&nbsp;&nbsp; Sélectionnez <span style="font-style: italic;">"Changer de couleur":</span> dans le mode "Moteur / Moteur", la couleur (blanc, noir) est modifiée après chaque partie.</li>
+  <li>&nbsp;&nbsp;&nbsp; Sélectionnez <span style="font-style: italic;">"Enregistrer la partie"</span>. Lorsqu'il est activé, chaque jeu est sauvegardé (chemin, fichier)</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Chemin, Fichier:</span>
+le gestionnaire de fichiers PGN est appelé avec le bouton "PGN". Ici,
+vous pouvez gérer les fichiers et également sélectionner les fichiers
+existants (continuer la correspondance avec l'ordinateur).</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Événement, Site:</span> Modification des champs qui peuvent être modifiés.</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Tour: </span>parties déjà terminées</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Jeux:</span> nombre maximum de jeux. Lorsque le dernier match est terminé, le match se termine automatiquement.</li>
+  <li>&nbsp;&nbsp;&nbsp; Affichage <span style="font-style: italic;">des données de match:</span> nom des moteurs et résultat</li>
+  <li>&nbsp;&nbsp;&nbsp; Bouton <span style="font-style: italic;">"Annuler":</span> le processus est annulé</li>
+  <li>&nbsp;&nbsp;&nbsp; Bouton <span style="font-style: italic;">"Démarrer / Continuer":</span> un nouveau match est lancé (tour: 0) ou un match interrompu se poursuit.<br>
+  </li>
+</ul>
+Après avoir appuyé sur <span style="font-style: italic;">"Démarrer / Continuer"</span>,
+l'application passe en "mode de match automatique" et toutes les
+données importantes du match sont affichées. Aucune autre fonction ne
+peut être appelée dans cet état. Au lieu de cela, une boîte de dialogue
+de correspondance d'ordinateur s'affiche avec les touches de fonction
+suivantes:<br>
+<ul>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Annuler:</span> le jeu en cours se termine immédiatement, toutes les données de ce jeu sont perdues.</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Terminer le jeu:</span> le jeu en cours est terminé et le match est terminé (interrompu).</li>
+  <li>&nbsp;&nbsp;&nbsp; <span style="font-style: italic;">Continuer:</span> le match en cours se poursuivra.<br>
+  </li>
+</ul>
+En fermant l'application (bouton Retour), le match est interrompu de
+manière à ce que le match se poursuive automatiquement lorsque
+l'application est redémarrée.<br>
+<br>
+NOTE IMPORTANTE<br>
+<br>
+Avec certains appareils, certains composants (par ex. Processeur,
+écran) peuvent être sollicités. Une utilisation prudente des fonctions
+Computer Match est requise. La responsabilité pour les dommages n'est
+pas acceptée.<br>
+
 <h3>Réglages</h3>Accès via le menu principal ou en appuyant longuement sur le premier bouton à gauche.<br>
 <br>
 <span style="font-style: italic;">Paramètres du moteur</span><br>
