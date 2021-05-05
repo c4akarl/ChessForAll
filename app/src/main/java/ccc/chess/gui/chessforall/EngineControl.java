@@ -8,13 +8,15 @@ import ccc.chess.book.C4aBook;
 
 public class EngineControl 
 {
-	EngineControl(Context context){
+	EngineControl(Context context)
+	{
 		this.context = context;
 		userPrefs = context.getSharedPreferences("user", 0);
 		createEngines();
     }
 
-	void createEngines() {
+	void createEngines()
+	{
 		uciEngines = new UciEngine[1];
 		uciEnginesMessage = new String[1];
 		engineCnt = 1;
@@ -139,6 +141,22 @@ public class EngineControl
 			makeMove = false;
 		}
 
+		if (chessEnginePlayMod == 3 && chessEngineMatch && engineCnt == 2)
+		{
+			if (color.equals("w"))
+			{
+				currentEngineId = 0;
+				uciEngines[0].startPlay = true;
+				uciEngines[1].startPlay = false;
+			}
+			else
+			{
+				currentEngineId = 1;
+				uciEngines[0].startPlay = false;
+				uciEngines[1].startPlay = true;
+			}
+		}
+
 //		Log.i(TAG, "setStartPlay(), playMod: " + chessEnginePlayMod + ", engineId: " + engineId + ", color: " + color + ", makeMove: " + makeMove);
 
     }
@@ -167,7 +185,6 @@ public class EngineControl
     boolean chessEngineProblem = false;
     boolean chessEngineMatch = false;
     boolean chessEngineMatchFinishGame = false;
-
     boolean chessEngineMatchError = false;
     boolean chessEngineAnalysis = false;
     CharSequence chessEnginePlayerWhite = "Me";

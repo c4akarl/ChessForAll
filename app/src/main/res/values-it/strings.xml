@@ -393,7 +393,7 @@
     <string name="engineWhite">Motore Bianco</string>
     <string name="engineBlack">Motore Nero</string>
     <string name="options">Opzioni</string>
-    <string name="changeColor">Cambia colore</string>
+    <string name="changeColor">Alterna colore</string>
     <string name="result">Risultato</string>
     <string name="startContinue">Avvia / Continua</string>
     <string name="engineVsEngine">Motore / Motore</string>
@@ -401,9 +401,9 @@
     <string name="multipleEngines">Più Motori</string>
     <string name="none">[ nessuno ]</string>
     <string name="differentValues">Ruotando lo schermo è possibile impostare diversi valori (varianti, mosse, linee).</string>
-    <string name="match">Concorrenza</string>
-    <string name="matchEnd">Fine della competizione</string>
-    <string name="endOrContinueMatch">Terminare o continuare la corrispondenza del computer?</string>
-    <string name="finishGame">Termina il gioco</string>
+    <string name="match">Match</string>
+    <string name="matchEnd">Fine del match</string>
+    <string name="endOrContinueMatch">Terminare o continuare il match tra computer?</string>
+    <string name="finishGame">Termina il match</string>
 
 </resources>

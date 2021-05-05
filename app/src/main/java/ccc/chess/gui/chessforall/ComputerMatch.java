@@ -54,7 +54,13 @@ public class ComputerMatch extends Activity {
         title = findViewById(R.id.title);
         u.setTextViewColors(title, "#6b2c2d", "#f1e622");
         btn_engine_white = findViewById(R.id.btn_engine_white);
+        u.setTextViewColors(btn_engine_white, "#BAB8B8", "#000000");
         btn_engine_black = findViewById(R.id.btn_engine_black);
+        u.setTextViewColors(btn_engine_black, "#BAB8B8", "#000000");
+        btn_cancel = findViewById(R.id.btn_cancel);
+        u.setTextViewColors(btn_cancel, "#BAB8B8", "#000000");
+        btn_start_continue = findViewById(R.id.btn_start_continue);
+        u.setTextViewColors(btn_start_continue, "#BAB8B8", "#000000");
         cb_engineVsEngine = findViewById(R.id.cb_engineVsEngine);
         cb_engineVsEngine.setChecked(engineVsEngine);
         if (engineVsEngine) {
@@ -100,7 +106,6 @@ public class ComputerMatch extends Activity {
         engine_white_name.setText(white);
         engine_black_name = findViewById(R.id.engine_black_name);
         engine_black_name.setText(black);
-
         cb_currentGame = findViewById(R.id.cb_currentGame);
         cb_currentGame.setChecked(currentGame);
         cb_changeColor = findViewById(R.id.cb_changeColor);
@@ -109,17 +114,22 @@ public class ComputerMatch extends Activity {
         cb_saveGames.setChecked(saveGames);
         et_path = findViewById(R.id.et_path);
         et_path.setText(path);
+        u.setTextViewColors(et_path, "#ADE4A7", "#000000");
         et_file = findViewById(R.id.et_file);
         et_file.setText(file);
+        u.setTextViewColors(et_file, "#ADE4A7", "#000000");
         et_event = findViewById(R.id.et_event);
         et_event.setText(event);
+        u.setTextViewColors(et_event, "#ADE4A7", "#000000");
         et_site = findViewById(R.id.et_site);
         et_site.setText(site);
+        u.setTextViewColors(et_site, "#ADE4A7", "#000000");
         et_round = findViewById(R.id.et_round);
         et_round.setText(Integer.toString(round));
+        u.setTextViewColors(et_round, "#ADE4A7", "#000000");
         et_games = findViewById(R.id.et_games);
         et_games.setText(Integer.toString(games));
-
+        u.setTextViewColors(et_games, "#ADE4A7", "#000000");
         tv_info = findViewById(R.id.tv_info);
         tv_info.setText(getInfo());
     }
@@ -506,6 +516,8 @@ public class ComputerMatch extends Activity {
     CheckBox cb_saveGames;
     TextView et_path;
     TextView et_file;
+    TextView btn_cancel;
+    TextView btn_start_continue;
 
     private static String engineDir = "c4a/uci";
     int engineId = 0;

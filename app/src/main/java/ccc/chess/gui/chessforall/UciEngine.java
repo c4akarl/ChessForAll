@@ -899,7 +899,6 @@ public class UciEngine
         if (writer != null)
         {
             if (isLogOn)
-//                Log.i(TAG, "C4A->" + engineName + ": " + data);
                 Log.i(TAG, "C4A->" + engineName  +  "(" + engineId + "): " + data);
 
             writer.write(data);
@@ -1057,23 +1056,6 @@ public class UciEngine
             return;
         }
 
-        long nowInfo = System.currentTimeMillis();
-
-        if (s.length() == 0) {
-
-            if (engineSearching() && nowInfo >= lastInfo + 10000) {
-
-//                Log.i(TAG, "D processEngineOutput(), s.length() == 0, >= 10 sec, engineName: " + engineName + "(" + engineId + "), engineState: " + engineState + ", s: " + s);
-
-                notifyGUI(searchRequest.engineId, searchRequest.searchId, "INFO SPACE", searchDisplayMoves.toString());
-                lastInfo = nowInfo;
-            }
-
-            return;
-        }
-
-        lastInfo = nowInfo;
-
 //        if (isLogOn)
 //            Log.i(TAG, engineName + ": " + s);
 
@@ -1151,9 +1133,7 @@ public class UciEngine
                         baseFen = ponderFen;
                         ponderFen = "";
                     }
-                    //karl???
-//                    listener.notifySearchResult(searchRequest.engineId, searchRequest.searchId, baseFen, bestMove, ponderMv);
-                    if (engineState == EngineState.SEARCH || engineState == EngineState.ANALYZE)
+                    if (engineState != EngineState.BOOK)
                         listener.notifySearchResult(searchRequest.engineId, searchRequest.searchId, baseFen, bestMove, ponderMv);
                 }
                 else {
@@ -1230,6 +1210,7 @@ public class UciEngine
             }
 
             case STOP_IDLE:
+            case STOP_IDLE_NONE:
             case STOP_MOVE:
             case STOP_MOVE_CONTINUE:
             case STOP_CONTINUE:
@@ -1262,7 +1243,7 @@ public class UciEngine
             }
             default: {
 
-                if (isLogOn)
+                if (isLogOn && engineState != EngineState.DEAD)
                     Log.i(TAG,  engineName + ": processEngineOutput(), engineState ??? : " + engineState);
 
                 break;
@@ -1333,6 +1314,7 @@ public class UciEngine
 
             if (notation.equals(""))
                 return "";
+
             notation = cl.history.getAlgebraicNotation(notation, userPrefs.getInt("user_options_gui_PieceNameId", 0));
             sbMoves.append(displayScore); sbMoves.append(") "); sbMoves.append(notation);
 
@@ -1370,19 +1352,6 @@ public class UciEngine
 
         return score;
     }
-
-    //karl??? only SEARCH !?
-//    void setBestScoreDrawCnt(int score)
-//    {
-//        int scoreAbs = Math.abs(score);
-//        if (scoreAbs < 10)
-//            bestScoreDrawCnt++;
-//        else
-//            bestScoreDrawCnt = 0;
-//
-////			Log.i(TAG, "getBestScoreDrawCnt(), bestScoreDrawCnt: " + bestScoreDrawCnt);
-//
-//    }
 
     public CharSequence getDisplayScore(int score, CharSequence fen)
     {
@@ -1567,7 +1536,8 @@ public class UciEngine
 
     final String TAG = "UciEngine";
     static final int UCI_ELO_STANDARD = 3000;
-    final long MAX_UCI_TIME = 2000;
+//    final long MAX_UCI_TIME = 2000;
+    final long MAX_UCI_TIME = 6000;
     final long MAX_ISREADY_TIME = 6000;
 
     Context context;
@@ -1605,6 +1575,7 @@ public class UciEngine
 		ANALYZE,                    // "go" sent, waiting for "bestmove" (which will be ignored)
 		BOOK,                       // book move
 		STOP_IDLE,   	            // "stop" sent, ignore "bestmove", and set to IDLE
+		STOP_IDLE_NONE,   	        // "stop" sent, ignore "bestmove", and set to IDLE, none actions
 		STOP_MOVE,   	            // "stop" sent, waiting for "bestmove", and make bestmove
 		STOP_MOVE_CONTINUE,         // "stop" sent, waiting for "bestmove", and make bestmove, and continue with next "search" (continueFen)
         STOP_CONTINUE,              // "stop" sent, ignore "bestmove", continue with next "search" (continueFen)
@@ -1672,7 +1643,6 @@ public class UciEngine
     StringBuilder sbInfo = new StringBuilder(100);
     CharSequence searchDisplayMoves = "";
     int bestScore = 0;
-    int bestScoreDrawCnt = 0;
     int multiPvCnt = 0;
 
     final CharSequence[] firstMove =	{	"a2a3", "a2a4", "b2b3", "b2b4",
