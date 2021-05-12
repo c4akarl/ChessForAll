@@ -6,7 +6,7 @@ public interface EngineListener {
 
     void notifySearchResult(int engineId, int id, String fen, String bestmove, String ponder);
 
-    void notifyPV(int engineId, int id, String engineMessage, String searchDisplayMoves);
+    void notifyPV(int engineId, int id, String engineMessage, int score, String searchDisplayMoves);
 
     void notifyStop(int engineId, int id, UciEngine.EngineState engineState, String fen, String bestmove);
 

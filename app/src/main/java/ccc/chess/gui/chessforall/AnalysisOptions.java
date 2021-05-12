@@ -7,11 +7,15 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.kalab.chess.enginesupport.ChessEngine;
 import com.kalab.chess.enginesupport.ChessEngineResolver;
@@ -23,12 +27,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class AnalysisOptions extends Activity {
 
     @SuppressLint("SetTextI18n")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         u = new Util();
+        cv = new ColorValues();
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         userPrefs = getSharedPreferences("user", 0);
         runPrefs = getSharedPreferences("run", 0);
@@ -81,12 +87,16 @@ public class AnalysisOptions extends Activity {
         btn_e4 = findViewById(R.id.btn_e4);
         btn_e4.setText(getString(R.string.engine) + "  4");
         e1_name = findViewById(R.id.e1_name);
+        e1_name.setTextColor(cv.getTransparentColorInt(ColorValues.COLOR_ARROWS5_27, ALPHA_VALUE));
         e1_name.setText(e1);
         e2_name = findViewById(R.id.e2_name);
+        e2_name.setTextColor(cv.getTransparentColorInt(ColorValues.COLOR_ARROWS6_28, ALPHA_VALUE));
         e2_name.setText(e2);
         e3_name = findViewById(R.id.e3_name);
+        e3_name.setTextColor(cv.getTransparentColorInt(ColorValues.COLOR_ARROWS7_29, ALPHA_VALUE));
         e3_name.setText(e3);
         e4_name = findViewById(R.id.e4_name);
+        e4_name.setTextColor(cv.getTransparentColorInt(ColorValues.COLOR_ARROWS8_30, ALPHA_VALUE));
         e4_name.setText(e4);
 
     }
@@ -238,20 +248,36 @@ public class AnalysisOptions extends Activity {
                             dialog.dismiss();
                             switch (engineId) {
                                 case 1:
+                                    if (items.get(item).equals(e2) || items.get(item).equals(e3) || items.get(item).equals(e4)) {
+                                        Toast.makeText(this, getString(R.string.engineExists), Toast.LENGTH_LONG).show();
+                                        break;
+                                    }
                                     e1 = items.get(item);
                                     e1_name.setText(e1);
                                     break;
                                 case 2:
+                                    if (items.get(item).equals(e1) || items.get(item).equals(e3) || items.get(item).equals(e4)) {
+                                        Toast.makeText(this, getString(R.string.engineExists), Toast.LENGTH_LONG).show();
+                                        break;
+                                    }
                                     e2 = items.get(item);
                                     e2_name.setText(e2);
                                     break;
                                 case 3:
+                                    if (items.get(item).equals(e1) || items.get(item).equals(e2) || items.get(item).equals(e4)) {
+                                        Toast.makeText(this, getString(R.string.engineExists), Toast.LENGTH_LONG).show();
+                                        break;
+                                    }
                                     e3 = items.get(item);
                                     if (e3.equals(getString(R.string.none)))
                                         e3 = "";
                                     e3_name.setText(e3);
                                     break;
                                 case 4:
+                                    if (items.get(item).equals(e1) || items.get(item).equals(e2) || items.get(item).equals(e3)) {
+                                        Toast.makeText(this, getString(R.string.engineExists), Toast.LENGTH_LONG).show();
+                                        break;
+                                    }
                                     e4 = items.get(item);
                                     if (e4.equals(getString(R.string.none)))
                                         e4 = "";
@@ -351,8 +377,10 @@ public class AnalysisOptions extends Activity {
     final static int EDIT_UCI_OPTIONS = 51;
 //    final static int NO_FILE_ACTIONS_DIALOG = 193;
     final static int MENU_SELECT_ENGINE_FROM_OEX = 194;
+    final static String ALPHA_VALUE = "ff";
 
     Util u;
+    ColorValues cv;
     SharedPreferences userPrefs;
     SharedPreferences runPrefs;
 

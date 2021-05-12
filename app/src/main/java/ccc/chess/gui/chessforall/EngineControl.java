@@ -19,9 +19,11 @@ public class EngineControl
 	{
 		uciEngines = new UciEngine[1];
 		uciEnginesMessage = new String[1];
+		uciEnginesScore = new int[1];
 		engineCnt = 1;
 		uciEngines[0] = new UciEngine(context, 0,null, null);
 		uciEnginesMessage[0] = "";
+		uciEnginesScore[0] = 0;
 		setCurrentEngineId(0);
 		ue = uciEngines[0];
 	}
@@ -107,6 +109,11 @@ public class EngineControl
 				uciEnginesMessage[i] = "";
 			}
 		}
+		if (uciEnginesScore != null) {
+			for (int i = 0; i < engineCnt; i++) {
+				uciEnginesScore[i] = 0;
+			}
+		}
 	}
 
 	boolean enginesRunning()
@@ -147,13 +154,15 @@ public class EngineControl
 			{
 				currentEngineId = 0;
 				uciEngines[0].startPlay = true;
-				uciEngines[1].startPlay = false;
+				if (uciEngines[1] != null)
+					uciEngines[1].startPlay = false;
 			}
 			else
 			{
 				currentEngineId = 1;
 				uciEngines[0].startPlay = false;
-				uciEngines[1].startPlay = true;
+				if (uciEngines[1] != null)
+					uciEngines[1].startPlay = true;
 			}
 		}
 
@@ -167,10 +176,13 @@ public class EngineControl
 	UciEngine ue;										// single UciEngine 			MainActivity.withMultiEngine = false
 	UciEngine[] uciEngines;								// manage multiple UciEngine	MainActivity.withMultiEngine = true
 	String[] uciEnginesMessage;							// engine messages from EngineListener
+	int[] uciEnginesScore;								// engine score from EngineListener
 	int engineCnt = 1;
 	public int currentEngineId = 0;                     // current engineId, idx from uciEngines, return from getEngine()
 	public int analysisEngineId = 0;                    // analysis engineId, for making move !
 	public int analysisEngineCnt = 0;                   // analysis engineId counter, for making move !
+	public int analysisBestScore = 0;           		// analysis best score
+	public int analysisBestScoreEngineId = 0;           // analysis best score, engineId
 	public String analysisEngineBestMove = "";          // analysis engineId best move, for making move !
 	int searchId = 0;
 	C4aBook book;

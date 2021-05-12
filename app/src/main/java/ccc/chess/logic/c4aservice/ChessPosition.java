@@ -435,8 +435,6 @@ public class ChessPosition
         return "";
     }
 
-
-
 	public String getLanMoveFromSanMove(CharSequence fen, String[] possibleSanMoves, CharSequence sanMove)
 	{
 
@@ -594,10 +592,11 @@ public class ChessPosition
 		
 		int cntFrom = 0;
 		int cntTo = 0;
+		cnt_fast_castle_move = 0;
 		for (int i = 0; i < moveList.size(); i++)
 		{
 
-//			Log.i(TAG, "1 moveList.get(i): " + moveList.get(i));
+//			Log.i(TAG, "1 moveList.get(i): " + moveList.get(i) + ", moveList.size(): " + moveList.size());
 
 			if (moveList.get(i).length() >= 4)
 			{
@@ -635,13 +634,18 @@ public class ChessPosition
 							listFrom = listFrom + moveList.get(i).toString().substring(5, 9) + " ";
 						}
 					}
-					if (fastMove.toString().equals("") && moveList.get(i).contains("|")) {
+
+					if (moveList.get(i).contains("|"))	// castle
+						cnt_fast_castle_move++;
+					if (fastMove.toString().equals("") && moveList.get(i).contains("|") && i -1 == moveList.size()) {
 						String[] split = moveList.get(i).split("\\|");
 						if (split.length >= 2) {
 							if (split[0].equals(split[1])) {
 								isChess960Castling = true;
-								fast_move = FAST_MOVE_OK;
-								return split[0];
+								if (cnt_fast_castle_move == 1) {
+									fast_move = FAST_MOVE_OK;
+									return split[0];
+								}
 							}
 						}
 					}
@@ -706,12 +710,172 @@ public class ChessPosition
 		}
 	}
 
-	public CharSequence getFEN(Position cpPos)	
+	public CharSequence getFEN(Position cpPos)
 	{
 		if (isChess960)
 			return chess960SetNewFEN(cpPos.getFEN(), chess960OldCast);
 		else
 			return cpPos.getFEN();
+	}
+
+	public CharSequence getNewFEN()
+	{
+		CharSequence newFen = cpPosition.getFEN();
+
+//		Log.i(TAG, "getNewFEN(), newFen: " + newFen);
+
+		String[] fenSplit = newFen.toString().split(" ");
+
+		if (!fenSplit[3].equals("-")) {
+			newFen = fenSplit[0] + " " + fenSplit[1] + " " + fenSplit[2] + " " + checkFenEp(newFen) + " " + fenSplit[4]  + " " + fenSplit[5];
+		}
+
+		if (!fenSplit[2].equals("-") && !isChess960) {
+			newFen = fenSplit[0] + " " + fenSplit[1] + " " + checkFenCastle(newFen) + " " + fenSplit[3]  + " " + fenSplit[4]  + " " + fenSplit[5];
+		}
+
+		return  newFen;
+
+	}
+
+	public String checkFenEp(CharSequence newFen)
+	{
+
+		//karl!!! check last opponent move is OK (left | right from current pawn move)
+
+		String[] fenSplit = newFen.toString().split(" ");
+		String ep = fenSplit[3];
+
+		if (ep.length() == 2) {
+			int pp = 0;
+			for (int i = 0; i < fldData.length; i++) {
+				if (fldData[i] == ep.charAt(0)) {
+					pp = i;
+					break;
+				}
+			}
+
+//			Log.i(TAG, "1 getNewFEN(), newFen: " + newFen + ", ep: " + ep);
+
+			String[] posSplit = fenSplit[0].toString().split("/");
+			boolean isLeftP = false;
+			boolean isRightP = false;
+			// white ep check
+			if (ep.endsWith("3")) {
+				String r4 = posSplit[4];
+				String l4 = "";
+				for (int i = 0; i < r4.length(); i++) {
+					if (Character.isDigit(r4.charAt(i))) {
+						int n = Integer.parseInt(String.valueOf(r4.charAt(i)));
+						for (int j = 0; j < n; j++) {
+							l4 = l4 + "-";
+						}
+					} else
+						l4 = l4 + r4.charAt(i);
+				}
+				if (pp > 0 && l4.charAt(pp -1) == 'p')
+					isLeftP = true;
+				if (pp < 7 && l4.charAt(pp +1) == 'p')
+					isRightP = true;
+
+//				Log.i(TAG, "2 getNewFEN(), l4: " + l4 + ", pp: " + pp + ", isLeftP: " + isLeftP + ", isRightP: " + isRightP);
+
+				if (!isLeftP && !isRightP)
+					ep = "-";
+			}
+
+			// black ep check
+			if (ep.endsWith("6")) {
+				String r5 = posSplit[3];
+				String l5 = "";
+				for (int i = 0; i < r5.length(); i++) {
+					if (Character.isDigit(r5.charAt(i))) {
+						int n = Integer.parseInt(String.valueOf(r5.charAt(i)));
+						for (int j = 0; j < n; j++) {
+							l5 = l5 + "-";
+						}
+					} else
+						l5 = l5 + r5.charAt(i);
+				}
+				if (pp > 0 && l5.charAt(pp -1) == 'P')
+					isLeftP = true;
+				if (pp < 7 && l5.charAt(pp +1) == 'P')
+					isRightP = true;
+
+//				Log.i(TAG, "2 getNewFEN(), l5: " + l5 + ", pp: " + pp + ", isLeftP: " + isLeftP + ", isRightP: " + isRightP);
+
+				if (!isLeftP && !isRightP)
+					ep = "-";
+			}
+
+		}
+
+//		Log.i(TAG, "9 getNewFEN(), newFen: " + newFen + ", ep: " + ep);
+
+		return ep;
+
+	}
+
+	public String checkFenCastle(CharSequence newFen)
+	{
+		String[] fenSplit = newFen.toString().split(" ");
+		String castle = fenSplit[2];
+		if (fenSplit.length == 6)
+		{
+			String baseBlack = "";
+			String baseWhite = "";
+			String[] posSplit = fenSplit[0].split("/");
+			if (posSplit.length == 8)
+			{
+
+//				Log.i(TAG, "checkFenCastle(), posSplit[0]: " + posSplit[0] + ", posSplit[7]: " + posSplit[7]);
+
+				for (int i = 0; i < posSplit[0].length(); i++) {
+					if (Character.isDigit(posSplit[0].charAt(i))) {
+						int n = Integer.parseInt(String.valueOf(posSplit[0].charAt(i)));
+						for (int j = 0; j < n; j++) {
+							baseBlack = baseBlack + "-";
+						}
+
+//						Log.i(TAG, "checkFenCastle(), n: " + n + ", baseBlack: " + baseBlack);
+
+					}
+					else
+						baseBlack = baseBlack + posSplit[0].charAt(i);
+				}
+
+				for (int i = 0; i < posSplit[7].length(); i++) {
+					if (Character.isDigit(posSplit[7].charAt(i))) {
+						int n = Integer.parseInt(String.valueOf(posSplit[7].charAt(i)));
+						for (int j = 0; j < n; j++) {
+							baseWhite = baseWhite + "-";
+						}
+					}
+					else
+						baseWhite = baseWhite + posSplit[7].charAt(i);
+				}
+
+			}
+			if (castle.contains("q")) {
+				if (baseBlack.charAt(0) != 'r' || baseBlack.charAt(4) != 'k')
+					castle = castle.replace("q", "");
+			}
+			if (castle.contains("k")) {
+				if (baseBlack.charAt(7) != 'r' || baseBlack.charAt(4) != 'k')
+					castle = castle.replace("k", "");
+			}
+			if (castle.contains("Q")) {
+				if (baseWhite.charAt(0) != 'R' || baseWhite.charAt(4) != 'K')
+					castle = castle.replace("Q", "");
+			}
+			if (castle.contains("K")) {
+				if (baseWhite.charAt(7) != 'R' || baseWhite.charAt(4) != 'K')
+					castle = castle.replace("K", "");
+			}
+		}
+
+		return castle;
+
 	}
 
 	public CharSequence getSAN()	
@@ -1031,10 +1195,11 @@ public class ChessPosition
 //		Log.i(TAG, "canCastWS, canCastWL, canCastBL, : " + canCastWS +  ", " + canCastWL + ", " + canCastBS + ", " + canCastBL);
 
 	}
-	
+
 	final String TAG = "ChessPosition";
 	Chess960 chess960 = new Chess960();
 	int fast_move = 0;
+	int cnt_fast_castle_move = 0;
 	final int FAST_MOVE_NO_MOVE = 0;
 	final int FAST_MOVE_OK = 1;
 	final int FAST_MOVE_MULTIPLE_FROM = 2;
@@ -1105,5 +1270,7 @@ public class ChessPosition
 	boolean isPromotion = false;
 	boolean isLanNotation = false;
 	boolean isFenError = false;
+
+	final Character fldData[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
 }

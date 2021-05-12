@@ -45,6 +45,18 @@
             android:background="@drawable/rectanglegrey"
             android:text="@string/btn_Cancel" />
         <TextView
+            android:id="@+id/btn_apply"
+            style="@style/c4aTV5"
+            android:layout_width="wrap_content"
+            android:onClick="myClickHandler"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingLeft="@dimen/tv_color_margin_2"
+            android:paddingRight="@dimen/tv_color_margin_2"
+            android:background="@drawable/rectanglegrey"
+            android:text="@string/colorApply" />
+        <TextView
             android:id="@+id/btn_start_continue"
             style="@style/c4aTV5"
             android:onClick="myClickHandler"

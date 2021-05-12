@@ -103,6 +103,41 @@ public class Util
         }
     }
 
+    public CharSequence getDisplayScore(int score, CharSequence fen)
+    {
+        char color = 'w';
+        CharSequence[] fenSplit = fen.toString().split(" ");
+        if (fenSplit.length >= 0)
+        {
+            if (fenSplit[1].equals("b"))
+                color = 'b';
+        }
+        int s1 = score / 100;
+        int s2 = score % 100;
+        CharSequence s = "";		// score
+        if (s1 < 0)	s1 = s1 * -1;
+        if (s2 < 0)	s2 = s2 * -1;
+        if (color == 'w')
+        {
+            if (score < 0)
+                s = s + "-";
+            else
+                s = s + "+";
+        }
+        else
+        {
+            if (score < 0)
+                s = s + "+";
+            else
+                s = s + "-";
+        }
+        if (s2 < 10)
+            s = s + Integer.toString(s1) + ".0" + s2;
+        else
+            s = s + Integer.toString(s1) + "." + s2;
+        return s;
+    }
+
     final String TAG = "Util";
 
 }

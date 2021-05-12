@@ -107,7 +107,11 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         cbGuLastPosition =  findViewById(R.id.cbGuLastPosition);
         cbGuEnableSounds =  findViewById(R.id.cbGuEnableSounds);
 
+//        Log.i(TAG, "1 start(), textsizeId: " + textsizeId + ", fontSize: " + fontSize);
+
         getPrefs();
+
+//        Log.i(TAG, "2 start(), textsizeId: " + textsizeId + ", fontSize: " + fontSize);
 
         variantsMinus = findViewById(R.id.variantsMinus);
         variantsMinus.setOnClickListener(v -> {
@@ -211,6 +215,8 @@ public class Settings  extends Activity implements Ic4aDialogCallback
         u.setTextViewColors(btnSettingsCancel, "#BAB8B8");
         btnSettingsOk = findViewById(R.id.btnSettingsOk);
         u.setTextViewColors(btnSettingsOk, "#BAB8B8");
+
+//        Log.i(TAG, "9 start(), textsizeId: " + textsizeId + ", fontSize: " + fontSize);
 
     }
 
@@ -386,6 +392,9 @@ public class Settings  extends Activity implements Ic4aDialogCallback
                 fontSize = FONTSIZE_LARGEST;
                 break;
         }
+
+//        Log.i(TAG, "setTextsize(), textsizeId: " + textsizeId + ", fontSize: " + fontSize);
+
         textsizeValue.setText(getTextsizeNames(textsizeId));
         u.setTextViewColors(textsizeValue, "#efe395");
         textsizeMinus.setTextSize(TypedValue.COMPLEX_UNIT_PX, ts);
@@ -645,7 +654,10 @@ public class Settings  extends Activity implements Ic4aDialogCallback
 
         // Appearance
         pieceNameId = userPrefs.getInt("user_options_gui_PieceNameId", pieceNameId);
-        textsizeId = userPrefs.getInt("user_options_gui_textsizeId", textsizeId);
+
+//        Log.i(TAG, "getPrefs(), textsizeId: " + userPrefs.getInt("user_options_gui_textsizeId", TEXTSIZE_DEFAULT));
+
+        textsizeId = userPrefs.getInt("user_options_gui_textsizeId", TEXTSIZE_DEFAULT);
         fontSize = userPrefs.getInt("user_options_gui_fontSize", fontSize);
         cbGuCoordinates.setChecked(userPrefs.getBoolean("user_options_gui_Coordinates", false));
         cbGuPosibleMoves.setChecked(userPrefs.getBoolean("user_options_gui_posibleMoves", true));
@@ -727,11 +739,13 @@ public class Settings  extends Activity implements Ic4aDialogCallback
     int TEXTSIZE_MIN = 1;
     int TEXTSIZE_MAX = 4;
     int textsizeId = TEXTSIZE_DEFAULT;
+
     int FONTSIZE_SMALL = 10;
     final static int FONTSIZE_MEDIUM = 14;
     int FONTSIZE_LARGE = 18;
     int FONTSIZE_LARGEST = 22;
     int fontSize = FONTSIZE_MEDIUM;
+
     float textsizePixel = 0F;
 
     // Engine Settings

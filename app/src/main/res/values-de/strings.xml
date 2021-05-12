@@ -281,7 +281,7 @@
     <string name="menu_edit_pgn_start">Datei-Anfang</string>
     <string name="menu_edit_pgn_end">Datei-Ende</string>
     <string name="delete_game">Partie löschen?</string>
-    <string name="btn_Cancel">Abbrechen</string>
+    <string name="btn_Cancel">Abbruch</string>
     <string name="game_saved">Partie gespeichert!</string>
     <string name="rebuild_pgn_file">PGN-Datei neu aufbauen:</string>
     <string name="fmInfoSelectFile">Wähle eine Datei (.pgn) aus um die Partienliste anzuzeigen. Durch langes Drücken wird die entsprechende Datei gelöscht. Drücke die Menü-Taste für weitere Optionen.</string>
@@ -405,4 +405,5 @@
     <string name="matchEnd">Wettkampfende</string>
     <string name="endOrContinueMatch">Computer Match beenden oder fortsetzen?</string>
     <string name="finishGame">Beenden</string>
+    <string name="engineExists">Engine bereits vorhanden.</string>
 </resources>

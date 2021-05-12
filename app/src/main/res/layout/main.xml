@@ -209,7 +209,7 @@
 			android:includeFontPadding="true"
 			android:paddingLeft="2dip"
 			android:paddingRight="2dip"
-			android:background="@drawable/rectangletransparent"
+			android:background="@drawable/rectangleenginemessage"
 			android:textColor="#000000" />
 	</ScrollView>
 

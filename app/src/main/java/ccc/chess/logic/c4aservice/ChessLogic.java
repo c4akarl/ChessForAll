@@ -148,7 +148,7 @@ public class ChessLogic
     		else
     		{
 
-//				Log.i(TAG, "newPositionFromMove(), moveLAN, canCast: " + mv + ", " + pos.isChess960Castling);
+//				Log.i(TAG, "1 newPositionFromMove(), moveLAN, canCast: " + mv + ", " + pos.isChess960Castling + ", moveList.size: "+ pos.moveList.size());
 
     			if (pos.cpPosition.getToPlay() == 0)
     			{	// white
@@ -164,6 +164,9 @@ public class ChessLogic
     				if (pos.chess960CanCastling(history.getStartFen(), fen, pos.cpPosition.getToPlay(), pos.bLongCastC4aLan.subSequence(0, 4)))
     					pos.moveList.add(pos.bLongCastC4aLan.toString());
     			}
+
+//				Log.i(TAG, "2 newPositionFromMove(), moveLAN, canCast: " + mv + ", " + pos.isChess960Castling + ", moveList.size: "+ pos.moveList.size());
+
     		}
 		}
 
@@ -206,7 +209,7 @@ public class ChessLogic
     	            break;
             }
 
-//			Log.i(TAG, "fastMove: " + fastMove + "\npos.fast_move: " + pos.fast_move + ", stat: " + stat + ", message: " + message);
+//			Log.i(TAG, "fastMove: " + fastMove + ", pos.fast_move: " + pos.fast_move + ", stat: " + stat + ", message: " + message);
 
 		}
 		if (mv.length() >= 2)
@@ -260,7 +263,11 @@ public class ChessLogic
 //					Log.i(TAG, "2 newPositionFromMove(), newFen: " + pos.cpPosition.getFEN());
 
     			}
-	    		CharSequence newFen = pos.cpPosition.getFEN();
+
+	    		CharSequence newFen = pos.getNewFEN();
+
+//				Log.i(TAG, "newPositionFromMove(), newFen : " + newFen);
+
 	    		CharSequence moveText = "";
 	            CharSequence isCheck = "f";
 	            CharSequence isMate = "f";
@@ -269,7 +276,7 @@ public class ChessLogic
 	            if (pos.isMate()) isMate = "t";
 	            if (pos.isStaleMate()) isStaleMate = "t";
 //	            Log.i(TAG, "mv, mvPgn, validMove: " + mv + ", " + mvPgn + ", " + validMove);
-//	            Log.i(TAG, "newFen: " + newFen);
+
 //	            Log.i(TAG, "isCheck, isMate, isStealMate: " + isCheck + ", " + isMate + ", " + isStaleMate);
 	            chessMove.setMoveFromHistory(history.moveHistory.get(history.getMoveIdx()));
 	            
@@ -579,13 +586,7 @@ public class ChessLogic
 
 				validMove = posPV.validMove(move);
 
-//				if (move.equals("e1g1")) {
-//					Log.i(TAG, "getNotationFromInfoPv, fen: " + fen);
-//					Log.i(TAG, "getNotationFromInfoPv, move: " + move + ", posPV.isChess960: " + posPV.isChess960 + ", isChess960Castling: " + posPV.isChess960Castling + ", validMove: " + validMove);
-//					Log.i(TAG, "getNotationFromInfoPv, posPV.canCastWS: " + posPV.canCastWS + ", posPV.wShortCastC4aLan: " + posPV.wShortCastC4aLan);
-//				}
-
-				if (move.length() >= 4)			
+				if (move.length() >= 4)
 				{
 		    		if (validMove)
 		    		{

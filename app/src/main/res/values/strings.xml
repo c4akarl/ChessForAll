@@ -409,5 +409,6 @@
     <string name="matchEnd">Match end</string>
     <string name="endOrContinueMatch">End or continue computer match?</string>
     <string name="finishGame">Finish game</string>
+    <string name="engineExists">Engine already exists.</string>
 
 </resources>

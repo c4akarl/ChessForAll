@@ -406,5 +406,6 @@
     <string name="matchEnd">Fin du match</string>
     <string name="endOrContinueMatch">Terminer ou continuer Computer Match?</string>
     <string name="finishGame">Terminer le jeu</string>
+    <string name="engineExists">Le moteur existe déjà.</string>
 
 </resources>

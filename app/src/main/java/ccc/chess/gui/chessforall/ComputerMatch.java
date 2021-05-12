@@ -6,7 +6,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
@@ -14,6 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.kalab.chess.enginesupport.ChessEngine;
 import com.kalab.chess.enginesupport.ChessEngineResolver;
@@ -27,11 +31,13 @@ import java.util.List;
 
 import ccc.chess.logic.c4aservice.ChessHistory;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ComputerMatch extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         u = new Util();
+        cv = new ColorValues();
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         fmPrefs = getSharedPreferences("fm", 0);
         userPrefs = getSharedPreferences("user", 0);
@@ -59,6 +65,8 @@ public class ComputerMatch extends Activity {
         u.setTextViewColors(btn_engine_black, "#BAB8B8", "#000000");
         btn_cancel = findViewById(R.id.btn_cancel);
         u.setTextViewColors(btn_cancel, "#BAB8B8", "#000000");
+        btn_apply = findViewById(R.id.btn_apply);
+        u.setTextViewColors(btn_apply, "#BAB8B8", "#000000");
         btn_start_continue = findViewById(R.id.btn_start_continue);
         u.setTextViewColors(btn_start_continue, "#BAB8B8", "#000000");
         cb_engineVsEngine = findViewById(R.id.cb_engineVsEngine);
@@ -72,6 +80,9 @@ public class ComputerMatch extends Activity {
             cb_engineVsEngine.setText(runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
             btn_engine_white.setText(R.string.engine);
             btn_engine_black.setText("");
+            white = runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE);
+            event = runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE);
+            black = "";
         }
         cb_engineVsEngine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -103,8 +114,10 @@ public class ComputerMatch extends Activity {
         });
 
         engine_white_name = findViewById(R.id.engine_white_name);
+        engine_white_name.setTextColor(cv.getTransparentColorInt(ColorValues.COLOR_ARROWS5_27, ALPHA_VALUE));
         engine_white_name.setText(white);
         engine_black_name = findViewById(R.id.engine_black_name);
+        engine_black_name.setTextColor(cv.getTransparentColorInt(ColorValues.COLOR_ARROWS6_28, ALPHA_VALUE));
         engine_black_name.setText(black);
         cb_currentGame = findViewById(R.id.cb_currentGame);
         cb_currentGame.setChecked(currentGame);
@@ -174,13 +187,18 @@ public class ComputerMatch extends Activity {
                 setResult(RESULT_CANCELED, returnIntent);
                 finish();
                 break;
+            case R.id.btn_apply:
+                setPrefs(false);
+                setResult(ACTION_APPLY, returnIntent);
+                finish();
+                break;
             case R.id.btn_start_continue:
                 if (cb_saveGames.isChecked() && !fileIO.fileExists(path, file))
                     Toast.makeText(this, getString(R.string.fmFileError), Toast.LENGTH_LONG).show();
                 else
                 {
-                    setPrefs();
-                    setResult(RESULT_OK, returnIntent);
+                    setPrefs(true);
+                    setResult(ACTION_MATCH, returnIntent);
                     finish();
                 }
                 break;
@@ -278,12 +296,28 @@ public class ComputerMatch extends Activity {
                             if ((item < 0) || (item >= nEngines))
                                 return;
                             dialog.dismiss();
+
+//                            Log.i(TAG, "MENU, MENU_SELECT_ENGINE_FROM_OEX, selected engine: " + items.get(item));
+//                            Log.i(TAG, "MENU, MENU_SELECT_ENGINE_FROM_OEX, white: " + white + ", black: " + black);
+
                             switch (engineId) {
                                 case 0:
+                                    if (items.get(item).equals(black)) {
+                                        Toast.makeText(this, getString(R.string.engineExists), Toast.LENGTH_LONG).show();
+                                        break;
+                                    }
                                     white = items.get(item);
                                     engine_white_name.setText(white);
+                                    if (!cb_engineVsEngine.isChecked()) {
+                                        cb_engineVsEngine.setText(white);
+                                        et_event.setText(white);
+                                    }
                                     break;
                                 case 1:
+                                    if (items.get(item).equals(white)) {
+                                        Toast.makeText(this, getString(R.string.engineExists), Toast.LENGTH_LONG).show();
+                                        break;
+                                    }
                                     black = items.get(item);
                                     engine_black_name.setText(black);
                                     break;
@@ -366,7 +400,7 @@ public class ComputerMatch extends Activity {
                 matchResult = history.getGameTagValue("MatchResult");
             if (!history.getGameTagValue("FEN").equals("")) {
                 fen = history.getGameTagValue("FEN");
-                currentGame = true;
+//                currentGame = true;
             }
             else
             {
@@ -404,7 +438,6 @@ public class ComputerMatch extends Activity {
         matchId = userPrefs.getInt("user_play_eve_matchId", 1);
         event = eventDefault;
         site = siteDefault;
-        currentGame = userPrefs.getBoolean("user_play_eve_autoCurrentGame", false);
         changeColor = userPrefs.getBoolean("user_play_eve_autoFlipColor", true);
         saveGames = userPrefs.getBoolean("user_play_eve_autoSave", true);
         path = userPrefs.getString("user_play_eve_path", "");
@@ -415,34 +448,8 @@ public class ComputerMatch extends Activity {
 
     }
 
-    protected void setPrefs()
+    protected void setPrefs(boolean isMatch)
     {
-        SharedPreferences.Editor ed = userPrefs.edit();
-        ed.putInt("user_play_playMod", 3);
-        ed.putBoolean("user_play_eve_engineVsEngine", cb_engineVsEngine.isChecked());
-        if (engineVsEngine) {
-            ed.putString("user_play_eve_white", engine_white_name.getText().toString());
-            ed.putString("user_play_eve_black", engine_black_name.getText().toString());
-        }
-        ed.putInt("user_play_eve_games", Integer.parseInt (et_games.getText().toString()));
-        round = Integer.parseInt (et_round.getText().toString());
-        ed.putInt("user_play_eve_round", round);
-        if (round == 0) {
-            matchId = userPrefs.getInt("user_play_eve_matchId", 1) +1;
-            matchResult = "0-0";
-            ed.putInt("user_play_eve_matchId", matchId);
-        }
-        ed.putString("user_play_eve_event", et_event.getText().toString());
-        ed.putString("user_play_eve_site", et_site.getText().toString());
-        ed.putString("user_play_eve_result", matchResult);
-        ed.putBoolean("user_play_eve_autoCurrentGame", cb_currentGame.isChecked());
-        ed.putBoolean("user_play_eve_autoFlipColor", cb_changeColor.isChecked());
-        ed.putBoolean("user_play_eve_autoSave", cb_saveGames.isChecked());
-        ed.putString("user_play_eve_path", et_path.getText().toString());
-        ed.putString("user_play_eve_file", et_file.getText().toString());
-        ed.putString("user_play_eve_fen", fen);
-        ed.apply();
-
         SharedPreferences.Editor edR = runPrefs.edit();
         if (engineVsEngine) {
             edR.putString("run_engineListMatch", engine_white_name.getText().toString() + "|" + engine_black_name.getText().toString());
@@ -450,6 +457,37 @@ public class ComputerMatch extends Activity {
         else
             edR.putString("run_engineProcess", engine_white_name.getText().toString());
         edR.apply();
+
+        SharedPreferences.Editor ed = userPrefs.edit();
+        ed.putBoolean("user_play_eve_engineVsEngine", cb_engineVsEngine.isChecked());
+        if (engineVsEngine) {
+            ed.putString("user_play_eve_white", engine_white_name.getText().toString());
+            ed.putString("user_play_eve_black", engine_black_name.getText().toString());
+        }
+
+        if (isMatch) {
+            ed.putInt("user_play_playMod", 3);
+            ed.putInt("user_play_eve_games", Integer.parseInt(et_games.getText().toString()));
+            try { round = Integer.parseInt(et_round.getText().toString()); }
+            catch (NumberFormatException e) { round = 0; }
+            ed.putInt("user_play_eve_round", round);
+            if (round == 0) {
+                matchId = userPrefs.getInt("user_play_eve_matchId", 1) + 1;
+                matchResult = "0-0";
+                ed.putInt("user_play_eve_matchId", matchId);
+            }
+            ed.putString("user_play_eve_event", et_event.getText().toString());
+            ed.putString("user_play_eve_site", et_site.getText().toString());
+            ed.putString("user_play_eve_result", matchResult);
+            ed.putBoolean("user_play_eve_autoCurrentGame", cb_currentGame.isChecked());
+            ed.putBoolean("user_play_eve_autoFlipColor", cb_changeColor.isChecked());
+            ed.putBoolean("user_play_eve_autoSave", cb_saveGames.isChecked());
+            ed.putString("user_play_eve_path", et_path.getText().toString());
+            ed.putString("user_play_eve_file", et_file.getText().toString());
+            ed.putString("user_play_eve_fen", fen);
+        }
+
+        ed.apply();
 
     }
 
@@ -460,13 +498,18 @@ public class ComputerMatch extends Activity {
             return white + "\n" + getString(R.string.result) + ": " + matchResult;
     }
 
-//    final String TAG = "ComputerMatch";
+    final String TAG = "ComputerMatch";
     final static int ENGINE_AUTOPLAY_REQUEST_CODE = 50;
     final static int EDIT_UCI_OPTIONS = 51;
 
     final static int NO_FILE_ACTIONS_DIALOG = 193;
 
     final static int MENU_SELECT_ENGINE_FROM_OEX = 194;
+
+    final static int ACTION_APPLY = 101;
+    final static int ACTION_MATCH = 102;
+    final static String ALPHA_VALUE = "bb";
+
     Util u;
     SharedPreferences fmPrefs;
     SharedPreferences userPrefs;
@@ -481,11 +524,12 @@ public class ComputerMatch extends Activity {
 
     FileIO fileIO;
     UciEngine engine;
+    ColorValues cv;
 
     boolean engineVsEngine = true;
     String white = "";
     String black = "";
-    boolean currentGame = true;
+    boolean currentGame = false;
     boolean changeColor = true;
     boolean saveGames = true;
     String path = "";
@@ -516,7 +560,9 @@ public class ComputerMatch extends Activity {
     CheckBox cb_saveGames;
     TextView et_path;
     TextView et_file;
+
     TextView btn_cancel;
+    TextView btn_apply;
     TextView btn_start_continue;
 
     private static String engineDir = "c4a/uci";

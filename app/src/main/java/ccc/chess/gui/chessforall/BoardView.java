@@ -609,8 +609,12 @@ public class BoardView extends View
 
 //            Log.i(TAG, "onDraw, displayArrows.size: " + displayArrows.size() + ", arrowMode: " + arrowMode);
 //            Log.i(TAG, "onDraw, scoreArrows.size: " + scoreArrows.size());
+//            Log.i(TAG, "onDraw, arrowMode: " + arrowMode);
 
             if (displayArrows.size() > 0) {
+
+//                Log.i(TAG, "onDraw, arrowMode: " + arrowMode + ", displayArrows: " + displayArrows + ", scoreArrows: " + scoreArrows);
+
                 for (int i = 0; i < displayArrows.size(); i++) {
 
                     if (displayArrows.get(i).length() != 4)
@@ -638,6 +642,7 @@ public class BoardView extends View
 
                     switch (arrowMode) {
                         case BoardView.ARROWS_BEST_VARIANT:
+                        case BoardView.ARROWS_BEST_MOVES:
 
                             if (i % 2 == 0) { // player to move next
                                 colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
@@ -666,9 +671,7 @@ public class BoardView extends View
                         case BoardView.ARROWS_BOOK:
                             colorFill = cv.getColor(cv.COLOR_ARROWS5_27);
 
-//                            if (scoreArrows.size() > 0) {
                             if (scoreArrows.size() > 0 && i < scoreArrows.size()) {
-//                                int score = Integer.parseInt(scoreArrows.get(i).toString());
                                 int score = 0;
                                 try {
                                     score = Integer.parseInt(scoreArrows.get(i).toString());
@@ -687,9 +690,10 @@ public class BoardView extends View
                                     (int) (Color.blue(colorFill) / darkenF));
                             }
                             break;
-                        case BoardView.ARROWS_BEST_MOVES:
-
-                            break;
+                            //karl NEU ?!
+//                        case BoardView.ARROWS_BEST_MOVES:
+//
+//                            break;
                     }
 
                     // DrawArrow: from, to, size, star, colorFill, colorStroke, strokeWidth, SameCount, SameNr
