@@ -404,5 +404,5 @@
     <string name="match">Wettkampf</string>
     <string name="matchEnd">Wettkampfende</string>
     <string name="endOrContinueMatch">Computer Match beenden oder fortsetzen?</string>
-    <string name="finishGame">Spiel beenden</string>
+    <string name="finishGame">Beenden</string>
 </resources>
