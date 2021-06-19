@@ -132,14 +132,16 @@ public class EditUciOptions extends Activity implements View.OnTouchListener, Te
                     name.setId(i + NAME_ADD);
                     name.setOnTouchListener(this);
                     editName.setId(i);
-                    if (getType(uciOptsList.get(i)) == Type.STRING && getName(uciOptsList.get(i)).toLowerCase().contains("file")) {
-                        editName.setFocusable(false);
-                        editName.setFocusableInTouchMode(false);
-                        editName.setOnTouchListener(this);
-                    }
-                    else {
-                        editName.addTextChangedListener(this);
-                    }
+                    //karl???
+//                    if (getType(uciOptsList.get(i)) == Type.STRING && getName(uciOptsList.get(i)).toLowerCase().contains("file")) {
+//                        editName.setFocusable(false);
+//                        editName.setFocusableInTouchMode(false);
+//                        editName.setOnTouchListener(this);
+//                    }
+//                    else {
+//                        editName.addTextChangedListener(this);
+//                    }
+                    editName.addTextChangedListener(this);
                     viewList.add(editName);
                     llv.addView(spcHeight);
                     llh.addView(name);

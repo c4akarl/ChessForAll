@@ -19,6 +19,7 @@ public class EngineControl
 	{
 		uciEngines = new UciEngine[1];
 		uciEnginesMessage = new String[1];
+		uciEnginesDisplayMoves = new String[1];
 		uciEnginesScore = new int[1];
 		engineCnt = 1;
 		uciEngines[0] = new UciEngine(context, 0,null, null);
@@ -109,6 +110,11 @@ public class EngineControl
 				uciEnginesMessage[i] = "";
 			}
 		}
+		if (uciEnginesDisplayMoves != null) {
+			for (int i = 0; i < engineCnt; i++) {
+				uciEnginesDisplayMoves[i] = "null";
+			}
+		}
 		if (uciEnginesScore != null) {
 			for (int i = 0; i < engineCnt; i++) {
 				uciEnginesScore[i] = 0;
@@ -176,6 +182,8 @@ public class EngineControl
 	UciEngine ue;										// single UciEngine 			MainActivity.withMultiEngine = false
 	UciEngine[] uciEngines;								// manage multiple UciEngine	MainActivity.withMultiEngine = true
 	String[] uciEnginesMessage;							// engine messages from EngineListener
+	String[] uciEnginesDisplayMoves;					// display moves, all engines (e.g. e2e4)
+	String displayMoves;								// display moves, 1. move (e.g. e2e4)
 	int[] uciEnginesScore;								// engine score from EngineListener
 	int engineCnt = 1;
 	public int currentEngineId = 0;                     // current engineId, idx from uciEngines, return from getEngine()

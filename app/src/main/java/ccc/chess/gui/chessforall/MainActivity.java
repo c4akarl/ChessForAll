@@ -3065,10 +3065,17 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					if (restartPlayDialog) {
 						dRestartEngine = true;
 						removeDialog(PLAY_DIALOG);
+
+//						Log.i(TAG, "onActivityResult(), ANALYSIS_OPTIONS, ec.chessEnginePaused: " + ec.chessEnginePaused);
+
 						if (!ec.chessEnginePaused)
 							pauseStopPlay(false);
-						else
-							stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.fen, true);
+						else {
+//							stopSearchAndContinue(EngineState.STOP_CONTINUE, gc.fen, true);
+							dRestartEngine = false;
+							stopMultiEnginesAndRestart();
+							setInfoMessage(getString(R.string.engineInit), null, null);
+						}
 					}
 				}
 				break;
@@ -3473,7 +3480,6 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	{
 
 //		Log.i(TAG, "stopSearchAndContinue(), ec.currentEngineId: " + ec.currentEngineId + ", ec.engineCnt: " + ec.engineCnt + ", stopAll: " + stopAll);
-
 //		Log.i(TAG, "stopSearchAndContinue(), engineState: " + engineState + ", fen: " + fen + ", stopAll: " + stopAll + ", ec.currentEngineId: " + ec.currentEngineId);
 
 		continueFen = "";
@@ -4121,6 +4127,7 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				ec.engineCnt = engineNames.size();
 				ec.uciEngines = new UciEngine[ec.engineCnt];
 				ec.uciEnginesMessage = new String[ec.engineCnt];
+				ec.uciEnginesDisplayMoves = new String[ec.engineCnt];
 				ec.uciEnginesScore = new int[ec.engineCnt];
 				ec.analysisBestScoreEngineId = 0;
 				ec.analysisEngineBestMove = "";
@@ -5919,6 +5926,12 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 	//  NEW ENGINE, searchThread		NEW ENGINE, searchThread		NEW ENGINE, searchThread		NEW ENGINE, searchThread
 	void startSearchThread(int engineId, String fen, String moves, String startFen, boolean isSearch, boolean isAnalyze, String ponderMove)
 	{
+
+//		Log.i(TAG, "startSearchThread(), updateBoardView()");
+//
+//		boardView.updateBoardView(gc.fen, gc.isBoardTurn, BoardView.ARROWS_NONE, null, null, null, null,
+//				null,null, false, userPrefs.getBoolean("user_options_gui_BlindMode", false));
+
 		ec.uciEngines[engineId].initPv();
 
 //		Log.i(TAG, "startSearchThread(), setInfoMessage(getEngineThinkingMessage(), ec.chessEngineMatch: " + ec.chessEngineMatch);
@@ -5992,8 +6005,9 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					else
 						engineId = 1;
 				}
-				if (!ec.chessEngineMatch)
-					playSound(1, 0);
+//				if (!ec.chessEngineMatch)
+//					playSound(1, 0);
+				playSound(1, 0);
 				if (!tc.clockIsRunning & ec.chessEnginePlayMod == 1)
 					startChessClock();
 				if (ec.chessEnginePlayMod != 3)
@@ -6112,9 +6126,27 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 				}
 			}
 			ec.uciEnginesMessage[engineId] = engineMessage;
+			ec.uciEnginesDisplayMoves[engineId] = searchDisplayMoves;
 			ec.uciEnginesScore[engineId] = score;
 
-			MainActivity.this.runOnUiThread(() -> handleEngineMessages(engineId, ec.uciEnginesMessage, ec.uciEnginesScore, searchDisplayMoves));
+			ec.displayMoves = searchDisplayMoves;
+			if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse) {
+				ec.displayMoves = "";
+				if (ec.uciEnginesDisplayMoves != null) {
+					for (int i = 0; i < ec.engineCnt; i++) {
+						if (ec.uciEnginesDisplayMoves[i] != null && !ec.uciEnginesDisplayMoves[i].equals("")) {
+							String[] split = ec.uciEnginesDisplayMoves[i].split(" ");
+							if (split.length > 0)
+								ec.displayMoves = ec.displayMoves + split[0] + " ";
+						}
+						else
+							ec.displayMoves = ec.displayMoves + "null ";
+					}
+				}
+			}
+
+//			MainActivity.this.runOnUiThread(() -> handleEngineMessages(engineId, ec.uciEnginesMessage, ec.uciEnginesScore, searchDisplayMoves));
+			MainActivity.this.runOnUiThread(() -> handleEngineMessages(engineId, ec.uciEnginesMessage, ec.uciEnginesScore, ec.displayMoves));
 
 		}
 
@@ -6972,7 +7004,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 					setEnginePausePlayBtn(false, null);
 			}
 		}
-		dContinueId = 3;
+
+//		dContinueId = 3;
 
 	}
 
@@ -7188,6 +7221,7 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 
 //						Log.i(TAG, "3 handleSearchResult(), --> stopSearchAndContinue()");
 
+						playSound(1, 0);
 						stopSearchAndContinue(EngineState.STOP_CONTINUE, newFen, false);			// "stop" & "go" (search)
 					}
 				}
@@ -7223,8 +7257,9 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 					& 	(ec.chessEnginePlayMod == 1 | ec.chessEnginePlayMod == 2)
 			)
 			{
-				if (!ec.chessEngineMatch)
-					playSound(1, 0);
+//				if (!ec.chessEngineMatch)
+//					playSound(1, 0);
+				playSound(1, 0);
 				enginePlayPonder(newFen);
 
 //				Log.i(TAG, "4 handleSearchResult(), engineId: " + engineId + ", newFen: " + newFen);
@@ -7406,16 +7441,19 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 			} else {
 				boolean isAnalysisMessage = false;
 
+//				if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && score.length == ec.engineCnt) {
+//				if (ec.chessEnginePlayMod == 4 && withSortAnalyse && userPrefs.getBoolean("user_play_multipleEngines", true) && score.length == ec.engineCnt) {
 				if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && score.length == ec.engineCnt) {
-					uciEnginesMessage = sortEngineAnalysisMessage(uciEnginesMessage, score);
-					isAnalysisMessage = true;
+//					uciEnginesMessage = sortEngineAnalysisMessage(uciEnginesMessage, score);
+//					isAnalysisMessage = true;
+					sortEngineAnalysisMessage(uciEnginesMessage, score);
 				}
 
 				if (ec.chessEnginePlayMod == 4 && ec.engineCnt == 1 && !userPrefs.getBoolean("user_play_multipleEngines", true)) {
 					ec.analysisBestScoreEngineId = 0;
 					ec.analysisBestScore = ec.uciEngines[0].bestScore;
 
-					Log.i(TAG, "handleEngineMessages(), bestScore: " + ec.uciEngines[0].bestScore);
+//					Log.i(TAG, "handleEngineMessages(), bestScore: " + ec.uciEngines[0].bestScore);
 
 				}
 
@@ -7534,6 +7572,8 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 //			Log.i(TAG, "handleEngineMessages(), searchDisplayMoves: " + searchDisplayMoves);
 //			Log.i(TAG, "1 handleEngineMessages(), arrowsId: " + arrowsId + ", searchDisplayMoves: " + searchDisplayMoves);
 
+//			Log.i(TAG, "handleEngineMessages(), engineId: " + engineId + ", engineState: " + ec.uciEngines[engineId].engineState);
+
 			if (ec.chessEnginePlayMod <= 4 && !ec.chessEnginePaused && !searchDisplayMoves.equals("")) {
 				boolean isPlayer = isPlayerMove(ec.chessEnginePlayMod, gc.getValueFromFen(gc.cl.p_fen, 2));
 				if (isPlayer && !userPrefs.getBoolean("user_options_enginePlay_Ponder", false)) {
@@ -7549,6 +7589,8 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 							arrowsId = BoardView.ARROWS_BEST_MOVES;
 						else
 							arrowsId = BoardView.ARROWS_BEST_VARIANT;
+//						if (!ec.uciEngines[engineId].engineSearching())
+//							arrowsId = BoardView.ARROWS_NONE;
 					}
 					displayMoves = searchDisplayMoves;
 				}
@@ -7568,8 +7610,8 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 				displayMoves = null;
 				ec.uciEngines[engineId].searchDisplayMoves = "";
 				arrowsId = BoardView.ARROWS_NONE;
-				if (ec.chessEnginePlayMod == 4)
-					updateGui();
+//				if (ec.chessEnginePlayMod == 4)
+//					updateGui();
 			}
 		}
 		else {
@@ -7794,8 +7836,9 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 
 						startChessClock();
 						isGoPonder = false;
-						if (!ec.chessEngineMatch)
-							playSound(1, 0);
+//						if (!ec.chessEngineMatch)
+//							playSound(1, 0);
+						playSound(1, 0);
 						ec.chessEngineSearching = true;
 
 //						Log.i(TAG, "5 IDLE, handleStop(), engineName: " + ec.uciEngines[ec.currentEngineId].engineName + "(" + ec.currentEngineId + ") ");
@@ -8112,7 +8155,6 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 		else
 			gc.hasVariations = false;
 
-
 		if (!gc.cl.p_fen.equals(""))
 		{
 
@@ -8130,6 +8172,8 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 				for (int i = 0; i < lineSplit.length; i++)
 				{
 					displayArrows.add(lineSplit[i]);
+//					if (arrowsId == BoardView.ARROWS_BEST_MOVES && i == 0)
+//						break;
 				}
 
 			}
@@ -8142,6 +8186,8 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 				for (int i = 0; i < lineSplit.length; i++)
 				{
 					scoreArrows.add(lineSplit[i]);
+//					if (arrowsId == BoardView.ARROWS_BEST_MOVES && i == 0)
+//						break;
 				}
 			}
 
@@ -8885,7 +8931,7 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 	int dSettingTimeBlack = 0;
 
 	boolean isStopAutoPlay = false;
-	int dContinueId = 3; 	// 1 new game, 2 continue, set clock, 3 continue
+//	int dContinueId = 3; 	// 1 new game, 2 continue, set clock, 3 continue
 
 
 	//karl --> test settings
@@ -8898,5 +8944,8 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 
 //	final static boolean withMultiEngineAnalyse = false;
 	final static boolean withMultiEngineAnalyse = true;
+
+	final static boolean withSortAnalyse = false;
+//	final static boolean withSortAnalyse = true;
 
 }

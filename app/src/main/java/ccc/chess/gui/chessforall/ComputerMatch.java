@@ -75,11 +75,13 @@ public class ComputerMatch extends Activity {
             cb_engineVsEngine.setText(R.string.engineVsEngine);
             btn_engine_white.setText(R.string.engineWhite);
             btn_engine_black.setText(R.string.engineBlack);
+            btn_engine_black.setVisibility(TextView.VISIBLE);
         }
         else {
             cb_engineVsEngine.setText(runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
             btn_engine_white.setText(R.string.engine);
             btn_engine_black.setText("");
+            btn_engine_black.setVisibility(TextView.GONE);
             white = runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE);
             event = runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE);
             black = "";
@@ -96,6 +98,7 @@ public class ComputerMatch extends Activity {
                     black = userPrefs.getString("user_play_eve_black", txtSplit[1]);
                     btn_engine_white.setText(R.string.engineWhite);
                     btn_engine_black.setText(R.string.engineBlack);
+                    btn_engine_black.setVisibility(TextView.VISIBLE);
                 }
                 else
                 {
@@ -105,7 +108,8 @@ public class ComputerMatch extends Activity {
                     white = runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE);
                     black = "";
                     btn_engine_white.setText(R.string.engine);
-                    btn_engine_black.setText("");
+//                    btn_engine_black.setText("");
+                    btn_engine_black.setVisibility(TextView.GONE);
                 }
                 engine_white_name.setText(white);
                 engine_black_name.setText(black);

@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -620,127 +621,150 @@ public class BoardView extends View
                     if (displayArrows.get(i).length() != 4)
                         return;
 
-                    int from = getPosition(displayArrows.get(i).subSequence(0, 2), isBoardTurn);
-                    int to = getPosition(displayArrows.get(i).subSequence(2, 4), isBoardTurn);
+//                    Log.i(TAG, "onDraw, i: " + i + ", displayArrows: " + displayArrows + ", scoreArrows: " + scoreArrows);
 
-                    int SameCount = 0;
-                    int SameNr = 0;
-                    for (int j = 0; j < displayArrows.size(); j++)
-                        if (from == getPosition(displayArrows.get(j).subSequence(0, 2), isBoardTurn) &&
-                                to == getPosition(displayArrows.get(j).subSequence(2, 4), isBoardTurn)) {
-                            SameCount++;
-                            if (j < i)
-                                SameNr++;
-                        }
+                    if (!displayArrows.get(i).equals("null")) {
 
-                    // Set individual Design (default first)
-                    int colorFill = Color.WHITE;
-                    int colorStroke = Color.BLACK;
-                    int strokeWidth = 2;
-                    int size = 80;
-                    int star = 0;
+                        int from = getPosition(displayArrows.get(i).subSequence(0, 2), isBoardTurn);
+                        int to = getPosition(displayArrows.get(i).subSequence(2, 4), isBoardTurn);
 
-                    switch (arrowMode) {
-                        case BoardView.ARROWS_BEST_VARIANT:
-                        case BoardView.ARROWS_BEST_MOVES:
-
-                            if (i % 2 == 0) { // player to move next
-                                colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
-                            } else { // other player
-                                colorFill = cv.getColor(cv.COLOR_ARROWS2_24);
+                        int SameCount = 0;
+                        int SameNr = 0;
+                        for (int j = 0; j < displayArrows.size(); j++)
+                            if (from == getPosition(displayArrows.get(j).subSequence(0, 2), isBoardTurn) &&
+                                    to == getPosition(displayArrows.get(j).subSequence(2, 4), isBoardTurn)) {
+                                SameCount++;
+                                if (j < i)
+                                    SameNr++;
                             }
 
-                            strokeWidth = 3;
+                        // Set individual Design (default first)
+                        int colorFill = Color.WHITE;
+                        int colorStroke = Color.BLACK;
+                        int strokeWidth = 2;
+                        int size = 80;
+                        int star = 0;
 
-                            size = 90;
-                            size = (int) (size - (size - size * 1.5 / displayArrows.size()) * i / (displayArrows.size() - 0.99999999));
+                        switch (arrowMode) {
+                            case BoardView.ARROWS_BEST_VARIANT:
+//                        case BoardView.ARROWS_BEST_MOVES:
 
-                            int alpha = 0xFF * size / 100;
-
-                            colorFill = Color.argb(alpha, Color.red(colorFill), Color.green(colorFill), Color.blue(colorFill));
-
-                            double darkenF = 1 + 4 * (alpha / 255.0);
-                            colorStroke = Color.argb(0xFF,
-                                    (int) (Color.red(colorFill) / darkenF),
-                                    (int) (Color.green(colorFill) / darkenF),
-                                    (int) (Color.blue(colorFill) / darkenF));
-
-                            star = 100;
-
-                            break;
-                        case BoardView.ARROWS_BOOK:
-                            colorFill = cv.getColor(cv.COLOR_ARROWS5_27);
-
-                            if (scoreArrows.size() > 0 && i < scoreArrows.size()) {
-                                int score = 0;
-                                try {
-                                    score = Integer.parseInt(scoreArrows.get(i).toString());
+                                if (i % 2 == 0) { // player to move next
+                                    colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
+                                } else { // other player
+                                    colorFill = cv.getColor(cv.COLOR_ARROWS2_24);
                                 }
-                                catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {  };
 
-                                size = 15;
-                                size = size + (95-size)*score/100;
-                                strokeWidth = 1;
-                                colorFill = Color.argb(0x80, Color.red(colorFill), Color.green(colorFill), Color.blue(colorFill));
+                                strokeWidth = 3;
+
+                                size = 90;
+                                size = (int) (size - (size - size * 1.5 / displayArrows.size()) * i / (displayArrows.size() - 0.99999999));
+
+                                int alpha = 0xFF * size / 100;
+
+                                colorFill = Color.argb(alpha, Color.red(colorFill), Color.green(colorFill), Color.blue(colorFill));
+
+                                double darkenF = 1 + 4 * (alpha / 255.0);
+                                colorStroke = Color.argb(0xFF,
+                                        (int) (Color.red(colorFill) / darkenF),
+                                        (int) (Color.green(colorFill) / darkenF),
+                                        (int) (Color.blue(colorFill) / darkenF));
+
+                                star = 100;
+
+                                break;
+                            case BoardView.ARROWS_BOOK:
+                                colorFill = cv.getColor(cv.COLOR_ARROWS5_27);
+
+                                if (scoreArrows.size() > 0 && i < scoreArrows.size()) {
+                                    int score = 0;
+                                    try {
+                                        score = Integer.parseInt(scoreArrows.get(i).toString());
+                                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {
+                                    }
+                                    ;
+
+                                    size = 15;
+                                    size = size + (95 - size) * score / 100;
+                                    strokeWidth = 1;
+                                    colorFill = Color.argb(0x80, Color.red(colorFill), Color.green(colorFill), Color.blue(colorFill));
+                                    alpha = 0xFF * size / 100;
+                                    darkenF = 1 + 4 * (alpha / 255.0);
+                                    colorStroke = Color.argb(0xFF,
+                                            (int) (Color.red(colorFill) / darkenF),
+                                            (int) (Color.green(colorFill) / darkenF),
+                                            (int) (Color.blue(colorFill) / darkenF));
+                                }
+                                break;
+                            case BoardView.ARROWS_BEST_MOVES:
+
+                                switch (i) {
+                                    case 0:  colorFill = cv.getColor(ColorValues.COLOR_ARROWS5_27); break;
+                                    case 1:  colorFill = cv.getColor(ColorValues.COLOR_ARROWS6_28); break;
+                                    case 2:  colorFill = cv.getColor(ColorValues.COLOR_ARROWS7_29); break;
+                                    case 3:  colorFill = cv.getColor(ColorValues.COLOR_ARROWS8_30); break;
+                                }
+
+                                strokeWidth = 3;
+
                                 alpha = 0xFF * size / 100;
                                 darkenF = 1 + 4 * (alpha / 255.0);
                                 colorStroke = Color.argb(0xFF,
-                                    (int) (Color.red(colorFill) / darkenF),
-                                    (int) (Color.green(colorFill) / darkenF),
-                                    (int) (Color.blue(colorFill) / darkenF));
-                            }
-                            break;
-                            //karl NEU ?!
-//                        case BoardView.ARROWS_BEST_MOVES:
-//
-//                            break;
+                                        (int) (Color.red(colorFill) / darkenF),
+                                        (int) (Color.green(colorFill) / darkenF),
+                                        (int) (Color.blue(colorFill) / darkenF));
+                                star = 100;
+
+//                            Log.i(TAG, "onDraw, i: " + i + ", displayArrows: " + displayArrows.get(i));
+
+                                break;
+                        }
+
+                        // DrawArrow: from, to, size, star, colorFill, colorStroke, strokeWidth, SameCount, SameNr
+
+                        int x0 = ((from % 8) * fieldSize) + fieldSize / 2;
+                        int y0 = ((from / 8) * fieldSize) + fieldSize / 2;
+                        int x1 = ((to % 8) * fieldSize) + fieldSize / 2;
+                        int y1 = ((to / 8) * fieldSize) + fieldSize / 2;
+
+                        float deltaX = x1 - x0;
+                        float deltaY = y1 - y0;
+                        float distance = (float) Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+
+                        float dX = deltaX * fieldSize / distance;
+                        float dY = deltaY * fieldSize / distance;
+
+                        float shift = (float) 1 / 2 - (float) 1 / (SameCount + 1) - (float) SameNr / (SameCount + 1);
+                        x0 += dY * shift * star / 100;
+                        y0 -= dX * shift * star / 100;
+                        x1 += dY * shift;
+                        y1 -= dX * shift;
+
+                        dX *= (float) size / 100 / 8;
+                        dY *= (float) size / 100 / 8;
+
+                        Path path = new Path();
+                        path.setFillType(Path.FillType.EVEN_ODD);
+                        path.moveTo(x0, y0);
+                        path.lineTo(x1 + dY - 4 * dX, y1 - dX - 4 * dY);
+                        path.lineTo(x1 + 4 * dY - 6 * dX, y1 - 4 * dX - 6 * dY);
+                        path.lineTo(x1, y1);
+                        path.lineTo(x1 - 4 * dY - 6 * dX, y1 + 4 * dX - 6 * dY);
+                        path.lineTo(x1 - dY - 4 * dX, y1 + dX - 4 * dY);
+                        path.lineTo(x0, y0);
+                        path.close();
+
+                        mPaint.setStyle(Paint.Style.FILL);
+                        mPaint.setColor(colorFill);
+                        canvas.drawPath(path, mPaint);
+
+                        mPaint.setStyle(Paint.Style.STROKE);
+                        mPaint.setColor(colorStroke);
+                        mPaint.setStrokeWidth(strokeWidth);
+                        mPaint.setAntiAlias(true);
+                        mPaint.setDither(true);
+                        canvas.drawPath(path, mPaint);
                     }
-
-                    // DrawArrow: from, to, size, star, colorFill, colorStroke, strokeWidth, SameCount, SameNr
-
-                    int x0 = ((from % 8) * fieldSize) + fieldSize / 2;
-                    int y0 = ((from / 8) * fieldSize) + fieldSize / 2;
-                    int x1 = ((to % 8) * fieldSize) + fieldSize / 2;
-                    int y1 = ((to / 8) * fieldSize) + fieldSize / 2;
-
-                    float deltaX = x1 - x0;
-                    float deltaY = y1 - y0;
-                    float distance = (float) Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
-
-                    float dX = deltaX * fieldSize / distance;
-                    float dY = deltaY * fieldSize / distance;
-
-                    float shift = (float) 1 / 2 - (float) 1 / (SameCount + 1) - (float) SameNr / (SameCount + 1);
-                    x0 += dY * shift * star / 100;
-                    y0 -= dX * shift * star / 100;
-                    x1 += dY * shift;
-                    y1 -= dX * shift;
-
-                    dX *= (float) size / 100 / 8;
-                    dY *= (float) size / 100 / 8;
-
-                    Path path = new Path();
-                    path.setFillType(Path.FillType.EVEN_ODD);
-                    path.moveTo(x0, y0);
-                    path.lineTo(x1 + dY - 4 * dX, y1 - dX - 4 * dY);
-                    path.lineTo(x1 + 4 * dY - 6 * dX, y1 - 4 * dX - 6 * dY);
-                    path.lineTo(x1, y1);
-                    path.lineTo(x1 - 4 * dY - 6 * dX, y1 + 4 * dX - 6 * dY);
-                    path.lineTo(x1 - dY - 4 * dX, y1 + dX - 4 * dY);
-                    path.lineTo(x0, y0);
-                    path.close();
-
-                    mPaint.setStyle(Paint.Style.FILL);
-                    mPaint.setColor(colorFill);
-                    canvas.drawPath(path, mPaint);
-
-                    mPaint.setStyle(Paint.Style.STROKE);
-                    mPaint.setColor(colorStroke);
-                    mPaint.setStrokeWidth(strokeWidth);
-                    mPaint.setAntiAlias(true);
-                    mPaint.setDither(true);
-                    canvas.drawPath(path, mPaint);
-
                 }
             }
         }

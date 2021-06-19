@@ -49,10 +49,10 @@ public class AnalysisOptions extends Activity {
 
         cb_multipleEngines = findViewById(R.id.cb_multipleEngines);
         cb_multipleEngines.setChecked(multipleEngines);
-        if (multipleEngines)
-            cb_multipleEngines.setText(R.string.multipleEngines);
-        else
-            cb_multipleEngines.setText(runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
+//        if (multipleEngines)
+//            cb_multipleEngines.setText(R.string.multipleEngines);
+//        else
+//            cb_multipleEngines.setText(runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
         cb_multipleEngines.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 cb_multipleEngines.setText(R.string.multipleEngines);
@@ -65,6 +65,9 @@ public class AnalysisOptions extends Activity {
                 e2_name.setText(e2);
                 e3_name.setText(e3);
                 e4_name.setText(e4);
+                btn_e2.setVisibility(TextView.VISIBLE);
+                btn_e3.setVisibility(TextView.VISIBLE);
+                btn_e4.setVisibility(TextView.VISIBLE);
                 multipleEngines = true;
             }
             else
@@ -75,6 +78,9 @@ public class AnalysisOptions extends Activity {
                 e2_name.setText("");
                 e3_name.setText("");
                 e4_name.setText("");
+                btn_e2.setVisibility(TextView.GONE);
+                btn_e3.setVisibility(TextView.GONE);
+                btn_e4.setVisibility(TextView.GONE);
                 multipleEngines = false;
             }
         });
@@ -98,6 +104,18 @@ public class AnalysisOptions extends Activity {
         e4_name = findViewById(R.id.e4_name);
         e4_name.setTextColor(cv.getTransparentColorInt(ColorValues.COLOR_ARROWS8_30, ALPHA_VALUE));
         e4_name.setText(e4);
+        if (multipleEngines) {
+            cb_multipleEngines.setText(R.string.multipleEngines);
+            btn_e2.setVisibility(TextView.VISIBLE);
+            btn_e3.setVisibility(TextView.VISIBLE);
+            btn_e4.setVisibility(TextView.VISIBLE);
+        }
+        else {
+            cb_multipleEngines.setText(runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
+            btn_e2.setVisibility(TextView.GONE);
+            btn_e3.setVisibility(TextView.GONE);
+            btn_e4.setVisibility(TextView.GONE);
+        }
 
     }
 
