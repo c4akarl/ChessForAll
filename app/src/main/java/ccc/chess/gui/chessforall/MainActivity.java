@@ -6114,6 +6114,10 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 //			Log.i(TAG, "EngineListener, notifyPV(), engineId: " + engineId + ", id: " + id + ", engineMessage: " + engineMessage + ", searchDisplayMoves: " + searchDisplayMoves);
 //			Log.i(TAG, "EngineListener, notifyPV(), engineId: " + engineId + ", id: " + id + ", engineMessage: " + engineMessage + ", score: " + score);
 //			Log.i(TAG, "EngineListener, notifyPV(), engineId: " + engineId + ", id: " + id);
+//			Log.i(TAG, "notifyPV(), engineId: " + engineId + ", engineState: " + ec.uciEngines[engineId].engineState);
+
+//			if (!ec.uciEngines[engineId].engineSearching())
+//				return;
 
 			if (ec.chessEnginePlayMod == 3 && ec.engineCnt == 2 && !userPrefs.getBoolean("user_options_enginePlay_Ponder", false)) {
 				if (engineId == 0) {
@@ -6132,7 +6136,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			ec.displayMoves = searchDisplayMoves;
 			if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse) {
 				ec.displayMoves = "";
-				if (ec.uciEnginesDisplayMoves != null) {
+//				if (ec.uciEnginesDisplayMoves != null) {
+				if (ec.uciEnginesDisplayMoves != null && ec.uciEngines[engineId].engineSearching()) {
 					for (int i = 0; i < ec.engineCnt; i++) {
 						if (ec.uciEnginesDisplayMoves[i] != null && !ec.uciEnginesDisplayMoves[i].equals("")) {
 							String[] split = ec.uciEnginesDisplayMoves[i].split(" ");
@@ -6143,6 +6148,21 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 							ec.displayMoves = ec.displayMoves + "null ";
 					}
 				}
+//				else {
+//					if (ec.uciEnginesDisplayMoves[engineId] != null)
+//						ec.uciEnginesDisplayMoves[engineId] = "";
+//				}
+			}
+
+			if (ec.uciEnginesDisplayMoves[engineId] != null) {
+				if (!ec.uciEngines[engineId].engineSearching()) {
+					ec.uciEnginesDisplayMoves[engineId] = "";
+					ec.displayMoves = "";
+				}
+			}
+			if (ec.uciEnginesMessage[engineId] != null) {
+				if (!ec.uciEngines[engineId].engineSearching())
+					ec.uciEnginesMessage[engineId] = "";
 			}
 
 //			MainActivity.this.runOnUiThread(() -> handleEngineMessages(engineId, ec.uciEnginesMessage, ec.uciEnginesScore, searchDisplayMoves));
