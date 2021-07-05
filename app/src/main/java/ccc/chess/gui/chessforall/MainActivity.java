@@ -1472,20 +1472,21 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			d_btn_edit.setOnClickListener(myViewListener);
 			d_btn_analysis = playDialog.findViewById(R.id.btn_analysis);
 			String[] txtSplit = runP.getString("run_engineListAnalysis", OEX_DEFAULT_ENGINES_ANALYSIS).split("\\|");
-			if (userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse)
+//			if (userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse)
+			if (userPrefs.getBoolean("user_play_multipleEngines", true))
 				d_btn_analysis.setText(getString(R.string.play_analysis) + " (" + txtSplit.length + ")");
 			else
 				d_btn_analysis.setText(getString(R.string.play_analysis) + " (1)");
 			d_btn_analysis.setOnClickListener(myViewListener);
 			d_btn_analysis.setOnLongClickListener(arg0 -> {
-				if (withMultiEngineAnalyse) {
-					dChessEnginePlayMod = 4;
-					dRestartEngine = true;
-					setPlayModBackground(dChessEnginePlayMod);
-					stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
-					restartPlayDialog = true;
-					startActivityForResult(analysisOptions, ANALYSIS_OPTIONS);
-				}
+//				if (withMultiEngineAnalyse) {
+				dChessEnginePlayMod = 4;
+				dRestartEngine = true;
+				setPlayModBackground(dChessEnginePlayMod);
+				stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
+				restartPlayDialog = true;
+				startActivityForResult(analysisOptions, ANALYSIS_OPTIONS);
+//				}
 				return true;
 			});
             setPlayModBackground(dChessEnginePlayMod);
@@ -1906,14 +1907,14 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 						startActivityForResult(computerMatch, COMPUTER_MATCH);
 						break;
 					case MENU_ENGINE_ANALYSIS:
-						if (withMultiEngineAnalyse) {
-							dChessEnginePlayMod = 4;
-							dRestartEngine = true;
-							setPlayModBackground(dChessEnginePlayMod);
-							stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
-							restartPlayDialog = true;
-							startActivityForResult(analysisOptions, ANALYSIS_OPTIONS);
-						}
+//						if (withMultiEngineAnalyse) {
+						dChessEnginePlayMod = 4;
+						dRestartEngine = true;
+						setPlayModBackground(dChessEnginePlayMod);
+						stopSearchAndContinue(EngineState.STOP_QUIT, "", true);
+						restartPlayDialog = true;
+						startActivityForResult(analysisOptions, ANALYSIS_OPTIONS);
+//						}
 						break;
 					case MENU_ENGINE_SHUTDOWN:
 						stopAllEnginesAndInit();
@@ -2595,7 +2596,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 					if (ec.chessEnginePlayMod == 4) {
 						if (ec.uciEngines[ec.analysisBestScoreEngineId] != null) {
-							if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse)
+//							if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse)
+							if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true))
 								ec.setCurrentEngineId(ec.analysisBestScoreEngineId);
 						}
 					}
@@ -4089,7 +4091,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 		}
 
-		boolean isSingleEngine =  ec.chessEnginePlayMod < 3 || ec.chessEnginePlayMod > 4 || (!withMultiEngineAnalyse && ec.chessEnginePlayMod == 4);
+//		boolean isSingleEngine =  ec.chessEnginePlayMod < 3 || ec.chessEnginePlayMod > 4 || (!withMultiEngineAnalyse && ec.chessEnginePlayMod == 4);
+		boolean isSingleEngine =  ec.chessEnginePlayMod < 3 || ec.chessEnginePlayMod > 4 || (!userPrefs.getBoolean("user_play_multipleEngines", true) && ec.chessEnginePlayMod == 4);
 		if (runP.getString("run_engineProcess", OEX_DEFAULT_ENGINE_SINGLE).equals(OEX_OLD_STOCKFISH)) {
 			SharedPreferences.Editor edR = runP.edit();
 			edR.putString("run_engineProcess", OEX_DEFAULT_STOCKFISH);
@@ -4322,7 +4325,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 
 	public int getMultiPv()
 	{
-		if (ec.chessEnginePlayMod == 4 && (!userPrefs.getBoolean("user_play_multipleEngines", true) || !withMultiEngineAnalyse)) {
+//		if (ec.chessEnginePlayMod == 4 && (!userPrefs.getBoolean("user_play_multipleEngines", true) || !withMultiEngineAnalyse)) {
+		if (ec.chessEnginePlayMod == 4 && !userPrefs.getBoolean("user_play_multipleEngines", true)) {
 			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
 				return userPrefs.getInt("user_options_enginePlay_MultiPv", Settings.VARIANTS_DEFAULT);
 			else
@@ -4399,7 +4403,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			{
 				CharSequence analizeEngineName = ec.getEngine().engineName;
 				if (ec.uciEngines[ec.analysisBestScoreEngineId] != null) {
-					if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse)
+//					if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse)
+					if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true))
 						analizeEngineName = ec.uciEngines[ec.analysisBestScoreEngineId].engineName;
 				}
 
@@ -5535,7 +5540,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			String engineName = "XXX";
 			if (ec.uciEngines[ec.currentEngineId] != null)
 				engineName = ec.uciEngines[ec.currentEngineId].uciEngineName;
-			if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse) {
+//			if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse) {
+			if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true)) {
 				if (ec.analysisBestScoreEngineId < ec.engineCnt) {
 					if (ec.uciEngines[ec.analysisBestScoreEngineId] != null) {
 						engineName = ec.uciEngines[ec.analysisBestScoreEngineId].uciEngineName;
@@ -6134,7 +6140,8 @@ public class MainActivity extends Activity implements Ic4aDialogCallback, OnTouc
 			ec.uciEnginesScore[engineId] = score;
 
 			ec.displayMoves = searchDisplayMoves;
-			if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse) {
+//			if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse) {
+			if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true)) {
 				ec.displayMoves = "";
 //				if (ec.uciEnginesDisplayMoves != null) {
 				if (ec.uciEnginesDisplayMoves != null && ec.uciEngines[engineId].engineSearching()) {
@@ -7605,7 +7612,8 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 				else
 				{
 					if (arrowsId != BoardView.ARROWS_BOOK) {
-						if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse)
+//						if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true) && withMultiEngineAnalyse)
+						if (ec.chessEnginePlayMod == 4 && userPrefs.getBoolean("user_play_multipleEngines", true))
 							arrowsId = BoardView.ARROWS_BEST_MOVES;
 						else
 							arrowsId = BoardView.ARROWS_BEST_VARIANT;
@@ -8963,7 +8971,7 @@ void handleSearchResult(int engineId, String fen, String bestmove, String ponder
 //	final static boolean withMatchPonder = true;
 
 //	final static boolean withMultiEngineAnalyse = false;
-	final static boolean withMultiEngineAnalyse = true;
+//	final static boolean withMultiEngineAnalyse = true;
 
 	final static boolean withSortAnalyse = false;
 //	final static boolean withSortAnalyse = true;
