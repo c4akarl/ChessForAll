@@ -967,11 +967,9 @@ public class UciEngine
 
                 processEngineOutput(s);
 
-//                s = readLineFromProcess(1);
                 s = readLineFromProcess(guiUpdateReadInterval);
 
                 long t1 = System.currentTimeMillis();
-//                if (t1 - t0 >= 1000)
                 if (t1 - t0 >= 1000 || statIsMate)
                     break;
 
@@ -1331,7 +1329,6 @@ public class UciEngine
 
                 searchDisplayMoves = getDisplayMoves(statPvMoves, userPrefs.getInt("user_options_gui_arrows", Settings.ARROWS_DEFAULT));
                 bestScore = getBestScore(statPvScore, fen);
-//                setBestScoreDrawCnt(bestScore);
             }
             CharSequence displayScore = getDisplayScore(statPvScore, fen);
             if (isMate & statPvScore > 0)
@@ -1503,7 +1500,7 @@ public class UciEngine
 
         cl.newPosition(Integer.toString(sr.chess960Id), sr.fen, "", "", "", "", "", "");
 
-        //karl??? 960; --> KQkq  ? A..G a..g ?
+        //karl??? 960; --> KQkq  ? A..H a..h ?
         //karl shredder chess960 castling;
 //        if (isChess960)
 //            sr.fen = (String) convertCastlingRight(sr.fen, sr.startFen);

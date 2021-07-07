@@ -49,10 +49,6 @@ public class AnalysisOptions extends Activity {
 
         cb_multipleEngines = findViewById(R.id.cb_multipleEngines);
         cb_multipleEngines.setChecked(multipleEngines);
-//        if (multipleEngines)
-//            cb_multipleEngines.setText(R.string.multipleEngines);
-//        else
-//            cb_multipleEngines.setText(runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE));
         cb_multipleEngines.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 cb_multipleEngines.setText(R.string.multipleEngines);

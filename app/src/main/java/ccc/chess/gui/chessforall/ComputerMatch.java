@@ -108,7 +108,6 @@ public class ComputerMatch extends Activity {
                     white = runPrefs.getString("run_engineProcess", MainActivity.OEX_DEFAULT_ENGINE_SINGLE);
                     black = "";
                     btn_engine_white.setText(R.string.engine);
-//                    btn_engine_black.setText("");
                     btn_engine_black.setVisibility(TextView.GONE);
                 }
                 engine_white_name.setText(white);
@@ -404,7 +403,6 @@ public class ComputerMatch extends Activity {
                 matchResult = history.getGameTagValue("MatchResult");
             if (!history.getGameTagValue("FEN").equals("")) {
                 fen = history.getGameTagValue("FEN");
-//                currentGame = true;
             }
             else
             {

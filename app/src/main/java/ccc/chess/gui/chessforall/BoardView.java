@@ -647,7 +647,6 @@ public class BoardView extends View
 
                         switch (arrowMode) {
                             case BoardView.ARROWS_BEST_VARIANT:
-//                        case BoardView.ARROWS_BEST_MOVES:
 
                                 if (i % 2 == 0) { // player to move next
                                     colorFill = cv.getColor(cv.COLOR_ARROWS1_23);
